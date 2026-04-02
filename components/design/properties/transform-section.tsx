@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label"
 import { useCanvas } from "../contexts/canvas-context"
 import { useSelection } from "../contexts/selection-context"
 import { useHistory } from "../contexts/history-context"
+import { Properties, PropertiesLabel } from "./properties"
 
 export function TransformSection() {
   const { dispatch } = useCanvas()
@@ -16,10 +17,8 @@ export function TransformSection() {
   if (!element) return null
 
   return (
-    <div className="space-y-2">
-      <h3 className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
-        Transform
-      </h3>
+    <Properties>
+      <PropertiesLabel>Transform</PropertiesLabel>
       <div className="grid grid-cols-2 gap-2">
         <NumberField label="X" value={element.x} field="x" elementId={element.id} dispatch={dispatch} pushSnapshot={pushSnapshot} />
         <NumberField label="Y" value={element.y} field="y" elementId={element.id} dispatch={dispatch} pushSnapshot={pushSnapshot} />
@@ -29,7 +28,7 @@ export function TransformSection() {
       <div className="grid grid-cols-2 gap-2">
         <NumberField label="R" value={element.rotation} field="rotation" elementId={element.id} dispatch={dispatch} pushSnapshot={pushSnapshot} />
       </div>
-    </div>
+    </Properties>
   )
 }
 

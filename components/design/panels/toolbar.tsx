@@ -8,8 +8,10 @@ import {
   RiSubtractLine,
   RiText,
   RiArtboardLine,
+  RiStackLine,
 } from "@remixicon/react"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { Toggle } from "@/components/ui/toggle"
 import {
   Tooltip,
   TooltipContent,
@@ -17,6 +19,7 @@ import {
 } from "@/components/ui/tooltip"
 import { Separator } from "@/components/ui/separator"
 import { useTool } from "../contexts/tool-context"
+import { usePanel } from "../contexts/panel-context"
 import type { ToolType } from "../types"
 
 const TOOLS: { id: ToolType; icon: React.ElementType; label: string; shortcut: string }[] = [
@@ -34,6 +37,8 @@ const SHAPE_TOOLS: { id: ToolType; icon: React.ElementType; label: string; short
 
 export function Toolbar() {
   const { activeTool, setTool } = useTool()
+  const { state: panelState, setLeftPanel } = usePanel()
+  const layersOpen = panelState.leftPanel === "layers"
 
   return (
     <div className="flex h-full w-12 flex-col items-center border-r border-border bg-background py-2">
@@ -75,6 +80,23 @@ export function Toolbar() {
           </Tooltip>
         ))}
       </ToggleGroup>
+
+      <div className="mt-auto">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Toggle
+              pressed={layersOpen}
+              onPressedChange={(pressed) => setLeftPanel(pressed ? "layers" : "tools")}
+              aria-label="Layers"
+            >
+              <RiStackLine className="size-4" />
+            </Toggle>
+          </TooltipTrigger>
+          <TooltipContent side="right" sideOffset={8}>
+            Layers
+          </TooltipContent>
+        </Tooltip>
+      </div>
     </div>
   )
 }

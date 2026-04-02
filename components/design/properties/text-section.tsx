@@ -14,6 +14,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { useCanvas } from "../contexts/canvas-context"
 import { useSelection } from "../contexts/selection-context"
 import { useHistory } from "../contexts/history-context"
+import { Properties, PropertiesLabel } from "./properties"
 import type { TextElement, TextStyle } from "../types"
 
 const FONT_FAMILIES = [
@@ -56,10 +57,8 @@ export function TextSection() {
   )
 
   return (
-    <div className="space-y-2">
-      <h3 className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
-        Text
-      </h3>
+    <Properties>
+      <PropertiesLabel>Text</PropertiesLabel>
 
       <div className="space-y-2">
         <Input
@@ -147,6 +146,6 @@ export function TextSection() {
           </ToggleGroup>
         </div>
       </div>
-    </div>
+    </Properties>
   )
 }

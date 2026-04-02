@@ -4,10 +4,10 @@ import { useCallback } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
-import { Button } from "@/components/ui/button"
 import { useCanvas } from "../contexts/canvas-context"
 import { useSelection } from "../contexts/selection-context"
 import { useHistory } from "../contexts/history-context"
+import { Properties, PropertiesHeader, PropertiesLabel, PropertiesAction } from "./properties"
 import type { Stroke } from "../types"
 
 export function StrokeSection() {
@@ -45,15 +45,13 @@ export function StrokeSection() {
   }, [element.id, stroke, dispatch, pushSnapshot])
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <h3 className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
-          Stroke
-        </h3>
-        <Button variant="ghost" size="icon-xs" onClick={toggleStroke} className="h-5 w-5">
+    <Properties>
+      <PropertiesHeader>
+        <PropertiesLabel>Stroke</PropertiesLabel>
+        <PropertiesAction onClick={toggleStroke}>
           <span className="text-[10px]">{stroke ? "-" : "+"}</span>
-        </Button>
-      </div>
+        </PropertiesAction>
+      </PropertiesHeader>
       {stroke && (
         <div className="space-y-2">
           <div className="flex items-center gap-2">
@@ -92,6 +90,6 @@ export function StrokeSection() {
           </div>
         </div>
       )}
-    </div>
+    </Properties>
   )
 }

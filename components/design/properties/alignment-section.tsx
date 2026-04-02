@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { useCanvas } from "../contexts/canvas-context"
 import { useSelection } from "../contexts/selection-context"
 import { useHistory } from "../contexts/history-context"
+import { Properties, PropertiesLabel } from "./properties"
 
 export function AlignmentSection() {
   const { dispatch } = useCanvas()
@@ -71,10 +72,8 @@ export function AlignmentSection() {
   )
 
   return (
-    <div className="space-y-2">
-      <h3 className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
-        Alignment
-      </h3>
+    <Properties>
+      <PropertiesLabel>Alignment</PropertiesLabel>
       <div className="flex gap-1">
         <Button variant="ghost" size="icon-xs" onClick={() => align("left")} title="Align Left" className="h-7 w-7 text-[10px]">
           AL
@@ -95,6 +94,6 @@ export function AlignmentSection() {
           AB
         </Button>
       </div>
-    </div>
+    </Properties>
   )
 }

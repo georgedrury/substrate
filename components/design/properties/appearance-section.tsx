@@ -6,6 +6,7 @@ import { Slider } from "@/components/ui/slider"
 import { useCanvas } from "../contexts/canvas-context"
 import { useSelection } from "../contexts/selection-context"
 import { useHistory } from "../contexts/history-context"
+import { Properties, PropertiesLabel } from "./properties"
 
 export function AppearanceSection() {
   const { dispatch } = useCanvas()
@@ -28,10 +29,8 @@ export function AppearanceSection() {
   )
 
   return (
-    <div className="space-y-2">
-      <h3 className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
-        Appearance
-      </h3>
+    <Properties>
+      <PropertiesLabel>Appearance</PropertiesLabel>
       <div className="flex items-center gap-2">
         <Label className="text-[11px] text-muted-foreground w-12 shrink-0">Opacity</Label>
         <Slider
@@ -45,6 +44,6 @@ export function AppearanceSection() {
           {Math.round(element.opacity * 100)}%
         </span>
       </div>
-    </div>
+    </Properties>
   )
 }

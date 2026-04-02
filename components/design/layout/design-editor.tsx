@@ -3,6 +3,7 @@
 import { DesignProvider } from "./design-provider"
 import { DesignCanvas } from "../canvas/design-canvas"
 import { Toolbar } from "../panels/toolbar"
+import { LayersPanel } from "../panels/layers-panel"
 import { PanelSwitcher } from "../panels/panel-switcher"
 import { usePanel } from "../contexts/panel-context"
 import { useCanvas } from "../contexts/canvas-context"
@@ -15,8 +16,13 @@ function EditorLayout() {
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-muted">
-      {/* Left toolbar */}
+      {/* Left toolbar + layers overlay */}
       <Toolbar />
+      {panelState.leftPanel === "layers" && (
+        <div className="w-[220px] border-r border-border bg-background shrink-0">
+          <LayersPanel />
+        </div>
+      )}
 
       {/* Canvas */}
       <div className="relative flex-1">

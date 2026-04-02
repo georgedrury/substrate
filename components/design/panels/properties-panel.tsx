@@ -10,44 +10,44 @@ import { AppearanceSection } from "../properties/appearance-section"
 import { AlignmentSection } from "../properties/alignment-section"
 
 export function PropertiesPanel() {
-  const { selectedElements } = useSelection()
+	const { selectedElements } = useSelection()
 
-  if (selectedElements.length === 0) {
-    return (
-      <div className="flex h-full items-center justify-center p-4">
-        <p className="text-xs text-muted-foreground">No selection</p>
-      </div>
-    )
-  }
+	if (selectedElements.length === 0) {
+		return (
+			<div className="flex h-full items-center justify-center p-4">
+				<p className="text-xs text-muted-foreground">No selection</p>
+			</div>
+		)
+	}
 
-  const element = selectedElements[0]
+	const element = selectedElements[0]
 
-  return (
-    <div className="space-y-3 p-3">
-      <div className="text-xs font-medium truncate">{element.name}</div>
+	return (
+		<div className="space-y-3 p-3">
+			<div className="text-xs font-medium truncate">{element.name}</div>
 
-      <TransformSection />
-      <Separator />
-      <FillSection />
-      <Separator />
-      <StrokeSection />
+			<TransformSection />
+			<Separator />
+			<FillSection />
+			<Separator />
+			<StrokeSection />
 
-      {element.type === "text" && (
-        <>
-          <Separator />
-          <TextSection />
-        </>
-      )}
+			{element.type === "text" && (
+				<>
+					<Separator />
+					<TextSection />
+				</>
+			)}
 
-      <Separator />
-      <AppearanceSection />
+			<Separator />
+			<AppearanceSection />
 
-      {selectedElements.length > 1 && (
-        <>
-          <Separator />
-          <AlignmentSection />
-        </>
-      )}
-    </div>
-  )
+			{selectedElements.length > 1 && (
+				<>
+					<Separator />
+					<AlignmentSection />
+				</>
+			)}
+		</div>
+	)
 }
