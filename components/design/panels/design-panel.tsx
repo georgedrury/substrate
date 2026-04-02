@@ -1,35 +1,49 @@
 "use client"
 
-import { useCanvas } from "../contexts/canvas-context"
-import { Label } from "@/components/ui/label"
+import { useEffect } from "react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { usePanel } from "../contexts/panel-context"
+import { useSelection } from "../contexts/selection-context"
+import { PropertiesTab } from "./properties-tab"
+import { DesignTab } from "./design-tab"
+import type { RightPanelId } from "../types"
 
-export function DesignPanel() {
-  const { state } = useCanvas()
+export function PanelSwitcher() {
+	const { state: panelState, setRightPanel } = usePanel()
+	const { state: selectionState } = useSelection()
 
-  return (
-    <div className="space-y-3 p-3">
-      <h3 className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
-        Canvas
-      </h3>
+	// Auto-switch to properties when something is selected
+	useEffect(() => {
+		if (selectionState.selectedIds.size > 0) {
+			setRightPanel("properties")
+		}
+	}, [selectionState.selectedIds.size, setRightPanel])
 
-      <div className="space-y-2">
-        <div className="flex items-center justify-between text-xs">
-          <Label className="text-muted-foreground">Zoom</Label>
-          <span>{Math.round(state.camera.zoom * 100)}%</span>
-        </div>
-
-        <div className="flex items-center justify-between text-xs">
-          <Label className="text-muted-foreground">Elements</Label>
-          <span>{state.elementOrder.length}</span>
-        </div>
-
-        <div className="flex items-center justify-between text-xs">
-          <Label className="text-muted-foreground">Position</Label>
-          <span className="font-mono text-[11px]">
-            {Math.round(state.camera.x)}, {Math.round(state.camera.y)}
-          </span>
-        </div>
-      </div>
-    </div>
-  )
+	return (
+		<Tabs
+			value={panelState.rightPanel}
+			onValueChange={(v) => setRightPanel(v as RightPanelId)}
+			className="h-full flex flex-col"
+		>
+			<TabsList className="w-full justify-start rounded-none border-b border-border bg-transparent px-2 shrink-0">
+				<TabsTrigger value="properties" className="text-xs cursor-pointer">
+					Properties
+				</TabsTrigger>
+				<TabsTrigger value="design" className="text-xs cursor-pointer">
+					Design
+				</TabsTrigger>
+			</TabsList>
+			<TabsContent value="properties" className="flex-1 m-0 overflow-hidden">
+				<ScrollArea className="h-full">
+					<PropertiesTab />
+				</ScrollArea>
+			</TabsContent>
+			<TabsContent value="design" className="flex-1 m-0 overflow-hidden">
+				<ScrollArea className="h-full">
+					<DesignTab />
+				</ScrollArea>
+			</TabsContent>
+		</Tabs>
+	)
 }

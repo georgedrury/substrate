@@ -9,7 +9,7 @@ import { TextSection } from "../properties/text-section"
 import { AppearanceSection } from "../properties/appearance-section"
 import { AlignmentSection } from "../properties/alignment-section"
 
-export function PropertiesPanel() {
+export function PropertiesTab() {
 	const { selectedElements } = useSelection()
 
 	if (selectedElements.length === 0) {
@@ -23,8 +23,8 @@ export function PropertiesPanel() {
 	const element = selectedElements[0]
 
 	return (
-		<div className="space-y-3 p-3">
-			<div className="text-xs font-medium truncate">{element.name}</div>
+		<div className="space-y-3 py-3">
+			<div className="text-xs font-medium truncate px-3">{element.name}</div>
 
 			<TransformSection />
 			<Separator />
