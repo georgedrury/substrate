@@ -6,7 +6,7 @@ export function Properties({
 	className,
 	...props
 }: PropertiesProps & React.ComponentProps<"div">) {
-	return <div className={cn("space-y-2", className)} {...props} />
+	return <div className={cn("space-y-2 px-3", className)} {...props} />
 }
 
 export function PropertiesHeader({
@@ -29,10 +29,7 @@ export function PropertiesLabel({
 	return (
 		<span
 			data-slot="properties-label"
-			className={cn(
-				"text-[11px] font-medium text-muted-foreground uppercase tracking-wider",
-				className,
-			)}
+			className={cn("text-xs font-medium", className)}
 			{...props}
 		/>
 	)

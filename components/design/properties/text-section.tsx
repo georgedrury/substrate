@@ -2,7 +2,6 @@
 
 import { useCallback } from "react"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -15,6 +14,7 @@ import { useCanvas } from "../contexts/canvas-context"
 import { useSelection } from "../contexts/selection-context"
 import { useHistory } from "../contexts/history-context"
 import { Properties, PropertiesLabel } from "./properties"
+import { Action, ActionLabel, ActionControls } from "../action"
 import type { TextElement, TextStyle } from "../types"
 
 const FONT_FAMILIES = [
@@ -68,71 +68,80 @@ export function TextSection() {
           placeholder="Text content"
         />
 
-        <div className="flex items-center gap-2">
-          <Label className="text-[11px] text-muted-foreground w-12 shrink-0">Font</Label>
-          <Select
-            value={textStyle.fontFamily}
-            onValueChange={(v) => updateTextStyle({ fontFamily: v })}
-          >
-            <SelectTrigger className="h-7 text-xs flex-1">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {FONT_FAMILIES.map((f) => (
-                <SelectItem key={f} value={f} className="text-xs">
-                  {f}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <Action>
+          <ActionLabel>Font</ActionLabel>
+          <ActionControls>
+            <Select
+              value={textStyle.fontFamily}
+              onValueChange={(v) => updateTextStyle({ fontFamily: v })}
+            >
+              <SelectTrigger className="h-7 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {FONT_FAMILIES.map((f) => (
+                  <SelectItem key={f} value={f} className="text-xs">
+                    {f}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </ActionControls>
+        </Action>
 
-        <div className="flex items-center gap-2">
-          <Label className="text-[11px] text-muted-foreground w-12 shrink-0">Weight</Label>
-          <Select
-            value={String(textStyle.fontWeight)}
-            onValueChange={(v) => updateTextStyle({ fontWeight: parseInt(v) })}
-          >
-            <SelectTrigger className="h-7 text-xs flex-1">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {FONT_WEIGHTS.map((w) => (
-                <SelectItem key={w.value} value={String(w.value)} className="text-xs">
-                  {w.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <Action>
+          <ActionLabel>Weight</ActionLabel>
+          <ActionControls>
+            <Select
+              value={String(textStyle.fontWeight)}
+              onValueChange={(v) => updateTextStyle({ fontWeight: parseInt(v) })}
+            >
+              <SelectTrigger className="h-7 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {FONT_WEIGHTS.map((w) => (
+                  <SelectItem key={w.value} value={String(w.value)} className="text-xs">
+                    {w.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </ActionControls>
+        </Action>
 
         <div className="grid grid-cols-2 gap-2">
-          <div className="flex items-center gap-1.5">
-            <Label className="text-[11px] text-muted-foreground w-6 shrink-0">Size</Label>
-            <Input
-              type="number"
-              value={textStyle.fontSize}
-              onChange={(e) => updateTextStyle({ fontSize: parseFloat(e.target.value) || 16 })}
-              className="h-7 text-xs"
-              min={1}
-            />
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Label className="text-[11px] text-muted-foreground w-6 shrink-0">LH</Label>
-            <Input
-              type="number"
-              value={textStyle.lineHeight}
-              onChange={(e) => updateTextStyle({ lineHeight: parseFloat(e.target.value) || 1.4 })}
-              className="h-7 text-xs"
-              step={0.1}
-              min={0.5}
-            />
-          </div>
+          <Action>
+            <ActionLabel className="w-6">Size</ActionLabel>
+            <ActionControls>
+              <Input
+                type="number"
+                value={textStyle.fontSize}
+                onChange={(e) => updateTextStyle({ fontSize: parseFloat(e.target.value) || 16 })}
+                className="h-7 text-xs"
+                min={1}
+              />
+            </ActionControls>
+          </Action>
+          <Action>
+            <ActionLabel className="w-6">LH</ActionLabel>
+            <ActionControls>
+              <Input
+                type="number"
+                value={textStyle.lineHeight}
+                onChange={(e) => updateTextStyle({ lineHeight: parseFloat(e.target.value) || 1.4 })}
+                className="h-7 text-xs"
+                step={0.1}
+                min={0.5}
+              />
+            </ActionControls>
+          </Action>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Label className="text-[11px] text-muted-foreground w-12 shrink-0">Align</Label>
-          <ToggleGroup
+        <Action>
+          <ActionLabel>Align</ActionLabel>
+          <ActionControls>
+            <ToggleGroup
             type="single"
             value={textStyle.textAlign}
             onValueChange={(v) => {
@@ -144,7 +153,8 @@ export function TextSection() {
             <ToggleGroupItem value="center" className="text-[10px] h-6 px-2">C</ToggleGroupItem>
             <ToggleGroupItem value="right" className="text-[10px] h-6 px-2">R</ToggleGroupItem>
           </ToggleGroup>
-        </div>
+          </ActionControls>
+        </Action>
       </div>
     </Properties>
   )

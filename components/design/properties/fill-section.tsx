@@ -2,84 +2,110 @@
 
 import { useCallback } from "react"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { useCanvas } from "../contexts/canvas-context"
 import { useSelection } from "../contexts/selection-context"
 import { useHistory } from "../contexts/history-context"
-import { Properties, PropertiesHeader, PropertiesLabel, PropertiesAction } from "./properties"
+import {
+	Properties,
+	PropertiesHeader,
+	PropertiesLabel,
+	PropertiesAction,
+} from "./properties"
+import { Action, ActionLabel, ActionControls } from "../action"
 import type { Fill } from "../types"
+import {
+	InputGroup,
+	InputGroupAddon,
+	InputGroupInput,
+} from "@/components/ui/input-group"
 
 export function FillSection() {
-  const { dispatch } = useCanvas()
-  const { selectedElements } = useSelection()
-  const { pushSnapshot } = useHistory()
+	const { dispatch } = useCanvas()
+	const { selectedElements } = useSelection()
+	const { pushSnapshot } = useHistory()
 
-  const element = selectedElements[0]
-  if (!element) return null
+	const element = selectedElements[0]
+	if (!element) return null
 
-  const fill = element.fill
+	const fill = element.fill
 
-  const updateFill = useCallback(
-    (changes: Partial<Fill>) => {
-      pushSnapshot()
-      const current = element.fill ?? { type: "solid" as const, color: "oklch(0.85 0 0)", opacity: 1 }
-      dispatch({
-        type: "UPDATE_ELEMENT",
-        id: element.id,
-        changes: { fill: { ...current, ...changes } },
-      })
-    },
-    [element, dispatch, pushSnapshot]
-  )
+	const updateFill = useCallback(
+		(changes: Partial<Fill>) => {
+			pushSnapshot()
+			const current = element.fill ?? {
+				type: "solid" as const,
+				color: "oklch(0.85 0 0)",
+				opacity: 1,
+			}
+			dispatch({
+				type: "UPDATE_ELEMENT",
+				id: element.id,
+				changes: { fill: { ...current, ...changes } },
+			})
+		},
+		[element, dispatch, pushSnapshot],
+	)
 
-  const toggleFill = useCallback(() => {
-    pushSnapshot()
-    dispatch({
-      type: "UPDATE_ELEMENT",
-      id: element.id,
-      changes: {
-        fill: fill ? null : { type: "solid", color: "oklch(0.85 0 0)", opacity: 1 },
-      },
-    })
-  }, [element.id, fill, dispatch, pushSnapshot])
+	const toggleFill = useCallback(() => {
+		pushSnapshot()
+		dispatch({
+			type: "UPDATE_ELEMENT",
+			id: element.id,
+			changes: {
+				fill: fill
+					? null
+					: { type: "solid", color: "oklch(0.85 0 0)", opacity: 1 },
+			},
+		})
+	}, [element.id, fill, dispatch, pushSnapshot])
 
-  return (
-    <Properties>
-      <PropertiesHeader>
-        <PropertiesLabel>Fill</PropertiesLabel>
-        <PropertiesAction onClick={toggleFill}>
-          <span className="text-[10px]">{fill ? "-" : "+"}</span>
-        </PropertiesAction>
-      </PropertiesHeader>
-      {fill && (
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <div
-              className="size-6 rounded border border-border shrink-0"
-              style={{ backgroundColor: fill.color }}
-            />
-            <Input
-              value={fill.color}
-              onChange={(e) => updateFill({ color: e.target.value })}
-              className="h-7 text-xs font-mono"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <Label className="text-[11px] text-muted-foreground w-12 shrink-0">Opacity</Label>
-            <Slider
-              value={[fill.opacity * 100]}
-              onValueChange={([v]) => updateFill({ opacity: v / 100 })}
-              max={100}
-              step={1}
-              className="flex-1"
-            />
-            <span className="text-[11px] text-muted-foreground w-8 text-right">
-              {Math.round(fill.opacity * 100)}%
-            </span>
-          </div>
-        </div>
-      )}
-    </Properties>
-  )
+	return (
+		<Properties>
+			<PropertiesHeader>
+				<PropertiesLabel>Fill</PropertiesLabel>
+				<PropertiesAction onClick={toggleFill}>
+					<span className="text-[10px]">{fill ? "-" : "+"}</span>
+				</PropertiesAction>
+			</PropertiesHeader>
+
+			{fill && (
+				<div className="space-y-2">
+					<Action>
+						<ActionLabel>Fill</ActionLabel>
+						<ActionControls>
+							<InputGroup>
+								<InputGroupAddon>
+									<div
+										className="size-4 rounded border border-border shrink-0"
+										style={{ backgroundColor: fill.color }}
+									/>
+								</InputGroupAddon>
+								<InputGroupInput
+									value={fill.color}
+									onChange={(e) => updateFill({ color: e.target.value })}
+									className="h-7 text-xs font-mono"
+								/>
+							</InputGroup>
+						</ActionControls>
+					</Action>
+					<Action>
+						<ActionLabel>Opacity</ActionLabel>
+						<ActionControls>
+							<Slider
+								value={[fill.opacity * 100]}
+								onValueChange={([v]) => updateFill({ opacity: v / 100 })}
+								max={100}
+								step={1}
+								className="flex-1"
+							/>
+							<span className="text-[11px] text-muted-foreground w-8 text-right">
+								{Math.round(fill.opacity * 100)}%
+							</span>
+						</ActionControls>
+					</Action>
+				</div>
+			)}
+		</Properties>
+	)
 }

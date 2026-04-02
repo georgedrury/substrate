@@ -1,12 +1,12 @@
 "use client"
 
 import { useCallback } from "react"
-import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { useCanvas } from "../contexts/canvas-context"
 import { useSelection } from "../contexts/selection-context"
 import { useHistory } from "../contexts/history-context"
 import { Properties, PropertiesLabel } from "./properties"
+import { Action, ActionLabel, ActionControls } from "../action"
 
 export function AppearanceSection() {
   const { dispatch } = useCanvas()
@@ -31,19 +31,21 @@ export function AppearanceSection() {
   return (
     <Properties>
       <PropertiesLabel>Appearance</PropertiesLabel>
-      <div className="flex items-center gap-2">
-        <Label className="text-[11px] text-muted-foreground w-12 shrink-0">Opacity</Label>
-        <Slider
-          value={[element.opacity * 100]}
-          onValueChange={([v]) => updateOpacity(v / 100)}
-          max={100}
-          step={1}
-          className="flex-1"
-        />
-        <span className="text-[11px] text-muted-foreground w-8 text-right">
-          {Math.round(element.opacity * 100)}%
-        </span>
-      </div>
+      <Action>
+        <ActionLabel>Opacity</ActionLabel>
+        <ActionControls className="flex items-center gap-2">
+          <Slider
+            value={[element.opacity * 100]}
+            onValueChange={([v]) => updateOpacity(v / 100)}
+            max={100}
+            step={1}
+            className="flex-1"
+          />
+          <span className="text-[11px] text-muted-foreground w-8 text-right">
+            {Math.round(element.opacity * 100)}%
+          </span>
+        </ActionControls>
+      </Action>
     </Properties>
   )
 }
