@@ -1,0 +1,87 @@
+"use client"
+
+import { useCallback } from "react"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Slider } from "@/components/ui/slider"
+import { Button } from "@/components/ui/button"
+import { useCanvas } from "../contexts/canvas-context"
+import { useSelection } from "../contexts/selection-context"
+import { useHistory } from "../contexts/history-context"
+import type { Fill } from "../types"
+
+export function FillSection() {
+  const { dispatch } = useCanvas()
+  const { selectedElements } = useSelection()
+  const { pushSnapshot } = useHistory()
+
+  const element = selectedElements[0]
+  if (!element) return null
+
+  const fill = element.fill
+
+  const updateFill = useCallback(
+    (changes: Partial<Fill>) => {
+      pushSnapshot()
+      const current = element.fill ?? { type: "solid" as const, color: "oklch(0.85 0 0)", opacity: 1 }
+      dispatch({
+        type: "UPDATE_ELEMENT",
+        id: element.id,
+        changes: { fill: { ...current, ...changes } },
+      })
+    },
+    [element, dispatch, pushSnapshot]
+  )
+
+  const toggleFill = useCallback(() => {
+    pushSnapshot()
+    dispatch({
+      type: "UPDATE_ELEMENT",
+      id: element.id,
+      changes: {
+        fill: fill ? null : { type: "solid", color: "oklch(0.85 0 0)", opacity: 1 },
+      },
+    })
+  }, [element.id, fill, dispatch, pushSnapshot])
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <h3 className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
+          Fill
+        </h3>
+        <Button variant="ghost" size="icon-xs" onClick={toggleFill} className="h-5 w-5">
+          <span className="text-[10px]">{fill ? "-" : "+"}</span>
+        </Button>
+      </div>
+      {fill && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <div
+              className="size-6 rounded border border-border shrink-0"
+              style={{ backgroundColor: fill.color }}
+            />
+            <Input
+              value={fill.color}
+              onChange={(e) => updateFill({ color: e.target.value })}
+              className="h-7 text-xs font-mono"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <Label className="text-[11px] text-muted-foreground w-12 shrink-0">Opacity</Label>
+            <Slider
+              value={[fill.opacity * 100]}
+              onValueChange={([v]) => updateFill({ opacity: v / 100 })}
+              max={100}
+              step={1}
+              className="flex-1"
+            />
+            <span className="text-[11px] text-muted-foreground w-8 text-right">
+              {Math.round(fill.opacity * 100)}%
+            </span>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
