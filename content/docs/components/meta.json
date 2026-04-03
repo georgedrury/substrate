@@ -1,0 +1,10 @@
+{
+	"pages": [
+		"design-canvas",
+		"toolbar",
+		"panel",
+		"pane",
+		"action",
+		"slider"
+	]
+}

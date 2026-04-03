@@ -1,0 +1,37 @@
+---
+title: Pane
+description: Content section within a panel for composing property editors.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.vui.run/r/pane
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Substrate" }]} />
+
+## Usage
+
+```tsx
+import { Pane, PaneHeader, PaneLabel, PaneAction } from "@/registry/substrate/components/pane"
+
+<Pane>
+  <PaneHeader>
+    <PaneLabel>Fill</PaneLabel>
+    <PaneAction onClick={toggleFill}>+</PaneAction>
+  </PaneHeader>
+  {/* Pane content */}
+</Pane>
+```
+
+## Components
+
+| Component | Description |
+|---|---|
+| `Pane` | Container with vertical spacing and horizontal padding |
+| `PaneHeader` | Flex row for label + action |
+| `PaneLabel` | Section title text |
+| `PaneAction` | Button slot in the header |

@@ -1,0 +1,75 @@
+---
+title: Toolbar
+description: Floating toolbar with toggle groups, dropdowns, and tooltips built on Radix primitives.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.vui.run/r/toolbar
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Radix", href: "https://radix-ui.com" }, { name: "Substrate" }]} />
+
+## Usage
+
+```tsx
+import {
+	Toolbar,
+	ToolbarToggleGroup,
+	ToolbarToggle,
+	ToolbarSeparator,
+	ToolbarDropdown,
+} from "@/registry/substrate/components/toolbar"
+```
+
+### Basic toolbar with toggles
+
+```tsx
+<Toolbar>
+	<ToolbarToggleGroup value={activeTool} onValueChange={setTool}>
+		<ToolbarToggle value="select" tooltip="Select" shortcut="V">
+			<CursorIcon />
+		</ToolbarToggle>
+		<ToolbarToggle value="hand" tooltip="Hand" shortcut="H">
+			<HandIcon />
+		</ToolbarToggle>
+
+		<ToolbarSeparator />
+
+		<ToolbarToggle value="rectangle" tooltip="Rectangle" shortcut="R">
+			<SquareIcon />
+		</ToolbarToggle>
+	</ToolbarToggleGroup>
+</Toolbar>
+```
+
+### Dropdown for tool variants
+
+```tsx
+<ToolbarDropdown
+	value={pointerTool}
+	active={isPointerActive}
+	onSelect={setTool}
+	tooltip="Select"
+	shortcut="V"
+	items={[
+		{ value: "select", icon: <CursorIcon />, label: "Select", shortcut: "V" },
+		{ value: "hand", icon: <HandIcon />, label: "Hand", shortcut: "H" },
+	]}
+>
+	<ActiveIcon />
+</ToolbarDropdown>
+```
+
+## Components
+
+| Component            | Description                                                                   |
+| -------------------- | ----------------------------------------------------------------------------- |
+| `Toolbar`            | Fixed-position container with `role="toolbar"` and built-in `TooltipProvider` |
+| `ToolbarToggleGroup` | Single-select toggle group (wraps Radix ToggleGroup)                          |
+| `ToolbarToggle`      | Toggle button with optional tooltip and keyboard shortcut display             |
+| `ToolbarSeparator`   | Vertical divider between tool groups                                          |
+| `ToolbarDropdown`    | Button with dropdown menu for tool variant selection, active state highlight  |

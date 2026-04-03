@@ -1,0 +1,39 @@
+---
+title: Introduction
+description: Canvas primitives for building design tools
+---
+
+## About Substrate
+
+Substrate is a shadcn-compatible registry of canvas primitives for building design tools. It provides the building blocks — canvas rendering, state management, interaction hooks, and composable UI components — so you can quickly scaffold creative canvas experiences.
+
+Built directly on **Radix primitives** and **Zustand** for state management. No wrapper layers.
+
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.vui.run/r/design-canvas
+```
+
+## What's included
+
+### Core
+- **Types** — Element, camera, tool, and panel type definitions
+- **Stores** — Zustand stores for document state, tool selection, and panel visibility
+- **Canvas engine** — HTML5 Canvas renderer, hit testing, element factory
+- **Hooks** — Interaction, rendering, transforms, keyboard shortcuts
+
+### UI Primitives
+- **Toolbar** — Floating toolbar with toggle groups, dropdowns, and tooltips
+- **Panel** — Side panel container with scroll and position variants
+- **Pane** — Content sections with header, label, and action slots
+- **Action** — Label + control field rows for property editors
+- **Slider** — Radix slider with design tool styling
+
+---
+
+## Lineage
+
+<Lineage items={[{ name: "Radix", href: "https://radix-ui.com" }, { name: "Substrate" }]} />

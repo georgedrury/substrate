@@ -1,0 +1,22 @@
+---
+title: Slider
+description: Slider component built on Radix Slider primitive.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.vui.run/r/slider
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Radix", href: "https://radix-ui.com" }, { name: "Substrate" }]} />
+
+## Usage
+
+```tsx
+import { Slider } from "@/registry/substrate/components/slider"
+
+<Slider value={[50]} onValueChange={setValue} max={100} step={1} />
+```

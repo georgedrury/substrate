@@ -1,0 +1,46 @@
+---
+title: Design Canvas
+description: The main canvas component for rendering and interacting with design elements.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.vui.run/r/design-canvas
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Substrate" }]} />
+
+## Usage
+
+```tsx
+import { DesignCanvas } from "@/registry/substrate/canvas/design-canvas"
+
+export default function Editor() {
+	return (
+		<div className="h-screen w-screen">
+			<DesignCanvas />
+		</div>
+	)
+}
+```
+
+## Features
+
+- HTML5 Canvas 2D rendering with `requestAnimationFrame` loop
+- DPR-aware sizing for sharp rendering on retina displays
+- Dirty-flag optimization — only re-renders when state changes
+- Pointer event handling for create, move, resize, pan, and marquee select
+- Keyboard shortcuts for tool switching, undo/redo, delete, and zoom
+- Cursor changes based on active tool
+
+## Dependencies
+
+The canvas component pulls in the full interaction stack:
+
+- `tool-store` — active tool state
+- `use-canvas-renderer` — render loop
+- `use-canvas-interaction` — pointer events
+- `use-keyboard-shortcuts` — keyboard handling

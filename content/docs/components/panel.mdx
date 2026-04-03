@@ -1,0 +1,35 @@
+---
+title: Panel
+description: Side panel container with position variants and scroll area.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.vui.run/r/panel
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Substrate" }]} />
+
+## Usage
+
+```tsx
+import { Panel } from "@/registry/substrate/components/panel"
+
+<Panel position="left">
+  {/* Panel content */}
+</Panel>
+
+<Panel position="right">
+  {/* Panel content */}
+</Panel>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `position` | `"left" \| "right"` | `"right"` | Which side the panel sits on. Controls border direction. |
+| `variant` | `"tool" \| "default"` | `"default"` | Panel variant. Tool variant uses flex column layout. |
