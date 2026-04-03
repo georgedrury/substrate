@@ -8,30 +8,27 @@ import {
 	RiSubtractLine,
 	RiText,
 	RiArtboardLine,
-	RiStackLine,
 } from "@remixicon/react"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { Toggle } from "@/components/ui/toggle"
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { Separator } from "@/components/ui/separator"
 import { useTool } from "../contexts/tool-context"
-import { usePanel } from "../contexts/panel-context"
 import type { ToolType } from "../types"
-import { Panel } from "./panel"
+import {
+	Toolbar,
+	ToolbarToggleGroup,
+	ToolbarToggle,
+	ToolbarSeparator,
+	ToolbarDropdown,
+	type ToolbarDropdownItem,
+} from "../components/toolbar"
 
-const TOOLS: {
-	id: ToolType
-	icon: React.ElementType
-	label: string
-	shortcut: string
-}[] = [
-	{ id: "select", icon: RiCursorLine, label: "Select", shortcut: "V" },
-	{ id: "hand", icon: RiHand, label: "Hand", shortcut: "H" },
+const POINTER_TOOLS: ToolbarDropdownItem[] = [
+	{ value: "select", icon: <RiCursorLine className="size-4" />, label: "Select", shortcut: "V" },
+	{ value: "hand", icon: <RiHand className="size-4" />, label: "Hand", shortcut: "H" },
 ]
+
+const POINTER_ICONS: Record<string, React.ElementType> = {
+	select: RiCursorLine,
+	hand: RiHand,
+}
 
 const SHAPE_TOOLS: {
 	id: ToolType
@@ -48,53 +45,43 @@ const SHAPE_TOOLS: {
 
 export function Tools() {
 	const { activeTool, setTool } = useTool()
-	const { state: panelState, setLeftPanel } = usePanel()
-	const layersOpen = panelState.leftPanel === "layers"
+
+	const pointerTool = activeTool === "select" || activeTool === "hand" ? activeTool : "select"
+	const PointerIcon = POINTER_ICONS[pointerTool]
 
 	return (
-		<div className="fixed z-99 p-2 bg-background border rounded-xl shadow-lg bottom-12 left-1/2 -translate-x-1/2">
-			<ToggleGroup
-				type="single"
+		<Toolbar>
+			<ToolbarToggleGroup
 				value={activeTool}
 				onValueChange={(value) => {
 					if (value) setTool(value as ToolType)
 				}}
-				orientation="horizontal"
-				spacing={1}
-				className="flex"
 			>
-				{TOOLS.map((tool) => (
-					<Tooltip key={tool.id}>
-						<TooltipTrigger asChild>
-							<ToggleGroupItem value={tool.id} aria-label={tool.label}>
-								<tool.icon className="size-6 stroke-1" />
-							</ToggleGroupItem>
-						</TooltipTrigger>
-						<TooltipContent side="top" sideOffset={8}>
-							{tool.label}{" "}
-							<kbd className="ml-1 text-[10px] text-muted-foreground">
-								{tool.shortcut}
-							</kbd>
-						</TooltipContent>
-					</Tooltip>
-				))}
+				<ToolbarDropdown
+					value={pointerTool}
+					active={activeTool === "select" || activeTool === "hand"}
+					onSelect={(v) => setTool(v as ToolType)}
+					tooltip={pointerTool === "select" ? "Select" : "Hand"}
+					shortcut={pointerTool === "select" ? "V" : "H"}
+					items={POINTER_TOOLS}
+				>
+					<PointerIcon className="size-6 stroke-1" />
+				</ToolbarDropdown>
+
+				<ToolbarSeparator />
 
 				{SHAPE_TOOLS.map((tool) => (
-					<Tooltip key={tool.id}>
-						<TooltipTrigger asChild>
-							<ToggleGroupItem value={tool.id} aria-label={tool.label}>
-								<tool.icon className="size-6 stroke-1" />
-							</ToggleGroupItem>
-						</TooltipTrigger>
-						<TooltipContent side="top" sideOffset={8}>
-							{tool.label}{" "}
-							<kbd className="ml-1 text-[10px] text-muted-foreground">
-								{tool.shortcut}
-							</kbd>
-						</TooltipContent>
-					</Tooltip>
+					<ToolbarToggle
+						key={tool.id}
+						value={tool.id}
+						tooltip={tool.label}
+						shortcut={tool.shortcut}
+						aria-label={tool.label}
+					>
+						<tool.icon className="size-6 stroke-1" />
+					</ToolbarToggle>
 				))}
-			</ToggleGroup>
-		</div>
+			</ToolbarToggleGroup>
+		</Toolbar>
 	)
 }
