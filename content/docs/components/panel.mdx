@@ -27,9 +27,16 @@ import { Panel } from "@/registry/substrate/components/panel"
 </Panel>
 ```
 
+## Theme variables
+
+| Variable             | Tailwind class          | Fallback            | Description             |
+| -------------------- | ----------------------- | ------------------- | ----------------------- |
+| `--panel`            | `bg-panel`              | `--card`            | Panel background colour |
+| `--panel-foreground` | `text-panel-foreground` | `--card-foreground` | Panel text colour       |
+
 ## Props
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `position` | `"left" \| "right"` | `"right"` | Which side the panel sits on. Controls border direction. |
-| `variant` | `"tool" \| "default"` | `"default"` | Panel variant. Tool variant uses flex column layout. |
+| Prop       | Type                  | Default     | Description                                              |
+| ---------- | --------------------- | ----------- | -------------------------------------------------------- |
+| `position` | `"left" \| "right"`   | `"right"`   | Which side the panel sits on. Controls border direction. |
+| `variant`  | `"tool" \| "default"` | `"default"` | Panel variant. Tool variant uses flex column layout.     |

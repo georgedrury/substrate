@@ -4,46 +4,63 @@ Guide to customising the visual appearance of Substrate's canvas, UI chrome, and
 
 ## How theming works
 
-Substrate components use Tailwind's semantic colour tokens (`bg-background`, `text-foreground`, `bg-accent`, etc.) rather than raw colours. This means theming is handled at the CSS variable level — you change the tokens, everything updates.
+Substrate uses a CSS variable fallback chain (Tailwind v4) so you can override specific tokens without redefining everything. The pattern is:
 
-The canvas renderer uses its own colour values for grid lines, selection boxes, and handles. These are defined as constants in the renderer and can be overridden.
+```css
+/* @theme inline block */
+--color-canvas: var(--canvas, var(--color-background));
+```
 
-## 1. UI chrome (toolbar, panels, panes)
+Set `--canvas` to override the canvas background; if unset, it falls back to `--color-background`.
 
-These components use the standard shadcn/Tailwind semantic tokens. Override them in your `globals.css`:
+## 1. Substrate tokens
+
+Substrate defines its own semantic tokens that fall back to standard shadcn tokens:
+
+| Tailwind class | CSS variable | Fallback | Used by |
+|---|---|---|---|
+| `bg-canvas` | `--color-canvas` → `--canvas` | `--color-background` | Canvas background |
+| `text-canvas-foreground` | `--color-canvas-foreground` → `--canvas-foreground` | `--color-foreground-muted` | Canvas grid dots |
+| `bg-panel` | `--color-panel` → `--panel` | `--color-card` | Panel background |
+| `text-panel-foreground` | `--color-panel-foreground` → `--panel-foreground` | `--color-card-foreground` | Panel text |
+
+Override the short-form variables in your `:root` and `.dark` blocks:
 
 ```css
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --border: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
+  /* Canvas */
+  --canvas: oklch(.97 0.0 0);
+  --canvas-foreground: oklch(0.556 0 0);
+  /* Panels */
+  --panel: oklch(1 0 0);
+  --panel-foreground: oklch(0.145 0 0);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  /* ... dark variants */
+  --canvas: oklch(17.764% 0.00002 271.152);
+  --canvas-foreground: oklch(0.708 0 0);
+  --panel: oklch(0.205 0 0);
+  --panel-foreground: oklch(0.985 0 0);
 }
 ```
+
+## 2. Standard shadcn tokens
+
+The toolbar, slider, and tooltip still use standard shadcn tokens:
 
 ### Key tokens per component
 
 - **Toolbar** — `bg-background`, `border`, `shadow-lg` for the container; `hover:bg-muted`, `aria-checked:bg-accent` for toggles
-- **Panel** — `bg-background`, `border-border` for the shell; scrollbar inherits from the panel
-- **Pane** — text uses `text-xs font-medium` (inherits `foreground`)
+- **Panel** — `bg-panel`, `text-panel-foreground`, `border-border`
+- **Pane** — `bg-panel` for action buttons, inherits `panel-foreground` for text
 - **Slider** — track uses `bg-accent`, thumb uses `bg-foreground`
 - **Tooltip** — inverted: `bg-foreground`, `text-background`
 
-## 2. Canvas rendering
+## 3. Canvas rendering
 
-The canvas renderer draws directly to a `CanvasRenderingContext2D`, so CSS variables don't apply. Instead, modify the colour constants in `canvas/renderer.ts`:
+The canvas background is now driven by the `--canvas` CSS variable, read at render time via `getComputedStyle`. This means it automatically responds to light/dark mode and custom themes.
+
+Grid dots, selection UI, and other renderer constants are still hardcoded in `canvas/renderer.ts`:
 
 ### Grid
 

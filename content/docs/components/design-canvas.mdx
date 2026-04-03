@@ -36,6 +36,15 @@ export default function Editor() {
 - Keyboard shortcuts for tool switching, undo/redo, delete, and zoom
 - Cursor changes based on active tool
 
+## Theme variables
+
+| Variable | Tailwind class | Fallback | Description |
+|---|---|---|---|
+| `--canvas` | `bg-canvas` | `--background` | Canvas background colour |
+| `--canvas-foreground` | `text-canvas-foreground` | `--foreground-muted` | Grid dots and canvas UI |
+
+Override in your `globals.css` `:root` / `.dark` blocks to theme the canvas.
+
 ## Dependencies
 
 The canvas component pulls in the full interaction stack:

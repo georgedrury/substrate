@@ -16,22 +16,35 @@ npx shadcn@latest add https://substrate.vui.run/r/pane
 ## Usage
 
 ```tsx
-import { Pane, PaneHeader, PaneLabel, PaneAction } from "@/registry/substrate/components/pane"
+import {
+	Pane,
+	PaneHeader,
+	PaneLabel,
+	PaneAction,
+} from "@/registry/substrate/components/pane"
 
-<Pane>
-  <PaneHeader>
-    <PaneLabel>Fill</PaneLabel>
-    <PaneAction onClick={toggleFill}>+</PaneAction>
-  </PaneHeader>
-  {/* Pane content */}
+;<Pane>
+	<PaneHeader>
+		<PaneLabel>Fill</PaneLabel>
+		<PaneAction onClick={toggleFill}>+</PaneAction>
+	</PaneHeader>
+	{/* Pane content */}
 </Pane>
 ```
 
+## Theme variables
+
+Pane inherits panel tokens. `PaneAction` uses `bg-panel` for its background.
+
+| Variable  | Tailwind class | Fallback | Description              |
+| --------- | -------------- | -------- | ------------------------ |
+| `--panel` | `bg-panel`     | `--card` | Action button background |
+
 ## Components
 
-| Component | Description |
-|---|---|
-| `Pane` | Container with vertical spacing and horizontal padding |
-| `PaneHeader` | Flex row for label + action |
-| `PaneLabel` | Section title text |
-| `PaneAction` | Button slot in the header |
+| Component    | Description                                            |
+| ------------ | ------------------------------------------------------ |
+| `Pane`       | Container with vertical spacing and horizontal padding |
+| `PaneHeader` | Flex row for label + action                            |
+| `PaneLabel`  | Section title text                                     |
+| `PaneAction` | Button slot in the header                              |
