@@ -1,10 +1,10 @@
 "use client"
 
 import { useCallback } from "react"
-import { Slider } from "@/components/design/components/slider"
-import { useDocumentStore } from "../stores/document-store"
-import { Pane, PaneLabel } from "../components/pane"
-import { Action, ActionLabel, ActionControls } from "../components/action"
+import { Slider } from "@/registry/substrate/components/slider"
+import { useDocumentStore } from "@/registry/substrate/stores/document-store"
+import { Pane, PaneLabel } from "@/registry/substrate/components/pane"
+import { Action, ActionLabel, ActionControls } from "@/registry/substrate/components/action"
 
 export function AppearancePane() {
 	const selectedIds = useDocumentStore((s) => s.selectedIds)

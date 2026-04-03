@@ -24,17 +24,19 @@ function Toolbar({
 	...props
 }: ToolbarProps & React.ComponentProps<"div">) {
 	return (
-		<div
-			role="toolbar"
-			data-slot="toolbar"
-			data-position={position}
-			data-orientation={orientation}
-			className={cn(
-				"group/toolbar fixed z-50 flex items-center p-2 bg-background border rounded-xl shadow-lg bottom-12 left-1/2 -translate-x-1/2",
-				className,
-			)}
-			{...props}
-		/>
+		<TooltipPrimitive.Provider delayDuration={300}>
+			<div
+				role="toolbar"
+				data-slot="toolbar"
+				data-position={position}
+				data-orientation={orientation}
+				className={cn(
+					"group/toolbar fixed z-50 flex items-center p-2 bg-background border rounded-xl shadow-lg bottom-12 left-1/2 -translate-x-1/2",
+					className,
+				)}
+				{...props}
+			/>
+		</TooltipPrimitive.Provider>
 	)
 }
 

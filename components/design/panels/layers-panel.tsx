@@ -1,9 +1,9 @@
 "use client"
 
-import { useDocumentStore } from "../stores/document-store"
+import { useDocumentStore } from "@/registry/substrate/stores/document-store"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
-import { Panel } from "../components/panel"
+import { Panel } from "@/registry/substrate/components/panel"
 
 export function LayersPanel() {
 	const elements = useDocumentStore((s) => s.elements)

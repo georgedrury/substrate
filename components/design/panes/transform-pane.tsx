@@ -2,9 +2,9 @@
 
 import { useCallback } from "react"
 import { Input } from "@/components/ui/input"
-import { useDocumentStore } from "../stores/document-store"
-import { Pane, PaneHeader, PaneLabel } from "../components/pane"
-import { Action, ActionLabel, ActionControls } from "../components/action"
+import { useDocumentStore } from "@/registry/substrate/stores/document-store"
+import { Pane, PaneHeader, PaneLabel } from "@/registry/substrate/components/pane"
+import { Action, ActionLabel, ActionControls } from "@/registry/substrate/components/action"
 
 export function TransformPane() {
 	const selectedIds = useDocumentStore((s) => s.selectedIds)

@@ -1,11 +1,10 @@
 "use client"
 
-import { DesignProvider } from "./design-provider"
-import { DesignCanvas } from "../canvas/design-canvas"
+import { DesignCanvas } from "@/registry/substrate/canvas/design-canvas"
 
 import { LayersPanel } from "../panels/layers-panel"
-import { usePanelStore } from "../stores/panel-store"
-import { useDocumentStore } from "../stores/document-store"
+import { usePanelStore } from "@/registry/substrate/stores/panel-store"
+import { useDocumentStore } from "@/registry/substrate/stores/document-store"
 import { PropertiesPanel } from "../panels/properties-panel"
 import { Tools } from "../panels/tools"
 
@@ -41,9 +40,5 @@ function EditorLayout() {
 }
 
 export function DesignEditor() {
-	return (
-		<DesignProvider>
-			<EditorLayout />
-		</DesignProvider>
-	)
+	return <EditorLayout />
 }

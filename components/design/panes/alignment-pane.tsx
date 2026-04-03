@@ -2,8 +2,8 @@
 
 import { useCallback } from "react"
 import { Button } from "@/components/ui/button"
-import { useDocumentStore } from "../stores/document-store"
-import { Pane, PaneLabel } from "../components/pane"
+import { useDocumentStore } from "@/registry/substrate/stores/document-store"
+import { Pane, PaneLabel } from "@/registry/substrate/components/pane"
 
 export function AlignmentPane() {
 	const selectedIds = useDocumentStore((s) => s.selectedIds)

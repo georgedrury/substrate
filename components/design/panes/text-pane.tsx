@@ -10,10 +10,10 @@ import {
 	SelectValue,
 } from "@/components/ui/select"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { useDocumentStore } from "../stores/document-store"
-import { Pane, PaneLabel } from "../components/pane"
-import { Action, ActionLabel, ActionControls } from "../components/action"
-import type { TextElement, TextStyle } from "../types"
+import { useDocumentStore } from "@/registry/substrate/stores/document-store"
+import { Pane, PaneLabel } from "@/registry/substrate/components/pane"
+import { Action, ActionLabel, ActionControls } from "@/registry/substrate/components/action"
+import type { TextElement, TextStyle } from "@/registry/substrate/types"
 import { RiAlignCenter, RiAlignLeft, RiAlignRight } from "@remixicon/react"
 
 const FONT_FAMILIES = [

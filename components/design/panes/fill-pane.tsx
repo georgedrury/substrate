@@ -2,11 +2,11 @@
 
 import { useCallback } from "react"
 import { Input } from "@/components/ui/input"
-import { Slider } from "@/components/design/components/slider"
-import { useDocumentStore } from "../stores/document-store"
-import { Pane, PaneHeader, PaneLabel, PaneAction } from "../components/pane"
-import { Action, ActionLabel, ActionControls } from "../components/action"
-import type { Fill } from "../types"
+import { Slider } from "@/registry/substrate/components/slider"
+import { useDocumentStore } from "@/registry/substrate/stores/document-store"
+import { Pane, PaneHeader, PaneLabel, PaneAction } from "@/registry/substrate/components/pane"
+import { Action, ActionLabel, ActionControls } from "@/registry/substrate/components/action"
+import type { Fill } from "@/registry/substrate/types"
 import {
 	InputGroup,
 	InputGroupAddon,

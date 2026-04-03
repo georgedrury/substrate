@@ -9,8 +9,8 @@ import {
 	RiText,
 	RiArtboardLine,
 } from "@remixicon/react"
-import { useToolStore } from "../stores/tool-store"
-import type { ToolType } from "../types"
+import { useToolStore } from "@/registry/substrate/stores/tool-store"
+import type { ToolType } from "@/registry/substrate/types"
 import {
 	Toolbar,
 	ToolbarToggleGroup,
@@ -18,7 +18,7 @@ import {
 	ToolbarSeparator,
 	ToolbarDropdown,
 	type ToolbarDropdownItem,
-} from "../components/toolbar"
+} from "@/registry/substrate/components/toolbar"
 
 const POINTER_TOOLS: ToolbarDropdownItem[] = [
 	{ value: "select", icon: <RiCursorLine className="size-4" />, label: "Select", shortcut: "V" },

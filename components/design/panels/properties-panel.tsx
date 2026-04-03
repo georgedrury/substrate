@@ -1,9 +1,9 @@
 "use client"
 
-import { useDocumentStore } from "../stores/document-store"
+import { useDocumentStore } from "@/registry/substrate/stores/document-store"
 import { Separator } from "@/components/ui/separator"
 
-import { Panel } from "../components/panel"
+import { Panel } from "@/registry/substrate/components/panel"
 import { AlignmentPane } from "../panes/alignment-pane"
 import { AppearancePane } from "../panes/appearance-pane"
 import { FillPane } from "../panes/fill-pane"
