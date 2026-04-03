@@ -7,14 +7,19 @@ import {
 	ToolbarToggle,
 	ToolbarSeparator,
 } from "@/registry/substrate/components/toolbar"
-import { RiCursorLine, RiSquareLine, RiCircleLine, RiPencilLine } from "@remixicon/react"
+import {
+	RiCursorLine,
+	RiSquareLine,
+	RiCircleLine,
+	RiPencilLine,
+} from "@remixicon/react"
 
 export default function ToolbarDemo() {
 	const [tool, setTool] = useState("select")
 
 	return (
-		<div className="relative h-[80px] w-full flex items-center justify-center">
-			<Toolbar>
+		<div className="relative h-20 w-full flex items-center justify-center">
+			<Toolbar className="absolute bottom-4">
 				<ToolbarToggleGroup value={tool} onValueChange={setTool}>
 					<ToolbarToggle value="select" tooltip="Select" shortcut="V">
 						<RiCursorLine className="size-4" />
