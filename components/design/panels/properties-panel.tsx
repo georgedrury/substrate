@@ -2,13 +2,14 @@
 
 import { useSelection } from "../contexts/selection-context"
 import { Separator } from "@/components/ui/separator"
-import { TransformSection } from "../properties/transform-section"
-import { FillSection } from "../properties/fill-section"
-import { StrokeSection } from "../properties/stroke-section"
-import { TextSection } from "../properties/text-section"
-import { AppearanceSection } from "../properties/appearance-section"
-import { AlignmentSection } from "../properties/alignment-section"
-import { Panel } from "./panel"
+
+import { Panel } from "../components/panel"
+import { AlignmentPane } from "../panes/alignment-pane"
+import { AppearancePane } from "../panes/appearance-pane"
+import { FillPane } from "../panes/fill-pane"
+import { StrokePane } from "../panes/stroke-pane"
+import { TextPane } from "../panes/text-pane"
+import { TransformPane } from "../panes/transform-pane"
 
 export function PropertiesPanel() {
 	const { selectedElements } = useSelection()
@@ -28,26 +29,25 @@ export function PropertiesPanel() {
 	return (
 		<Panel>
 			<div className="text-xs font-medium truncate px-3">{element.name}</div>
-			<TransformSection />
+			<TransformPane />
 			<Separator />
-			<FillSection />
+			<FillPane />
 			<Separator />
-			<StrokeSection />
-
+			<StrokePane />
 			{element.type === "text" && (
 				<>
 					<Separator />
-					<TextSection />
+					<TextPane />
 				</>
 			)}
 
 			<Separator />
-			<AppearanceSection />
+			<AppearancePane />
 
 			{selectedElements.length > 1 && (
 				<>
 					<Separator />
-					<AlignmentSection />
+					<AlignmentPane />
 				</>
 			)}
 		</Panel>

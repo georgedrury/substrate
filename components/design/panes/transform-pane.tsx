@@ -5,10 +5,10 @@ import { Input } from "@/components/ui/input"
 import { useCanvas } from "../contexts/canvas-context"
 import { useSelection } from "../contexts/selection-context"
 import { useHistory } from "../contexts/history-context"
-import { Properties, PropertiesHeader, PropertiesLabel } from "./properties"
-import { Action, ActionLabel, ActionControls } from "../action"
+import { Pane, PaneHeader, PaneLabel } from "../components/pane"
+import { Action, ActionLabel, ActionControls } from "../components/action"
 
-export function TransformSection() {
+export function TransformPane() {
 	const { dispatch } = useCanvas()
 	const { selectedElements } = useSelection()
 	const { pushSnapshot } = useHistory()
@@ -17,10 +17,10 @@ export function TransformSection() {
 	if (!element) return null
 
 	return (
-		<Properties>
-			<PropertiesHeader>
-				<PropertiesLabel>Transform</PropertiesLabel>
-			</PropertiesHeader>
+		<Pane>
+			<PaneHeader>
+				<PaneLabel>Transform</PaneLabel>
+			</PaneHeader>
 			<div className="grid grid-cols-2 gap-2">
 				<NumberField
 					label="X"
@@ -65,7 +65,7 @@ export function TransformSection() {
 					pushSnapshot={pushSnapshot}
 				/>
 			</div>
-		</Properties>
+		</Pane>
 	)
 }
 

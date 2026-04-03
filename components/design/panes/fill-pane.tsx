@@ -2,17 +2,12 @@
 
 import { useCallback } from "react"
 import { Input } from "@/components/ui/input"
-import { Slider } from "@/components/ui/slider"
+import { Slider } from "@/components/design/components/slider"
 import { useCanvas } from "../contexts/canvas-context"
 import { useSelection } from "../contexts/selection-context"
 import { useHistory } from "../contexts/history-context"
-import {
-	Properties,
-	PropertiesHeader,
-	PropertiesLabel,
-	PropertiesAction,
-} from "./properties"
-import { Action, ActionLabel, ActionControls } from "../action"
+import { Pane, PaneHeader, PaneLabel, PaneAction } from "../components/pane"
+import { Action, ActionLabel, ActionControls } from "../components/action"
 import type { Fill } from "../types"
 import {
 	InputGroup,
@@ -20,7 +15,7 @@ import {
 	InputGroupInput,
 } from "@/components/ui/input-group"
 
-export function FillSection() {
+export function FillPane() {
 	const { dispatch } = useCanvas()
 	const { selectedElements } = useSelection()
 	const { pushSnapshot } = useHistory()
@@ -61,13 +56,13 @@ export function FillSection() {
 	}, [element.id, fill, dispatch, pushSnapshot])
 
 	return (
-		<Properties>
-			<PropertiesHeader>
-				<PropertiesLabel>Fill</PropertiesLabel>
-				<PropertiesAction onClick={toggleFill}>
+		<Pane>
+			<PaneHeader>
+				<PaneLabel>Fill</PaneLabel>
+				<PaneAction onClick={toggleFill}>
 					<span className="text-[10px]">{fill ? "-" : "+"}</span>
-				</PropertiesAction>
-			</PropertiesHeader>
+				</PaneAction>
+			</PaneHeader>
 
 			{fill && (
 				<div className="space-y-2">
@@ -106,6 +101,6 @@ export function FillSection() {
 					</Action>
 				</div>
 			)}
-		</Properties>
+		</Pane>
 	)
 }

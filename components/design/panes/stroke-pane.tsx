@@ -6,13 +6,8 @@ import { Slider } from "@/components/ui/slider"
 import { useCanvas } from "../contexts/canvas-context"
 import { useSelection } from "../contexts/selection-context"
 import { useHistory } from "../contexts/history-context"
-import {
-	Properties,
-	PropertiesHeader,
-	PropertiesLabel,
-	PropertiesAction,
-} from "./properties"
-import { Action, ActionLabel, ActionControls } from "../action"
+import { Pane, PaneHeader, PaneLabel, PaneAction } from "../components/pane"
+import { Action, ActionLabel, ActionControls } from "../components/action"
 import type { Stroke } from "../types"
 import {
 	InputGroup,
@@ -20,7 +15,7 @@ import {
 	InputGroupInput,
 } from "@/components/ui/input-group"
 
-export function StrokeSection() {
+export function StrokePane() {
 	const { dispatch } = useCanvas()
 	const { selectedElements } = useSelection()
 	const { pushSnapshot } = useHistory()
@@ -61,13 +56,13 @@ export function StrokeSection() {
 	}, [element.id, stroke, dispatch, pushSnapshot])
 
 	return (
-		<Properties>
-			<PropertiesHeader>
-				<PropertiesLabel>Stroke</PropertiesLabel>
-				<PropertiesAction onClick={toggleStroke}>
+		<Pane>
+			<PaneHeader>
+				<PaneLabel>Stroke</PaneLabel>
+				<PaneAction onClick={toggleStroke}>
 					<span className="text-[10px]">{stroke ? "-" : "+"}</span>
-				</PropertiesAction>
-			</PropertiesHeader>
+				</PaneAction>
+			</PaneHeader>
 			{stroke && (
 				<div className="space-y-2">
 					<Action>
@@ -119,6 +114,6 @@ export function StrokeSection() {
 					</Action>
 				</div>
 			)}
-		</Properties>
+		</Pane>
 	)
 }
