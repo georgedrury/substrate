@@ -1,21 +1,48 @@
 # Scaffold a Substrate playground
 
-Step-by-step guide to bootstrapping a new interactive canvas playground from Substrate primitives.
+Step-by-step guide to bootstrapping a new interactive playground from Substrate primitives.
+
+## What is a Substrate playground?
+
+A Substrate playground is a creative app built from composable primitives: a **surface** (the central area where the main interaction happens), **chrome** (toolbar, panels, panes), and **stores** (Zustand state management with undo/redo). You bring the creative idea — Substrate provides the shell.
 
 ## Prerequisites
 
 A Next.js 14+ project with Tailwind CSS and the shadcn CLI configured. If you don't have one, run:
 
 ```bash
-npx shadcn@latest init
+npx substrate create my-playground
 ```
 
-## 1. Install core primitives
+This scaffolds a full project with dependencies, globals.css with Substrate tokens, and a starter playground page.
+
+To add Substrate to an existing project instead:
 
 ```bash
-# Canvas engine
-npx shadcn@latest add https://substrate.vui.run/r/design-canvas
+npx substrate init
+```
 
+This installs skills, CLAUDE.md, components.json, and registers the MCP server.
+
+## 1. Choose your surface
+
+The surface is the heart of the playground — the central area where the main interaction happens. Substrate supports several surface types:
+
+| Surface | Best for | Skill |
+|---|---|---|
+| 2D canvas | Shape editors, diagrams, whiteboards, node graphs | [canvas-2d](./canvas-2d.md) |
+| 3D scene | Product viewers, scene builders, shader playgrounds | [3d-scene](./3d-scene.md) |
+| Animation | Timeline editors, motion prototyping, easing explorers | [animation](./animation.md) |
+| Image generation | Prompt-driven image tools, texture generators, inpainting | [image-generation](./image-generation.md) |
+| Data visualisation | Chart editors, dashboard builders, data explorers | [data-visualisation](./data-visualisation.md) |
+
+Read the relevant surface skill for setup instructions, dependencies, and architecture patterns.
+
+## 2. Install chrome primitives
+
+Regardless of surface type, most playgrounds use the same chrome components:
+
+```bash
 # UI chrome
 npx shadcn@latest add https://substrate.vui.run/r/toolbar
 npx shadcn@latest add https://substrate.vui.run/r/panel
@@ -24,84 +51,50 @@ npx shadcn@latest add https://substrate.vui.run/r/action
 npx shadcn@latest add https://substrate.vui.run/r/slider
 ```
 
-Installing `design-canvas` automatically pulls in all hooks, stores, types, and canvas modules it depends on.
+For the 2D canvas surface specifically, also install:
 
-## 2. Create the playground layout
+```bash
+npx shadcn@latest add https://substrate.vui.run/r/design-canvas
+```
 
-Create a page that composes the canvas with toolbar and panels:
+## 3. Compose the layout
+
+Every playground follows the same layout pattern — surface in the centre, optional panels on left/right, toolbar floating at the bottom:
 
 ```tsx
-// app/playground/page.tsx
 "use client"
 
-import { DesignCanvas } from "@/registry/substrate/canvas/design-canvas"
-import {
-  Toolbar,
-  ToolbarToggleGroup,
-  ToolbarToggle,
-  ToolbarSeparator,
-} from "@/registry/substrate/components/toolbar"
 import { Panel } from "@/registry/substrate/components/panel"
-import { useToolStore } from "@/registry/substrate/stores/tool-store"
+import { Toolbar, ToolbarToggleGroup, ToolbarToggle, ToolbarSeparator } from "@/registry/substrate/components/toolbar"
 import { usePanelStore } from "@/registry/substrate/stores/panel-store"
-import {
-  RiCursorLine,
-  RiHandLine,
-  RiSquareLine,
-  RiCircleLine,
-  RiSubtractLine,
-  RiText,
-} from "@remixicon/react"
+import { useToolStore } from "@/registry/substrate/stores/tool-store"
 
 export default function PlaygroundPage() {
-  const activeTool = useToolStore((s) => s.activeTool)
-  const setTool = useToolStore((s) => s.setTool)
   const leftPanel = usePanelStore((s) => s.leftPanel)
   const rightPanel = usePanelStore((s) => s.rightPanel)
+  const activeTool = useToolStore((s) => s.activeTool)
+  const setTool = useToolStore((s) => s.setTool)
 
   return (
-    <div className="h-screen w-screen bg-muted">
-      {/* Left panel — layers, tools */}
+    <div className="h-screen w-screen bg-canvas">
       {leftPanel && (
         <Panel position="left">
-          {/* Add panes here */}
+          {/* Layers, data sources, history — depends on surface type */}
         </Panel>
       )}
 
-      {/* Canvas */}
-      <DesignCanvas />
+      {/* Your surface goes here */}
+      {/* <DesignCanvas /> or <SceneViewport /> or <PreviewSurface /> etc. */}
 
-      {/* Right panel — properties */}
       {rightPanel && (
         <Panel position="right">
-          {/* Add property panes here */}
+          {/* Properties, parameters, configuration — depends on surface type */}
         </Panel>
       )}
 
-      {/* Toolbar */}
       <Toolbar>
         <ToolbarToggleGroup value={activeTool} onValueChange={setTool}>
-          <ToolbarToggle value="select" tooltip="Select" shortcut="V">
-            <RiCursorLine className="size-4" />
-          </ToolbarToggle>
-          <ToolbarToggle value="hand" tooltip="Hand" shortcut="H">
-            <RiHandLine className="size-4" />
-          </ToolbarToggle>
-
-          <ToolbarSeparator />
-
-          <ToolbarToggle value="rectangle" tooltip="Rectangle" shortcut="R">
-            <RiSquareLine className="size-4" />
-          </ToolbarToggle>
-          <ToolbarToggle value="ellipse" tooltip="Ellipse" shortcut="O">
-            <RiCircleLine className="size-4" />
-          </ToolbarToggle>
-          <ToolbarToggle value="line" tooltip="Line" shortcut="L">
-            <RiSubtractLine className="size-4" />
-          </ToolbarToggle>
-          <ToolbarToggle value="text" tooltip="Text" shortcut="T">
-            <RiText className="size-4" />
-          </ToolbarToggle>
+          {/* Tool toggles — depends on surface type */}
         </ToolbarToggleGroup>
       </Toolbar>
     </div>
@@ -109,20 +102,22 @@ export default function PlaygroundPage() {
 }
 ```
 
-## 3. What you get out of the box
+## 4. What the chrome gives you
 
-Once scaffolded, the playground includes:
+Once scaffolded, the chrome primitives provide:
 
-- **Canvas** — pan (scroll/space+drag), zoom (pinch/scroll), create elements by dragging with a shape tool
-- **Selection** — click to select, shift-click to multi-select, marquee selection
-- **Manipulation** — move and resize selected elements with handles
-- **History** — Cmd+Z / Cmd+Shift+Z for undo/redo
-- **Keyboard shortcuts** — V (select), H (hand), R (rectangle), O (ellipse), L (line), T (text), F (frame), Delete, Cmd+A, Cmd+D (duplicate)
-- **Grid** — toggleable via the document store
+- **Toolbar** — floating bottom bar with toggle groups, separators, and tooltip/shortcut hints
+- **Panels** — side panels (left/right) with visibility controlled by `usePanelStore`
+- **Panes** — collapsible sections within panels, with headers, labels, and action buttons
+- **Actions** — labelled property rows (label + controls) for building inspectors
+- **Sliders** — range inputs for numeric properties
 
-## 4. Next steps
+These are surface-agnostic — they work the same whether you're building a 3D scene editor or an image generation tool.
 
-- **Add property panels** — see the [composing panels](./composing-panels.md) skill
-- **Create custom tools** — see the [create custom tool](./create-custom-tool.md) skill
-- **Wire interactions** — see the [wire interactions](./wire-interactions.md) skill
-- **Customise appearance** — see the [theming](./theming.md) skill
+## 5. Next steps
+
+- **Build your surface** — read the surface skill for your chosen type
+- **Add property panels** — see [composing panels](./composing-panels.md)
+- **Wire keyboard shortcuts** — see [wire interactions](./wire-interactions.md)
+- **Create custom tools** — see [create custom tool](./create-custom-tool.md)
+- **Customise appearance** — see [theming](./theming.md)

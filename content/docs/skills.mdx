@@ -3,18 +3,89 @@ title: Skills
 description: Reusable capabilities for AI agents
 ---
 
-## Substrate skills
+## Surface skills
+
+Skills that teach Claude how to set up and wire different types of creative surfaces into the Substrate chrome.
+
+### 2D canvas
+
+<Skills
+	title="2D canvas"
+	description="Shape editors, diagrams, whiteboards, and Figma-like design surfaces."
+>
+	<Skill name="canvas-2d.md" href="/skills/canvas-2d.md" />
+</Skills>
+
+Substrate's default surface. Covers the full rendering pipeline, coordinate systems, element CRUD, hit-testing, and how to extend with custom element types and rendering logic.
+
+---
+
+### 3D scene
+
+<Skills
+	title="3D scene"
+	description="Interactive 3D viewports with orbit cameras, materials, and lighting."
+>
+	<Skill name="3d-scene.md" href="/skills/3d-scene.md" />
+</Skills>
+
+Build 3D tools using Three.js via React Three Fiber. Covers scene graph stores, transform gizmos, raycasting for selection, and wiring material/lighting properties to Substrate panels.
+
+---
+
+### Animation
+
+<Skills
+	title="Animation"
+	description="Timeline-based motion tools with keyframe editing and playback."
+>
+	<Skill name="animation.md" href="/skills/animation.md" />
+</Skills>
+
+Build animation editors using GSAP. Covers timeline interaction, keyframe stores, easing curve editors, playback loops, and how to scrub a GSAP timeline from Substrate state.
+
+---
+
+### Image generation
+
+<Skills
+	title="Image generation"
+	description="Prompt-driven image creation with parameter tuning and galleries."
+>
+	<Skill name="image-generation.md" href="/skills/image-generation.md" />
+</Skills>
+
+Build AI image tools using fal.ai or similar providers. Covers generation stores, server actions, prompt editing, seed management, image comparison, and inpainting extensions.
+
+---
+
+### Data visualisation
+
+<Skills
+	title="Data visualisation"
+	description="Charts, dashboards, and interactive data exploration."
+>
+	<Skill name="data-visualisation.md" href="/skills/data-visualisation.md" />
+</Skills>
+
+Build data tools using Recharts and D3. Covers data loading, column type inference, chart configuration stores, axis assignment, brushing and linking, and dashboard grid layouts.
+
+---
+
+## Workflow skills
+
+Skills that guide common Substrate development patterns, regardless of surface type.
 
 ### Scaffold playground
 
 <Skills
 	title="Scaffold playground"
-	description="Bootstrap a new canvas playground from Substrate primitives."
+	description="Bootstrap a new playground with surface, chrome, and stores."
 >
 	<Skill name="scaffold-playground.md" href="/skills/scaffold-playground.md" />
 </Skills>
 
-Walks through installing core primitives, composing the page layout with DesignCanvas, Toolbar, and Panel, and explains what you get out of the box — pan, zoom, selection, keyboard shortcuts, and undo/redo.
+The starting point for any new Substrate app. Walks through choosing a surface, installing chrome primitives, composing the layout, and links to all other skills.
 
 ---
 
