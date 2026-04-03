@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "id",
+  "title": "ID",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "ID generation utility using crypto.randomUUID.",
+  "files": [
+    {
+      "path": "registry/substrate/lib/id.ts",
+      "content": "export function generateId(): string {\n  return crypto.randomUUID()\n}\n",
+      "type": "registry:lib",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "lineage": [
+      {
+        "name": "Radix"
+      },
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "lib"
+  ],
+  "type": "registry:lib"
+}

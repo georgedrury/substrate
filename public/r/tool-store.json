@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tool-store",
+  "title": "Tool Store",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Zustand store for active tool state with temporary tool support (e.g. hold Space for hand tool).",
+  "dependencies": [
+    "zustand"
+  ],
+  "registryDependencies": [
+    "https://substrate.vui.run/r/types"
+  ],
+  "files": [
+    {
+      "path": "registry/substrate/stores/tool-store.ts",
+      "content": "import { create } from \"zustand\"\nimport type { ToolType } from \"../types\"\n\ninterface ToolState {\n  activeTool: ToolType\n  previousTool: ToolType | null\n  setTool: (tool: ToolType) => void\n  setTemporaryTool: (tool: ToolType) => void\n  restoreTool: () => void\n}\n\nexport const useToolStore = create<ToolState>()((set) => ({\n  activeTool: \"select\",\n  previousTool: null,\n\n  setTool: (tool) =>\n    set({ activeTool: tool, previousTool: null }),\n\n  setTemporaryTool: (tool) =>\n    set((s) => ({\n      activeTool: tool,\n      previousTool: s.previousTool ?? s.activeTool,\n    })),\n\n  restoreTool: () =>\n    set((s) => {\n      if (!s.previousTool) return s\n      return { activeTool: s.previousTool, previousTool: null }\n    }),\n}))\n",
+      "type": "registry:lib",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "lineage": [
+      {
+        "name": "Radix"
+      },
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "store"
+  ],
+  "type": "registry:lib"
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "panel-store",
+  "title": "Panel Store",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Zustand store for panel visibility — left panel, right panel, and open/collapse state.",
+  "dependencies": [
+    "zustand"
+  ],
+  "registryDependencies": [
+    "https://substrate.vui.run/r/types"
+  ],
+  "files": [
+    {
+      "path": "registry/substrate/stores/panel-store.ts",
+      "content": "import { create } from \"zustand\"\nimport type { LeftPanelId, RightPanelId } from \"../types\"\n\ninterface PanelState {\n  leftPanel: LeftPanelId\n  rightPanel: RightPanelId\n  rightPanelOpen: boolean\n  setLeftPanel: (panel: LeftPanelId) => void\n  setRightPanel: (panel: RightPanelId) => void\n  toggleRightPanel: () => void\n}\n\nexport const usePanelStore = create<PanelState>()((set) => ({\n  leftPanel: \"layers\",\n  rightPanel: \"properties\",\n  rightPanelOpen: true,\n\n  setLeftPanel: (panel) =>\n    set({ leftPanel: panel }),\n\n  setRightPanel: (panel) =>\n    set({ rightPanel: panel }),\n\n  toggleRightPanel: () =>\n    set((s) => ({ rightPanelOpen: !s.rightPanelOpen })),\n}))\n",
+      "type": "registry:lib",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "lineage": [
+      {
+        "name": "Radix"
+      },
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "store"
+  ],
+  "type": "registry:lib"
+}

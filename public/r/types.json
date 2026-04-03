@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "types",
+  "title": "Types",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Core TypeScript type definitions for the design canvas — element types, camera, tools, panels, hit testing, and interaction state.",
+  "files": [
+    {
+      "path": "registry/substrate/types.ts",
+      "content": "// ── Element Types ──\n\nexport type ElementType = \"rectangle\" | \"ellipse\" | \"text\" | \"line\" | \"frame\"\n\nexport interface Point {\n  x: number\n  y: number\n}\n\nexport interface Bounds {\n  x: number\n  y: number\n  width: number\n  height: number\n}\n\nexport interface Fill {\n  type: \"solid\"\n  color: string\n  opacity: number\n}\n\nexport interface Stroke {\n  color: string\n  width: number\n  opacity: number\n}\n\nexport interface TextStyle {\n  content: string\n  fontSize: number\n  fontFamily: string\n  fontWeight: number\n  textAlign: \"left\" | \"center\" | \"right\"\n  lineHeight: number\n}\n\nexport interface BaseElement {\n  id: string\n  type: ElementType\n  name: string\n  x: number\n  y: number\n  width: number\n  height: number\n  rotation: number\n  opacity: number\n  fill: Fill | null\n  stroke: Stroke | null\n  locked: boolean\n  visible: boolean\n}\n\nexport interface RectangleElement extends BaseElement {\n  type: \"rectangle\"\n  cornerRadius: number\n}\n\nexport interface EllipseElement extends BaseElement {\n  type: \"ellipse\"\n}\n\nexport interface TextElement extends BaseElement {\n  type: \"text\"\n  textStyle: TextStyle\n}\n\nexport interface LineElement extends BaseElement {\n  type: \"line\"\n}\n\nexport interface FrameElement extends BaseElement {\n  type: \"frame\"\n  children: string[]\n  clipContent: boolean\n  cornerRadius: number\n}\n\nexport type DesignElement =\n  | RectangleElement\n  | EllipseElement\n  | TextElement\n  | LineElement\n  | FrameElement\n\n// ── Camera ──\n\nexport interface Camera {\n  x: number\n  y: number\n  zoom: number\n}\n\n// ── Tools ──\n\nexport type ToolType =\n  | \"select\"\n  | \"hand\"\n  | \"rectangle\"\n  | \"ellipse\"\n  | \"line\"\n  | \"text\"\n  | \"frame\"\n\n// ── Panels ──\n\nexport type LeftPanelId = \"tools\" | \"layers\"\nexport type RightPanelId = \"properties\"\n\n// ── Hit Testing ──\n\nexport type HandlePosition = \"nw\" | \"n\" | \"ne\" | \"e\" | \"se\" | \"s\" | \"sw\" | \"w\"\n\n// ── Interaction State ──\n\nexport type InteractionMode =\n  | \"idle\"\n  | \"panning\"\n  | \"creating\"\n  | \"moving\"\n  | \"resizing\"\n  | \"marquee_selecting\"\n",
+      "type": "registry:lib",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "lineage": [
+      {
+        "name": "Radix"
+      },
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "lib"
+  ],
+  "type": "registry:lib"
+}

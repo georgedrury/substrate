@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "document-store",
+  "title": "Document Store",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Zustand store for canvas document state — elements, camera, selection, and undo/redo history with colocated actions.",
+  "dependencies": [
+    "zustand"
+  ],
+  "registryDependencies": [
+    "https://substrate.vui.run/r/types"
+  ],
+  "files": [
+    {
+      "path": "registry/substrate/stores/document-store.ts",
+      "content": "import { create } from \"zustand\"\nimport type { DesignElement, Camera } from \"../types\"\n\nconst MAX_HISTORY = 50\n\n// ── Snapshot (what gets saved for undo/redo) ──\n\nexport interface DocumentSnapshot {\n  elements: Record<string, DesignElement>\n  elementOrder: string[]\n  camera: Camera\n  showGrid: boolean\n}\n\n// ── State + Actions ──\n\ninterface DocumentState extends DocumentSnapshot {\n  // Selection\n  selectedIds: Set<string>\n  hoveredId: string | null\n\n  // History\n  past: DocumentSnapshot[]\n  future: DocumentSnapshot[]\n\n  // Element actions\n  addElement: (element: DesignElement) => void\n  updateElement: (id: string, changes: Partial<DesignElement>) => void\n  deleteElements: (ids: string[]) => void\n  reorderElement: (id: string, newIndex: number) => void\n\n  // Camera actions\n  setCamera: (camera: Partial<Camera>) => void\n  toggleGrid: () => void\n\n  // Selection actions\n  select: (ids: string[], append?: boolean) => void\n  deselectAll: () => void\n  toggleSelection: (id: string) => void\n  setHovered: (id: string | null) => void\n\n  // History actions\n  pushSnapshot: () => void\n  undo: () => void\n  redo: () => void\n  loadState: (snapshot: DocumentSnapshot) => void\n}\n\nfunction takeSnapshot(state: DocumentState): DocumentSnapshot {\n  return {\n    elements: state.elements,\n    elementOrder: state.elementOrder,\n    camera: state.camera,\n    showGrid: state.showGrid,\n  }\n}\n\nexport const useDocumentStore = create<DocumentState>()((set, get) => ({\n  // Initial state\n  elements: {},\n  elementOrder: [],\n  camera: { x: 0, y: 0, zoom: 1 },\n  showGrid: false,\n\n  selectedIds: new Set<string>(),\n  hoveredId: null,\n\n  past: [],\n  future: [],\n\n  // ── Element actions ──\n\n  addElement: (element) =>\n    set((s) => ({\n      elements: { ...s.elements, [element.id]: element },\n      elementOrder: [...s.elementOrder, element.id],\n    })),\n\n  updateElement: (id, changes) =>\n    set((s) => {\n      const existing = s.elements[id]\n      if (!existing) return s\n      return {\n        elements: {\n          ...s.elements,\n          [id]: { ...existing, ...changes } as DesignElement,\n        },\n      }\n    }),\n\n  deleteElements: (ids) =>\n    set((s) => {\n      const idSet = new Set(ids)\n      const elements = { ...s.elements }\n      for (const id of ids) delete elements[id]\n      return {\n        elements,\n        elementOrder: s.elementOrder.filter((id) => !idSet.has(id)),\n      }\n    }),\n\n  reorderElement: (id, newIndex) =>\n    set((s) => {\n      const order = s.elementOrder.filter((eid) => eid !== id)\n      order.splice(newIndex, 0, id)\n      return { elementOrder: order }\n    }),\n\n  // ── Camera actions ──\n\n  setCamera: (camera) =>\n    set((s) => ({ camera: { ...s.camera, ...camera } })),\n\n  toggleGrid: () =>\n    set((s) => ({ showGrid: !s.showGrid })),\n\n  // ── Selection actions ──\n\n  select: (ids, append) =>\n    set((s) => {\n      if (append) {\n        const next = new Set(s.selectedIds)\n        for (const id of ids) next.add(id)\n        return { selectedIds: next }\n      }\n      return { selectedIds: new Set(ids) }\n    }),\n\n  deselectAll: () =>\n    set((s) => {\n      if (s.selectedIds.size === 0) return s\n      return { selectedIds: new Set<string>() }\n    }),\n\n  toggleSelection: (id) =>\n    set((s) => {\n      const next = new Set(s.selectedIds)\n      if (next.has(id)) next.delete(id)\n      else next.add(id)\n      return { selectedIds: next }\n    }),\n\n  setHovered: (id) =>\n    set((s) => {\n      if (s.hoveredId === id) return s\n      return { hoveredId: id }\n    }),\n\n  // ── History actions ──\n\n  pushSnapshot: () =>\n    set((s) => ({\n      past: [...s.past.slice(-(MAX_HISTORY - 1)), takeSnapshot(s)],\n      future: [],\n    })),\n\n  undo: () => {\n    const s = get()\n    if (s.past.length === 0) return\n    const previous = s.past[s.past.length - 1]\n    set({\n      ...previous,\n      past: s.past.slice(0, -1),\n      future: [takeSnapshot(s), ...s.future],\n      // Preserve selection and hover\n      selectedIds: s.selectedIds,\n      hoveredId: s.hoveredId,\n    })\n  },\n\n  redo: () => {\n    const s = get()\n    if (s.future.length === 0) return\n    const next = s.future[0]\n    set({\n      ...next,\n      past: [...s.past, takeSnapshot(s)],\n      future: s.future.slice(1),\n      selectedIds: s.selectedIds,\n      hoveredId: s.hoveredId,\n    })\n  },\n\n  loadState: (snapshot) =>\n    set({\n      ...snapshot,\n    }),\n}))\n",
+      "type": "registry:lib",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "lineage": [
+      {
+        "name": "Radix"
+      },
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "store"
+  ],
+  "type": "registry:lib"
+}

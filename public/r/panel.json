@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "panel",
+  "title": "Panel",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Side panel container with position (left/right), variant (tool/default), border, and scroll area. Used for layers, properties, and other side panels.",
+  "files": [
+    {
+      "path": "registry/substrate/components/panel.tsx",
+      "content": "import { ScrollArea } from \"@/components/ui/scroll-area\"\nimport { cn } from \"@/lib/utils\"\n\ntype PanelProps = {\n\tposition?: \"left\" | \"right\"\n\tvariant?: \"tool\" | \"default\"\n}\n\nexport function Panel({\n\tclassName,\n\tchildren,\n\tposition = \"right\",\n\tvariant = \"default\",\n\t...props\n}: PanelProps & React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<div\n\t\t\tdata-position={position}\n\t\t\tdata-variant={variant}\n\t\t\tdata-slot=\"panel\"\n\t\t\tclassName={cn(\n\t\t\t\t\"w-70 h-full bg-background data-[position=right]:border-l data-[position=left]:border-r\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t>\n\t\t\t<ScrollArea>\n\t\t\t\t<div\n\t\t\t\t\tdata-variant={variant}\n\t\t\t\t\tclassName=\"space-y-3 h-full py-2 data-[variant=tool]:flex data-[variant=tool]:flex-col data-[variant=tool]:justify-between\"\n\t\t\t\t>\n\t\t\t\t\t{children}\n\t\t\t\t</div>\n\t\t\t</ScrollArea>\n\t\t</div>\n\t)\n}\n",
+      "type": "registry:ui",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "example": "<Panel position=\"left\">content</Panel>",
+    "lineage": [
+      {
+        "name": "Radix"
+      },
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "ui"
+  ],
+  "type": "registry:ui"
+}

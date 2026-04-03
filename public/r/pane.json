@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pane",
+  "title": "Pane",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Content section within a panel — Pane wrapper with PaneHeader, PaneLabel, and PaneAction for composing property editors.",
+  "files": [
+    {
+      "path": "registry/substrate/components/pane.tsx",
+      "content": "import { cn } from \"@/lib/utils\"\n\ntype PaneProps = {}\n\nexport function Pane({\n\tclassName,\n\t...props\n}: PaneProps & React.ComponentProps<\"div\">) {\n\treturn <div className={cn(\"space-y-2 px-3\", className)} {...props} />\n}\n\nexport function PaneHeader({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"pane-header\"\n\t\t\tclassName={cn(\"flex justify-between items-center\", className)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\nexport function PaneLabel({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<span\n\t\t\tdata-slot=\"pane-label\"\n\t\t\tclassName={cn(\"text-xs font-medium\", className)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\nexport function PaneAction({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"button\">) {\n\treturn (\n\t\t<button\n\t\t\tdata-slot=\"pane-action\"\n\t\t\tclassName={cn(\n\t\t\t\t\"size-6 flex items-center justify-center transition bg-background rounded hover:bg-accent\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n",
+      "type": "registry:ui",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "example": "<Pane><PaneHeader><PaneLabel>Fill</PaneLabel><PaneAction>+</PaneAction></PaneHeader></Pane>",
+    "lineage": [
+      {
+        "name": "Radix"
+      },
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "ui"
+  ],
+  "type": "registry:ui"
+}

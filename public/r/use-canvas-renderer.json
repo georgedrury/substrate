@@ -1,0 +1,37 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-canvas-renderer",
+  "title": "useCanvasRenderer",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Hook for the requestAnimationFrame render loop — dirty-flag optimization, DPR-aware canvas sizing, and full render pipeline (grid, elements, selection UI, creation preview, marquee).",
+  "registryDependencies": [
+    "https://substrate.vui.run/r/types",
+    "https://substrate.vui.run/r/math",
+    "https://substrate.vui.run/r/document-store",
+    "https://substrate.vui.run/r/tool-store",
+    "https://substrate.vui.run/r/renderer"
+  ],
+  "files": [
+    {
+      "path": "registry/substrate/hooks/use-canvas-renderer.ts",
+      "content": "\"use client\"\n\nimport { useEffect, useRef, useCallback } from \"react\"\nimport { useDocumentStore } from \"../stores/document-store\"\nimport { useToolStore } from \"../stores/tool-store\"\nimport {\n  renderGrid,\n  renderElement,\n  renderSelectionBox,\n  renderResizeHandles,\n  renderCreationPreview,\n  renderMarquee,\n} from \"../canvas/renderer\"\nimport { worldToScreen } from \"../lib/math\"\nimport type { Point, Bounds } from \"../types\"\n\ninterface DragState {\n  isDragging: boolean\n  dragStart: Point | null\n  dragCurrent: Point | null\n  dragType: \"create\" | \"marquee\" | null\n}\n\nexport function useCanvasRenderer(\n  canvasRef: React.RefObject<HTMLCanvasElement | null>,\n  containerRef: React.RefObject<HTMLDivElement | null>\n) {\n  const elements = useDocumentStore((s) => s.elements)\n  const elementOrder = useDocumentStore((s) => s.elementOrder)\n  const camera = useDocumentStore((s) => s.camera)\n  const showGrid = useDocumentStore((s) => s.showGrid)\n  const selectedIds = useDocumentStore((s) => s.selectedIds)\n  const activeTool = useToolStore((s) => s.activeTool)\n  const dirtyRef = useRef(true)\n  const dragStateRef = useRef<DragState>({\n    isDragging: false,\n    dragStart: null,\n    dragCurrent: null,\n    dragType: null,\n  })\n\n  const markDirty = useCallback(() => {\n    dirtyRef.current = true\n  }, [])\n\n  // Mark dirty when state changes\n  useEffect(() => {\n    dirtyRef.current = true\n  }, [elements, elementOrder, camera, showGrid, selectedIds])\n\n  // Handle resize\n  useEffect(() => {\n    const canvas = canvasRef.current\n    const container = containerRef.current\n    if (!canvas || !container) return\n\n    const observer = new ResizeObserver(() => {\n      const dpr = window.devicePixelRatio || 1\n      const rect = container.getBoundingClientRect()\n      canvas.width = rect.width * dpr\n      canvas.height = rect.height * dpr\n      canvas.style.width = `${rect.width}px`\n      canvas.style.height = `${rect.height}px`\n      dirtyRef.current = true\n    })\n\n    observer.observe(container)\n    return () => observer.disconnect()\n  }, [canvasRef, containerRef])\n\n  // Render loop\n  useEffect(() => {\n    let rafId: number\n\n    function render() {\n      rafId = requestAnimationFrame(render)\n\n      if (!dirtyRef.current) return\n      dirtyRef.current = false\n\n      const canvas = canvasRef.current\n      if (!canvas) return\n      const ctx = canvas.getContext(\"2d\")\n      if (!ctx) return\n\n      const dpr = window.devicePixelRatio || 1\n      const width = canvas.width / dpr\n      const height = canvas.height / dpr\n\n      // Clear\n      ctx.save()\n      ctx.scale(dpr, dpr)\n      ctx.clearRect(0, 0, width, height)\n      ctx.fillStyle = \"oklch(0.97 0 0)\"\n      ctx.fillRect(0, 0, width, height)\n\n      // Camera transform\n      ctx.save()\n      ctx.translate(camera.x, camera.y)\n      ctx.scale(camera.zoom, camera.zoom)\n\n      // Grid\n      if (showGrid) {\n        renderGrid(ctx, camera, width, height)\n      }\n\n      // Elements\n      for (const id of elementOrder) {\n        const el = elements[id]\n        if (el) renderElement(ctx, el)\n      }\n\n      // Creation preview (in world space)\n      const drag = dragStateRef.current\n      if (drag.isDragging && drag.dragStart && drag.dragCurrent && drag.dragType === \"create\") {\n        renderCreationPreview(ctx, activeTool, drag.dragStart, drag.dragCurrent)\n      }\n\n      ctx.restore() // Back to screen space\n\n      // Selection UI (screen space)\n      for (const id of selectedIds) {\n        const el = elements[id]\n        if (!el) continue\n        const topLeft = worldToScreen({ x: el.x, y: el.y }, camera)\n        const screenBounds: Bounds = {\n          x: topLeft.x,\n          y: topLeft.y,\n          width: el.width * camera.zoom,\n          height: el.height * camera.zoom,\n        }\n        renderSelectionBox(ctx, screenBounds, camera.zoom)\n        renderResizeHandles(ctx, screenBounds, camera.zoom)\n      }\n\n      // Marquee selection (screen space)\n      if (drag.isDragging && drag.dragStart && drag.dragCurrent && drag.dragType === \"marquee\") {\n        const screenStart = worldToScreen(drag.dragStart, camera)\n        const screenEnd = worldToScreen(drag.dragCurrent, camera)\n        const marqueeBounds: Bounds = {\n          x: Math.min(screenStart.x, screenEnd.x),\n          y: Math.min(screenStart.y, screenEnd.y),\n          width: Math.abs(screenEnd.x - screenStart.x),\n          height: Math.abs(screenEnd.y - screenStart.y),\n        }\n        renderMarquee(ctx, marqueeBounds)\n      }\n\n      ctx.restore() // dpr scale\n    }\n\n    rafId = requestAnimationFrame(render)\n    return () => cancelAnimationFrame(rafId)\n  }, [canvasRef, elements, elementOrder, camera, showGrid, selectedIds, activeTool])\n\n  return { markDirty, dragStateRef }\n}\n",
+      "type": "registry:hook",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "lineage": [
+      {
+        "name": "Radix"
+      },
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "canvas"
+  ],
+  "type": "registry:hook"
+}
