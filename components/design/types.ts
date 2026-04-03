@@ -105,7 +105,7 @@ export type ToolType =
 // ── Panels ──
 
 export type LeftPanelId = "tools" | "layers"
-export type RightPanelId = "properties" | "design"
+export type RightPanelId = "properties"
 
 // ── Hit Testing ──
 

@@ -4,26 +4,24 @@ import { DesignProvider } from "./design-provider"
 import { DesignCanvas } from "../canvas/design-canvas"
 import { Toolbar } from "../panels/toolbar"
 import { LayersPanel } from "../panels/layers-panel"
-import { PanelSwitcher } from "../panels/design-panel"
 import { usePanel } from "../contexts/panel-context"
 import { useCanvas } from "../contexts/canvas-context"
 import { useHistory } from "../contexts/history-context"
+import { PropertiesPanel } from "../panels/properties-panel"
+import { Tools } from "../panels/tools"
 
 function EditorLayout() {
 	const { state: panelState } = usePanel()
 	const { state: canvasState } = useCanvas()
+
 	const { canUndo, canRedo } = useHistory()
 
 	return (
 		<div className="flex h-screen w-screen overflow-hidden bg-muted">
 			{/* Left toolbar + layers overlay */}
-			<Toolbar />
-			{panelState.leftPanel === "layers" && (
-				<div className="w-55 border-r border-border bg-background shrink-0">
-					<LayersPanel />
-				</div>
-			)}
+			{panelState.leftPanel === "layers" && <LayersPanel />}
 
+			<Tools />
 			{/* Canvas */}
 			<div className="relative flex-1">
 				<DesignCanvas />
@@ -37,11 +35,7 @@ function EditorLayout() {
 			</div>
 
 			{/* Right panel */}
-			{panelState.rightPanelOpen && (
-				<div className="w-70 border-l border-border bg-background shrink-0">
-					<PanelSwitcher />
-				</div>
-			)}
+			{panelState.rightPanelOpen && <PropertiesPanel />}
 		</div>
 	)
 }

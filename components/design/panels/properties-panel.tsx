@@ -8,24 +8,26 @@ import { StrokeSection } from "../properties/stroke-section"
 import { TextSection } from "../properties/text-section"
 import { AppearanceSection } from "../properties/appearance-section"
 import { AlignmentSection } from "../properties/alignment-section"
+import { Panel } from "./panel"
 
-export function PropertiesTab() {
+export function PropertiesPanel() {
 	const { selectedElements } = useSelection()
 
 	if (selectedElements.length === 0) {
 		return (
-			<div className="flex h-full items-center justify-center p-4">
-				<p className="text-xs text-muted-foreground">No selection</p>
-			</div>
+			<Panel className="">
+				<div className="flex h-full items-center justify-center p-4">
+					<p className="text-xs text-muted-foreground">No selection</p>
+				</div>
+			</Panel>
 		)
 	}
 
 	const element = selectedElements[0]
 
 	return (
-		<div className="space-y-3 py-3">
+		<Panel>
 			<div className="text-xs font-medium truncate px-3">{element.name}</div>
-
 			<TransformSection />
 			<Separator />
 			<FillSection />
@@ -48,6 +50,6 @@ export function PropertiesTab() {
 					<AlignmentSection />
 				</>
 			)}
-		</div>
+		</Panel>
 	)
 }
