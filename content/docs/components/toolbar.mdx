@@ -25,24 +25,16 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/toolbar
 ## Anatomy
 
 ```tsx
-import {
-  Toolbar,
-  ToolbarToggleGroup,
-  ToolbarToggle,
-  ToolbarSeparator,
-  ToolbarDropdown,
-} from "@/components/substrate/toolbar"
-
 <Toolbar>
-  <ToolbarToggleGroup value={tool} onValueChange={setTool}>
-    <ToolbarToggle value="select" tooltip="Select" shortcut="V">
-      <CursorIcon />
-    </ToolbarToggle>
-    <ToolbarSeparator />
-    <ToolbarToggle value="rectangle" tooltip="Rectangle" shortcut="R">
-      <SquareIcon />
-    </ToolbarToggle>
-  </ToolbarToggleGroup>
+	<ToolbarToggleGroup value={tool} onValueChange={setTool}>
+		<ToolbarToggle value="select" tooltip="Select" shortcut="V">
+			<CursorIcon />
+		</ToolbarToggle>
+		<ToolbarSeparator />
+		<ToolbarToggle value="rectangle" tooltip="Rectangle" shortcut="R">
+			<SquareIcon />
+		</ToolbarToggle>
+	</ToolbarToggleGroup>
 </Toolbar>
 ```
 
