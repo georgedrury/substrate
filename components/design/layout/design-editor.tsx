@@ -16,7 +16,7 @@ function EditorLayout() {
 	const canRedo = useDocumentStore((s) => s.future.length > 0)
 
 	return (
-		<div className="flex h-screen w-screen overflow-hidden bg-muted">
+		<div className="flex h-screen w-screen overflow-hidden">
 			{/* Left toolbar + layers overlay */}
 			{leftPanel === "layers" && <LayersPanel />}
 

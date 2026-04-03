@@ -358,6 +358,20 @@
 				"https://substrate.vui.run/r/use-canvas-interaction",
 				"https://substrate.vui.run/r/use-keyboard-shortcuts"
 			],
+			"cssVars": {
+				"theme": {
+					"color-canvas": "var(--canvas, var(--color-background))",
+					"color-canvas-foreground": "var(--canvas-foreground, var(--color-foreground-muted))"
+				},
+				"light": {
+					"canvas": "oklch(.97 0.0 0)",
+					"canvas-foreground": "oklch(0.556 0 0)"
+				},
+				"dark": {
+					"canvas": "oklch(17.764% 0.00002 271.152)",
+					"canvas-foreground": "oklch(0.708 0 0)"
+				}
+			},
 			"meta": {
 				"example": "<DesignCanvas />",
 				"lineage": [{ "name": "Substrate" }]
@@ -397,6 +411,20 @@
 			"description": "Side panel container with position (left/right), variant (tool/default), border, and scroll area. Used for layers, properties, and other side panels.",
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "ui"],
+			"cssVars": {
+				"theme": {
+					"color-panel": "var(--panel, var(--color-card))",
+					"color-panel-foreground": "var(--panel-foreground, var(--color-card-foreground))"
+				},
+				"light": {
+					"panel": "oklch(1 0 0)",
+					"panel-foreground": "oklch(0.145 0 0)"
+				},
+				"dark": {
+					"panel": "oklch(0.205 0 0)",
+					"panel-foreground": "oklch(0.985 0 0)"
+				}
+			},
 			"meta": {
 				"example": "<Panel position=\"left\">content</Panel>",
 				"lineage": [{ "name": "Substrate" }]
@@ -416,6 +444,9 @@
 			"description": "Content section within a panel — Pane wrapper with PaneHeader, PaneLabel, and PaneAction for composing property editors.",
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "ui"],
+			"registryDependencies": [
+				"https://substrate.vui.run/r/panel"
+			],
 			"meta": {
 				"example": "<Pane><PaneHeader><PaneLabel>Fill</PaneLabel><PaneAction>+</PaneAction></PaneHeader></Pane>",
 				"lineage": [{ "name": "Substrate" }]

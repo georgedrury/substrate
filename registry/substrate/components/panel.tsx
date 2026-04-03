@@ -19,7 +19,7 @@ export function Panel({
 			data-variant={variant}
 			data-slot="panel"
 			className={cn(
-				"w-70 h-full bg-background data-[position=right]:border-l data-[position=left]:border-r",
+				"w-70 h-full bg-panel text-panel-foreground data-[position=right]:border-l data-[position=left]:border-r",
 				className,
 			)}
 			{...props}

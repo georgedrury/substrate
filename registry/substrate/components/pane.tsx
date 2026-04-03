@@ -43,7 +43,7 @@ export function PaneAction({
 		<button
 			data-slot="pane-action"
 			className={cn(
-				"size-6 flex items-center justify-center transition bg-background rounded hover:bg-accent",
+				"size-6 flex items-center justify-center transition bg-panel rounded hover:bg-accent",
 				className,
 			)}
 			{...props}
