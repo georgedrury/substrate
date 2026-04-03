@@ -2,7 +2,7 @@
 
 import { useCallback } from "react"
 import { Input } from "@/components/ui/input"
-import { Slider } from "@/components/ui/slider"
+import { Slider } from "@/components/design/components/slider"
 import { useCanvas } from "../contexts/canvas-context"
 import { useSelection } from "../contexts/selection-context"
 import { useHistory } from "../contexts/history-context"

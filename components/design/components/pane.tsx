@@ -16,7 +16,7 @@ export function PaneHeader({
 	return (
 		<div
 			data-slot="pane-header"
-			className={cn("flex justify-between", className)}
+			className={cn("flex justify-between items-center", className)}
 			{...props}
 		/>
 	)
@@ -40,6 +40,13 @@ export function PaneAction({
 	...props
 }: React.ComponentProps<"button">) {
 	return (
-		<button data-slot="pane-action" className={cn("", className)} {...props} />
+		<button
+			data-slot="pane-action"
+			className={cn(
+				"size-6 flex items-center justify-center transition bg-background rounded hover:bg-accent",
+				className,
+			)}
+			{...props}
+		/>
 	)
 }

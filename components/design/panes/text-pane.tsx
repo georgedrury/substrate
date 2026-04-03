@@ -16,6 +16,7 @@ import { useHistory } from "../contexts/history-context"
 import { Pane, PaneLabel } from "../components/pane"
 import { Action, ActionLabel, ActionControls } from "../components/action"
 import type { TextElement, TextStyle } from "../types"
+import { RiAlignCenter, RiAlignLeft, RiAlignRight } from "@remixicon/react"
 
 const FONT_FAMILIES = [
 	"sans-serif",
@@ -61,13 +62,17 @@ export function TextPane() {
 			<PaneLabel>Text</PaneLabel>
 
 			<div className="space-y-2">
-				<Input
-					value={textStyle.content}
-					onChange={(e) => updateTextStyle({ content: e.target.value })}
-					className="h-7 text-xs"
-					placeholder="Text content"
-				/>
-
+				<Action>
+					<ActionLabel>Text</ActionLabel>
+					<ActionControls>
+						<Input
+							value={textStyle.content}
+							onChange={(e) => updateTextStyle({ content: e.target.value })}
+							className="h-7 text-xs"
+							placeholder="Text content"
+						/>
+					</ActionControls>
+				</Action>
 				<Action>
 					<ActionLabel>Font</ActionLabel>
 					<ActionControls>
@@ -75,12 +80,12 @@ export function TextPane() {
 							value={textStyle.fontFamily}
 							onValueChange={(v) => updateTextStyle({ fontFamily: v })}
 						>
-							<SelectTrigger className="h-7 text-xs">
+							<SelectTrigger>
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>
 								{FONT_FAMILIES.map((f) => (
-									<SelectItem key={f} value={f} className="text-xs">
+									<SelectItem key={f} value={f}>
 										{f}
 									</SelectItem>
 								))}
@@ -98,16 +103,12 @@ export function TextPane() {
 								updateTextStyle({ fontWeight: parseInt(v) })
 							}
 						>
-							<SelectTrigger className="h-7 text-xs">
+							<SelectTrigger>
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>
 								{FONT_WEIGHTS.map((w) => (
-									<SelectItem
-										key={w.value}
-										value={String(w.value)}
-										className="text-xs"
-									>
+									<SelectItem key={w.value} value={String(w.value)}>
 										{w.label}
 									</SelectItem>
 								))}
@@ -116,41 +117,37 @@ export function TextPane() {
 					</ActionControls>
 				</Action>
 
-				<div className="grid grid-cols-2 gap-2">
-					<Action>
-						<ActionLabel className="w-6">Size</ActionLabel>
-						<ActionControls>
-							<Input
-								type="number"
-								value={textStyle.fontSize}
-								onChange={(e) =>
-									updateTextStyle({
-										fontSize: parseFloat(e.target.value) || 16,
-									})
-								}
-								className="h-7 text-xs"
-								min={1}
-							/>
-						</ActionControls>
-					</Action>
-					<Action>
-						<ActionLabel className="w-6">LH</ActionLabel>
-						<ActionControls>
-							<Input
-								type="number"
-								value={textStyle.lineHeight}
-								onChange={(e) =>
-									updateTextStyle({
-										lineHeight: parseFloat(e.target.value) || 1.4,
-									})
-								}
-								className="h-7 text-xs"
-								step={0.1}
-								min={0.5}
-							/>
-						</ActionControls>
-					</Action>
-				</div>
+				<Action>
+					<ActionLabel>Size</ActionLabel>
+					<ActionControls>
+						<Input
+							type="number"
+							value={textStyle.fontSize}
+							onChange={(e) =>
+								updateTextStyle({
+									fontSize: parseFloat(e.target.value) || 16,
+								})
+							}
+							min={1}
+						/>
+					</ActionControls>
+				</Action>
+				<Action>
+					<ActionLabel>Line height</ActionLabel>
+					<ActionControls>
+						<Input
+							type="number"
+							value={textStyle.lineHeight}
+							onChange={(e) =>
+								updateTextStyle({
+									lineHeight: parseFloat(e.target.value) || 1.4,
+								})
+							}
+							step={0.1}
+							min={0.5}
+						/>
+					</ActionControls>
+				</Action>
 
 				<Action>
 					<ActionLabel>Align</ActionLabel>
@@ -163,15 +160,16 @@ export function TextPane() {
 									updateTextStyle({ textAlign: v as TextStyle["textAlign"] })
 							}}
 							spacing={0}
+							className="h-7"
 						>
-							<ToggleGroupItem value="left" className="text-[10px] h-6 px-2">
-								L
+							<ToggleGroupItem value="left" className="h-7">
+								<RiAlignLeft />
 							</ToggleGroupItem>
-							<ToggleGroupItem value="center" className="text-[10px] h-6 px-2">
-								C
+							<ToggleGroupItem value="center" className="h-7">
+								<RiAlignCenter />
 							</ToggleGroupItem>
-							<ToggleGroupItem value="right" className="text-[10px] h-6 px-2">
-								R
+							<ToggleGroupItem value="right" className="h-7">
+								<RiAlignRight />
 							</ToggleGroupItem>
 						</ToggleGroup>
 					</ActionControls>
