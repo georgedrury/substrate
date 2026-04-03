@@ -20,9 +20,6 @@
   "meta": {
     "lineage": [
       {
-        "name": "Radix"
-      },
-      {
         "name": "Substrate"
       }
     ]

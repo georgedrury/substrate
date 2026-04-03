@@ -7,17 +7,28 @@
   "files": [
     {
       "path": "registry/substrate/components/panel.tsx",
-      "content": "import { ScrollArea } from \"@/components/ui/scroll-area\"\nimport { cn } from \"@/lib/utils\"\n\ntype PanelProps = {\n\tposition?: \"left\" | \"right\"\n\tvariant?: \"tool\" | \"default\"\n}\n\nexport function Panel({\n\tclassName,\n\tchildren,\n\tposition = \"right\",\n\tvariant = \"default\",\n\t...props\n}: PanelProps & React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<div\n\t\t\tdata-position={position}\n\t\t\tdata-variant={variant}\n\t\t\tdata-slot=\"panel\"\n\t\t\tclassName={cn(\n\t\t\t\t\"w-70 h-full bg-background data-[position=right]:border-l data-[position=left]:border-r\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t>\n\t\t\t<ScrollArea>\n\t\t\t\t<div\n\t\t\t\t\tdata-variant={variant}\n\t\t\t\t\tclassName=\"space-y-3 h-full py-2 data-[variant=tool]:flex data-[variant=tool]:flex-col data-[variant=tool]:justify-between\"\n\t\t\t\t>\n\t\t\t\t\t{children}\n\t\t\t\t</div>\n\t\t\t</ScrollArea>\n\t\t</div>\n\t)\n}\n",
+      "content": "import { ScrollArea } from \"@/components/ui/scroll-area\"\nimport { cn } from \"@/lib/utils\"\n\ntype PanelProps = {\n\tposition?: \"left\" | \"right\"\n\tvariant?: \"tool\" | \"default\"\n}\n\nexport function Panel({\n\tclassName,\n\tchildren,\n\tposition = \"right\",\n\tvariant = \"default\",\n\t...props\n}: PanelProps & React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<div\n\t\t\tdata-position={position}\n\t\t\tdata-variant={variant}\n\t\t\tdata-slot=\"panel\"\n\t\t\tclassName={cn(\n\t\t\t\t\"w-70 h-full bg-panel text-panel-foreground data-[position=right]:border-l data-[position=left]:border-r\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t>\n\t\t\t<ScrollArea>\n\t\t\t\t<div\n\t\t\t\t\tdata-variant={variant}\n\t\t\t\t\tclassName=\"space-y-3 h-full py-2 data-[variant=tool]:flex data-[variant=tool]:flex-col data-[variant=tool]:justify-between\"\n\t\t\t\t>\n\t\t\t\t\t{children}\n\t\t\t\t</div>\n\t\t\t</ScrollArea>\n\t\t</div>\n\t)\n}\n",
       "type": "registry:ui",
       "target": ""
     }
   ],
+  "cssVars": {
+    "theme": {
+      "color-panel": "var(--panel, var(--color-card))",
+      "color-panel-foreground": "var(--panel-foreground, var(--color-card-foreground))"
+    },
+    "light": {
+      "panel": "oklch(1 0 0)",
+      "panel-foreground": "oklch(0.145 0 0)"
+    },
+    "dark": {
+      "panel": "oklch(0.205 0 0)",
+      "panel-foreground": "oklch(0.985 0 0)"
+    }
+  },
   "meta": {
     "example": "<Panel position=\"left\">content</Panel>",
     "lineage": [
-      {
-        "name": "Radix"
-      },
       {
         "name": "Substrate"
       }

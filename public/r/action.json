@@ -16,9 +16,6 @@
     "example": "<Action><ActionLabel>Opacity</ActionLabel><ActionControls><Slider /></ActionControls></Action>",
     "lineage": [
       {
-        "name": "Radix"
-      },
-      {
         "name": "Substrate"
       }
     ]
