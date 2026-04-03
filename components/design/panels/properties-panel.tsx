@@ -31,6 +31,8 @@ export function PropertiesPanel() {
 			<div className="text-xs font-medium truncate px-3">{element.name}</div>
 			<TransformPane />
 			<Separator />
+			<AppearancePane />
+			<Separator />
 			<FillPane />
 			<Separator />
 			<StrokePane />
@@ -42,7 +44,6 @@ export function PropertiesPanel() {
 			)}
 
 			<Separator />
-			<AppearancePane />
 
 			{selectedElements.length > 1 && (
 				<>

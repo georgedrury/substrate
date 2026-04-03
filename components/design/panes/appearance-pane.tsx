@@ -30,7 +30,7 @@ export function AppearancePane() {
 
 	return (
 		<Pane>
-			<PaneLabel>Appearance</PaneLabel>
+			<PaneLabel>Layer</PaneLabel>
 			<Action>
 				<ActionLabel>Opacity</ActionLabel>
 				<ActionControls className="flex items-center gap-2">
