@@ -495,6 +495,184 @@
 					"target": ""
 				}
 			]
+		},
+		{
+			"name": "surface",
+			"type": "registry:ui",
+			"title": "Surface",
+			"description": "Container component for creative surfaces — provides consistent mount point with canvas background, optional overlay controls, and dot grid background.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": ["substrate", "ui", "chrome"],
+			"cssVars": {
+				"theme": {
+					"color-canvas": "var(--canvas, var(--color-background))",
+					"color-canvas-foreground": "var(--canvas-foreground, var(--color-foreground-muted))"
+				},
+				"light": {
+					"canvas": "oklch(.97 0.0 0)",
+					"canvas-foreground": "oklch(0.556 0 0)"
+				},
+				"dark": {
+					"canvas": "oklch(17.764% 0.00002 271.152)",
+					"canvas-foreground": "oklch(0.708 0 0)"
+				}
+			},
+			"meta": {
+				"example": "<Surface><SurfaceGrid />{/* your renderer */}<SurfaceControls position=\"bottom-right\">{/* zoom buttons */}</SurfaceControls></Surface>",
+				"lineage": [{ "name": "Substrate" }]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/components/surface.tsx",
+					"type": "registry:ui",
+					"target": ""
+				}
+			]
+		},
+		{
+			"name": "easing",
+			"type": "registry:lib",
+			"title": "Easing",
+			"description": "Cubic bezier easing utilities — presets, evaluation via Newton's method, CSS cubic-bezier() parsing and serialisation.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": ["substrate", "lib", "animation"],
+			"meta": {
+				"lineage": [{ "name": "Substrate" }]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/lib/easing.ts",
+					"type": "registry:lib",
+					"target": ""
+				}
+			]
+		},
+		{
+			"name": "animation-store",
+			"type": "registry:lib",
+			"title": "Animation Store",
+			"description": "Zustand store for animation playback — duration, current time, play/pause, zoom level, and keyframe selection.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": ["substrate", "store", "animation"],
+			"dependencies": ["zustand"],
+			"meta": {
+				"lineage": [{ "name": "Substrate" }]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/stores/animation-store.ts",
+					"type": "registry:lib",
+					"target": ""
+				}
+			]
+		},
+		{
+			"name": "timeline",
+			"type": "registry:ui",
+			"title": "Timeline",
+			"description": "Compound timeline component with ruler, playhead, tracks, keyframe diamonds, and transport controls for animation and sequencing tools.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": ["substrate", "ui", "animation"],
+			"dependencies": ["@remixicon/react"],
+			"registryDependencies": [
+				"https://substrate.georgedrury.co.uk/r/animation-store"
+			],
+			"cssVars": {
+				"theme": {
+					"color-timeline-playhead": "var(--timeline-playhead, var(--color-destructive))",
+					"color-timeline-keyframe": "var(--timeline-keyframe, var(--color-muted-foreground))",
+					"color-timeline-track": "var(--timeline-track, var(--color-panel))"
+				},
+				"light": {},
+				"dark": {}
+			},
+			"meta": {
+				"example": "<Timeline><TimelineTransport /><TimelineRuler duration={5} zoomLevel={100} /><TimelineTrack label=\"opacity\"><TimelineKeyframe time={0} duration={5} zoomLevel={100} /><TimelineKeyframe time={2.5} duration={5} zoomLevel={100} /></TimelineTrack></Timeline>",
+				"lineage": [{ "name": "Substrate" }]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/components/timeline.tsx",
+					"type": "registry:ui",
+					"target": ""
+				}
+			]
+		},
+		{
+			"name": "gallery",
+			"type": "registry:ui",
+			"title": "Gallery",
+			"description": "Responsive thumbnail grid with selection state, hover overlays, and action buttons. Used for image histories, asset browsers, and media galleries.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": ["substrate", "ui", "visualization"],
+			"cssVars": {
+				"theme": {
+					"color-gallery-selection": "var(--gallery-selection, var(--color-primary))"
+				},
+				"light": {},
+				"dark": {}
+			},
+			"meta": {
+				"example": "<Gallery columns={3}><GalleryItem selected onSelect={handleSelect}><GalleryImage src=\"/image.jpg\" alt=\"\" /><GalleryAction><RiDeleteBinLine /></GalleryAction></GalleryItem></Gallery>",
+				"lineage": [{ "name": "Substrate" }]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/components/gallery.tsx",
+					"type": "registry:ui",
+					"target": ""
+				}
+			]
+		},
+		{
+			"name": "colour-picker",
+			"type": "registry:ui",
+			"title": "Colour Picker",
+			"description": "Colour picker with hex input and swatch preview, powered by react-colorful in a Radix Popover. Used in material editors, fill/stroke controls, and chart styling.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": ["substrate", "ui", "control"],
+			"dependencies": ["react-colorful", "radix-ui"],
+			"meta": {
+				"example": "<ColourPicker value=\"#6366f1\" onChange={setColour} />",
+				"lineage": [{ "name": "react-colorful" }, { "name": "Substrate" }]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/components/colour-picker.tsx",
+					"type": "registry:ui",
+					"target": ""
+				}
+			]
+		},
+		{
+			"name": "easing-curve-editor",
+			"type": "registry:ui",
+			"title": "Easing Curve Editor",
+			"description": "Interactive cubic bezier curve editor with draggable control points and preset buttons. Used for keyframe easing in animation tools.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": ["substrate", "ui", "animation"],
+			"registryDependencies": [
+				"https://substrate.georgedrury.co.uk/r/easing"
+			],
+			"cssVars": {
+				"theme": {
+					"color-easing-curve": "var(--easing-curve, var(--color-primary))",
+					"color-easing-handle": "var(--easing-handle, var(--color-primary))"
+				},
+				"light": {},
+				"dark": {}
+			},
+			"meta": {
+				"example": "<EasingCurveEditor value={{ x1: 0.42, y1: 0, x2: 0.58, y2: 1 }} onChange={setEasing} />",
+				"lineage": [{ "name": "Substrate" }]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/components/easing-curve-editor.tsx",
+					"type": "registry:ui",
+					"target": ""
+				}
+			]
 		}
 	]
 }
