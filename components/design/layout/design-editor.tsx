@@ -2,7 +2,7 @@
 
 import { DesignProvider } from "./design-provider"
 import { DesignCanvas } from "../canvas/design-canvas"
-import { Toolbar } from "../panels/toolbar"
+
 import { LayersPanel } from "../panels/layers-panel"
 import { usePanel } from "../contexts/panel-context"
 import { useCanvas } from "../contexts/canvas-context"

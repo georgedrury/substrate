@@ -1,49 +1,45 @@
 import { cn } from "@/lib/utils"
 
-type PropertiesProps = {}
+type PaneProps = {}
 
-export function Properties({
+export function Pane({
 	className,
 	...props
-}: PropertiesProps & React.ComponentProps<"div">) {
+}: PaneProps & React.ComponentProps<"div">) {
 	return <div className={cn("space-y-2 px-3", className)} {...props} />
 }
 
-export function PropertiesHeader({
+export function PaneHeader({
 	className,
 	...props
 }: React.ComponentProps<"div">) {
 	return (
 		<div
-			data-slot="properties-header"
+			data-slot="pane-header"
 			className={cn("flex justify-between", className)}
 			{...props}
 		/>
 	)
 }
 
-export function PropertiesLabel({
+export function PaneLabel({
 	className,
 	...props
 }: React.ComponentProps<"div">) {
 	return (
 		<span
-			data-slot="properties-label"
+			data-slot="pane-label"
 			className={cn("text-xs font-medium", className)}
 			{...props}
 		/>
 	)
 }
 
-export function PropertiesAction({
+export function PaneAction({
 	className,
 	...props
 }: React.ComponentProps<"button">) {
 	return (
-		<button
-			data-slot="properties-action"
-			className={cn("", className)}
-			{...props}
-		/>
+		<button data-slot="pane-action" className={cn("", className)} {...props} />
 	)
 }

@@ -4,7 +4,7 @@ import { useCanvas } from "../contexts/canvas-context"
 import { useSelection } from "../contexts/selection-context"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
-import { Panel } from "./panel"
+import { Panel } from "../components/panel"
 
 export function LayersPanel() {
 	const { state } = useCanvas()
