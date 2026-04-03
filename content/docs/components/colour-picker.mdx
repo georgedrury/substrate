@@ -1,0 +1,64 @@
+---
+title: Colour picker
+description: Hex colour picker with swatch trigger, popover panel, and text input — built on react-colorful and Radix Popover.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/colour-picker
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Substrate" }]} />
+
+## Examples
+
+<ComponentPreview name="colour-picker-demo" />
+
+## Anatomy
+
+```tsx
+<ColourPicker value={colour} onChange={setColour} />
+```
+
+## Components
+
+| Component             | Description                                                            |
+| --------------------- | ---------------------------------------------------------------------- |
+| `ColourPicker`        | Popover wrapper — renders swatch trigger and picker content in a panel |
+| `ColourPickerContent` | Saturation/hue picker with hex input and preview swatch                |
+| `ColourSwatch`        | Colour preview button sized `sm` (20px) or `md` (28px)                 |
+| `ColourInput`         | Hex colour text input wrapping `HexColorInput` from react-colorful     |
+
+## Props
+
+### ColourPicker
+
+| Prop       | Type                       | Default | Description                |
+| ---------- | -------------------------- | ------- | -------------------------- |
+| `value`    | `string`                   | —       | Current hex colour value   |
+| `onChange` | `(colour: string) => void` | —       | Called when colour changes |
+| `children` | `React.ReactNode`          | Swatch  | Custom trigger element     |
+
+### ColourPickerContent
+
+| Prop       | Type                       | Default | Description                |
+| ---------- | -------------------------- | ------- | -------------------------- |
+| `value`    | `string`                   | —       | Current hex colour value   |
+| `onChange` | `(colour: string) => void` | —       | Called when colour changes |
+
+### ColourSwatch
+
+| Prop     | Type           | Default | Description           |
+| -------- | -------------- | ------- | --------------------- |
+| `colour` | `string`       | —       | Hex colour to display |
+| `size`   | `"sm" \| "md"` | `"md"`  | Swatch size           |
+
+### ColourInput
+
+| Prop       | Type                       | Default | Description                |
+| ---------- | -------------------------- | ------- | -------------------------- |
+| `value`    | `string`                   | —       | Current hex colour value   |
+| `onChange` | `(colour: string) => void` | —       | Called when colour changes |

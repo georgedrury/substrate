@@ -1,0 +1,80 @@
+---
+title: Gallery
+description: Responsive thumbnail grid with selection, hover actions, and empty state.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/gallery
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Substrate" }]} />
+
+## Examples
+
+<ComponentPreview name="gallery-demo" />
+
+## Anatomy
+
+```tsx
+import {
+  Gallery,
+  GalleryItem,
+  GalleryImage,
+  GalleryAction,
+  GalleryEmpty,
+} from "@/components/substrate/gallery"
+
+<Gallery columns={3} gap={2}>
+  <GalleryItem selected={isSelected} onSelect={handleSelect}>
+    <GalleryImage src="/photo.jpg" alt="Landscape" />
+    <GalleryAction onClick={handleDownload}>
+      <DownloadIcon />
+    </GalleryAction>
+  </GalleryItem>
+  <GalleryEmpty>No images yet</GalleryEmpty>
+</Gallery>
+```
+
+## Theme variables
+
+| Variable              | Tailwind class          | Fallback      | Description              |
+| --------------------- | ----------------------- | ------------- | ------------------------ |
+| `--gallery-selection` | `ring-gallery-selection`| `--primary`   | Selection ring colour    |
+
+## Components
+
+| Component      | Description                                                                    |
+| -------------- | ------------------------------------------------------------------------------ |
+| `Gallery`      | CSS grid container with configurable columns and gap                           |
+| `GalleryItem`  | Aspect-square cell with selection ring, hover overlay, and click handler        |
+| `GalleryImage` | `<img>` with `object-cover` filling the item                                   |
+| `GalleryAction`| Button overlaid on hover in the top-right corner of an item                    |
+| `GalleryEmpty` | Full-width placeholder spanning all columns                                    |
+
+## Props
+
+### Gallery
+
+| Prop      | Type     | Default | Description                       |
+| --------- | -------- | ------- | --------------------------------- |
+| `columns` | `number` | `3`     | Number of grid columns            |
+| `gap`     | `number` | `2`     | Gap between items (in 0.25rem units) |
+
+### GalleryItem
+
+| Prop       | Type         | Default | Description                    |
+| ---------- | ------------ | ------- | ------------------------------ |
+| `selected` | `boolean`    | `false` | Shows selection ring           |
+| `onSelect` | `() => void` | —       | Click handler                  |
+
+### GalleryImage
+
+Extends `React.ComponentProps<"img">`.
+
+### GalleryAction
+
+Extends `React.ComponentProps<"button">`.

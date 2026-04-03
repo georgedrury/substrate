@@ -18,55 +18,32 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/toolbar
 	]}
 />
 
-## Usage
+## Examples
+
+<ComponentPreview name="toolbar-demo" />
+
+## Anatomy
 
 ```tsx
 import {
-	Toolbar,
-	ToolbarToggleGroup,
-	ToolbarToggle,
-	ToolbarSeparator,
-	ToolbarDropdown,
-} from "@/registry/substrate/components/toolbar"
-```
+  Toolbar,
+  ToolbarToggleGroup,
+  ToolbarToggle,
+  ToolbarSeparator,
+  ToolbarDropdown,
+} from "@/components/substrate/toolbar"
 
-### Basic toolbar with toggles
-
-```tsx
 <Toolbar>
-	<ToolbarToggleGroup value={activeTool} onValueChange={setTool}>
-		<ToolbarToggle value="select" tooltip="Select" shortcut="V">
-			<CursorIcon />
-		</ToolbarToggle>
-		<ToolbarToggle value="hand" tooltip="Hand" shortcut="H">
-			<HandIcon />
-		</ToolbarToggle>
-
-		<ToolbarSeparator />
-
-		<ToolbarToggle value="rectangle" tooltip="Rectangle" shortcut="R">
-			<SquareIcon />
-		</ToolbarToggle>
-	</ToolbarToggleGroup>
+  <ToolbarToggleGroup value={tool} onValueChange={setTool}>
+    <ToolbarToggle value="select" tooltip="Select" shortcut="V">
+      <CursorIcon />
+    </ToolbarToggle>
+    <ToolbarSeparator />
+    <ToolbarToggle value="rectangle" tooltip="Rectangle" shortcut="R">
+      <SquareIcon />
+    </ToolbarToggle>
+  </ToolbarToggleGroup>
 </Toolbar>
-```
-
-### Dropdown for tool variants
-
-```tsx
-<ToolbarDropdown
-	value={pointerTool}
-	active={isPointerActive}
-	onSelect={setTool}
-	tooltip="Select"
-	shortcut="V"
-	items={[
-		{ value: "select", icon: <CursorIcon />, label: "Select", shortcut: "V" },
-		{ value: "hand", icon: <HandIcon />, label: "Hand", shortcut: "H" },
-	]}
->
-	<ActiveIcon />
-</ToolbarDropdown>
 ```
 
 ## Components

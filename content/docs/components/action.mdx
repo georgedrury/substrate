@@ -13,20 +13,20 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/action
 
 <Lineage items={[{ name: "Substrate" }]} />
 
-## Usage
+## Examples
+
+<ComponentPreview name="action-demo" />
+
+## Anatomy
 
 ```tsx
-import {
-	Action,
-	ActionLabel,
-	ActionControls,
-} from "@/registry/substrate/components/action"
+import { Action, ActionLabel, ActionControls } from "@/components/substrate/action"
 
-;<Action>
-	<ActionLabel>Opacity</ActionLabel>
-	<ActionControls>
-		<Slider value={[50]} max={100} />
-	</ActionControls>
+<Action>
+  <ActionLabel>Opacity</ActionLabel>
+  <ActionControls>
+    <Slider value={[50]} max={100} />
+  </ActionControls>
 </Action>
 ```
 

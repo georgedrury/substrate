@@ -10,6 +10,7 @@ import { NewTab } from "@/components/docs/new-tab"
 import { SourceCode } from "@/components/docs/source-code"
 import { Lineage } from "@/components/docs/lineage"
 import { Banner } from "@/components/docs/banner"
+import { ComponentPreview } from "@/components/docs/component-preview"
 import { Skills, SkillsFolder, Skill } from "@/components/docs/skills"
 import {
 	Accordion,
@@ -24,6 +25,7 @@ export const mdxComponents: MDXComponents = {
 	SourceCode,
 	Lineage,
 	Banner,
+	ComponentPreview,
 	Skills,
 	SkillsFolder,
 	Skill,

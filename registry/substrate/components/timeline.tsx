@@ -246,14 +246,10 @@ function TimelineTransport({
   className,
   ...props
 }: TimelineTransportProps & React.ComponentProps<"div">) {
-  const { isPlaying, currentTime, duration, togglePlayback } = useAnimationStore(
-    (s) => ({
-      isPlaying: s.isPlaying,
-      currentTime: s.currentTime,
-      duration: s.duration,
-      togglePlayback: s.togglePlayback,
-    }),
-  )
+  const isPlaying = useAnimationStore((s) => s.isPlaying)
+  const currentTime = useAnimationStore((s) => s.currentTime)
+  const duration = useAnimationStore((s) => s.duration)
+  const togglePlayback = useAnimationStore((s) => s.togglePlayback)
 
   const minutes = Math.floor(currentTime / 60)
   const seconds = (currentTime % 60).toFixed(2)

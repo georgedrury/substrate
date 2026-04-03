@@ -13,16 +13,14 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/pane
 
 <Lineage items={[{ name: "Substrate" }]} />
 
-## Usage
+## Examples
+
+<ComponentPreview name="pane-demo" />
+
+## Anatomy
 
 ```tsx
-import {
-	Pane,
-	PaneHeader,
-	PaneLabel,
-	PaneAction,
-} from "@/registry/substrate/components/pane"
-;<Pane>
+<Pane>
 	<PaneHeader>
 		<PaneLabel>Fill</PaneLabel>
 		<PaneAction onClick={toggleFill}>+</PaneAction>

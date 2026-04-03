@@ -41,7 +41,7 @@ function ColourSwatch({
 type ColourInputProps = {
 	value: string
 	onChange: (colour: string) => void
-} & React.ComponentProps<"div">
+} & Omit<React.ComponentProps<"div">, "onChange">
 
 function ColourInput({
 	value,
@@ -74,7 +74,7 @@ function ColourInput({
 type ColourPickerContentProps = {
 	value: string
 	onChange: (colour: string) => void
-} & React.ComponentProps<"div">
+} & Omit<React.ComponentProps<"div">, "onChange">
 
 function ColourPickerContent({
 	value,
@@ -111,7 +111,7 @@ type ColourPickerProps = {
 	value: string
 	onChange: (colour: string) => void
 	children?: React.ReactNode
-} & React.ComponentProps<"div">
+} & Omit<React.ComponentProps<"div">, "onChange">
 
 function ColourPicker({
 	value,

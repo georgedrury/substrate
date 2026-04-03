@@ -1,0 +1,125 @@
+---
+title: Timeline
+description: Compound timeline for keyframe animation editing with playhead, tracks, and transport controls.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/timeline
+```
+
+This also installs the `animation-store` dependency (Zustand).
+
+## Lineage
+
+<Lineage items={[{ name: "Substrate" }]} />
+
+## Examples
+
+<ComponentPreview name="timeline-demo" />
+
+## Anatomy
+
+```tsx
+import {
+  Timeline,
+  TimelineRuler,
+  TimelinePlayhead,
+  TimelineTrack,
+  TimelineKeyframe,
+  TimelineTransport,
+} from "@/components/substrate/timeline"
+import { useAnimationStore } from "@/stores/animation-store"
+
+const { duration, currentTime, zoomLevel } = useAnimationStore()
+
+<Timeline>
+  <TimelineRuler duration={duration} zoomLevel={zoomLevel} />
+  <TimelineTrack label="Position">
+    <TimelineKeyframe time={0} duration={duration} zoomLevel={zoomLevel} />
+  </TimelineTrack>
+  <TimelinePlayhead time={currentTime} duration={duration} zoomLevel={zoomLevel} />
+  <TimelineTransport />
+</Timeline>
+```
+
+## Theme variables
+
+| Variable              | Tailwind class         | Fallback                   | Description             |
+| --------------------- | ---------------------- | -------------------------- | ----------------------- |
+| `--timeline-playhead` | `bg-timeline-playhead` | `--color-destructive`      | Playhead colour         |
+| `--timeline-keyframe` | `bg-timeline-keyframe` | `--color-muted-foreground` | Keyframe diamond colour |
+| `--timeline-track`    | `bg-timeline-track`    | `--color-panel`            | Track background        |
+
+## Components
+
+| Component           | Description                                                                       |
+| ------------------- | --------------------------------------------------------------------------------- |
+| `Timeline`          | Flex-column container with panel background and top border                        |
+| `TimelineRuler`     | Second-interval tick marks with time labels. Fixed label column at 128px width    |
+| `TimelinePlayhead`  | Draggable vertical line with triangular handle. Updates `animation-store` on drag |
+| `TimelineTrack`     | Single track row with a label column and a content area for keyframes             |
+| `TimelineKeyframe`  | Diamond-shaped marker positioned by `time * zoomLevel` pixels                     |
+| `TimelineTransport` | Play/pause, loop, and time display. Reads directly from `animation-store`         |
+
+## Props
+
+### Timeline
+
+| Prop       | Type     | Default | Description                                           |
+| ---------- | -------- | ------- | ----------------------------------------------------- |
+| `duration` | `number` | `5`     | Total duration (unused internally — pass to children) |
+
+### TimelineRuler
+
+| Prop        | Type     | Default | Description               |
+| ----------- | -------- | ------- | ------------------------- |
+| `duration`  | `number` | —       | Total duration in seconds |
+| `zoomLevel` | `number` | —       | Pixels per second         |
+
+### TimelinePlayhead
+
+| Prop        | Type     | Default | Description               |
+| ----------- | -------- | ------- | ------------------------- |
+| `time`      | `number` | —       | Current time in seconds   |
+| `duration`  | `number` | —       | Total duration in seconds |
+| `zoomLevel` | `number` | —       | Pixels per second         |
+
+### TimelineKeyframe
+
+| Prop        | Type         | Default | Description                  |
+| ----------- | ------------ | ------- | ---------------------------- |
+| `time`      | `number`     | —       | Keyframe time in seconds     |
+| `duration`  | `number`     | —       | Total duration in seconds    |
+| `zoomLevel` | `number`     | —       | Pixels per second            |
+| `selected`  | `boolean`    | `false` | Whether keyframe is selected |
+| `onSelect`  | `() => void` | —       | Click handler for selection  |
+
+### TimelineTransport
+
+No additional props. Reads state from `useAnimationStore`.
+
+## Animation store
+
+The timeline uses a shared Zustand store (`animation-store`) for playback state:
+
+```tsx
+import { useAnimationStore } from "@/registry/substrate/stores/animation-store"
+
+const { currentTime, isPlaying, togglePlayback } = useAnimationStore()
+```
+
+| Property                 | Type                                       | Description                 |
+| ------------------------ | ------------------------------------------ | --------------------------- |
+| `duration`               | `number`                                   | Total duration (default 5s) |
+| `currentTime`            | `number`                                   | Current playhead time       |
+| `isPlaying`              | `boolean`                                  | Playback state              |
+| `fps`                    | `number`                                   | Frames per second (60)      |
+| `zoomLevel`              | `number`                                   | Pixels per second (100)     |
+| `selectedKeyframeIds`    | `Set<string>`                              | Selected keyframe IDs       |
+| `setCurrentTime`         | `(time: number) => void`                   | Set time (clamped)          |
+| `togglePlayback`         | `() => void`                               | Toggle play/pause           |
+| `setZoomLevel`           | `(level: number) => void`                  | Set zoom (clamped 20–500)   |
+| `selectKeyframe`         | `(id: string, additive?: boolean) => void` | Select keyframe             |
+| `clearKeyframeSelection` | `() => void`                               | Clear selection             |

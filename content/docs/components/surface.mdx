@@ -1,0 +1,63 @@
+---
+title: Surface
+description: Full-bleed container for rendering engines — canvas, WebGL, video or any visual content.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/surface
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Substrate" }]} />
+
+## Examples
+
+<ComponentPreview name="surface-demo" />
+
+## Anatomy
+
+```tsx
+<Surface>
+	<SurfaceGrid size={20} />
+	<canvas ref={canvasRef} />
+	<SurfaceControls position="bottom-right">
+		<ZoomButton />
+	</SurfaceControls>
+</Surface>
+```
+
+## Theme variables
+
+| Variable              | Tailwind class           | Fallback             | Description             |
+| --------------------- | ------------------------ | -------------------- | ----------------------- |
+| `--canvas`            | `bg-canvas`              | `--background`       | Surface background      |
+| `--canvas-foreground` | `text-canvas-foreground` | `--foreground-muted` | Surface foreground/grid |
+
+## Components
+
+| Component         | Description                                                        |
+| ----------------- | ------------------------------------------------------------------ |
+| `Surface`         | Absolute-positioned container with `bg-canvas` and overflow hidden |
+| `SurfaceControls` | Overlay layer with pointer-events pass-through except on children  |
+| `SurfaceGrid`     | CSS radial-gradient dot pattern sized via the `size` prop          |
+
+## Props
+
+### Surface
+
+Extends `React.ComponentProps<"div">`.
+
+### SurfaceControls
+
+| Prop       | Type                                                           | Default          | Description                        |
+| ---------- | -------------------------------------------------------------- | ---------------- | ---------------------------------- |
+| `position` | `"top-left" \| "top-right" \| "bottom-left" \| "bottom-right"` | `"bottom-right"` | Which corner to anchor controls to |
+
+### SurfaceGrid
+
+| Prop   | Type     | Default | Description                |
+| ------ | -------- | ------- | -------------------------- |
+| `size` | `number` | `20`    | Grid dot spacing in pixels |

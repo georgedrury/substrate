@@ -49,17 +49,8 @@
   /* Substrate */
   --color-canvas: var(--canvas, var(--color-background));
   --color-canvas-foreground: var(--canvas-foreground, var(--color-foreground-muted));
-  --color-panel: var(--panel, var(--color-card));
-  --color-panel-foreground: var(--panel-foreground, var(--color-card-foreground));
-  /* Substrate — Timeline */
-  --color-timeline-playhead: var(--timeline-playhead, var(--color-destructive));
-  --color-timeline-keyframe: var(--timeline-keyframe, var(--color-muted-foreground));
-  --color-timeline-track: var(--timeline-track, var(--color-panel));
-  /* Substrate — Gallery */
-  --color-gallery-selection: var(--gallery-selection, var(--color-primary));
-  /* Substrate — Easing */
-  --color-easing-curve: var(--easing-curve, var(--color-primary));
-  --color-easing-handle: var(--easing-handle, var(--color-primary));
+  --color-panel:  var(--panel, var(--color-card));
+  --color-panel-foregorund:  var(--panel-foreground, var(--color-panel-foreground))
 }
 
 :root {

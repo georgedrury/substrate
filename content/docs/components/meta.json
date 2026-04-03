@@ -1,10 +1,15 @@
 {
 	"pages": [
 		"design-canvas",
+		"surface",
 		"toolbar",
 		"panel",
 		"pane",
 		"action",
-		"slider"
+		"slider",
+		"timeline",
+		"gallery",
+		"colour-picker",
+		"easing-curve-editor"
 	]
 }
