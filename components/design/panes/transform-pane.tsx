@@ -2,16 +2,17 @@
 
 import { useCallback } from "react"
 import { Input } from "@/components/ui/input"
-import { useCanvas } from "../contexts/canvas-context"
-import { useSelection } from "../contexts/selection-context"
-import { useHistory } from "../contexts/history-context"
+import { useDocumentStore } from "../stores/document-store"
 import { Pane, PaneHeader, PaneLabel } from "../components/pane"
 import { Action, ActionLabel, ActionControls } from "../components/action"
 
 export function TransformPane() {
-	const { dispatch } = useCanvas()
-	const { selectedElements } = useSelection()
-	const { pushSnapshot } = useHistory()
+	const selectedIds = useDocumentStore((s) => s.selectedIds)
+	const elements = useDocumentStore((s) => s.elements)
+	const updateElement = useDocumentStore((s) => s.updateElement)
+	const pushSnapshot = useDocumentStore((s) => s.pushSnapshot)
+
+	const selectedElements = [...selectedIds].map((id) => elements[id]).filter(Boolean)
 
 	const element = selectedElements[0]
 	if (!element) return null
@@ -22,48 +23,13 @@ export function TransformPane() {
 				<PaneLabel>Transform</PaneLabel>
 			</PaneHeader>
 			<div className="grid grid-cols-2 gap-2">
-				<NumberField
-					label="X"
-					value={element.x}
-					field="x"
-					elementId={element.id}
-					dispatch={dispatch}
-					pushSnapshot={pushSnapshot}
-				/>
-				<NumberField
-					label="Y"
-					value={element.y}
-					field="y"
-					elementId={element.id}
-					dispatch={dispatch}
-					pushSnapshot={pushSnapshot}
-				/>
-				<NumberField
-					label="W"
-					value={element.width}
-					field="width"
-					elementId={element.id}
-					dispatch={dispatch}
-					pushSnapshot={pushSnapshot}
-				/>
-				<NumberField
-					label="H"
-					value={element.height}
-					field="height"
-					elementId={element.id}
-					dispatch={dispatch}
-					pushSnapshot={pushSnapshot}
-				/>
+				<NumberField label="X" value={element.x} field="x" elementId={element.id} updateElement={updateElement} pushSnapshot={pushSnapshot} />
+				<NumberField label="Y" value={element.y} field="y" elementId={element.id} updateElement={updateElement} pushSnapshot={pushSnapshot} />
+				<NumberField label="W" value={element.width} field="width" elementId={element.id} updateElement={updateElement} pushSnapshot={pushSnapshot} />
+				<NumberField label="H" value={element.height} field="height" elementId={element.id} updateElement={updateElement} pushSnapshot={pushSnapshot} />
 			</div>
 			<div className="grid grid-cols-2 gap-2">
-				<NumberField
-					label="R"
-					value={element.rotation}
-					field="rotation"
-					elementId={element.id}
-					dispatch={dispatch}
-					pushSnapshot={pushSnapshot}
-				/>
+				<NumberField label="R" value={element.rotation} field="rotation" elementId={element.id} updateElement={updateElement} pushSnapshot={pushSnapshot} />
 			</div>
 		</Pane>
 	)
@@ -74,18 +40,14 @@ function NumberField({
 	value,
 	field,
 	elementId,
-	dispatch,
+	updateElement,
 	pushSnapshot,
 }: {
 	label: string
 	value: number
 	field: string
 	elementId: string
-	dispatch: React.Dispatch<{
-		type: "UPDATE_ELEMENT"
-		id: string
-		changes: Record<string, number>
-	}>
+	updateElement: (id: string, changes: Record<string, number>) => void
 	pushSnapshot: () => void
 }) {
 	const onChange = useCallback(
@@ -93,13 +55,9 @@ function NumberField({
 			const num = parseFloat(e.target.value)
 			if (isNaN(num)) return
 			pushSnapshot()
-			dispatch({
-				type: "UPDATE_ELEMENT",
-				id: elementId,
-				changes: { [field]: num },
-			})
+			updateElement(elementId, { [field]: num })
 		},
-		[elementId, field, dispatch, pushSnapshot],
+		[elementId, field, updateElement, pushSnapshot],
 	)
 
 	return (

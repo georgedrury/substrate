@@ -3,9 +3,7 @@
 import { useCallback } from "react"
 import { Input } from "@/components/ui/input"
 import { Slider } from "@/components/design/components/slider"
-import { useCanvas } from "../contexts/canvas-context"
-import { useSelection } from "../contexts/selection-context"
-import { useHistory } from "../contexts/history-context"
+import { useDocumentStore } from "../stores/document-store"
 import { Pane, PaneHeader, PaneLabel, PaneAction } from "../components/pane"
 import { Action, ActionLabel, ActionControls } from "../components/action"
 import type { Fill } from "../types"
@@ -16,11 +14,12 @@ import {
 } from "@/components/ui/input-group"
 
 export function FillPane() {
-	const { dispatch } = useCanvas()
-	const { selectedElements } = useSelection()
-	const { pushSnapshot } = useHistory()
+	const selectedIds = useDocumentStore((s) => s.selectedIds)
+	const elements = useDocumentStore((s) => s.elements)
+	const updateElement = useDocumentStore((s) => s.updateElement)
+	const pushSnapshot = useDocumentStore((s) => s.pushSnapshot)
 
-	const element = selectedElements[0]
+	const element = [...selectedIds].map((id) => elements[id]).filter(Boolean)[0]
 	if (!element) return null
 
 	const fill = element.fill
@@ -33,27 +32,19 @@ export function FillPane() {
 				color: "oklch(0.85 0 0)",
 				opacity: 1,
 			}
-			dispatch({
-				type: "UPDATE_ELEMENT",
-				id: element.id,
-				changes: { fill: { ...current, ...changes } },
-			})
+			updateElement(element.id, { fill: { ...current, ...changes } })
 		},
-		[element, dispatch, pushSnapshot],
+		[element, updateElement, pushSnapshot],
 	)
 
 	const toggleFill = useCallback(() => {
 		pushSnapshot()
-		dispatch({
-			type: "UPDATE_ELEMENT",
-			id: element.id,
-			changes: {
-				fill: fill
-					? null
-					: { type: "solid", color: "oklch(0.85 0 0)", opacity: 1 },
-			},
+		updateElement(element.id, {
+			fill: fill
+				? null
+				: { type: "solid", color: "oklch(0.85 0 0)", opacity: 1 },
 		})
-	}, [element.id, fill, dispatch, pushSnapshot])
+	}, [element.id, fill, updateElement, pushSnapshot])
 
 	return (
 		<Pane>

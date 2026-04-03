@@ -1,25 +1,33 @@
 "use client"
 
 import { useEffect, useRef, useCallback } from "react"
-import { useCanvas } from "../contexts/canvas-context"
-import { useSelection } from "../contexts/selection-context"
-import { useTool } from "../contexts/tool-context"
-import { useHistory } from "../contexts/history-context"
+import { useDocumentStore } from "../stores/document-store"
+import { useToolStore } from "../stores/tool-store"
 import { useCanvasTransform } from "./use-canvas-transform"
 import { generateId } from "../lib/id"
 import type { DesignElement } from "../types"
 
 export function useKeyboardShortcuts() {
-  const { state: canvasState, dispatch: canvasDispatch } = useCanvas()
-  const { state: selectionState, dispatch: selectionDispatch } = useSelection()
-  const { setTool, setTemporaryTool, restoreTool } = useTool()
-  const { undo, redo, pushSnapshot } = useHistory()
+  const elements = useDocumentStore((s) => s.elements)
+  const elementOrder = useDocumentStore((s) => s.elementOrder)
+  const selectedIds = useDocumentStore((s) => s.selectedIds)
+  const addElement = useDocumentStore((s) => s.addElement)
+  const deleteElements = useDocumentStore((s) => s.deleteElements)
+  const select = useDocumentStore((s) => s.select)
+  const deselectAll = useDocumentStore((s) => s.deselectAll)
+  const pushSnapshot = useDocumentStore((s) => s.pushSnapshot)
+  const undo = useDocumentStore((s) => s.undo)
+  const redo = useDocumentStore((s) => s.redo)
+
+  const setTool = useToolStore((s) => s.setTool)
+  const setTemporaryTool = useToolStore((s) => s.setTemporaryTool)
+  const restoreTool = useToolStore((s) => s.restoreTool)
+
   const { zoomIn, zoomOut, resetZoom } = useCanvasTransform()
   const spaceHeldRef = useRef(false)
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      // Don't capture shortcuts when typing in inputs
       const target = e.target as HTMLElement
       if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) {
         return
@@ -27,7 +35,6 @@ export function useKeyboardShortcuts() {
 
       const meta = e.metaKey || e.ctrlKey
 
-      // Space for temporary hand tool
       if (e.code === "Space" && !spaceHeldRef.current && !meta) {
         e.preventDefault()
         spaceHeldRef.current = true
@@ -35,7 +42,6 @@ export function useKeyboardShortcuts() {
         return
       }
 
-      // Tool shortcuts (no modifiers)
       if (!meta && !e.shiftKey && !e.altKey) {
         switch (e.key.toLowerCase()) {
           case "v": setTool("select"); return
@@ -48,21 +54,16 @@ export function useKeyboardShortcuts() {
         }
       }
 
-      // Delete
       if (e.key === "Delete" || e.key === "Backspace") {
-        if (selectionState.selectedIds.size > 0) {
+        if (selectedIds.size > 0) {
           e.preventDefault()
           pushSnapshot()
-          canvasDispatch({
-            type: "DELETE_ELEMENTS",
-            ids: [...selectionState.selectedIds],
-          })
-          selectionDispatch({ type: "DESELECT_ALL" })
+          deleteElements([...selectedIds])
+          deselectAll()
         }
         return
       }
 
-      // Cmd+Z / Cmd+Shift+Z
       if (meta && e.key.toLowerCase() === "z") {
         e.preventDefault()
         if (e.shiftKey) redo()
@@ -70,24 +71,19 @@ export function useKeyboardShortcuts() {
         return
       }
 
-      // Cmd+A — select all
       if (meta && e.key.toLowerCase() === "a") {
         e.preventDefault()
-        selectionDispatch({
-          type: "SELECT",
-          ids: canvasState.elementOrder,
-        })
+        select(elementOrder)
         return
       }
 
-      // Cmd+D — duplicate
       if (meta && e.key.toLowerCase() === "d") {
         e.preventDefault()
-        if (selectionState.selectedIds.size === 0) return
+        if (selectedIds.size === 0) return
         pushSnapshot()
         const newIds: string[] = []
-        for (const id of selectionState.selectedIds) {
-          const el = canvasState.elements[id]
+        for (const id of selectedIds) {
+          const el = elements[id]
           if (!el) continue
           const newId = generateId()
           const clone: DesignElement = {
@@ -97,14 +93,13 @@ export function useKeyboardShortcuts() {
             x: el.x + 20,
             y: el.y + 20,
           } as DesignElement
-          canvasDispatch({ type: "ADD_ELEMENT", element: clone })
+          addElement(clone)
           newIds.push(newId)
         }
-        selectionDispatch({ type: "SELECT", ids: newIds })
+        select(newIds)
         return
       }
 
-      // Zoom
       if (e.key === "=" || e.key === "+") {
         e.preventDefault()
         zoomIn()
@@ -121,17 +116,16 @@ export function useKeyboardShortcuts() {
         return
       }
 
-      // Escape — deselect
       if (e.key === "Escape") {
-        selectionDispatch({ type: "DESELECT_ALL" })
+        deselectAll()
         setTool("select")
         return
       }
     },
     [
-      canvasState, selectionState, canvasDispatch, selectionDispatch,
-      setTool, setTemporaryTool, undo, redo, pushSnapshot,
-      zoomIn, zoomOut, resetZoom,
+      elements, elementOrder, selectedIds, addElement, deleteElements,
+      select, deselectAll, pushSnapshot, undo, redo,
+      setTool, setTemporaryTool, zoomIn, zoomOut, resetZoom,
     ]
   )
 

@@ -2,30 +2,25 @@
 
 import { useCallback } from "react"
 import { Slider } from "@/components/design/components/slider"
-import { useCanvas } from "../contexts/canvas-context"
-import { useSelection } from "../contexts/selection-context"
-import { useHistory } from "../contexts/history-context"
+import { useDocumentStore } from "../stores/document-store"
 import { Pane, PaneLabel } from "../components/pane"
 import { Action, ActionLabel, ActionControls } from "../components/action"
 
 export function AppearancePane() {
-	const { dispatch } = useCanvas()
-	const { selectedElements } = useSelection()
-	const { pushSnapshot } = useHistory()
+	const selectedIds = useDocumentStore((s) => s.selectedIds)
+	const elements = useDocumentStore((s) => s.elements)
+	const updateElement = useDocumentStore((s) => s.updateElement)
+	const pushSnapshot = useDocumentStore((s) => s.pushSnapshot)
 
-	const element = selectedElements[0]
+	const element = [...selectedIds].map((id) => elements[id]).filter(Boolean)[0]
 	if (!element) return null
 
 	const updateOpacity = useCallback(
 		(opacity: number) => {
 			pushSnapshot()
-			dispatch({
-				type: "UPDATE_ELEMENT",
-				id: element.id,
-				changes: { opacity },
-			})
+			updateElement(element.id, { opacity })
 		},
-		[element.id, dispatch, pushSnapshot],
+		[element.id, updateElement, pushSnapshot],
 	)
 
 	return (

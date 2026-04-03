@@ -1,32 +1,34 @@
 "use client"
 
-import { useCanvas } from "../contexts/canvas-context"
-import { useSelection } from "../contexts/selection-context"
+import { useDocumentStore } from "../stores/document-store"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 import { Panel } from "../components/panel"
 
 export function LayersPanel() {
-	const { state } = useCanvas()
-	const { state: selectionState, dispatch: selectionDispatch } = useSelection()
+	const elements = useDocumentStore((s) => s.elements)
+	const elementOrder = useDocumentStore((s) => s.elementOrder)
+	const selectedIds = useDocumentStore((s) => s.selectedIds)
+	const select = useDocumentStore((s) => s.select)
+	const toggleSelection = useDocumentStore((s) => s.toggleSelection)
 
 	return (
 		<Panel position="left">
 			<ScrollArea className="flex-1">
 				<div className="p-1">
-					{[...state.elementOrder].reverse().map((id) => {
-						const el = state.elements[id]
+					{[...elementOrder].reverse().map((id) => {
+						const el = elements[id]
 						if (!el) return null
-						const isSelected = selectionState.selectedIds.has(id)
+						const isSelected = selectedIds.has(id)
 
 						return (
 							<button
 								key={id}
 								onClick={(e) => {
 									if (e.shiftKey) {
-										selectionDispatch({ type: "TOGGLE", id })
+										toggleSelection(id)
 									} else {
-										selectionDispatch({ type: "SELECT", ids: [id] })
+										select([id])
 									}
 								}}
 								className={cn(
@@ -49,7 +51,7 @@ export function LayersPanel() {
 						)
 					})}
 
-					{state.elementOrder.length === 0 && (
+					{elementOrder.length === 0 && (
 						<p className="px-2 py-4 text-center text-xs text-muted-foreground">
 							No layers
 						</p>

@@ -2,16 +2,16 @@
 
 import { useCallback } from "react"
 import { Button } from "@/components/ui/button"
-import { useCanvas } from "../contexts/canvas-context"
-import { useSelection } from "../contexts/selection-context"
-import { useHistory } from "../contexts/history-context"
+import { useDocumentStore } from "../stores/document-store"
 import { Pane, PaneLabel } from "../components/pane"
 
 export function AlignmentPane() {
-	const { dispatch } = useCanvas()
-	const { selectedElements } = useSelection()
-	const { pushSnapshot } = useHistory()
+	const selectedIds = useDocumentStore((s) => s.selectedIds)
+	const elements = useDocumentStore((s) => s.elements)
+	const updateElement = useDocumentStore((s) => s.updateElement)
+	const pushSnapshot = useDocumentStore((s) => s.pushSnapshot)
 
+	const selectedElements = [...selectedIds].map((id) => elements[id]).filter(Boolean)
 	if (selectedElements.length < 2) return null
 
 	const align = useCallback(
@@ -25,11 +25,9 @@ export function AlignmentPane() {
 				case "left": {
 					const minX = Math.min(...els.map((e) => e.x))
 					for (const el of els) {
-						dispatch({
-							type: "UPDATE_ELEMENT",
-							id: el.id,
-							changes: { x: minX },
-						})
+						updateElement(el.id,
+							{ x: minX },
+						)
 					}
 					break
 				}
@@ -38,33 +36,27 @@ export function AlignmentPane() {
 					const maxX = Math.max(...els.map((e) => e.x + e.width))
 					const center = (minX + maxX) / 2
 					for (const el of els) {
-						dispatch({
-							type: "UPDATE_ELEMENT",
-							id: el.id,
-							changes: { x: center - el.width / 2 },
-						})
+						updateElement(el.id,
+							{ x: center - el.width / 2 },
+						)
 					}
 					break
 				}
 				case "right": {
 					const maxX = Math.max(...els.map((e) => e.x + e.width))
 					for (const el of els) {
-						dispatch({
-							type: "UPDATE_ELEMENT",
-							id: el.id,
-							changes: { x: maxX - el.width },
-						})
+						updateElement(el.id,
+							{ x: maxX - el.width },
+						)
 					}
 					break
 				}
 				case "top": {
 					const minY = Math.min(...els.map((e) => e.y))
 					for (const el of els) {
-						dispatch({
-							type: "UPDATE_ELEMENT",
-							id: el.id,
-							changes: { y: minY },
-						})
+						updateElement(el.id,
+							{ y: minY },
+						)
 					}
 					break
 				}
@@ -73,28 +65,24 @@ export function AlignmentPane() {
 					const maxY = Math.max(...els.map((e) => e.y + e.height))
 					const center = (minY + maxY) / 2
 					for (const el of els) {
-						dispatch({
-							type: "UPDATE_ELEMENT",
-							id: el.id,
-							changes: { y: center - el.height / 2 },
-						})
+						updateElement(el.id,
+							{ y: center - el.height / 2 },
+						)
 					}
 					break
 				}
 				case "bottom": {
 					const maxY = Math.max(...els.map((e) => e.y + e.height))
 					for (const el of els) {
-						dispatch({
-							type: "UPDATE_ELEMENT",
-							id: el.id,
-							changes: { y: maxY - el.height },
-						})
+						updateElement(el.id,
+							{ y: maxY - el.height },
+						)
 					}
 					break
 				}
 			}
 		},
-		[selectedElements, dispatch, pushSnapshot],
+		[selectedElements, updateElement, pushSnapshot],
 	)
 
 	return (

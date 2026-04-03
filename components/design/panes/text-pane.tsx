@@ -10,9 +10,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { useCanvas } from "../contexts/canvas-context"
-import { useSelection } from "../contexts/selection-context"
-import { useHistory } from "../contexts/history-context"
+import { useDocumentStore } from "../stores/document-store"
 import { Pane, PaneLabel } from "../components/pane"
 import { Action, ActionLabel, ActionControls } from "../components/action"
 import type { TextElement, TextStyle } from "../types"
@@ -35,11 +33,12 @@ const FONT_WEIGHTS = [
 ]
 
 export function TextPane() {
-	const { dispatch } = useCanvas()
-	const { selectedElements } = useSelection()
-	const { pushSnapshot } = useHistory()
+	const selectedIds = useDocumentStore((s) => s.selectedIds)
+	const elements = useDocumentStore((s) => s.elements)
+	const updateElement = useDocumentStore((s) => s.updateElement)
+	const pushSnapshot = useDocumentStore((s) => s.pushSnapshot)
 
-	const element = selectedElements[0]
+	const element = [...selectedIds].map((id) => elements[id]).filter(Boolean)[0]
 	if (!element || element.type !== "text") return null
 
 	const textEl = element as TextElement
@@ -48,13 +47,9 @@ export function TextPane() {
 	const updateTextStyle = useCallback(
 		(changes: Partial<TextStyle>) => {
 			pushSnapshot()
-			dispatch({
-				type: "UPDATE_ELEMENT",
-				id: textEl.id,
-				changes: { textStyle: { ...textStyle, ...changes } },
-			})
+			updateElement(textEl.id, { textStyle: { ...textStyle, ...changes } })
 		},
-		[textEl.id, textStyle, dispatch, pushSnapshot],
+		[textEl.id, textStyle, updateElement, pushSnapshot],
 	)
 
 	return (

@@ -1,9 +1,8 @@
 "use client"
 
 import { useEffect, useRef, useCallback } from "react"
-import { useCanvas } from "../contexts/canvas-context"
-import { useSelection } from "../contexts/selection-context"
-import { useTool } from "../contexts/tool-context"
+import { useDocumentStore } from "../stores/document-store"
+import { useToolStore } from "../stores/tool-store"
 import {
   renderGrid,
   renderElement,
@@ -26,9 +25,12 @@ export function useCanvasRenderer(
   canvasRef: React.RefObject<HTMLCanvasElement | null>,
   containerRef: React.RefObject<HTMLDivElement | null>
 ) {
-  const { state: canvasState } = useCanvas()
-  const { state: selectionState } = useSelection()
-  const { activeTool } = useTool()
+  const elements = useDocumentStore((s) => s.elements)
+  const elementOrder = useDocumentStore((s) => s.elementOrder)
+  const camera = useDocumentStore((s) => s.camera)
+  const showGrid = useDocumentStore((s) => s.showGrid)
+  const selectedIds = useDocumentStore((s) => s.selectedIds)
+  const activeTool = useToolStore((s) => s.activeTool)
   const dirtyRef = useRef(true)
   const dragStateRef = useRef<DragState>({
     isDragging: false,
@@ -44,7 +46,7 @@ export function useCanvasRenderer(
   // Mark dirty when state changes
   useEffect(() => {
     dirtyRef.current = true
-  }, [canvasState, selectionState])
+  }, [elements, elementOrder, camera, showGrid, selectedIds])
 
   // Handle resize
   useEffect(() => {
@@ -92,15 +94,13 @@ export function useCanvasRenderer(
       ctx.fillStyle = "oklch(0.97 0 0)"
       ctx.fillRect(0, 0, width, height)
 
-      const { camera, elements, elementOrder } = canvasState
-
       // Camera transform
       ctx.save()
       ctx.translate(camera.x, camera.y)
       ctx.scale(camera.zoom, camera.zoom)
 
       // Grid
-      if (canvasState.showGrid) {
+      if (showGrid) {
         renderGrid(ctx, camera, width, height)
       }
 
@@ -119,7 +119,7 @@ export function useCanvasRenderer(
       ctx.restore() // Back to screen space
 
       // Selection UI (screen space)
-      for (const id of selectionState.selectedIds) {
+      for (const id of selectedIds) {
         const el = elements[id]
         if (!el) continue
         const topLeft = worldToScreen({ x: el.x, y: el.y }, camera)
@@ -151,7 +151,7 @@ export function useCanvasRenderer(
 
     rafId = requestAnimationFrame(render)
     return () => cancelAnimationFrame(rafId)
-  }, [canvasRef, canvasState, selectionState, activeTool])
+  }, [canvasRef, elements, elementOrder, camera, showGrid, selectedIds, activeTool])
 
   return { markDirty, dragStateRef }
 }

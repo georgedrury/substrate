@@ -9,7 +9,7 @@ import {
 	RiText,
 	RiArtboardLine,
 } from "@remixicon/react"
-import { useTool } from "../contexts/tool-context"
+import { useToolStore } from "../stores/tool-store"
 import type { ToolType } from "../types"
 import {
 	Toolbar,
@@ -44,7 +44,8 @@ const SHAPE_TOOLS: {
 ]
 
 export function Tools() {
-	const { activeTool, setTool } = useTool()
+	const activeTool = useToolStore((s) => s.activeTool)
+	const setTool = useToolStore((s) => s.setTool)
 
 	const pointerTool = activeTool === "select" || activeTool === "hand" ? activeTool : "select"
 	const PointerIcon = POINTER_ICONS[pointerTool]

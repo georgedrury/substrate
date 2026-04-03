@@ -3,9 +3,7 @@
 import { useCallback } from "react"
 import { Input } from "@/components/ui/input"
 import { Slider } from "@/components/design/components/slider"
-import { useCanvas } from "../contexts/canvas-context"
-import { useSelection } from "../contexts/selection-context"
-import { useHistory } from "../contexts/history-context"
+import { useDocumentStore } from "../stores/document-store"
 import { Pane, PaneHeader, PaneLabel, PaneAction } from "../components/pane"
 import { Action, ActionLabel, ActionControls } from "../components/action"
 import type { Stroke } from "../types"
@@ -16,11 +14,12 @@ import {
 } from "@/components/ui/input-group"
 
 export function StrokePane() {
-	const { dispatch } = useCanvas()
-	const { selectedElements } = useSelection()
-	const { pushSnapshot } = useHistory()
+	const selectedIds = useDocumentStore((s) => s.selectedIds)
+	const elements = useDocumentStore((s) => s.elements)
+	const updateElement = useDocumentStore((s) => s.updateElement)
+	const pushSnapshot = useDocumentStore((s) => s.pushSnapshot)
 
-	const element = selectedElements[0]
+	const element = [...selectedIds].map((id) => elements[id]).filter(Boolean)[0]
 	if (!element) return null
 
 	const stroke = element.stroke
@@ -33,27 +32,19 @@ export function StrokePane() {
 				width: 1,
 				opacity: 1,
 			}
-			dispatch({
-				type: "UPDATE_ELEMENT",
-				id: element.id,
-				changes: { stroke: { ...current, ...changes } },
-			})
+			updateElement(element.id, { stroke: { ...current, ...changes } })
 		},
-		[element, dispatch, pushSnapshot],
+		[element, updateElement, pushSnapshot],
 	)
 
 	const toggleStroke = useCallback(() => {
 		pushSnapshot()
-		dispatch({
-			type: "UPDATE_ELEMENT",
-			id: element.id,
-			changes: {
-				stroke: stroke
-					? null
-					: { color: "oklch(0.145 0 0)", width: 1, opacity: 1 },
-			},
+		updateElement(element.id, {
+			stroke: stroke
+				? null
+				: { color: "oklch(0.145 0 0)", width: 1, opacity: 1 },
 		})
-	}, [element.id, stroke, dispatch, pushSnapshot])
+	}, [element.id, stroke, updateElement, pushSnapshot])
 
 	return (
 		<Pane>

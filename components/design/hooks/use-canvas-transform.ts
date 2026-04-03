@@ -3,14 +3,14 @@
 import { useCallback } from "react"
 import type { Point, Camera } from "../types"
 import { screenToWorld, worldToScreen, clamp } from "../lib/math"
-import { useCanvas } from "../contexts/canvas-context"
+import { useDocumentStore } from "../stores/document-store"
 
 const MIN_ZOOM = 0.1
 const MAX_ZOOM = 10
 
 export function useCanvasTransform() {
-  const { state, dispatch } = useCanvas()
-  const { camera } = state
+  const camera = useDocumentStore((s) => s.camera)
+  const setCamera = useDocumentStore((s) => s.setCamera)
 
   const toWorld = useCallback(
     (screenPoint: Point): Point => screenToWorld(screenPoint, camera),
@@ -31,19 +31,16 @@ export function useCanvasTransform() {
         y: screenPoint.y - worldBefore.y * clamped,
         zoom: clamped,
       }
-      dispatch({ type: "SET_CAMERA", camera: newCamera })
+      setCamera(newCamera)
     },
-    [camera, dispatch]
+    [camera, setCamera]
   )
 
   const pan = useCallback(
     (dx: number, dy: number) => {
-      dispatch({
-        type: "SET_CAMERA",
-        camera: { x: camera.x + dx, y: camera.y + dy },
-      })
+      setCamera({ x: camera.x + dx, y: camera.y + dy })
     },
-    [camera, dispatch]
+    [camera, setCamera]
   )
 
   const zoomIn = useCallback(() => {
@@ -61,8 +58,8 @@ export function useCanvasTransform() {
   }, [camera.zoom, zoomToPoint])
 
   const resetZoom = useCallback(() => {
-    dispatch({ type: "SET_CAMERA", camera: { x: 0, y: 0, zoom: 1 } })
-  }, [dispatch])
+    setCamera({ x: 0, y: 0, zoom: 1 })
+  }, [setCamera])
 
   return { camera, toWorld, toScreen, zoomToPoint, pan, zoomIn, zoomOut, resetZoom }
 }

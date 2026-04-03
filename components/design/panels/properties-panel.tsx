@@ -1,6 +1,6 @@
 "use client"
 
-import { useSelection } from "../contexts/selection-context"
+import { useDocumentStore } from "../stores/document-store"
 import { Separator } from "@/components/ui/separator"
 
 import { Panel } from "../components/panel"
@@ -12,8 +12,10 @@ import { TextPane } from "../panes/text-pane"
 import { TransformPane } from "../panes/transform-pane"
 
 export function PropertiesPanel() {
-	const { selectedElements } = useSelection()
+	const selectedIds = useDocumentStore((s) => s.selectedIds)
+	const elements = useDocumentStore((s) => s.elements)
 
+	const selectedElements = [...selectedIds].map((id) => elements[id]).filter(Boolean)
 	if (selectedElements.length === 0) {
 		return (
 			<Panel className="">

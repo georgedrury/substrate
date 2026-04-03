@@ -4,7 +4,7 @@ import { useRef } from "react"
 import { useCanvasRenderer } from "../hooks/use-canvas-renderer"
 import { useCanvasInteraction } from "../hooks/use-canvas-interaction"
 import { useKeyboardShortcuts } from "../hooks/use-keyboard-shortcuts"
-import { useTool } from "../contexts/tool-context"
+import { useToolStore } from "../stores/tool-store"
 
 const CURSOR_MAP: Record<string, string> = {
 	select: "default",
@@ -19,7 +19,7 @@ const CURSOR_MAP: Record<string, string> = {
 export function DesignCanvas() {
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 	const containerRef = useRef<HTMLDivElement>(null)
-	const { activeTool } = useTool()
+	const activeTool = useToolStore((s) => s.activeTool)
 
 	const { markDirty, dragStateRef } = useCanvasRenderer(canvasRef, containerRef)
 	const { onPointerDown, onPointerMove, onPointerUp, onWheel } =
