@@ -5,7 +5,7 @@
   "author": "George Drury <info@georgedrury.co.uk>",
   "description": "Geometry helpers — rotate point, bounds checking, ellipse hit test, screen/world coordinate conversion, normalize bounds, distance, and clamping.",
   "registryDependencies": [
-    "https://substrate.vui.run/r/types"
+    "https://substrate.georgedrury.co.uk/r/types"
   ],
   "files": [
     {

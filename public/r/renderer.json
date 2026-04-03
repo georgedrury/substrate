@@ -5,7 +5,7 @@
   "author": "George Drury <info@georgedrury.co.uk>",
   "description": "Pure Canvas 2D rendering functions — grid, elements (rectangle, ellipse, text, line, frame), selection boxes, resize handles, creation preview, and marquee.",
   "registryDependencies": [
-    "https://substrate.vui.run/r/types"
+    "https://substrate.georgedrury.co.uk/r/types"
   ],
   "files": [
     {

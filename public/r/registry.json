@@ -1,7 +1,7 @@
 {
 	"$schema": "https://ui.shadcn.com/schema/registry.json",
 	"name": "substrate",
-	"homepage": "https://substrate.vui.run",
+	"homepage": "https://substrate.georgedrury.co.uk",
 	"items": [
 		{
 			"name": "types",
@@ -28,7 +28,7 @@
 			"description": "Geometry helpers — rotate point, bounds checking, ellipse hit test, screen/world coordinate conversion, normalize bounds, distance, and clamping.",
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "lib"],
-			"registryDependencies": ["https://substrate.vui.run/r/types"],
+			"registryDependencies": ["https://substrate.georgedrury.co.uk/r/types"],
 			"meta": {
 				"lineage": [{ "name": "Substrate" }]
 			},
@@ -84,7 +84,7 @@
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "store"],
 			"dependencies": ["zustand"],
-			"registryDependencies": ["https://substrate.vui.run/r/types"],
+			"registryDependencies": ["https://substrate.georgedrury.co.uk/r/types"],
 			"meta": {
 				"lineage": [{ "name": "Substrate" }]
 			},
@@ -104,7 +104,7 @@
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "store"],
 			"dependencies": ["zustand"],
-			"registryDependencies": ["https://substrate.vui.run/r/types"],
+			"registryDependencies": ["https://substrate.georgedrury.co.uk/r/types"],
 			"meta": {
 				"lineage": [{ "name": "Substrate" }]
 			},
@@ -124,7 +124,7 @@
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "store"],
 			"dependencies": ["zustand"],
-			"registryDependencies": ["https://substrate.vui.run/r/types"],
+			"registryDependencies": ["https://substrate.georgedrury.co.uk/r/types"],
 			"meta": {
 				"lineage": [{ "name": "Substrate" }]
 			},
@@ -144,8 +144,8 @@
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "canvas"],
 			"registryDependencies": [
-				"https://substrate.vui.run/r/types",
-				"https://substrate.vui.run/r/id"
+				"https://substrate.georgedrury.co.uk/r/types",
+				"https://substrate.georgedrury.co.uk/r/id"
 			],
 			"meta": {
 				"lineage": [{ "name": "Substrate" }]
@@ -165,7 +165,7 @@
 			"description": "Pure Canvas 2D rendering functions — grid, elements (rectangle, ellipse, text, line, frame), selection boxes, resize handles, creation preview, and marquee.",
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "canvas"],
-			"registryDependencies": ["https://substrate.vui.run/r/types"],
+			"registryDependencies": ["https://substrate.georgedrury.co.uk/r/types"],
 			"meta": {
 				"lineage": [{ "name": "Substrate" }]
 			},
@@ -185,8 +185,8 @@
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "canvas"],
 			"registryDependencies": [
-				"https://substrate.vui.run/r/types",
-				"https://substrate.vui.run/r/math"
+				"https://substrate.georgedrury.co.uk/r/types",
+				"https://substrate.georgedrury.co.uk/r/math"
 			],
 			"meta": {
 				"lineage": [{ "name": "Substrate" }]
@@ -206,7 +206,7 @@
 			"description": "Hook for managing drag state machine — tracks drag type (create, move, resize, marquee, pan), start/current positions, and element snapshots.",
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "canvas"],
-			"registryDependencies": ["https://substrate.vui.run/r/types"],
+			"registryDependencies": ["https://substrate.georgedrury.co.uk/r/types"],
 			"meta": {
 				"lineage": [{ "name": "Substrate" }]
 			},
@@ -226,9 +226,9 @@
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "canvas"],
 			"registryDependencies": [
-				"https://substrate.vui.run/r/types",
-				"https://substrate.vui.run/r/math",
-				"https://substrate.vui.run/r/document-store"
+				"https://substrate.georgedrury.co.uk/r/types",
+				"https://substrate.georgedrury.co.uk/r/math",
+				"https://substrate.georgedrury.co.uk/r/document-store"
 			],
 			"meta": {
 				"lineage": [{ "name": "Substrate" }]
@@ -249,11 +249,11 @@
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "canvas"],
 			"registryDependencies": [
-				"https://substrate.vui.run/r/types",
-				"https://substrate.vui.run/r/math",
-				"https://substrate.vui.run/r/document-store",
-				"https://substrate.vui.run/r/hit-test",
-				"https://substrate.vui.run/r/use-canvas-transform"
+				"https://substrate.georgedrury.co.uk/r/types",
+				"https://substrate.georgedrury.co.uk/r/math",
+				"https://substrate.georgedrury.co.uk/r/document-store",
+				"https://substrate.georgedrury.co.uk/r/hit-test",
+				"https://substrate.georgedrury.co.uk/r/use-canvas-transform"
 			],
 			"meta": {
 				"lineage": [{ "name": "Substrate" }]
@@ -274,11 +274,11 @@
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "canvas"],
 			"registryDependencies": [
-				"https://substrate.vui.run/r/types",
-				"https://substrate.vui.run/r/math",
-				"https://substrate.vui.run/r/document-store",
-				"https://substrate.vui.run/r/tool-store",
-				"https://substrate.vui.run/r/renderer"
+				"https://substrate.georgedrury.co.uk/r/types",
+				"https://substrate.georgedrury.co.uk/r/math",
+				"https://substrate.georgedrury.co.uk/r/document-store",
+				"https://substrate.georgedrury.co.uk/r/tool-store",
+				"https://substrate.georgedrury.co.uk/r/renderer"
 			],
 			"meta": {
 				"lineage": [{ "name": "Substrate" }]
@@ -299,15 +299,15 @@
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "canvas"],
 			"registryDependencies": [
-				"https://substrate.vui.run/r/types",
-				"https://substrate.vui.run/r/math",
-				"https://substrate.vui.run/r/document-store",
-				"https://substrate.vui.run/r/tool-store",
-				"https://substrate.vui.run/r/element-factory",
-				"https://substrate.vui.run/r/hit-test",
-				"https://substrate.vui.run/r/use-canvas-transform",
-				"https://substrate.vui.run/r/use-hit-test",
-				"https://substrate.vui.run/r/use-canvas-drag"
+				"https://substrate.georgedrury.co.uk/r/types",
+				"https://substrate.georgedrury.co.uk/r/math",
+				"https://substrate.georgedrury.co.uk/r/document-store",
+				"https://substrate.georgedrury.co.uk/r/tool-store",
+				"https://substrate.georgedrury.co.uk/r/element-factory",
+				"https://substrate.georgedrury.co.uk/r/hit-test",
+				"https://substrate.georgedrury.co.uk/r/use-canvas-transform",
+				"https://substrate.georgedrury.co.uk/r/use-hit-test",
+				"https://substrate.georgedrury.co.uk/r/use-canvas-drag"
 			],
 			"meta": {
 				"lineage": [{ "name": "Substrate" }]
@@ -328,11 +328,11 @@
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "canvas"],
 			"registryDependencies": [
-				"https://substrate.vui.run/r/types",
-				"https://substrate.vui.run/r/id",
-				"https://substrate.vui.run/r/document-store",
-				"https://substrate.vui.run/r/tool-store",
-				"https://substrate.vui.run/r/use-canvas-transform"
+				"https://substrate.georgedrury.co.uk/r/types",
+				"https://substrate.georgedrury.co.uk/r/id",
+				"https://substrate.georgedrury.co.uk/r/document-store",
+				"https://substrate.georgedrury.co.uk/r/tool-store",
+				"https://substrate.georgedrury.co.uk/r/use-canvas-transform"
 			],
 			"meta": {
 				"lineage": [{ "name": "Substrate" }]
@@ -353,10 +353,10 @@
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "canvas"],
 			"registryDependencies": [
-				"https://substrate.vui.run/r/tool-store",
-				"https://substrate.vui.run/r/use-canvas-renderer",
-				"https://substrate.vui.run/r/use-canvas-interaction",
-				"https://substrate.vui.run/r/use-keyboard-shortcuts"
+				"https://substrate.georgedrury.co.uk/r/tool-store",
+				"https://substrate.georgedrury.co.uk/r/use-canvas-renderer",
+				"https://substrate.georgedrury.co.uk/r/use-canvas-interaction",
+				"https://substrate.georgedrury.co.uk/r/use-keyboard-shortcuts"
 			],
 			"cssVars": {
 				"theme": {
@@ -444,9 +444,7 @@
 			"description": "Content section within a panel — Pane wrapper with PaneHeader, PaneLabel, and PaneAction for composing property editors.",
 			"author": "George Drury <info@georgedrury.co.uk>",
 			"categories": ["substrate", "ui"],
-			"registryDependencies": [
-				"https://substrate.vui.run/r/panel"
-			],
+			"registryDependencies": ["https://substrate.georgedrury.co.uk/r/panel"],
 			"meta": {
 				"example": "<Pane><PaneHeader><PaneLabel>Fill</PaneLabel><PaneAction>+</PaneAction></PaneHeader></Pane>",
 				"lineage": [{ "name": "Substrate" }]

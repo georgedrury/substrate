@@ -5,9 +5,9 @@
   "author": "George Drury <info@georgedrury.co.uk>",
   "description": "Hook for screen/world coordinate conversion, pan, zoom-to-point, zoom in/out, and reset zoom.",
   "registryDependencies": [
-    "https://substrate.vui.run/r/types",
-    "https://substrate.vui.run/r/math",
-    "https://substrate.vui.run/r/document-store"
+    "https://substrate.georgedrury.co.uk/r/types",
+    "https://substrate.georgedrury.co.uk/r/math",
+    "https://substrate.georgedrury.co.uk/r/document-store"
   ],
   "files": [
     {

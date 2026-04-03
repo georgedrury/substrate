@@ -6,7 +6,7 @@ description: Form field row layout for property editors.
 ## Install
 
 ```bash
-npx shadcn@latest add https://substrate.vui.run/r/action
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/action
 ```
 
 ## Lineage
@@ -16,20 +16,24 @@ npx shadcn@latest add https://substrate.vui.run/r/action
 ## Usage
 
 ```tsx
-import { Action, ActionLabel, ActionControls } from "@/registry/substrate/components/action"
+import {
+	Action,
+	ActionLabel,
+	ActionControls,
+} from "@/registry/substrate/components/action"
 
-<Action>
-  <ActionLabel>Opacity</ActionLabel>
-  <ActionControls>
-    <Slider value={[50]} max={100} />
-  </ActionControls>
+;<Action>
+	<ActionLabel>Opacity</ActionLabel>
+	<ActionControls>
+		<Slider value={[50]} max={100} />
+	</ActionControls>
 </Action>
 ```
 
 ## Components
 
-| Component | Description |
-|---|---|
-| `Action` | Container with flex row layout and gap |
-| `ActionLabel` | Fixed-width label |
-| `ActionControls` | Flex-1 control area |
+| Component        | Description                            |
+| ---------------- | -------------------------------------- |
+| `Action`         | Container with flex row layout and gap |
+| `ActionLabel`    | Fixed-width label                      |
+| `ActionControls` | Flex-1 control area                    |

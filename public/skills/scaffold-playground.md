@@ -28,13 +28,13 @@ This installs skills, CLAUDE.md, components.json, and registers the MCP server.
 
 The surface is the heart of the playground — the central area where the main interaction happens. Substrate supports several surface types:
 
-| Surface | Best for | Skill |
-|---|---|---|
-| 2D canvas | Shape editors, diagrams, whiteboards, node graphs | [canvas-2d](./canvas-2d.md) |
-| 3D scene | Product viewers, scene builders, shader playgrounds | [3d-scene](./3d-scene.md) |
-| Animation | Timeline editors, motion prototyping, easing explorers | [animation](./animation.md) |
-| Image generation | Prompt-driven image tools, texture generators, inpainting | [image-generation](./image-generation.md) |
-| Data visualisation | Chart editors, dashboard builders, data explorers | [data-visualisation](./data-visualisation.md) |
+| Surface            | Best for                                                  | Skill                                         |
+| ------------------ | --------------------------------------------------------- | --------------------------------------------- |
+| 2D canvas          | Shape editors, diagrams, whiteboards, node graphs         | [canvas-2d](./canvas-2d.md)                   |
+| 3D scene           | Product viewers, scene builders, shader playgrounds       | [3d-scene](./3d-scene.md)                     |
+| Animation          | Timeline editors, motion prototyping, easing explorers    | [animation](./animation.md)                   |
+| Image generation   | Prompt-driven image tools, texture generators, inpainting | [image-generation](./image-generation.md)     |
+| Data visualisation | Chart editors, dashboard builders, data explorers         | [data-visualisation](./data-visualisation.md) |
 
 Read the relevant surface skill for setup instructions, dependencies, and architecture patterns.
 
@@ -44,17 +44,17 @@ Regardless of surface type, most playgrounds use the same chrome components:
 
 ```bash
 # UI chrome
-npx shadcn@latest add https://substrate.vui.run/r/toolbar
-npx shadcn@latest add https://substrate.vui.run/r/panel
-npx shadcn@latest add https://substrate.vui.run/r/pane
-npx shadcn@latest add https://substrate.vui.run/r/action
-npx shadcn@latest add https://substrate.vui.run/r/slider
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/toolbar
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/panel
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/pane
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/action
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/slider
 ```
 
 For the 2D canvas surface specifically, also install:
 
 ```bash
-npx shadcn@latest add https://substrate.vui.run/r/design-canvas
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/design-canvas
 ```
 
 ## 3. Compose the layout
@@ -65,40 +65,45 @@ Every playground follows the same layout pattern — surface in the centre, opti
 "use client"
 
 import { Panel } from "@/registry/substrate/components/panel"
-import { Toolbar, ToolbarToggleGroup, ToolbarToggle, ToolbarSeparator } from "@/registry/substrate/components/toolbar"
+import {
+	Toolbar,
+	ToolbarToggleGroup,
+	ToolbarToggle,
+	ToolbarSeparator,
+} from "@/registry/substrate/components/toolbar"
 import { usePanelStore } from "@/registry/substrate/stores/panel-store"
 import { useToolStore } from "@/registry/substrate/stores/tool-store"
 
 export default function PlaygroundPage() {
-  const leftPanel = usePanelStore((s) => s.leftPanel)
-  const rightPanel = usePanelStore((s) => s.rightPanel)
-  const activeTool = useToolStore((s) => s.activeTool)
-  const setTool = useToolStore((s) => s.setTool)
+	const leftPanel = usePanelStore((s) => s.leftPanel)
+	const rightPanel = usePanelStore((s) => s.rightPanel)
+	const activeTool = useToolStore((s) => s.activeTool)
+	const setTool = useToolStore((s) => s.setTool)
 
-  return (
-    <div className="h-screen w-screen bg-canvas">
-      {leftPanel && (
-        <Panel position="left">
-          {/* Layers, data sources, history — depends on surface type */}
-        </Panel>
-      )}
+	return (
+		<div className="h-screen w-screen bg-canvas">
+			{leftPanel && (
+				<Panel position="left">
+					{/* Layers, data sources, history — depends on surface type */}
+				</Panel>
+			)}
 
-      {/* Your surface goes here */}
-      {/* <DesignCanvas /> or <SceneViewport /> or <PreviewSurface /> etc. */}
+			{/* Your surface goes here */}
+			{/* <DesignCanvas /> or <SceneViewport /> or <PreviewSurface /> etc. */}
 
-      {rightPanel && (
-        <Panel position="right">
-          {/* Properties, parameters, configuration — depends on surface type */}
-        </Panel>
-      )}
+			{rightPanel && (
+				<Panel position="right">
+					{/* Properties, parameters, configuration — depends on surface type */}
+				</Panel>
+			)}
 
-      <Toolbar>
-        <ToolbarToggleGroup value={activeTool} onValueChange={setTool}>
-          {/* Tool toggles — depends on surface type */}
-        </ToolbarToggleGroup>
-      </Toolbar>
-    </div>
-  )
+			<Toolbar>
+				<ToolbarToggleGroup value={activeTool} onValueChange={setTool}>
+					{/* Tool toggles — depends on surface type */}
+				</ToolbarToggleGroup>
+			</Toolbar>
+		</div>
+	)
 }
 ```
 

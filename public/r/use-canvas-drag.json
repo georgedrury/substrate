@@ -5,7 +5,7 @@
   "author": "George Drury <info@georgedrury.co.uk>",
   "description": "Hook for managing drag state machine — tracks drag type (create, move, resize, marquee, pan), start/current positions, and element snapshots.",
   "registryDependencies": [
-    "https://substrate.vui.run/r/types"
+    "https://substrate.georgedrury.co.uk/r/types"
   ],
   "files": [
     {

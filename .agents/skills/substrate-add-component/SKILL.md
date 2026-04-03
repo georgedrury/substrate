@@ -66,48 +66,48 @@ Add an entry to the `items` array in `registry.json`:
 
 ```json
 {
-  "name": "{name}",
-  "type": "registry:ui",
-  "title": "{Title}",
-  "description": "One-sentence description of what the component does.",
-  "author": "George Drury <info@georgedrury.co.uk>",
-  "categories": ["substrate", "ui"],
-  "dependencies": [],
-  "registryDependencies": [],
-  "meta": {
-    "example": "<{Name}>content</{Name}>",
-    "lineage": [{ "name": "Substrate" }]
-  },
-  "files": [
-    {
-      "path": "registry/substrate/components/{name}.tsx",
-      "type": "registry:ui",
-      "target": ""
-    }
-  ]
+	"name": "{name}",
+	"type": "registry:ui",
+	"title": "{Title}",
+	"description": "One-sentence description of what the component does.",
+	"author": "George Drury <info@georgedrury.co.uk>",
+	"categories": ["substrate", "ui"],
+	"dependencies": [],
+	"registryDependencies": [],
+	"meta": {
+		"example": "<{Name}>content</{Name}>",
+		"lineage": [{ "name": "Substrate" }]
+	},
+	"files": [
+		{
+			"path": "registry/substrate/components/{name}.tsx",
+			"type": "registry:ui",
+			"target": ""
+		}
+	]
 }
 ```
 
 ### Notes
 
 - `dependencies` — only include npm packages the component directly imports (e.g. `radix-ui`, `@remixicon/react`). Omit if none.
-- `registryDependencies` — full URL to any Substrate registry items this depends on, e.g. `"https://substrate.vui.run/r/types"`.
+- `registryDependencies` — full URL to any Substrate registry items this depends on, e.g. `"https://substrate.georgedrury.co.uk/r/types"`.
 - `lineage` — `[{ "name": "Substrate" }]` unless built on a third-party primitive, in which case prepend it, e.g. `[{ "name": "Radix" }, { "name": "Substrate" }]`.
 
 ## MDX documentation
 
 Create `content/docs/components/{name}.mdx`:
 
-```mdx
+````mdx
 ---
-title: {Title}
+title: { Title }
 description: One-sentence description.
 ---
 
 ## Install
 
 \```bash
-npx shadcn@latest add https://substrate.vui.run/r/{name}
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/{name}
 \```
 
 ## Lineage
@@ -124,10 +124,10 @@ import { {Name} } from "@/registry/substrate/components/{name}"
 
 ## Components
 
-| Component | Description |
-|---|---|
-| `{Name}` | Root container |
-```
+| Component | Description    |
+| --------- | -------------- |
+| `{Name}`  | Root container |
+````
 
 Then add `"{name}"` to the `pages` array in `content/docs/components/meta.json`.
 

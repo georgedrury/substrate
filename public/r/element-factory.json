@@ -5,8 +5,8 @@
   "author": "George Drury <info@georgedrury.co.uk>",
   "description": "Factory functions for creating design elements — rectangle, ellipse, text, line, and frame with sensible defaults.",
   "registryDependencies": [
-    "https://substrate.vui.run/r/types",
-    "https://substrate.vui.run/r/id"
+    "https://substrate.georgedrury.co.uk/r/types",
+    "https://substrate.georgedrury.co.uk/r/id"
   ],
   "files": [
     {

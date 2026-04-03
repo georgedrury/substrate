@@ -5,15 +5,15 @@
   "author": "George Drury <info@georgedrury.co.uk>",
   "description": "Hook for pointer event handling — state machine for idle, panning, creating, moving, resizing, and marquee selecting. Handles element creation, selection, and drag operations.",
   "registryDependencies": [
-    "https://substrate.vui.run/r/types",
-    "https://substrate.vui.run/r/math",
-    "https://substrate.vui.run/r/document-store",
-    "https://substrate.vui.run/r/tool-store",
-    "https://substrate.vui.run/r/element-factory",
-    "https://substrate.vui.run/r/hit-test",
-    "https://substrate.vui.run/r/use-canvas-transform",
-    "https://substrate.vui.run/r/use-hit-test",
-    "https://substrate.vui.run/r/use-canvas-drag"
+    "https://substrate.georgedrury.co.uk/r/types",
+    "https://substrate.georgedrury.co.uk/r/math",
+    "https://substrate.georgedrury.co.uk/r/document-store",
+    "https://substrate.georgedrury.co.uk/r/tool-store",
+    "https://substrate.georgedrury.co.uk/r/element-factory",
+    "https://substrate.georgedrury.co.uk/r/hit-test",
+    "https://substrate.georgedrury.co.uk/r/use-canvas-transform",
+    "https://substrate.georgedrury.co.uk/r/use-hit-test",
+    "https://substrate.georgedrury.co.uk/r/use-canvas-drag"
   ],
   "files": [
     {

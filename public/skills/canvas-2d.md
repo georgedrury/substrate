@@ -13,7 +13,7 @@ This is Substrate's default surface. The `DesignCanvas` component provides a ful
 ### Install
 
 ```bash
-npx shadcn@latest add https://substrate.vui.run/r/design-canvas
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/design-canvas
 ```
 
 This pulls in the canvas renderer, hit-test system, interaction hooks, transform utilities, and all required stores.
@@ -24,11 +24,11 @@ This pulls in the canvas renderer, hit-test system, interaction hooks, transform
 import { DesignCanvas } from "@/registry/substrate/canvas/design-canvas"
 
 export default function PlaygroundPage() {
-  return (
-    <div className="h-screen w-screen bg-canvas">
-      <DesignCanvas />
-    </div>
-  )
+	return (
+		<div className="h-screen w-screen bg-canvas">
+			<DesignCanvas />
+		</div>
+	)
 }
 ```
 
@@ -67,15 +67,15 @@ Always convert pointer events to world space before hit-testing or element manip
 
 The default tool set for a 2D canvas:
 
-| Tool | Purpose | Shortcut |
-|---|---|---|
-| Select | Click/drag to select elements | V |
-| Hand | Pan the canvas | H |
-| Rectangle | Draw rectangles | R |
-| Ellipse | Draw ellipses | O |
-| Line | Draw lines | L |
-| Text | Place text elements | T |
-| Frame | Draw frame containers | F |
+| Tool      | Purpose                       | Shortcut |
+| --------- | ----------------------------- | -------- |
+| Select    | Click/drag to select elements | V        |
+| Hand      | Pan the canvas                | H        |
+| Rectangle | Draw rectangles               | R        |
+| Ellipse   | Draw ellipses                 | O        |
+| Line      | Draw lines                    | L        |
+| Text      | Place text elements           | T        |
+| Frame     | Draw frame containers         | F        |
 
 ### Panels
 

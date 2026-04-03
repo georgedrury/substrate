@@ -5,10 +5,10 @@
   "author": "George Drury <info@georgedrury.co.uk>",
   "description": "The main canvas component — renders a full-size HTML5 Canvas element with cursor management, pointer events, and keyboard shortcuts wired up.",
   "registryDependencies": [
-    "https://substrate.vui.run/r/tool-store",
-    "https://substrate.vui.run/r/use-canvas-renderer",
-    "https://substrate.vui.run/r/use-canvas-interaction",
-    "https://substrate.vui.run/r/use-keyboard-shortcuts"
+    "https://substrate.georgedrury.co.uk/r/tool-store",
+    "https://substrate.georgedrury.co.uk/r/use-canvas-renderer",
+    "https://substrate.georgedrury.co.uk/r/use-canvas-interaction",
+    "https://substrate.georgedrury.co.uk/r/use-keyboard-shortcuts"
   ],
   "files": [
     {

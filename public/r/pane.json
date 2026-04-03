@@ -5,7 +5,7 @@
   "author": "George Drury <info@georgedrury.co.uk>",
   "description": "Content section within a panel — Pane wrapper with PaneHeader, PaneLabel, and PaneAction for composing property editors.",
   "registryDependencies": [
-    "https://substrate.vui.run/r/panel"
+    "https://substrate.georgedrury.co.uk/r/panel"
   ],
   "files": [
     {

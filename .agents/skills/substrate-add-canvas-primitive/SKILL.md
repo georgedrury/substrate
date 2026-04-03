@@ -18,7 +18,7 @@ Stateless utility functions. No React, no hooks, no `"use client"`.
 import type { Point, Bounds } from "../types"
 
 export function someGeometryFn(point: Point, bounds: Bounds): boolean {
-  // Pure function — no side effects, no store access
+	// Pure function — no side effects, no store access
 }
 ```
 
@@ -33,10 +33,16 @@ export function someGeometryFn(point: Point, bounds: Bounds): boolean {
 
 ```json
 {
-  "name": "{name}",
-  "type": "registry:lib",
-  "categories": ["substrate", "lib"],
-  "files": [{ "path": "registry/substrate/lib/{name}.ts", "type": "registry:lib", "target": "" }]
+	"name": "{name}",
+	"type": "registry:lib",
+	"categories": ["substrate", "lib"],
+	"files": [
+		{
+			"path": "registry/substrate/lib/{name}.ts",
+			"type": "registry:lib",
+			"target": ""
+		}
+	]
 }
 ```
 
@@ -52,18 +58,22 @@ These are pure functions that operate on Canvas2D context or geometry. No React.
 import type { DesignElement, Camera } from "../types"
 
 // Renderer functions take a CanvasRenderingContext2D and draw
-export function renderElement(ctx: CanvasRenderingContext2D, element: DesignElement, camera: Camera) {
-  // ...
+export function renderElement(
+	ctx: CanvasRenderingContext2D,
+	element: DesignElement,
+	camera: Camera,
+) {
+	// ...
 }
 
 // Hit-test functions take geometry and return results
 export function elementAtPoint(
-  point: Point,
-  elements: Record<string, DesignElement>,
-  order: string[],
-  camera: Camera
+	point: Point,
+	elements: Record<string, DesignElement>,
+	order: string[],
+	camera: Camera,
 ): string | null {
-  // ...
+	// ...
 }
 ```
 
@@ -144,24 +154,24 @@ export const use{Name}Store = create<{Name}State>()((set, get) => ({
 
 ```json
 {
-  "name": "{name}",
-  "type": "registry:lib",
-  "title": "{Title}",
-  "description": "One-sentence description.",
-  "author": "George Drury <info@georgedrury.co.uk>",
-  "categories": ["substrate", "{category}"],
-  "dependencies": [],
-  "registryDependencies": ["https://substrate.vui.run/r/types"],
-  "meta": {
-    "lineage": [{ "name": "Substrate" }]
-  },
-  "files": [
-    {
-      "path": "registry/substrate/{dir}/{name}.ts",
-      "type": "registry:lib",
-      "target": ""
-    }
-  ]
+	"name": "{name}",
+	"type": "registry:lib",
+	"title": "{Title}",
+	"description": "One-sentence description.",
+	"author": "George Drury <info@georgedrury.co.uk>",
+	"categories": ["substrate", "{category}"],
+	"dependencies": [],
+	"registryDependencies": ["https://substrate.georgedrury.co.uk/r/types"],
+	"meta": {
+		"lineage": [{ "name": "Substrate" }]
+	},
+	"files": [
+		{
+			"path": "registry/substrate/{dir}/{name}.ts",
+			"type": "registry:lib",
+			"target": ""
+		}
+	]
 }
 ```
 

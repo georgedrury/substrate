@@ -81,25 +81,23 @@ export function use{Name}() {
 
 ```json
 {
-  "name": "use-{name}",
-  "type": "registry:hook",
-  "title": "use{Name}",
-  "description": "Hook for ... — one sentence.",
-  "author": "George Drury <info@georgedrury.co.uk>",
-  "categories": ["substrate", "canvas"],
-  "registryDependencies": [
-    "https://substrate.vui.run/r/types"
-  ],
-  "meta": {
-    "lineage": [{ "name": "Substrate" }]
-  },
-  "files": [
-    {
-      "path": "registry/substrate/hooks/use-{name}.ts",
-      "type": "registry:hook",
-      "target": ""
-    }
-  ]
+	"name": "use-{name}",
+	"type": "registry:hook",
+	"title": "use{Name}",
+	"description": "Hook for ... — one sentence.",
+	"author": "George Drury <info@georgedrury.co.uk>",
+	"categories": ["substrate", "canvas"],
+	"registryDependencies": ["https://substrate.georgedrury.co.uk/r/types"],
+	"meta": {
+		"lineage": [{ "name": "Substrate" }]
+	},
+	"files": [
+		{
+			"path": "registry/substrate/hooks/use-{name}.ts",
+			"type": "registry:hook",
+			"target": ""
+		}
+	]
 }
 ```
 
