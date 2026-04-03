@@ -374,6 +374,6 @@ export async function add(
 
 	log.blank()
 	log.info(
-		`Added ${installed} component${installed === 1 ? "" : "s"} from substrate.vui.run`,
+		`Added ${installed} component${installed === 1 ? "" : "s"} from substrate.georgedrury.co.uk`,
 	)
 }

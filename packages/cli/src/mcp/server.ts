@@ -38,7 +38,7 @@ export async function startServer(): Promise<void> {
 
   server.tool(
     "install_components",
-    "Install one or more Substrate components from substrate.vui.run into the current project. Runs shadcn add behind the scenes.",
+    "Install one or more Substrate components from substrate.georgedrury.co.uk into the current project. Runs shadcn add behind the scenes.",
     {
       components: z.array(z.string()).describe("Component names to install (e.g. ['design-canvas', 'toolbar', 'panel'])"),
     },

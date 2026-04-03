@@ -36,7 +36,7 @@ npx substrate add design-canvas toolbar panel pane action slider
 
 ## Registry
 
-Components are installed from \`substrate.vui.run/r/\` via the shadcn CLI.
+Components are installed from \`substrate.georgedrury.co.uk/r/\` via the shadcn CLI.
 `
 }
 
