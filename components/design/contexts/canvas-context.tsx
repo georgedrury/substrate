@@ -9,12 +9,14 @@ export interface CanvasState {
   elements: Record<string, DesignElement>
   elementOrder: string[]
   camera: Camera
+  showGrid: boolean
 }
 
 const initialState: CanvasState = {
   elements: {},
   elementOrder: [],
   camera: { x: 0, y: 0, zoom: 1 },
+  showGrid: false,
 }
 
 // ── Actions ──
@@ -25,6 +27,7 @@ export type CanvasAction =
   | { type: "DELETE_ELEMENTS"; ids: string[] }
   | { type: "REORDER_ELEMENT"; id: string; newIndex: number }
   | { type: "SET_CAMERA"; camera: Partial<Camera> }
+  | { type: "TOGGLE_GRID" }
   | { type: "LOAD_STATE"; state: CanvasState }
 
 // ── Reducer ──
@@ -72,6 +75,9 @@ function canvasReducer(state: CanvasState, action: CanvasAction): CanvasState {
         ...state,
         camera: { ...state.camera, ...action.camera },
       }
+
+    case "TOGGLE_GRID":
+      return { ...state, showGrid: !state.showGrid }
 
     case "LOAD_STATE":
       return action.state

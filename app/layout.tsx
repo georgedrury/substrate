@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Geist, Geist_Mono, Inter } from "next/font/google"
 import localFont from "next/font/local"
 
 import "./globals.css"
@@ -12,6 +12,10 @@ const geistMonoHeading = Geist_Mono({
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
+	subsets: ["latin"],
+})
+const inter = Inter({
+	variable: "--font-inter",
 	subsets: ["latin"],
 })
 
@@ -42,12 +46,14 @@ export default function RootLayout({
 				"h-full",
 				"antialiased",
 				geistSans.variable,
+				inter.variable,
 				geistMono.variable,
 				geistMonoHeading.variable,
 				bureauSans.variable,
+				"overscroll-none",
 			)}
 		>
-			<body className="min-h-full  flex flex-col">{children}</body>
+			<body className="min-h-full flex flex-col">{children}</body>
 		</html>
 	)
 }

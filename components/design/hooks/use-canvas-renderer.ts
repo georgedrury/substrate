@@ -100,7 +100,9 @@ export function useCanvasRenderer(
       ctx.scale(camera.zoom, camera.zoom)
 
       // Grid
-      renderGrid(ctx, camera, width, height)
+      if (canvasState.showGrid) {
+        renderGrid(ctx, camera, width, height)
+      }
 
       // Elements
       for (const id of elementOrder) {
