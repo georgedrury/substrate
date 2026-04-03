@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "animation-store",
+  "title": "Animation Store",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Zustand store for animation playback — duration, current time, play/pause, zoom level, and keyframe selection.",
+  "dependencies": [
+    "zustand"
+  ],
+  "files": [
+    {
+      "path": "registry/substrate/stores/animation-store.ts",
+      "content": "import { create } from \"zustand\"\n\ninterface AnimationState {\n  duration: number\n  currentTime: number\n  isPlaying: boolean\n  fps: number\n  zoomLevel: number\n  selectedKeyframeIds: Set<string>\n  setCurrentTime: (time: number) => void\n  setDuration: (duration: number) => void\n  togglePlayback: () => void\n  play: () => void\n  pause: () => void\n  setZoomLevel: (level: number) => void\n  selectKeyframe: (id: string, additive?: boolean) => void\n  clearKeyframeSelection: () => void\n}\n\nexport const useAnimationStore = create<AnimationState>()((set, get) => ({\n  duration: 5,\n  currentTime: 0,\n  isPlaying: false,\n  fps: 60,\n  zoomLevel: 100,\n  selectedKeyframeIds: new Set(),\n\n  setCurrentTime: (time) => {\n    const { duration } = get()\n    const clamped = Math.max(0, Math.min(time, duration))\n    set({ currentTime: clamped })\n  },\n\n  setDuration: (duration) => {\n    set({ duration: Math.max(0.1, duration) })\n  },\n\n  togglePlayback: () => {\n    set((s) => ({ isPlaying: !s.isPlaying }))\n  },\n\n  play: () => {\n    set({ isPlaying: true })\n  },\n\n  pause: () => {\n    set({ isPlaying: false })\n  },\n\n  setZoomLevel: (level) => {\n    const clamped = Math.max(20, Math.min(level, 500))\n    set({ zoomLevel: clamped })\n  },\n\n  selectKeyframe: (id, additive) => {\n    set((s) => {\n      const newSelection = additive\n        ? new Set(s.selectedKeyframeIds)\n        : new Set([id])\n\n      if (!additive || !s.selectedKeyframeIds.has(id)) {\n        newSelection.add(id)\n      } else {\n        newSelection.delete(id)\n      }\n\n      return { selectedKeyframeIds: newSelection }\n    })\n  },\n\n  clearKeyframeSelection: () => {\n    set({ selectedKeyframeIds: new Set() })\n  },\n}))\n",
+      "type": "registry:lib",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "lineage": [
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "store",
+    "animation"
+  ],
+  "type": "registry:lib"
+}

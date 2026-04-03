@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "surface",
+  "title": "Surface",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Container component for creative surfaces — provides consistent mount point with canvas background, optional overlay controls, and dot grid background.",
+  "files": [
+    {
+      "path": "registry/substrate/components/surface.tsx",
+      "content": "import { cn } from \"@/lib/utils\"\n\ntype SurfaceProps = {\n\tchildren?: React.ReactNode\n}\n\nexport function Surface({\n\tclassName,\n\tchildren,\n\t...props\n}: SurfaceProps & React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"surface\"\n\t\t\tclassName={cn(\n\t\t\t\t\"absolute inset-0 bg-canvas text-canvas-foreground overflow-hidden\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t>\n\t\t\t{children}\n\t\t</div>\n\t)\n}\n\ntype SurfaceControlsProps = {\n\tposition?: \"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\"\n\tchildren?: React.ReactNode\n}\n\nexport function SurfaceControls({\n\tclassName,\n\tchildren,\n\tposition = \"bottom-right\",\n\t...props\n}: SurfaceControlsProps & React.ComponentProps<\"div\">) {\n\tconst positionClasses = {\n\t\t\"top-left\": \"top-3 left-3\",\n\t\t\"top-right\": \"top-3 right-3\",\n\t\t\"bottom-left\": \"bottom-3 left-3\",\n\t\t\"bottom-right\": \"bottom-3 right-3\",\n\t}\n\n\treturn (\n\t\t<div\n\t\t\tclassName=\"absolute inset-0 pointer-events-none\"\n\t\t\tdata-slot=\"surface-controls-container\"\n\t\t>\n\t\t\t<div\n\t\t\t\tdata-slot=\"surface-controls\"\n\t\t\t\tdata-position={position}\n\t\t\t\tclassName={cn(\n\t\t\t\t\t\"absolute flex gap-1 pointer-events-auto z-10\",\n\t\t\t\t\tpositionClasses[position],\n\t\t\t\t\tclassName,\n\t\t\t\t)}\n\t\t\t\t{...props}\n\t\t\t>\n\t\t\t\t{children}\n\t\t\t</div>\n\t\t</div>\n\t)\n}\n\ntype SurfaceGridProps = {\n\tsize?: number\n\tchildren?: React.ReactNode\n}\n\nexport function SurfaceGrid({\n\tclassName,\n\tchildren,\n\tsize = 20,\n\t...props\n}: SurfaceGridProps & React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"surface-grid\"\n\t\t\tclassName={cn(\n\t\t\t\t\"absolute inset-0 text-canvas-foreground\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\tstyle={{\n\t\t\t\tbackgroundImage: `radial-gradient(circle, currentColor var(--surface-grid-opacity, 0.1) ${size / 2}px, transparent ${size / 2}px)`,\n\t\t\t\tbackgroundSize: `${size}px ${size}px`,\n\t\t\t}}\n\t\t\t{...props}\n\t\t>\n\t\t\t{children}\n\t\t</div>\n\t)\n}\n",
+      "type": "registry:ui",
+      "target": ""
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-canvas": "var(--canvas, var(--color-background))",
+      "color-canvas-foreground": "var(--canvas-foreground, var(--color-foreground-muted))"
+    },
+    "light": {
+      "canvas": "oklch(.97 0.0 0)",
+      "canvas-foreground": "oklch(0.556 0 0)"
+    },
+    "dark": {
+      "canvas": "oklch(17.764% 0.00002 271.152)",
+      "canvas-foreground": "oklch(0.708 0 0)"
+    }
+  },
+  "meta": {
+    "example": "<Surface><SurfaceGrid />{/* your renderer */}<SurfaceControls position=\"bottom-right\">{/* zoom buttons */}</SurfaceControls></Surface>",
+    "lineage": [
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "ui",
+    "chrome"
+  ],
+  "type": "registry:ui"
+}

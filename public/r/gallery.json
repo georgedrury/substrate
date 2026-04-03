@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "gallery",
+  "title": "Gallery",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Responsive thumbnail grid with selection state, hover overlays, and action buttons. Used for image histories, asset browsers, and media galleries.",
+  "files": [
+    {
+      "path": "registry/substrate/components/gallery.tsx",
+      "content": "import { cn } from \"@/lib/utils\"\n\ntype GalleryProps = {\n\tcolumns?: number\n\tgap?: number\n\tchildren?: React.ReactNode\n}\n\nexport function Gallery({\n\tclassName,\n\tchildren,\n\tcolumns = 3,\n\tgap = 2,\n\t...props\n}: GalleryProps & React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"gallery\"\n\t\t\tclassName={cn(\"grid w-full\", className)}\n\t\t\tstyle={{\n\t\t\t\tgridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,\n\t\t\t\tgap: `${gap * 0.25}rem`,\n\t\t\t}}\n\t\t\t{...props}\n\t\t>\n\t\t\t{children}\n\t\t</div>\n\t)\n}\n\ntype GalleryItemProps = {\n\tselected?: boolean\n\tonSelect?: () => void\n\tchildren?: React.ReactNode\n}\n\nexport function GalleryItem({\n\tclassName,\n\tchildren,\n\tselected = false,\n\tonSelect,\n\t...props\n}: GalleryItemProps & React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"gallery-item\"\n\t\t\tdata-selected={selected}\n\t\t\tclassName={cn(\n\t\t\t\t\"group relative aspect-square overflow-hidden rounded-md cursor-pointer\",\n\t\t\t\t\"transition-all duration-200\",\n\t\t\t\tselected && \"ring-2 ring-primary\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\tonClick={onSelect}\n\t\t\t{...props}\n\t\t>\n\t\t\t{children}\n\t\t\t<div\n\t\t\t\tclassName={cn(\n\t\t\t\t\t\"absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200\",\n\t\t\t\t)}\n\t\t\t/>\n\t\t</div>\n\t)\n}\n\ntype GalleryImageProps = React.ComponentProps<\"img\">\n\nexport function GalleryImage({ className, ...props }: GalleryImageProps) {\n\treturn (\n\t\t<img\n\t\t\tdata-slot=\"gallery-image\"\n\t\t\tclassName={cn(\"object-cover w-full h-full\", className)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\ntype GalleryActionProps = React.ComponentProps<\"button\">\n\nexport function GalleryAction({\n\tclassName,\n\tchildren,\n\t...props\n}: GalleryActionProps) {\n\treturn (\n\t\t<button\n\t\t\tdata-slot=\"gallery-action\"\n\t\t\tclassName={cn(\n\t\t\t\t\"absolute top-2 right-2 z-10 size-7 rounded bg-background/80 backdrop-blur-sm\",\n\t\t\t\t\"opacity-0 group-hover:opacity-100 transition-opacity duration-200\",\n\t\t\t\t\"flex items-center justify-center hover:bg-background\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t>\n\t\t\t{children}\n\t\t</button>\n\t)\n}\n\ntype GalleryEmptyProps = {\n\tchildren?: React.ReactNode\n}\n\nexport function GalleryEmpty({\n\tclassName,\n\tchildren,\n\t...props\n}: GalleryEmptyProps & React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"gallery-empty\"\n\t\t\tclassName={cn(\n\t\t\t\t\"col-span-full flex items-center justify-center text-sm text-muted-foreground py-8\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t>\n\t\t\t{children}\n\t\t</div>\n\t)\n}\n",
+      "type": "registry:ui",
+      "target": ""
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-gallery-selection": "var(--gallery-selection, var(--color-primary))"
+    },
+    "light": {},
+    "dark": {}
+  },
+  "meta": {
+    "example": "<Gallery columns={3}><GalleryItem selected onSelect={handleSelect}><GalleryImage src=\"/image.jpg\" alt=\"\" /><GalleryAction><RiDeleteBinLine /></GalleryAction></GalleryItem></Gallery>",
+    "lineage": [
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "ui",
+    "visualization"
+  ],
+  "type": "registry:ui"
+}

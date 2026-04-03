@@ -1,0 +1,28 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "easing",
+  "title": "Easing",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Cubic bezier easing utilities — presets, evaluation via Newton's method, CSS cubic-bezier() parsing and serialisation.",
+  "files": [
+    {
+      "path": "registry/substrate/lib/easing.ts",
+      "content": "/**\n * Cubic Bezier easing utility library\n * Pure utility module with no React or client-side dependencies\n */\n\nexport interface CubicBezier {\n  x1: number\n  y1: number\n  x2: number\n  y2: number\n}\n\nexport type EasingPresetName =\n  | \"linear\"\n  | \"ease-in\"\n  | \"ease-out\"\n  | \"ease-in-out\"\n  | \"ease-in-cubic\"\n  | \"ease-out-cubic\"\n  | \"ease-in-out-cubic\"\n\n/**\n * Standard easing curve presets\n */\nexport const EASING_PRESETS: Record<EasingPresetName, CubicBezier> = {\n  linear: { x1: 0, y1: 0, x2: 1, y2: 1 },\n  \"ease-in\": { x1: 0.42, y1: 0, x2: 1, y2: 1 },\n  \"ease-out\": { x1: 0, y1: 0, x2: 0.58, y2: 1 },\n  \"ease-in-out\": { x1: 0.42, y1: 0, x2: 0.58, y2: 1 },\n  \"ease-in-cubic\": { x1: 0.32, y1: 0, x2: 0.67, y2: 0 },\n  \"ease-out-cubic\": { x1: 0.33, y1: 1, x2: 0.68, y2: 1 },\n  \"ease-in-out-cubic\": { x1: 0.65, y1: 0, x2: 0.35, y2: 1 },\n}\n\n/**\n * Evaluate a cubic bezier curve at parameter t using Newton's method\n * @param bezier - The cubic bezier curve definition\n * @param t - Parameter in [0, 1]\n * @returns The y value at parameter t\n */\nexport function evaluateCubicBezier(bezier: CubicBezier, t: number): number {\n  const { x1, y1, x2, y2 } = bezier\n\n  // Clamp t to valid range\n  if (t <= 0) return 0\n  if (t >= 1) return 1\n\n  // Coefficients for cubic bezier: B(t) = (1-t)³P0 + 3(1-t)²tP1 + 3(1-t)t²P2 + t³P3\n  // where P0=(0,0), P1=(x1,y1), P2=(x2,y2), P3=(1,1)\n\n  const cx = 3 * x1\n  const bx = 3 * (x2 - x1) - cx\n  const ax = 1 - cx - bx\n\n  const cy = 3 * y1\n  const by = 3 * (y2 - y1) - cy\n  const ay = 1 - cy - by\n\n  // Find t value that corresponds to given x using Newton's method\n  let x_t = t\n  for (let i = 0; i < 8; i++) {\n    // Derivative: dx/dt = 3ax*t² + 2bx*t + cx\n    const derivative = 3 * ax * x_t * x_t + 2 * bx * x_t + cx\n    if (Math.abs(derivative) < 1e-6) break\n\n    // Current x value: ax*t³ + bx*t² + cx*t\n    const x_current = ax * x_t * x_t * x_t + bx * x_t * x_t + cx * x_t\n    x_t -= (x_current - t) / derivative\n  }\n\n  // Clamp to valid range\n  x_t = Math.max(0, Math.min(1, x_t))\n\n  // Evaluate y at the found t value\n  const y = ay * x_t * x_t * x_t + by * x_t * x_t + cy * x_t\n  return Math.max(0, Math.min(1, y))\n}\n\n/**\n * Convert a cubic bezier to CSS cubic-bezier() string\n * @param bezier - The cubic bezier curve\n * @returns CSS cubic-bezier string\n */\nexport function cubicBezierToString(bezier: CubicBezier): string {\n  return `cubic-bezier(${bezier.x1}, ${bezier.y1}, ${bezier.x2}, ${bezier.y2})`\n}\n\n/**\n * Parse a CSS cubic-bezier() string to CubicBezier object\n * @param str - CSS cubic-bezier string\n * @returns CubicBezier object or null if invalid\n */\nexport function parseCubicBezier(str: string): CubicBezier | null {\n  const match = str.match(/cubic-bezier\\s*\\(\\s*([\\d.-]+)\\s*,\\s*([\\d.-]+)\\s*,\\s*([\\d.-]+)\\s*,\\s*([\\d.-]+)\\s*\\)/)\n  if (!match) return null\n\n  const [, x1Str, y1Str, x2Str, y2Str] = match\n  const x1 = parseFloat(x1Str)\n  const y1 = parseFloat(y1Str)\n  const x2 = parseFloat(x2Str)\n  const y2 = parseFloat(y2Str)\n\n  if (isNaN(x1) || isNaN(y1) || isNaN(x2) || isNaN(y2)) {\n    return null\n  }\n\n  return { x1, y1, x2, y2 }\n}\n\n/**\n * Check if two cubic bezier curves are equal\n * @param a - First curve\n * @param b - Second curve\n * @param tolerance - Floating point tolerance (default 0.0001)\n * @returns True if curves are equal within tolerance\n */\nexport function isCubicBezierEqual(\n  a: CubicBezier,\n  b: CubicBezier,\n  tolerance: number = 0.0001\n): boolean {\n  return (\n    Math.abs(a.x1 - b.x1) < tolerance &&\n    Math.abs(a.y1 - b.y1) < tolerance &&\n    Math.abs(a.x2 - b.x2) < tolerance &&\n    Math.abs(a.y2 - b.y2) < tolerance\n  )\n}\n",
+      "type": "registry:lib",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "lineage": [
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "lib",
+    "animation"
+  ],
+  "type": "registry:lib"
+}
