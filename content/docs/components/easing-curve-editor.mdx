@@ -17,28 +17,13 @@ This also installs the `easing` utility library.
 
 ## Examples
 
+### Default
+
 <ComponentPreview name="easing-curve-editor-demo" />
 
-## Anatomy
+### Canvas only
 
-```tsx
-import {
-  EasingCurveEditor,
-  EasingCurveCanvas,
-  EasingPresets,
-} from "@/components/substrate/easing-curve-editor"
-import { EASING_PRESETS } from "@/lib/easing"
-import type { CubicBezier } from "@/lib/easing"
-
-{/* Full editor — canvas + presets */}
-<EasingCurveEditor value={bezier} onChange={setBezier} />
-
-{/* Canvas only */}
-<EasingCurveCanvas value={bezier} onChange={setBezier} width={200} height={160} />
-
-{/* Presets only */}
-<EasingPresets value={bezier} onChange={setBezier} />
-```
+<ComponentPreview name="easing-curve-canvas-only" />
 
 ## Theme variables
 

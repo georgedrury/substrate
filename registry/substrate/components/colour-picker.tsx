@@ -9,23 +9,20 @@ import { cn } from "@/lib/utils"
 type ColourSwatchProps = {
 	colour: string
 	size?: "sm" | "md"
-} & React.ComponentProps<"button">
+} & React.ComponentProps<"div">
 
 function ColourSwatch({
 	colour,
-	size = "md",
+	size = "sm",
 	className,
 	...props
 }: ColourSwatchProps) {
 	return (
-		<button
-			type="button"
+		<div
 			data-slot="colour-swatch"
 			data-size={size}
 			className={cn(
-				"rounded-md border transition-all outline-none",
-				"focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
-				"disabled:opacity-50 disabled:cursor-not-allowed",
+				"rounded-md border transition-all",
 				size === "sm" && "size-5",
 				size === "md" && "size-7",
 				className,
@@ -123,11 +120,7 @@ function ColourPicker({
 	return (
 		<PopoverPrimitive.Root>
 			<PopoverPrimitive.Trigger asChild>
-				{children ? (
-					<div>{children}</div>
-				) : (
-					<ColourSwatch colour={value} />
-				)}
+				{children ? <div>{children}</div> : <ColourSwatch colour={value} />}
 			</PopoverPrimitive.Trigger>
 			<PopoverPrimitive.Portal>
 				<PopoverPrimitive.Content
@@ -136,7 +129,7 @@ function ColourPicker({
 					sideOffset={8}
 					data-slot="colour-picker"
 					className={cn(
-						"w-[220px] p-3 z-50",
+						"w-55 p-3 z-50",
 						"bg-popover text-popover-foreground",
 						"border rounded-lg shadow-md",
 						"data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95",

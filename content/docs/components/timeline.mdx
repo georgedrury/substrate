@@ -19,31 +19,6 @@ This also installs the `animation-store` dependency (Zustand).
 
 <ComponentPreview name="timeline-demo" />
 
-## Anatomy
-
-```tsx
-import {
-  Timeline,
-  TimelineRuler,
-  TimelinePlayhead,
-  TimelineTrack,
-  TimelineKeyframe,
-  TimelineTransport,
-} from "@/components/substrate/timeline"
-import { useAnimationStore } from "@/stores/animation-store"
-
-const { duration, currentTime, zoomLevel } = useAnimationStore()
-
-<Timeline>
-  <TimelineRuler duration={duration} zoomLevel={zoomLevel} />
-  <TimelineTrack label="Position">
-    <TimelineKeyframe time={0} duration={duration} zoomLevel={zoomLevel} />
-  </TimelineTrack>
-  <TimelinePlayhead time={currentTime} duration={duration} zoomLevel={zoomLevel} />
-  <TimelineTransport />
-</Timeline>
-```
-
 ## Theme variables
 
 | Variable              | Tailwind class         | Fallback                   | Description             |

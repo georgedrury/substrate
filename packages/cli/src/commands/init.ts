@@ -16,14 +16,13 @@ export interface InitOptions {
 function claudeMd(): string {
 	return `# Substrate
 
-This project uses [Substrate](https://substrate.georgedrury.co.uk) — a toolkit for interactive canvas-based visual playgrounds.
+This project uses [Substrate](https://substrate.georgedrury.co.uk) — a creative app framework that provides chrome (toolbar, panels, panes, stores, shortcuts) around different surface types.
 
 ## Skills
 
 Substrate skills are installed in \`.claude/skills/\`. They teach Claude how to:
 
-- Scaffold canvas playgrounds
-- Create custom tools
+- Scaffold creative apps with different surfaces (2D canvas, 3D scenes, animation, image generation, data visualisation)
 - Compose panels and property editors
 - Wire interactions and keyboard shortcuts
 - Theme components and canvas rendering
@@ -31,7 +30,11 @@ Substrate skills are installed in \`.claude/skills/\`. They teach Claude how to:
 ## Install components
 
 \`\`\`bash
+# Core chrome
 npx substrate add design-canvas toolbar panel pane action slider
+
+# Surface components
+npx substrate add surface timeline gallery colour-picker easing-curve-editor
 \`\`\`
 
 ## Registry
@@ -144,6 +147,6 @@ export async function init(options: InitOptions = {}): Promise<void> {
 
 	log.blank()
 	log.info(
-		"Substrate is ready. Claude can now use the skills for canvas playground development.",
+		"Substrate is ready. Claude can now use the skills for creative app development.",
 	)
 }

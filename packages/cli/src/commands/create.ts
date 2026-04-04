@@ -12,10 +12,10 @@ import { init } from "./init.js"
 
 function printBanner(): void {
 	const banner = [
-		"┌─────────────────────────────┐",
-		"│  ▓▓▓  substrate  ▓▓▓       │",
-		"│  canvas playground toolkit  │",
-		"└─────────────────────────────┘",
+		"┌──────────────────────────────────┐",
+		"│  ▓▓▓  substrate  ▓▓▓            │",
+		"│  creative app framework          │",
+		"└──────────────────────────────────┘",
 	]
 	console.log()
 	for (const line of banner) {
@@ -167,6 +167,7 @@ function packageJson(name: string): string {
 				"tailwind-merge": "^3.3.1",
 				"@remixicon/react": "^4.9.0",
 				"radix-ui": "^1.4.3",
+				"react-colorful": "^5.6.1",
 				zustand: "^5.0.12",
 			},
 			devDependencies: {
@@ -283,6 +284,15 @@ function globalsCss(): string {
   --color-canvas-foreground: var(--canvas-foreground, var(--color-foreground-muted));
   --color-panel: var(--panel, var(--color-card));
   --color-panel-foreground: var(--panel-foreground, var(--color-card-foreground));
+  /* Substrate — Timeline */
+  --color-timeline-playhead: var(--timeline-playhead, var(--color-destructive));
+  --color-timeline-keyframe: var(--timeline-keyframe, var(--color-muted-foreground));
+  --color-timeline-track: var(--timeline-track, var(--color-panel));
+  /* Substrate — Gallery */
+  --color-gallery-selection: var(--gallery-selection, var(--color-primary));
+  /* Substrate — Easing */
+  --color-easing-curve: var(--easing-curve, var(--color-primary));
+  --color-easing-handle: var(--easing-handle, var(--color-primary));
 }
 
 :root {
@@ -375,16 +385,16 @@ export default function RootLayout({
 function playgroundPage(): string {
 	return `"use client"
 
-import { DesignCanvas } from "@/registry/substrate/canvas/design-canvas"
+import { DesignCanvas } from "@/components/substrate/design-canvas"
 import {
   Toolbar,
   ToolbarToggleGroup,
   ToolbarToggle,
   ToolbarSeparator,
-} from "@/registry/substrate/components/toolbar"
-import { Panel } from "@/registry/substrate/components/panel"
-import { useToolStore } from "@/registry/substrate/stores/tool-store"
-import { usePanelStore } from "@/registry/substrate/stores/panel-store"
+} from "@/components/substrate/toolbar"
+import { Panel } from "@/components/substrate/panel"
+import { useToolStore } from "@/stores/tool-store"
+import { usePanelStore } from "@/stores/panel-store"
 import {
   RiCursorLine,
   RiHand,

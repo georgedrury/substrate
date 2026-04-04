@@ -599,6 +599,26 @@
 			]
 		},
 		{
+			"name": "history-controls",
+			"type": "registry:ui",
+			"title": "History Controls",
+			"description": "Undo and redo buttons that read from the document store. Position anywhere — inside a toolbar, panel header, or floating independently.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": ["substrate", "ui", "chrome"],
+			"dependencies": ["@remixicon/react"],
+			"meta": {
+				"example": "<HistoryControls />",
+				"lineage": [{ "name": "Substrate" }]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/components/history-controls.tsx",
+					"type": "registry:component",
+					"target": "components/substrate/history-controls.tsx"
+				}
+			]
+		},
+		{
 			"name": "gallery",
 			"type": "registry:ui",
 			"title": "Gallery",

@@ -15,29 +15,13 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/gallery
 
 ## Examples
 
+### Default
+
 <ComponentPreview name="gallery-demo" />
 
-## Anatomy
+### Empty state
 
-```tsx
-import {
-  Gallery,
-  GalleryItem,
-  GalleryImage,
-  GalleryAction,
-  GalleryEmpty,
-} from "@/components/substrate/gallery"
-
-<Gallery columns={3} gap={2}>
-  <GalleryItem selected={isSelected} onSelect={handleSelect}>
-    <GalleryImage src="/photo.jpg" alt="Landscape" />
-    <GalleryAction onClick={handleDownload}>
-      <DownloadIcon />
-    </GalleryAction>
-  </GalleryItem>
-  <GalleryEmpty>No images yet</GalleryEmpty>
-</Gallery>
-```
+<ComponentPreview name="gallery-empty" />
 
 ## Theme variables
 

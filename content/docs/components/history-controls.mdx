@@ -1,0 +1,51 @@
+---
+title: History controls
+description: Undo and redo buttons that read from the document store. Position-agnostic — use inside a toolbar, panel header, or floating independently.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/history-controls
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Substrate" }]} />
+
+## Examples
+
+### Default
+
+<ComponentPreview name="history-controls-demo" />
+
+### Inside a toolbar
+
+<ComponentPreview name="history-controls-toolbar" />
+
+## Components
+
+| Component         | Description                                                   |
+| ----------------- | ------------------------------------------------------------- |
+| `HistoryControls` | Inline flex container with undo and redo buttons               |
+| `HistoryButton`   | Individual icon button with disabled state styling             |
+
+## Props
+
+### HistoryControls
+
+| Prop   | Type             | Default | Description       |
+| ------ | ---------------- | ------- | ----------------- |
+| `size` | `"sm" \| "md"`   | `"md"`  | Button and icon size |
+
+Extends `React.ComponentProps<"div">`.
+
+## Behaviour
+
+The component reads directly from the document store:
+
+- **Undo** is enabled when `past.length > 0`
+- **Redo** is enabled when `future.length > 0`
+- Disabled buttons drop to 30% opacity and ignore pointer events
+
+Keyboard shortcuts (`Cmd+Z` / `Cmd+Shift+Z`) are handled separately in `use-keyboard-shortcuts` — this component only provides the visual controls.

@@ -53,7 +53,7 @@ export default function RootLayout({
 				"overscroll-none",
 			)}
 		>
-			<body className="min-h-full flex flex-col">{children}</body>
+			<body className="min-h-full dark flex flex-col">{children}</body>
 		</html>
 	)
 }

@@ -4,14 +4,24 @@ import { useCallback } from "react"
 import { Input } from "@/components/ui/input"
 import { Slider } from "@/registry/substrate/components/slider"
 import { useDocumentStore } from "@/registry/substrate/stores/document-store"
-import { Pane, PaneHeader, PaneLabel, PaneAction } from "@/registry/substrate/components/pane"
-import { Action, ActionLabel, ActionControls } from "@/registry/substrate/components/action"
+import {
+	Pane,
+	PaneHeader,
+	PaneLabel,
+	PaneAction,
+} from "@/registry/substrate/components/pane"
+import {
+	Action,
+	ActionLabel,
+	ActionControls,
+} from "@/registry/substrate/components/action"
 import type { Fill } from "@/registry/substrate/types"
 import {
 	InputGroup,
 	InputGroupAddon,
 	InputGroupInput,
 } from "@/components/ui/input-group"
+import { ColourPicker } from "@/registry/substrate/components/colour-picker"
 
 export function FillPane() {
 	const selectedIds = useDocumentStore((s) => s.selectedIds)
@@ -61,10 +71,10 @@ export function FillPane() {
 						<ActionLabel>Fill</ActionLabel>
 						<ActionControls>
 							<InputGroup>
-								<InputGroupAddon>
-									<div
-										className="size-4 rounded border border-border shrink-0"
-										style={{ backgroundColor: fill.color }}
+								<InputGroupAddon className="**:data-[slot=colour-swatch]:size-4 **:data-[slot=colour-swatch]:rounded">
+									<ColourPicker
+										value={fill.color}
+										onChange={(color) => updateFill({ color })}
 									/>
 								</InputGroupAddon>
 								<InputGroupInput

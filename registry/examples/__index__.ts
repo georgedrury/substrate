@@ -10,6 +10,13 @@ import PaneDemo from "./pane-demo"
 import ToolbarDemo from "./toolbar-demo"
 import SliderDemo from "./slider-demo"
 import ActionDemo from "./action-demo"
+import ColourPickerInline from "./colour-picker-inline"
+import ColourPickerCustomTrigger from "./colour-picker-custom-trigger"
+import GalleryEmpty from "./gallery-empty"
+import EasingCurveCanvasOnly from "./easing-curve-canvas-only"
+import HistoryControlsDemo from "./history-controls-demo"
+import HistoryControlsToolbar from "./history-controls-toolbar"
+import SliderRange from "./slider-range"
 
 interface ExampleEntry {
 	component: ComponentType
@@ -32,6 +39,14 @@ export const Index: Record<string, ExampleEntry> = {
 	"colour-picker-demo": {
 		component: ColourPickerDemo,
 		filePath: "registry/examples/colour-picker-demo.tsx",
+	},
+	"colour-picker-inline": {
+		component: ColourPickerInline,
+		filePath: "registry/examples/colour-picker-inline.tsx",
+	},
+	"colour-picker-custom-trigger": {
+		component: ColourPickerCustomTrigger,
+		filePath: "registry/examples/colour-picker-custom-trigger.tsx",
 	},
 	"easing-curve-editor-demo": {
 		component: EasingCurveEditorDemo,
@@ -56,5 +71,25 @@ export const Index: Record<string, ExampleEntry> = {
 	"action-demo": {
 		component: ActionDemo,
 		filePath: "registry/examples/action-demo.tsx",
+	},
+	"gallery-empty": {
+		component: GalleryEmpty,
+		filePath: "registry/examples/gallery-empty.tsx",
+	},
+	"easing-curve-canvas-only": {
+		component: EasingCurveCanvasOnly,
+		filePath: "registry/examples/easing-curve-canvas-only.tsx",
+	},
+	"history-controls-demo": {
+		component: HistoryControlsDemo,
+		filePath: "registry/examples/history-controls-demo.tsx",
+	},
+	"history-controls-toolbar": {
+		component: HistoryControlsToolbar,
+		filePath: "registry/examples/history-controls-toolbar.tsx",
+	},
+	"slider-range": {
+		component: SliderRange,
+		filePath: "registry/examples/slider-range.tsx",
 	},
 }
