@@ -202,3 +202,10 @@ Some examples of what this surface enables:
 - **Character designer** — generate character variations, save favourites, export sprite sheets
 - **Mood board builder** — generate images for different themes, arrange in a gallery layout
 - **Inpainting editor** — upload an image, mask regions, regenerate specific areas
+
+## Related reference skills
+
+- **substrate-scaffold** — Toolbar, Panel, StatusBar for the app shell
+- **substrate-controls** — Slider, NumberInput, TextArea, Select for generation parameters
+- **substrate-feedback** — Toast, ProgressBar for generation status, EmptyState for no results
+- **substrate-canvas** — useViewport for inpainting canvas pan/zoom

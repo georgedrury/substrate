@@ -123,3 +123,10 @@ Some examples of what this surface enables:
 - **Map builder** — tile-based or freeform map editor for games or floor plans
 - **Node graph** — visual programming interface with typed ports and connections
 - **Wireframe tool** — UI component blocks with snap-to-grid and responsive breakpoints
+
+## Related reference skills
+
+- **substrate-canvas** — full catalogue of spatial hooks (useViewport, useSelection, useDragReorder) and utilities (snapToGrid, boundingBox, math)
+- **substrate-scaffold** — Toolbar, Panel, StatusBar, ZoomControls for the app shell
+- **substrate-controls** — NumberInput, Slider, ColourPicker, ActionControls for property panes
+- **substrate-interaction** — useUndoable, useClipboard, createKeyboardShortcuts, LayerList

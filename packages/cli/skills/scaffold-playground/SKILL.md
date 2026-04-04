@@ -126,3 +126,16 @@ These are surface-agnostic — they work the same whether you're building a 3D s
 - **Wire keyboard shortcuts** — see [wire interactions](./wire-interactions.md)
 - **Create custom tools** — see [create custom tool](./create-custom-tool.md)
 - **Customise appearance** — see [theming](./theming.md)
+
+## Component reference skills
+
+For a full catalogue of available components, hooks, and utilities organised by domain:
+
+| Domain | Skill | What it covers |
+| --- | --- | --- |
+| App shell | **substrate-scaffold** | Toolbar, Panel, Pane, DocumentTabs, StatusBar, ZoomControls, Breadcrumbs, Resizer |
+| Input controls | **substrate-controls** | NumberInput, Slider, NumberSlider, Select, Toggle, TextArea, ColourPicker, ActionControls |
+| Spatial primitives | **substrate-canvas** | useViewport, useSelection, snap, boundingBox, hit testing, coordinate maths |
+| Node graph | **substrate-nodes** | Node cards, typed ports, port colour theming |
+| Status and communication | **substrate-feedback** | Toast, ProgressBar, Badge, EmptyState, CommandPalette, ContextMenu, ShortcutOverlay |
+| Editing flows | **substrate-interaction** | useUndoable, useClipboard, createKeyboardShortcuts, HistoryControls, LayerList, TreeList |

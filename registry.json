@@ -9,9 +9,16 @@
 			"title": "Types",
 			"description": "Core TypeScript type definitions for the design canvas — element types, camera, tools, panels, hit testing, and interaction state.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "lib"],
+			"categories": [
+				"substrate",
+				"lib"
+			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -27,10 +34,19 @@
 			"title": "Math",
 			"description": "Geometry helpers — rotate point, bounds checking, ellipse hit test, screen/world coordinate conversion, normalize bounds, distance, and clamping.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "lib"],
-			"registryDependencies": ["https://substrate.georgedrury.co.uk/r/types"],
+			"categories": [
+				"substrate",
+				"lib"
+			],
+			"registryDependencies": [
+				"https://substrate.georgedrury.co.uk/r/types"
+			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -46,9 +62,16 @@
 			"title": "ID",
 			"description": "ID generation utility using crypto.randomUUID.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "lib"],
+			"categories": [
+				"substrate",
+				"lib"
+			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -64,9 +87,16 @@
 			"title": "Color",
 			"description": "OKLCh color parsing and manipulation utilities — parse, serialize, and adjust lightness.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "lib"],
+			"categories": [
+				"substrate",
+				"lib"
+			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -82,11 +112,22 @@
 			"title": "Document Store",
 			"description": "Zustand store for canvas document state — elements, camera, selection, and undo/redo history with colocated actions.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "store"],
-			"dependencies": ["zustand"],
-			"registryDependencies": ["https://substrate.georgedrury.co.uk/r/types"],
+			"categories": [
+				"substrate",
+				"store"
+			],
+			"dependencies": [
+				"zustand"
+			],
+			"registryDependencies": [
+				"https://substrate.georgedrury.co.uk/r/types"
+			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -102,11 +143,22 @@
 			"title": "Tool Store",
 			"description": "Zustand store for active tool state with temporary tool support (e.g. hold Space for hand tool).",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "store"],
-			"dependencies": ["zustand"],
-			"registryDependencies": ["https://substrate.georgedrury.co.uk/r/types"],
+			"categories": [
+				"substrate",
+				"store"
+			],
+			"dependencies": [
+				"zustand"
+			],
+			"registryDependencies": [
+				"https://substrate.georgedrury.co.uk/r/types"
+			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -122,11 +174,22 @@
 			"title": "Panel Store",
 			"description": "Zustand store for panel visibility — left panel, right panel, and open/collapse state.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "store"],
-			"dependencies": ["zustand"],
-			"registryDependencies": ["https://substrate.georgedrury.co.uk/r/types"],
+			"categories": [
+				"substrate",
+				"store"
+			],
+			"dependencies": [
+				"zustand"
+			],
+			"registryDependencies": [
+				"https://substrate.georgedrury.co.uk/r/types"
+			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -142,13 +205,20 @@
 			"title": "Element Factory",
 			"description": "Factory functions for creating design elements — rectangle, ellipse, text, line, and frame with sensible defaults.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "canvas"],
+			"categories": [
+				"substrate",
+				"canvas"
+			],
 			"registryDependencies": [
 				"https://substrate.georgedrury.co.uk/r/types",
 				"https://substrate.georgedrury.co.uk/r/id"
 			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -164,10 +234,19 @@
 			"title": "Renderer",
 			"description": "Pure Canvas 2D rendering functions — grid, elements (rectangle, ellipse, text, line, frame), selection boxes, resize handles, creation preview, and marquee.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "canvas"],
-			"registryDependencies": ["https://substrate.georgedrury.co.uk/r/types"],
+			"categories": [
+				"substrate",
+				"canvas"
+			],
+			"registryDependencies": [
+				"https://substrate.georgedrury.co.uk/r/types"
+			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -183,13 +262,20 @@
 			"title": "Hit Test",
 			"description": "Pure geometry functions for point-in-element testing, element-at-point lookup, marquee selection, and resize handle detection.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "canvas"],
+			"categories": [
+				"substrate",
+				"canvas"
+			],
 			"registryDependencies": [
 				"https://substrate.georgedrury.co.uk/r/types",
 				"https://substrate.georgedrury.co.uk/r/math"
 			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -205,10 +291,19 @@
 			"title": "useCanvasDrag",
 			"description": "Hook for managing drag state machine — tracks drag type (create, move, resize, marquee, pan), start/current positions, and element snapshots.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "canvas"],
-			"registryDependencies": ["https://substrate.georgedrury.co.uk/r/types"],
+			"categories": [
+				"substrate",
+				"canvas"
+			],
+			"registryDependencies": [
+				"https://substrate.georgedrury.co.uk/r/types"
+			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -224,14 +319,21 @@
 			"title": "useCanvasTransform",
 			"description": "Hook for screen/world coordinate conversion, pan, zoom-to-point, zoom in/out, and reset zoom.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "canvas"],
+			"categories": [
+				"substrate",
+				"canvas"
+			],
 			"registryDependencies": [
 				"https://substrate.georgedrury.co.uk/r/types",
 				"https://substrate.georgedrury.co.uk/r/math",
 				"https://substrate.georgedrury.co.uk/r/document-store"
 			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -247,7 +349,10 @@
 			"title": "useHitTest",
 			"description": "Hook wrapping hit-test functions with canvas state — get element or resize handle at screen point.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "canvas"],
+			"categories": [
+				"substrate",
+				"canvas"
+			],
 			"registryDependencies": [
 				"https://substrate.georgedrury.co.uk/r/types",
 				"https://substrate.georgedrury.co.uk/r/math",
@@ -256,7 +361,11 @@
 				"https://substrate.georgedrury.co.uk/r/use-canvas-transform"
 			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -272,7 +381,10 @@
 			"title": "useCanvasRenderer",
 			"description": "Hook for the requestAnimationFrame render loop — dirty-flag optimization, DPR-aware canvas sizing, and full render pipeline (grid, elements, selection UI, creation preview, marquee).",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "canvas"],
+			"categories": [
+				"substrate",
+				"canvas"
+			],
 			"registryDependencies": [
 				"https://substrate.georgedrury.co.uk/r/types",
 				"https://substrate.georgedrury.co.uk/r/math",
@@ -281,7 +393,11 @@
 				"https://substrate.georgedrury.co.uk/r/renderer"
 			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -297,7 +413,10 @@
 			"title": "useCanvasInteraction",
 			"description": "Hook for pointer event handling — state machine for idle, panning, creating, moving, resizing, and marquee selecting. Handles element creation, selection, and drag operations.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "canvas"],
+			"categories": [
+				"substrate",
+				"canvas"
+			],
 			"registryDependencies": [
 				"https://substrate.georgedrury.co.uk/r/types",
 				"https://substrate.georgedrury.co.uk/r/math",
@@ -310,7 +429,11 @@
 				"https://substrate.georgedrury.co.uk/r/use-canvas-drag"
 			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -326,7 +449,10 @@
 			"title": "useKeyboardShortcuts",
 			"description": "Hook for global keyboard shortcuts — tool switching (V/R/O/T/F), delete, undo/redo, select all, duplicate, zoom, and temporary hand tool (Space hold).",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "canvas"],
+			"categories": [
+				"substrate",
+				"canvas"
+			],
 			"registryDependencies": [
 				"https://substrate.georgedrury.co.uk/r/types",
 				"https://substrate.georgedrury.co.uk/r/id",
@@ -335,7 +461,11 @@
 				"https://substrate.georgedrury.co.uk/r/use-canvas-transform"
 			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -351,7 +481,10 @@
 			"title": "Design Canvas",
 			"description": "The main canvas component — renders a full-size HTML5 Canvas element with cursor management, pointer events, and keyboard shortcuts wired up.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "canvas"],
+			"categories": [
+				"substrate",
+				"canvas"
+			],
 			"registryDependencies": [
 				"https://substrate.georgedrury.co.uk/r/tool-store",
 				"https://substrate.georgedrury.co.uk/r/use-canvas-renderer",
@@ -374,7 +507,11 @@
 			},
 			"meta": {
 				"example": "<DesignCanvas />",
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -390,11 +527,24 @@
 			"title": "Toolbar",
 			"description": "Floating toolbar with toggle groups, toggle buttons with tooltips, separators, and dropdown menus for tool variant selection. Built directly on Radix primitives.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "ui"],
-			"dependencies": ["radix-ui", "@remixicon/react"],
+			"categories": [
+				"substrate",
+				"ui"
+			],
+			"dependencies": [
+				"radix-ui",
+				"@remixicon/react"
+			],
 			"meta": {
 				"example": "<Toolbar><ToolbarToggleGroup value={tool} onValueChange={setTool}><ToolbarToggle value=\"select\" tooltip=\"Select\" shortcut=\"V\"><CursorIcon /></ToolbarToggle></ToolbarToggleGroup></Toolbar>",
-				"lineage": [{ "name": "Radix" }, { "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Radix"
+					},
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -410,7 +560,10 @@
 			"title": "Panel",
 			"description": "Side panel container with position (left/right), variant (tool/default), border, and scroll area. Used for layers, properties, and other side panels.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "ui"],
+			"categories": [
+				"substrate",
+				"ui"
+			],
 			"cssVars": {
 				"theme": {
 					"color-panel": "var(--panel, var(--color-card))",
@@ -427,7 +580,11 @@
 			},
 			"meta": {
 				"example": "<Panel position=\"left\">content</Panel>",
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -443,11 +600,20 @@
 			"title": "Pane",
 			"description": "Content section within a panel — Pane wrapper with PaneHeader, PaneLabel, and PaneAction for composing property editors.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "ui"],
-			"registryDependencies": ["https://substrate.georgedrury.co.uk/r/panel"],
+			"categories": [
+				"substrate",
+				"ui"
+			],
+			"registryDependencies": [
+				"https://substrate.georgedrury.co.uk/r/panel"
+			],
 			"meta": {
 				"example": "<Pane><PaneHeader><PaneLabel>Fill</PaneLabel><PaneAction>+</PaneAction></PaneHeader></Pane>",
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -463,10 +629,17 @@
 			"title": "Action",
 			"description": "Form field row layout — Action container with ActionLabel and ActionControls for consistent label + control rows in property panes.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "ui"],
+			"categories": [
+				"substrate",
+				"ui"
+			],
 			"meta": {
 				"example": "<Action><ActionLabel>Opacity</ActionLabel><ActionControls><Slider /></ActionControls></Action>",
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -482,11 +655,23 @@
 			"title": "Slider",
 			"description": "Slider component built directly on Radix Slider primitive with design tool styling.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "ui"],
-			"dependencies": ["radix-ui"],
+			"categories": [
+				"substrate",
+				"ui"
+			],
+			"dependencies": [
+				"radix-ui"
+			],
 			"meta": {
 				"example": "<Slider value={[50]} onValueChange={setValue} max={100} step={1} />",
-				"lineage": [{ "name": "Radix" }, { "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Radix"
+					},
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -502,7 +687,11 @@
 			"title": "Surface",
 			"description": "Container component for creative surfaces — provides consistent mount point with canvas background, optional overlay controls, and dot grid background.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "ui", "chrome"],
+			"categories": [
+				"substrate",
+				"ui",
+				"chrome"
+			],
 			"cssVars": {
 				"theme": {
 					"color-canvas": "var(--canvas, var(--color-background))",
@@ -519,7 +708,11 @@
 			},
 			"meta": {
 				"example": "<Surface><SurfaceGrid />{/* your renderer */}<SurfaceControls position=\"bottom-right\">{/* zoom buttons */}</SurfaceControls></Surface>",
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -535,9 +728,17 @@
 			"title": "Easing",
 			"description": "Cubic bezier easing utilities — presets, evaluation via Newton's method, CSS cubic-bezier() parsing and serialisation.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "lib", "animation"],
+			"categories": [
+				"substrate",
+				"lib",
+				"animation"
+			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -553,10 +754,20 @@
 			"title": "Animation Store",
 			"description": "Zustand store for animation playback — duration, current time, play/pause, zoom level, and keyframe selection.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "store", "animation"],
-			"dependencies": ["zustand"],
+			"categories": [
+				"substrate",
+				"store",
+				"animation"
+			],
+			"dependencies": [
+				"zustand"
+			],
 			"meta": {
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -572,8 +783,14 @@
 			"title": "Timeline",
 			"description": "Compound timeline component with ruler, playhead, tracks, keyframe diamonds, and transport controls for animation and sequencing tools.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "ui", "animation"],
-			"dependencies": ["@remixicon/react"],
+			"categories": [
+				"substrate",
+				"ui",
+				"animation"
+			],
+			"dependencies": [
+				"@remixicon/react"
+			],
 			"registryDependencies": [
 				"https://substrate.georgedrury.co.uk/r/animation-store"
 			],
@@ -588,7 +805,11 @@
 			},
 			"meta": {
 				"example": "<Timeline><TimelineTransport /><TimelineRuler duration={5} zoomLevel={100} /><TimelineTrack label=\"opacity\"><TimelineKeyframe time={0} duration={5} zoomLevel={100} /><TimelineKeyframe time={2.5} duration={5} zoomLevel={100} /></TimelineTrack></Timeline>",
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -604,10 +825,18 @@
 			"title": "Number Input",
 			"description": "Numeric input with drag-to-scrub on the label, arrow key stepping, shift for larger increments, and optional suffix. Designed for property editors.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "ui", "form"],
+			"categories": [
+				"substrate",
+				"ui",
+				"form"
+			],
 			"meta": {
 				"example": "<NumberInput label=\"X\" value={100} onChange={setValue} />",
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -623,11 +852,21 @@
 			"title": "History Controls",
 			"description": "Undo and redo buttons that read from the document store. Position anywhere — inside a toolbar, panel header, or floating independently.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "ui", "chrome"],
-			"dependencies": ["@remixicon/react"],
+			"categories": [
+				"substrate",
+				"ui",
+				"chrome"
+			],
+			"dependencies": [
+				"@remixicon/react"
+			],
 			"meta": {
 				"example": "<HistoryControls />",
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -643,7 +882,11 @@
 			"title": "Gallery",
 			"description": "Responsive thumbnail grid with selection state, hover overlays, and action buttons. Used for image histories, asset browsers, and media galleries.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "ui", "visualization"],
+			"categories": [
+				"substrate",
+				"ui",
+				"visualization"
+			],
 			"cssVars": {
 				"theme": {
 					"color-gallery-selection": "var(--gallery-selection, var(--color-primary))"
@@ -653,7 +896,11 @@
 			},
 			"meta": {
 				"example": "<Gallery columns={3}><GalleryItem selected onSelect={handleSelect}><GalleryImage src=\"/image.jpg\" alt=\"\" /><GalleryAction><RiDeleteBinLine /></GalleryAction></GalleryItem></Gallery>",
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -669,11 +916,25 @@
 			"title": "Colour Picker",
 			"description": "Colour picker with hex input and swatch preview, powered by react-colorful in a Radix Popover. Used in material editors, fill/stroke controls, and chart styling.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "ui", "control"],
-			"dependencies": ["react-colorful", "radix-ui"],
+			"categories": [
+				"substrate",
+				"ui",
+				"control"
+			],
+			"dependencies": [
+				"react-colorful",
+				"radix-ui"
+			],
 			"meta": {
 				"example": "<ColourPicker value=\"#6366f1\" onChange={setColour} />",
-				"lineage": [{ "name": "react-colorful" }, { "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "react-colorful"
+					},
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
@@ -689,7 +950,11 @@
 			"title": "Easing Curve Editor",
 			"description": "Interactive cubic bezier curve editor with draggable control points and preset buttons. Used for keyframe easing in animation tools.",
 			"author": "George Drury <info@georgedrury.co.uk>",
-			"categories": ["substrate", "ui", "animation"],
+			"categories": [
+				"substrate",
+				"ui",
+				"animation"
+			],
 			"registryDependencies": [
 				"https://substrate.georgedrury.co.uk/r/easing"
 			],
@@ -703,12 +968,228 @@
 			},
 			"meta": {
 				"example": "<EasingCurveEditor value={{ x1: 0.42, y1: 0, x2: 0.58, y2: 1 }} onChange={setEasing} />",
-				"lineage": [{ "name": "Substrate" }]
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
 			},
 			"files": [
 				{
 					"path": "registry/substrate/components/easing-curve-editor.tsx",
 					"type": "registry:ui",
+					"target": ""
+				}
+			]
+		},
+		{
+			"name": "use-selection",
+			"type": "registry:hook",
+			"title": "useSelection",
+			"description": "Multi-select hook with cmd-click toggle and shift-click range selection.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": [
+				"substrate",
+				"hook"
+			],
+			"registryDependencies": [],
+			"meta": {
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/hooks/use-selection.ts",
+					"type": "registry:hook",
+					"target": ""
+				}
+			]
+		},
+		{
+			"name": "use-drag-reorder",
+			"type": "registry:hook",
+			"title": "useDragReorder",
+			"description": "Pointer-based list reordering with visual feedback and pointer capture.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": [
+				"substrate",
+				"hook"
+			],
+			"registryDependencies": [],
+			"meta": {
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/hooks/use-drag-reorder.ts",
+					"type": "registry:hook",
+					"target": ""
+				}
+			]
+		},
+		{
+			"name": "use-clipboard",
+			"type": "registry:hook",
+			"title": "useClipboard",
+			"description": "Copy, cut, and paste with keyboard shortcuts and system clipboard integration.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": [
+				"substrate",
+				"hook"
+			],
+			"registryDependencies": [],
+			"meta": {
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/hooks/use-clipboard.ts",
+					"type": "registry:hook",
+					"target": ""
+				}
+			]
+		},
+		{
+			"name": "use-viewport",
+			"type": "registry:hook",
+			"title": "useViewport",
+			"description": "Pan and zoom state management for canvas surfaces — coordinate transforms, pinch-zoom, and zoom-to-fit.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": [
+				"substrate",
+				"hook"
+			],
+			"registryDependencies": [],
+			"meta": {
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/hooks/use-viewport.ts",
+					"type": "registry:hook",
+					"target": ""
+				}
+			]
+		},
+		{
+			"name": "use-undoable",
+			"type": "registry:hook",
+			"title": "useUndoable",
+			"description": "Lightweight undo/redo stack using refs for performance — pushSnapshot, undo, redo.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": [
+				"substrate",
+				"hook"
+			],
+			"registryDependencies": [],
+			"meta": {
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/hooks/use-undoable.ts",
+					"type": "registry:hook",
+					"target": ""
+				}
+			]
+		},
+		{
+			"name": "keyboard-shortcuts",
+			"type": "registry:lib",
+			"title": "Keyboard shortcuts",
+			"description": "Declarative keyboard shortcut registration and formatting — replaces switch statements with a structured map.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": [
+				"substrate",
+				"lib"
+			],
+			"registryDependencies": [],
+			"meta": {
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/lib/keyboard-shortcuts.ts",
+					"type": "registry:lib",
+					"target": ""
+				}
+			]
+		},
+		{
+			"name": "snap",
+			"type": "registry:lib",
+			"title": "Snap",
+			"description": "Grid snapping and smart edge snapping utilities — snapToGrid, snapToGuides, guidesFromBounds.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": [
+				"substrate",
+				"lib"
+			],
+			"registryDependencies": [
+				"https://substrate.georgedrury.co.uk/r/types"
+			],
+			"meta": {
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/lib/snap.ts",
+					"type": "registry:lib",
+					"target": ""
+				}
+			]
+		},
+		{
+			"name": "bounding-box",
+			"type": "registry:lib",
+			"title": "Bounding box",
+			"description": "Bounding box computation — union, intersection, containment, expansion, and point-in-bounds testing.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": [
+				"substrate",
+				"lib"
+			],
+			"registryDependencies": [
+				"https://substrate.georgedrury.co.uk/r/types"
+			],
+			"meta": {
+				"lineage": [
+					{
+						"name": "Substrate"
+					}
+				]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/lib/bounding-box.ts",
+					"type": "registry:lib",
 					"target": ""
 				}
 			]

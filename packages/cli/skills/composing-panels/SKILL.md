@@ -301,3 +301,9 @@ if (selectedIds.size > 1) {
 	)
 }
 ```
+
+## Related reference skills
+
+- **substrate-scaffold** — full catalogue of Panel, Pane, CollapsiblePane, PaneHeader, and layout components
+- **substrate-controls** — full catalogue of ActionControls, NumberInput, Slider, NumberSlider, Select, Toggle, ColourPicker, and the data-slot composition pattern
+- **substrate-interaction** — HistoryControls (auto-positioned in PaneHeader), LayerList, TreeList

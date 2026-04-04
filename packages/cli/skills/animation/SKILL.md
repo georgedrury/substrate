@@ -186,3 +186,9 @@ Some examples of what this surface enables:
 - **Sprite animator** — frame-by-frame sprite animation with onion skinning
 - **Motion graphics tool** — animate text and shapes along paths with timing controls
 - **Transition builder** — design page/component transitions, preview at different speeds
+
+## Related reference skills
+
+- **substrate-scaffold** — Toolbar, Panel, StatusBar for the app shell
+- **substrate-controls** — NumberInput, Slider, EasingCurveEditor, ActionControls for keyframe properties
+- **substrate-interaction** — useUndoable, createKeyboardShortcuts, LayerList for animation layers

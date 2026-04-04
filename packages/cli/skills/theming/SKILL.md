@@ -110,3 +110,8 @@ const CURSOR_MAP: Record<string, string> = {
 ## 5. Dark mode
 
 Substrate UI components automatically respect dark mode when using `next-themes` or a `.dark` class on the document. The canvas renderer needs manual dark mode handling — check a CSS variable or a store flag and swap your colour constants accordingly.
+
+## Related reference skills
+
+- **substrate-nodes** — port type CSS variables (7 port colours + 4 node chrome vars) follow the same fallback chain
+- **substrate-controls** — ColourPicker, SwatchPalette for colour selection in property panes

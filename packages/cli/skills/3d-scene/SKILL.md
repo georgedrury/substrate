@@ -164,3 +164,9 @@ Some examples of what this surface enables:
 - **Shader playground** — custom `ShaderMaterial` with uniforms exposed as sliders in the properties panel
 - **Particle system editor** — particle emitter properties as pane controls, real-time preview in the viewport
 - **Architectural viewer** — import a model, add measurement tools, annotate with text labels
+
+## Related reference skills
+
+- **substrate-scaffold** — Toolbar, Panel, StatusBar, ZoomControls for the app shell
+- **substrate-controls** — NumberInput, Slider, ColourPicker, ActionControls for property panes
+- **substrate-interaction** — useUndoable, useClipboard, createKeyboardShortcuts, TreeList for scene hierarchy

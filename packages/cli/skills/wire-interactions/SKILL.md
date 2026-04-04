@@ -147,3 +147,9 @@ if (meta && e.key.toLowerCase() === "k") {
   return
 }
 ```
+
+## Related reference skills
+
+- **substrate-interaction** — full catalogue of useUndoable, useClipboard, createKeyboardShortcuts (declarative replacement for switch statements), and formatShortcut
+- **substrate-canvas** — useViewport, useSelection, useDragReorder, snap, boundingBox
+- **substrate-feedback** — CommandPalette (⌘K), ShortcutOverlay (?), ContextMenu, Toast (for delete-with-undo)

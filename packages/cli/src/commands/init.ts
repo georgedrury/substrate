@@ -16,21 +16,31 @@ export interface InitOptions {
 function claudeMd(): string {
 	return `# Substrate
 
-This project uses [Substrate](https://substrate.georgedrury.co.uk) — a creative app framework that provides chrome (toolbar, panels, panes, stores, shortcuts) around different surface types.
+This project uses [Substrate](https://substrate.georgedrury.co.uk) — a creative app framework that provides scaffold (toolbar, panels, panes, stores, shortcuts) around different surface types.
 
 ## Skills
 
-Substrate skills are installed in \`.claude/skills/\`. They teach Claude how to:
+Substrate skills are installed in \`.claude/skills/\`. They are organised into two groups:
 
-- Scaffold creative apps with different surfaces (2D canvas, 3D scenes, animation, image generation, data visualisation)
-- Compose panels and property editors
-- Wire interactions and keyboard shortcuts
-- Theme components and canvas rendering
+### Surface guides (how to build)
+
+- **scaffold-playground** — bootstrapping a new playground
+- **canvas-2d** / **3d-scene** / **animation** / **image-generation** / **data-visualisation** — surface-specific architecture
+- **composing-panels** / **wire-interactions** / **create-custom-tool** / **theming** — workflow guides
+
+### Component reference (what to use)
+
+- **substrate-scaffold** — Toolbar, Panel, Pane, DocumentTabs, StatusBar, ZoomControls, Breadcrumbs, Resizer
+- **substrate-controls** — NumberInput, Slider, NumberSlider, Select, Toggle, TextArea, ColourPicker, ActionControls
+- **substrate-canvas** — useViewport, useSelection, useDragReorder, snap, boundingBox, hit testing
+- **substrate-nodes** — Node cards, typed ports, port colour theming
+- **substrate-feedback** — Toast, ProgressBar, Badge, EmptyState, CommandPalette, ContextMenu, ShortcutOverlay
+- **substrate-interaction** — useUndoable, useClipboard, createKeyboardShortcuts, HistoryControls, LayerList, TreeList
 
 ## Install components
 
 \`\`\`bash
-# Core chrome
+# Core scaffold
 npx substrate add design-canvas toolbar panel pane action slider
 
 # Surface components
