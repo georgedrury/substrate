@@ -1,11 +1,18 @@
 "use client"
 
 import { useDocumentStore } from "@/registry/substrate/stores/document-store"
-import { Separator } from "@/components/ui/separator"
-
 import { Panel } from "@/registry/substrate/components/panel"
+import { Separator } from "@/components/ui/separator"
+import { Badge } from "@/registry/substrate/components/badge"
+import {
+	EmptyState,
+	EmptyStateIcon,
+	EmptyStateTitle,
+	EmptyStateDescription,
+} from "@/registry/substrate/components/empty-state"
+import { RiCursorLine } from "@remixicon/react"
+
 import { AlignmentPane } from "../panes/alignment-pane"
-import { AppearancePane } from "../panes/appearance-pane"
 import { FillPane } from "../panes/fill-pane"
 import { StrokePane } from "../panes/stroke-pane"
 import { TextPane } from "../panes/text-pane"
@@ -16,12 +23,19 @@ export function PropertiesPanel() {
 	const elements = useDocumentStore((s) => s.elements)
 
 	const selectedElements = [...selectedIds].map((id) => elements[id]).filter(Boolean)
+
 	if (selectedElements.length === 0) {
 		return (
-			<Panel className="">
-				<div className="flex h-full items-center justify-center p-4">
-					<p className="text-xs text-muted-foreground">No selection</p>
-				</div>
+			<Panel>
+				<EmptyState>
+					<EmptyStateIcon>
+						<RiCursorLine className="size-5" />
+					</EmptyStateIcon>
+					<EmptyStateTitle>No selection</EmptyStateTitle>
+					<EmptyStateDescription>
+						Select an element to view its properties
+					</EmptyStateDescription>
+				</EmptyState>
 			</Panel>
 		)
 	}
@@ -30,23 +44,23 @@ export function PropertiesPanel() {
 
 	return (
 		<Panel>
-			<div className="text-xs font-medium truncate px-3">{element.name}</div>
+			<div className="flex items-center gap-2 px-3">
+				<span className="text-xs font-medium truncate flex-1">{element.name}</span>
+				<Badge variant="muted">{element.type}</Badge>
+			</div>
+
 			<TransformPane />
-			<Separator />
-			<AppearancePane />
 			<Separator />
 			<FillPane />
 			<Separator />
 			<StrokePane />
+
 			{element.type === "text" && (
 				<>
 					<Separator />
 					<TextPane />
 				</>
 			)}
-
-			<Separator />
-
 			{selectedElements.length > 1 && (
 				<>
 					<Separator />

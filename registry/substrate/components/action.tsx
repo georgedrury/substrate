@@ -41,13 +41,13 @@ export function ActionControls({
 			data-slot="action-controls"
 			className={cn(
 				"flex-1 flex items-center gap-2",
-					// Strip borders from nested inputs, selects, and number inputs
-					"[&_input]:border-0 **:data-[slot=input-group]:border-0 **:data-[slot=select-trigger]:border-0 **:data-[slot=select-trigger]:w-full",
-					"**:data-[slot=number-input]:border-0 **:data-[slot=number-input]:bg-transparent",
-					// ColourSwatch: match row height, remove border
-					"**:data-[slot=colour-swatch]:size-7 **:data-[slot=colour-swatch]:border-0 **:data-[slot=colour-swatch]:rounded-md",
-					// Slider: remove outer border inside action row
-					"**:data-[slot=slider]:border-0",
+				// Strip borders from nested inputs, selects, and number inputs
+				"[&_input]:border-0 **:data-[slot=input-group]:border-0 **:data-[slot=select-trigger]:border-0 **:data-[slot=select-trigger]:w-full",
+				"**:data-[slot=number-input]:border-0 **:data-[slot=number-input]:bg-transparent",
+				// ColourSwatch: match row height, remove border
+				"**:data-[slot=colour-swatch]:size-4 **:data-[slot=colour-swatch]:border-0 **:data-[slot=colour-swatch]:rounded-md",
+				// Slider: remove outer border inside action row
+				"**:data-[slot=slider]:border-0",
 				className,
 			)}
 			{...props}

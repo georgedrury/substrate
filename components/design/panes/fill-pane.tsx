@@ -1,27 +1,13 @@
 "use client"
 
 import { useCallback } from "react"
-import { Input } from "@/components/ui/input"
 import { Slider } from "@/registry/substrate/components/slider"
 import { useDocumentStore } from "@/registry/substrate/stores/document-store"
-import {
-	Pane,
-	PaneHeader,
-	PaneLabel,
-	PaneAction,
-} from "@/registry/substrate/components/pane"
-import {
-	Action,
-	ActionLabel,
-	ActionControls,
-} from "@/registry/substrate/components/action"
+import { Pane, PaneHeader, PaneLabel, PaneAction } from "@/registry/substrate/components/pane"
+import { Action, ActionLabel, ActionControls } from "@/registry/substrate/components/action"
 import type { Fill } from "@/registry/substrate/types"
-import {
-	InputGroup,
-	InputGroupAddon,
-	InputGroupInput,
-} from "@/components/ui/input-group"
 import { ColourPicker } from "@/registry/substrate/components/colour-picker"
+import { NumberSlider } from "@/registry/substrate/components/number-slider"
 
 export function FillPane() {
 	const selectedIds = useDocumentStore((s) => s.selectedIds)
@@ -61,43 +47,33 @@ export function FillPane() {
 			<PaneHeader>
 				<PaneLabel>Fill</PaneLabel>
 				<PaneAction onClick={toggleFill}>
-					<span className="text-[10px]">{fill ? "-" : "+"}</span>
+					<span className="text-[10px]">{fill ? "−" : "+"}</span>
 				</PaneAction>
 			</PaneHeader>
-
 			{fill && (
-				<div className="space-y-2">
+				<div className="space-y-1">
 					<Action>
-						<ActionLabel>Fill</ActionLabel>
 						<ActionControls>
-							<InputGroup>
-								<InputGroupAddon className="**:data-[slot=colour-swatch]:size-4 **:data-[slot=colour-swatch]:rounded">
-									<ColourPicker
-										value={fill.color}
-										onChange={(color) => updateFill({ color })}
-									/>
-								</InputGroupAddon>
-								<InputGroupInput
-									value={fill.color}
-									onChange={(e) => updateFill({ color: e.target.value })}
-									className="h-7 text-xs font-mono"
-								/>
-							</InputGroup>
+							<ColourPicker
+								value={fill.color}
+								onChange={(color) => updateFill({ color })}
+							/>
+							<span className="text-[11px] font-mono text-muted-foreground truncate">
+								{fill.color}
+							</span>
 						</ActionControls>
 					</Action>
 					<Action>
 						<ActionLabel>Opacity</ActionLabel>
 						<ActionControls>
-							<Slider
-								value={[fill.opacity * 100]}
-								onValueChange={([v]) => updateFill({ opacity: v / 100 })}
+							<NumberSlider
+								value={fill.opacity * 100}
+								onChange={(v) => updateFill({ opacity: v / 100 })}
+								min={0}
 								max={100}
 								step={1}
-								className="flex-1"
+								suffix="%"
 							/>
-							<span className="text-[11px] text-muted-foreground w-8 text-right">
-								{Math.round(fill.opacity * 100)}%
-							</span>
 						</ActionControls>
 					</Action>
 				</div>

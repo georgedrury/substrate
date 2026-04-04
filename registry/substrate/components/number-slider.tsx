@@ -17,10 +17,7 @@ type NumberSliderProps = {
 	label?: string
 	suffix?: string
 	disabled?: boolean
-} & Omit<
-	React.ComponentProps<"div">,
-	"value" | "onChange" | "defaultValue"
->
+} & Omit<React.ComponentProps<"div">, "value" | "onChange" | "defaultValue">
 
 function NumberSlider({
 	value,
@@ -44,18 +41,15 @@ function NumberSlider({
 		[onChange],
 	)
 
-	const handleSliderCommit = useCallback(
-		(_values: number[]) => {
-			// onStart fires at the beginning of a drag gesture
-		},
-		[],
-	)
+	const handleSliderCommit = useCallback((_values: number[]) => {
+		// onStart fires at the beginning of a drag gesture
+	}, [])
 
 	return (
 		<div
 			data-slot="number-slider"
 			className={cn(
-				"flex items-center gap-2",
+				"flex items-center gap-2 w-full",
 				disabled && "opacity-50 pointer-events-none",
 				className,
 			)}

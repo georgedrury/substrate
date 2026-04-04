@@ -1,17 +1,13 @@
 "use client"
 
 import { useCallback } from "react"
-import { Input } from "@/components/ui/input"
-import { Slider } from "@/registry/substrate/components/slider"
 import { useDocumentStore } from "@/registry/substrate/stores/document-store"
 import { Pane, PaneHeader, PaneLabel, PaneAction } from "@/registry/substrate/components/pane"
 import { Action, ActionLabel, ActionControls } from "@/registry/substrate/components/action"
+import { ColourPicker } from "@/registry/substrate/components/colour-picker"
+import { NumberInput } from "@/registry/substrate/components/number-input"
+import { NumberSlider } from "@/registry/substrate/components/number-slider"
 import type { Stroke } from "@/registry/substrate/types"
-import {
-	InputGroup,
-	InputGroupAddon,
-	InputGroupInput,
-} from "@/components/ui/input-group"
 
 export function StrokePane() {
 	const selectedIds = useDocumentStore((s) => s.selectedIds)
@@ -51,56 +47,46 @@ export function StrokePane() {
 			<PaneHeader>
 				<PaneLabel>Stroke</PaneLabel>
 				<PaneAction onClick={toggleStroke}>
-					<span className="text-[10px]">{stroke ? "-" : "+"}</span>
+					<span className="text-[10px]">{stroke ? "−" : "+"}</span>
 				</PaneAction>
 			</PaneHeader>
 			{stroke && (
-				<div className="space-y-2">
+				<div className="space-y-1">
 					<Action>
-						<ActionLabel>Stroke</ActionLabel>
 						<ActionControls>
-							<InputGroup>
-								<InputGroupAddon>
-									<div
-										className="size-4 rounded border border-border shrink-0"
-										style={{ backgroundColor: stroke.color }}
-									/>
-								</InputGroupAddon>
-								<InputGroupInput
-									value={stroke.color}
-									onChange={(e) => updateStroke({ color: e.target.value })}
-									className="h-7 text-xs font-mono"
-								/>
-							</InputGroup>
+							<ColourPicker
+								value={stroke.color}
+								onChange={(color) => updateStroke({ color })}
+							/>
+							<span className="text-[11px] font-mono text-muted-foreground truncate">
+								{stroke.color}
+							</span>
 						</ActionControls>
 					</Action>
 					<Action>
 						<ActionLabel>Width</ActionLabel>
 						<ActionControls>
-							<Input
-								type="number"
+							<NumberInput
 								value={stroke.width}
-								onChange={(e) =>
-									updateStroke({ width: parseFloat(e.target.value) || 1 })
-								}
-								className="text-xs"
+								onChange={(w) => updateStroke({ width: w })}
+								onStart={() => pushSnapshot()}
 								min={0}
+								step={1}
+								suffix="px"
 							/>
 						</ActionControls>
 					</Action>
 					<Action>
 						<ActionLabel>Opacity</ActionLabel>
-						<ActionControls className="flex items-center gap-2">
-							<Slider
-								value={[stroke.opacity * 100]}
-								onValueChange={([v]) => updateStroke({ opacity: v / 100 })}
+						<ActionControls>
+							<NumberSlider
+								value={stroke.opacity * 100}
+								onChange={(v) => updateStroke({ opacity: v / 100 })}
+								min={0}
 								max={100}
 								step={1}
-								className="flex-1"
+								suffix="%"
 							/>
-							<span className="text-[11px] text-muted-foreground w-8 text-right">
-								{Math.round(stroke.opacity * 100)}%
-							</span>
 						</ActionControls>
 					</Action>
 				</div>
