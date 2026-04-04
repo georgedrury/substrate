@@ -599,6 +599,25 @@
 			]
 		},
 		{
+			"name": "number-input",
+			"type": "registry:ui",
+			"title": "Number Input",
+			"description": "Numeric input with drag-to-scrub on the label, arrow key stepping, shift for larger increments, and optional suffix. Designed for property editors.",
+			"author": "George Drury <info@georgedrury.co.uk>",
+			"categories": ["substrate", "ui", "form"],
+			"meta": {
+				"example": "<NumberInput label=\"X\" value={100} onChange={setValue} />",
+				"lineage": [{ "name": "Substrate" }]
+			},
+			"files": [
+				{
+					"path": "registry/substrate/components/number-input.tsx",
+					"type": "registry:component",
+					"target": "components/substrate/number-input.tsx"
+				}
+			]
+		},
+		{
 			"name": "history-controls",
 			"type": "registry:ui",
 			"title": "History Controls",

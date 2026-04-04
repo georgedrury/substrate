@@ -40,7 +40,7 @@ export function ActionControls({
 		<div
 			data-slot="action-controls"
 			className={cn(
-				"flex-1 flex items-center gap-2 [&_input]:border-0 **:data-[slot=input-group]:border-0 **:data-[slot=select-trigger]:border-0 **:data-[slot=select-trigger]:w-full",
+				"flex-1 flex items-center gap-2 [&_input]:border-0 **:data-[slot=input-group]:border-0 **:data-[slot=select-trigger]:border-0 **:data-[slot=select-trigger]:w-full **:data-[slot=number-input]:border-0 **:data-[slot=number-input]:bg-transparent",
 				className,
 			)}
 			{...props}

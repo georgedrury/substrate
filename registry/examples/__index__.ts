@@ -14,6 +14,8 @@ import ColourPickerInline from "./colour-picker-inline"
 import ColourPickerCustomTrigger from "./colour-picker-custom-trigger"
 import GalleryEmpty from "./gallery-empty"
 import EasingCurveCanvasOnly from "./easing-curve-canvas-only"
+import NumberInputDemo from "./number-input-demo"
+import NumberInputLabels from "./number-input-labels"
 import HistoryControlsDemo from "./history-controls-demo"
 import HistoryControlsToolbar from "./history-controls-toolbar"
 import SliderRange from "./slider-range"
@@ -71,6 +73,14 @@ export const Index: Record<string, ExampleEntry> = {
 	"action-demo": {
 		component: ActionDemo,
 		filePath: "registry/examples/action-demo.tsx",
+	},
+	"number-input-demo": {
+		component: NumberInputDemo,
+		filePath: "registry/examples/number-input-demo.tsx",
+	},
+	"number-input-labels": {
+		component: NumberInputLabels,
+		filePath: "registry/examples/number-input-labels.tsx",
 	},
 	"gallery-empty": {
 		component: GalleryEmpty,

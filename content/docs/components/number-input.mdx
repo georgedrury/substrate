@@ -1,0 +1,48 @@
+---
+title: Number input
+description: Numeric input with drag-to-scrub on the label, arrow key stepping, and shift for larger increments.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/number-input
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Substrate" }]} />
+
+## Examples
+
+### Default
+
+<ComponentPreview name="number-input-demo" />
+
+### With labels and suffix
+
+<ComponentPreview name="number-input-labels" />
+
+## Interaction
+
+- **Drag on label** — pointer left/right to scrub the value. Hold Shift for larger increments.
+- **Arrow keys** — Up/Down to step the value when the input is focused. Hold Shift for `shiftStep`.
+- **Click label** — focuses and selects the input for direct typing.
+- **Enter** — commits the typed value.
+- **Escape** — cancels editing and blurs.
+
+## Props
+
+| Prop        | Type                       | Default | Description                                        |
+| ----------- | -------------------------- | ------- | -------------------------------------------------- |
+| `value`     | `number`                   | —       | Current value                                       |
+| `onChange`   | `(value: number) => void` | —       | Called when the value changes                        |
+| `onStart`   | `() => void`              | —       | Called once at the start of a drag or before a step. Useful for pushing undo snapshots. |
+| `label`     | `string`                   | —       | Inline label with drag-to-scrub cursor              |
+| `suffix`    | `string`                   | —       | Trailing text (e.g. `°`, `%`, `px`)                 |
+| `min`       | `number`                   | —       | Minimum value                                        |
+| `max`       | `number`                   | —       | Maximum value                                        |
+| `step`      | `number`                   | `1`     | Increment per pixel of drag or arrow key press       |
+| `shiftStep` | `number`                   | `10`    | Increment when Shift is held                         |
+| `precision` | `number`                   | `2`     | Decimal places for display                           |
+| `disabled`  | `boolean`                  | —       | Disables input and drag                              |
