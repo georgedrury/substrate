@@ -1,46 +1,55 @@
 ---
 title: Introduction
-description: Canvas primitives for building design tools
+description: A component framework for building creative tools
 ---
 
-## About Substrate
+## What is Substrate?
 
-Substrate is a shadcn-compatible registry of canvas primitives for building design tools. It provides the building blocks — canvas rendering, state management, interaction hooks, and composable UI components — so you can quickly scaffold creative canvas experiences.
+Substrate is a component framework for building creative tools. It gives you the scaffold – toolbar, panels, panes, stores, keyboard shortcuts – and you bring the surface.
 
-Built directly on **Radix primitives** and **Zustand** for state management. No wrapper layers.
+The **scaffold** is everything around the edges: the floating toolbar at the bottom, the resizable side panels, the property panes inside them, document tabs, status bar, zoom controls, breadcrumbs. These are surface-agnostic – they work the same whether you're building a 2D design tool, a 3D scene editor, a node graph, or an animation timeline.
+
+The **surface** is the central interactive area where the core creative work happens. It could be an HTML5 canvas, a Three.js viewport, a timeline track, or a data visualisation. Substrate doesn't prescribe a rendering engine – it provides the hooks, utilities, and interaction patterns that let any surface plug into the scaffold cleanly.
+
+```
+┌──────────┬────────────────────────┬──────────┐
+│          │                        │          │
+│  Left    │       Surface          │  Right   │
+│  panel   │                        │  panel   │
+│          │                        │          │
+└──────────┴────────────────────────┴──────────┘
+                 [ Toolbar ]
+```
+
+Every component uses the `data-slot` composition pattern – parent components style children via `**:data-[slot=...]` CSS selectors, and theming flows through a CSS variable fallback chain. Override a single variable like `--toolbar-bg` and it propagates everywhere it's needed; leave it unset and the global token takes over.
+
+---
+
+## Six domains
+
+Substrate's 35+ components, 5 hooks, and 3 utilities are organised into six domains:
+
+| Domain      | Purpose                             | Includes                                                                                                                    |
+| ----------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Scaffold    | Structural shell around the surface | Toolbar, Panel, Pane, DocumentTabs, StatusBar, ZoomControls, Breadcrumbs, Resizer                                           |
+| Controls    | Inputs inside panes and toolbars    | NumberInput, Slider, NumberSlider, Select, Toggle, TextArea, ColourPicker, SwatchPalette, EasingCurveEditor, ActionControls |
+| Canvas      | Spatial hooks and utilities         | useViewport, useSelection, useDragReorder, snapToGrid, snapToGuides, boundingBox                                            |
+| Nodes       | Card-based node editor system       | Node, NodePort (7 typed ports), NodePreview, NodeDivider, NodeBadge                                                         |
+| Feedback    | System communication and discovery  | Toast, ProgressBar, Badge, EmptyState, CommandPalette, ContextMenu, ShortcutOverlay, Popover                                |
+| Interaction | Cross-cutting editing flows         | useUndoable, useClipboard, createKeyboardShortcuts, HistoryControls, LayerList, TreeList                                    |
 
 ---
 
 ## Install
 
+Add any component individually:
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/toolbar
+```
+
+Or start with the full canvas scaffold:
+
 ```bash
 npx shadcn@latest add https://substrate.georgedrury.co.uk/r/design-canvas
 ```
-
-## What's included
-
-### Core
-
-- **Types** — Element, camera, tool, and panel type definitions
-- **Stores** — Zustand stores for document state, tool selection, and panel visibility
-- **Canvas engine** — HTML5 Canvas renderer, hit testing, element factory
-- **Hooks** — Interaction, rendering, transforms, keyboard shortcuts
-
-### UI Primitives
-
-- **Toolbar** — Floating toolbar with toggle groups, dropdowns, and tooltips
-- **Panel** — Side panel container with scroll and position variants
-- **Pane** — Content sections with header, label, and action slots
-- **Action** — Label + control field rows for property editors
-- **Slider** — Radix slider with design tool styling
-
----
-
-## Lineage
-
-<Lineage
-	items={[
-		{ name: "Radix", href: "https://radix-ui.com" },
-		{ name: "Substrate" },
-	]}
-/>
