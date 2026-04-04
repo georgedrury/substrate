@@ -1,191 +1,179 @@
-import { join } from "node:path"
-import chalk from "chalk"
-import { exists, ensureDir, writeFile } from "../utils/fs.js"
-import { exec, execSilent } from "../utils/shell.js"
-import { log } from "../utils/logger.js"
-import { detectPackageManager, getInstallCommand } from "../utils/detect-pm.js"
-import { init } from "./init.js"
+import { join } from "node:path";
+import chalk from "chalk";
+import { exists, ensureDir, writeFile } from "../utils/fs.js";
+import { exec, execSilent } from "../utils/shell.js";
+import { log } from "../utils/logger.js";
+import { detectPackageManager, getInstallCommand, } from "../utils/detect-pm.js";
+import { init } from "./init.js";
 function printBanner() {
-	const banner = [
-		"┌─────────────────────────────┐",
-		"│  ▓▓▓  substrate  ▓▓▓       │",
-		"│  canvas playground toolkit  │",
-		"└─────────────────────────────┘",
-	]
-	console.log()
-	for (const line of banner) {
-		console.log(chalk.bold(`  ${line}`))
-	}
-	console.log()
+    const banner = [
+        "┌──────────────────────────────────┐",
+        "│  ▓▓▓  substrate  ▓▓▓            │",
+        "│  creative app framework          │",
+        "└──────────────────────────────────┘",
+    ];
+    console.log();
+    for (const line of banner) {
+        console.log(chalk.bold(`  ${line}`));
+    }
+    console.log();
 }
-const REGISTRY_BASE = "https://substrate.georgedrury.co.uk/r"
+const REGISTRY_BASE = "https://substrate.georgedrury.co.uk/r";
 const CORE_COMPONENTS = [
-	"design-canvas",
-	"toolbar",
-	"panel",
-	"pane",
-	"action",
-	"slider",
-]
+    "design-canvas",
+    "toolbar",
+    "panel",
+    "pane",
+    "action",
+    "slider",
+];
 export async function create(projectName, options = {}) {
-	const { skipInstall = false, skipGit = false, packageManager } = options
-	const projectDir = join(process.cwd(), projectName)
-	if (exists(projectDir)) {
-		log.error(`Directory "${projectName}" already exists`)
-		process.exit(1)
-	}
-	printBanner()
-	log.title(`Creating Substrate playground: ${projectName}`)
-	// 1. Create project directory
-	ensureDir(projectDir)
-	// 2. Write template files
-	log.step("Scaffolding project files...")
-	// package.json
-	writeFile(join(projectDir, "package.json"), packageJson(projectName))
-	// tsconfig.json
-	writeFile(join(projectDir, "tsconfig.json"), tsconfig())
-	// next.config.ts
-	writeFile(join(projectDir, "next.config.ts"), nextConfig())
-	// postcss.config.mjs
-	writeFile(join(projectDir, "postcss.config.mjs"), postcssConfig())
-	// .gitignore
-	writeFile(join(projectDir, ".gitignore"), gitignore())
-	// app/globals.css
-	writeFile(join(projectDir, "app/globals.css"), globalsCss())
-	// app/layout.tsx
-	writeFile(join(projectDir, "app/layout.tsx"), rootLayout(projectName))
-	// app/page.tsx (playground page)
-	writeFile(join(projectDir, "app/page.tsx"), playgroundPage())
-	// lib/utils.ts
-	writeFile(join(projectDir, "lib/utils.ts"), utilsTs())
-	log.success("Project files created")
-	// 3. Install dependencies
-	if (!skipInstall) {
-		const pm = packageManager ?? detectPackageManager(projectDir)
-		log.step(`Installing dependencies with ${pm}...`)
-		exec(getInstallCommand(pm), { cwd: projectDir })
-		log.success("Dependencies installed")
-		// 4. Install core Substrate components
-		log.step("Installing Substrate components...")
-		for (const component of CORE_COMPONENTS) {
-			const url = `${REGISTRY_BASE}/${component}`
-			try {
-				exec(`npx shadcn@latest add ${url}`, { cwd: projectDir })
-				log.step(`  ${component}`)
-			} catch {
-				log.warn(
-					`  Failed to install ${component} — you can add it later with: substrate add ${component}`,
-				)
-			}
-		}
-		log.success("Substrate components installed")
-	} else {
-		log.warn("Skipping dependency installation (--skip-install)")
-	}
-	// 5. Run init to install skills and CLAUDE.md
-	const originalCwd = process.cwd()
-	process.chdir(projectDir)
-	await init({ force: true, skipComponentsJson: true })
-	process.chdir(originalCwd)
-	// 6. Initialise git
-	if (!skipGit) {
-		log.step("Initialising git repository...")
-		execSilent("git init", projectDir)
-		execSilent("git add -A", projectDir)
-		execSilent(
-			'git commit -m "Initial commit from substrate create"',
-			projectDir,
-		)
-		log.success("Git repository initialised")
-	}
-	// Done
-	log.title("Your Substrate playground is ready")
-	log.info(`  cd ${projectName}`)
-	log.info("  npm run dev")
-	log.blank()
-	log.info(
-		"Open the project in Claude Code or Cowork to start building with Substrate skills.",
-	)
-	log.blank()
+    const { skipInstall = false, skipGit = false, packageManager } = options;
+    const projectDir = join(process.cwd(), projectName);
+    if (exists(projectDir)) {
+        log.error(`Directory "${projectName}" already exists`);
+        process.exit(1);
+    }
+    printBanner();
+    log.title(`Creating Substrate playground: ${projectName}`);
+    // 1. Create project directory
+    ensureDir(projectDir);
+    // 2. Write template files
+    log.step("Scaffolding project files...");
+    // package.json
+    writeFile(join(projectDir, "package.json"), packageJson(projectName));
+    // tsconfig.json
+    writeFile(join(projectDir, "tsconfig.json"), tsconfig());
+    // next.config.ts
+    writeFile(join(projectDir, "next.config.ts"), nextConfig());
+    // postcss.config.mjs
+    writeFile(join(projectDir, "postcss.config.mjs"), postcssConfig());
+    // .gitignore
+    writeFile(join(projectDir, ".gitignore"), gitignore());
+    // app/globals.css
+    writeFile(join(projectDir, "app/globals.css"), globalsCss());
+    // app/layout.tsx
+    writeFile(join(projectDir, "app/layout.tsx"), rootLayout(projectName));
+    // app/page.tsx (playground page)
+    writeFile(join(projectDir, "app/page.tsx"), playgroundPage());
+    // lib/utils.ts
+    writeFile(join(projectDir, "lib/utils.ts"), utilsTs());
+    log.success("Project files created");
+    // 3. Install dependencies
+    if (!skipInstall) {
+        const pm = packageManager ?? detectPackageManager(projectDir);
+        log.step(`Installing dependencies with ${pm}...`);
+        exec(getInstallCommand(pm), { cwd: projectDir });
+        log.success("Dependencies installed");
+        // 4. Install core Substrate components
+        log.step("Installing Substrate components...");
+        for (const component of CORE_COMPONENTS) {
+            const url = `${REGISTRY_BASE}/${component}`;
+            try {
+                exec(`npx shadcn@latest add ${url}`, { cwd: projectDir });
+                log.step(`  ${component}`);
+            }
+            catch {
+                log.warn(`  Failed to install ${component} — you can add it later with: substrate add ${component}`);
+            }
+        }
+        log.success("Substrate components installed");
+    }
+    else {
+        log.warn("Skipping dependency installation (--skip-install)");
+    }
+    // 5. Run init to install skills and CLAUDE.md
+    const originalCwd = process.cwd();
+    process.chdir(projectDir);
+    await init({ force: true, skipComponentsJson: true });
+    process.chdir(originalCwd);
+    // 6. Initialise git
+    if (!skipGit) {
+        log.step("Initialising git repository...");
+        execSilent("git init", projectDir);
+        execSilent("git add -A", projectDir);
+        execSilent('git commit -m "Initial commit from substrate create"', projectDir);
+        log.success("Git repository initialised");
+    }
+    // Done
+    log.title("Your Substrate playground is ready");
+    log.info(`  cd ${projectName}`);
+    log.info("  npm run dev");
+    log.blank();
+    log.info("Open the project in Claude Code or Cowork to start building with Substrate skills.");
+    log.blank();
 }
 function packageJson(name) {
-	return JSON.stringify(
-		{
-			name,
-			version: "0.1.0",
-			private: true,
-			scripts: {
-				dev: "next dev",
-				build: "next build",
-				start: "next start",
-				lint: "eslint",
-			},
-			dependencies: {
-				next: "^15.5.0",
-				react: "^19.1.0",
-				"react-dom": "^19.1.0",
-				"class-variance-authority": "^0.7.1",
-				clsx: "^2.1.1",
-				"tailwind-merge": "^3.3.1",
-				"@remixicon/react": "^4.9.0",
-				"radix-ui": "^1.4.3",
-				zustand: "^5.0.12",
-			},
-			devDependencies: {
-				typescript: "^5",
-				"@types/node": "^20",
-				"@types/react": "^19",
-				"@types/react-dom": "^19",
-				tailwindcss: "^4",
-				"@tailwindcss/postcss": "^4",
-				"tw-animate-css": "^1.4.0",
-				eslint: "^9",
-				"eslint-config-next": "^15.5.0",
-			},
-		},
-		null,
-		2,
-	)
+    return JSON.stringify({
+        name,
+        version: "0.1.0",
+        private: true,
+        scripts: {
+            dev: "next dev",
+            build: "next build",
+            start: "next start",
+            lint: "eslint",
+        },
+        dependencies: {
+            next: "^15.5.0",
+            react: "^19.1.0",
+            "react-dom": "^19.1.0",
+            "class-variance-authority": "^0.7.1",
+            clsx: "^2.1.1",
+            "tailwind-merge": "^3.3.1",
+            "@remixicon/react": "^4.9.0",
+            "radix-ui": "^1.4.3",
+            "react-colorful": "^5.6.1",
+            zustand: "^5.0.12",
+        },
+        devDependencies: {
+            typescript: "^5",
+            "@types/node": "^20",
+            "@types/react": "^19",
+            "@types/react-dom": "^19",
+            tailwindcss: "^4",
+            "@tailwindcss/postcss": "^4",
+            "tw-animate-css": "^1.4.0",
+            eslint: "^9",
+            "eslint-config-next": "^15.5.0",
+        },
+    }, null, 2);
 }
 function tsconfig() {
-	return JSON.stringify(
-		{
-			compilerOptions: {
-				target: "ES2017",
-				lib: ["dom", "dom.iterable", "esnext"],
-				allowJs: true,
-				skipLibCheck: true,
-				strict: true,
-				noEmit: true,
-				esModuleInterop: true,
-				module: "esnext",
-				moduleResolution: "bundler",
-				resolveJsonModule: true,
-				isolatedModules: true,
-				jsx: "preserve",
-				incremental: true,
-				plugins: [{ name: "next" }],
-				paths: {
-					"@/*": ["./*"],
-				},
-			},
-			include: ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-			exclude: ["node_modules"],
-		},
-		null,
-		2,
-	)
+    return JSON.stringify({
+        compilerOptions: {
+            target: "ES2017",
+            lib: ["dom", "dom.iterable", "esnext"],
+            allowJs: true,
+            skipLibCheck: true,
+            strict: true,
+            noEmit: true,
+            esModuleInterop: true,
+            module: "esnext",
+            moduleResolution: "bundler",
+            resolveJsonModule: true,
+            isolatedModules: true,
+            jsx: "preserve",
+            incremental: true,
+            plugins: [{ name: "next" }],
+            paths: {
+                "@/*": ["./*"],
+            },
+        },
+        include: ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+        exclude: ["node_modules"],
+    }, null, 2);
 }
 function nextConfig() {
-	return `import type { NextConfig } from "next"
+    return `import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {}
 
 export default nextConfig
-`
+`;
 }
 function postcssConfig() {
-	return `/** @type {import('postcss-load-config').Config} */
+    return `/** @type {import('postcss-load-config').Config} */
 const config = {
   plugins: {
     "@tailwindcss/postcss": {},
@@ -193,10 +181,10 @@ const config = {
 }
 
 export default config
-`
+`;
 }
 function gitignore() {
-	return `node_modules/
+    return `node_modules/
 .next/
 out/
 build/
@@ -206,10 +194,10 @@ build/
 .env*.local
 *.tsbuildinfo
 next-env.d.ts
-`
+`;
 }
 function globalsCss() {
-	return `@import "tailwindcss";
+    return `@import "tailwindcss";
 @import "tw-animate-css";
 
 @theme inline {
@@ -240,6 +228,15 @@ function globalsCss() {
   --color-canvas-foreground: var(--canvas-foreground, var(--color-foreground-muted));
   --color-panel: var(--panel, var(--color-card));
   --color-panel-foreground: var(--panel-foreground, var(--color-card-foreground));
+  /* Substrate — Timeline */
+  --color-timeline-playhead: var(--timeline-playhead, var(--color-destructive));
+  --color-timeline-keyframe: var(--timeline-keyframe, var(--color-muted-foreground));
+  --color-timeline-track: var(--timeline-track, var(--color-panel));
+  /* Substrate — Gallery */
+  --color-gallery-selection: var(--gallery-selection, var(--color-primary));
+  /* Substrate — Easing */
+  --color-easing-curve: var(--easing-curve, var(--color-primary));
+  --color-easing-handle: var(--easing-handle, var(--color-primary));
 }
 
 :root {
@@ -303,10 +300,10 @@ function globalsCss() {
     @apply bg-background text-foreground;
   }
 }
-`
+`;
 }
 function rootLayout(projectName) {
-	return `import type { Metadata } from "next"
+    return `import type { Metadata } from "next"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -325,21 +322,21 @@ export default function RootLayout({
     </html>
   )
 }
-`
+`;
 }
 function playgroundPage() {
-	return `"use client"
+    return `"use client"
 
-import { DesignCanvas } from "@/registry/substrate/canvas/design-canvas"
+import { DesignCanvas } from "@/components/substrate/design-canvas"
 import {
   Toolbar,
   ToolbarToggleGroup,
   ToolbarToggle,
   ToolbarSeparator,
-} from "@/registry/substrate/components/toolbar"
-import { Panel } from "@/registry/substrate/components/panel"
-import { useToolStore } from "@/registry/substrate/stores/tool-store"
-import { usePanelStore } from "@/registry/substrate/stores/panel-store"
+} from "@/components/substrate/toolbar"
+import { Panel } from "@/components/substrate/panel"
+import { useToolStore } from "@/stores/tool-store"
+import { usePanelStore } from "@/stores/panel-store"
 import {
   RiCursorLine,
   RiHand,
@@ -403,15 +400,15 @@ export default function PlaygroundPage() {
     </div>
   )
 }
-`
+`;
 }
 function utilsTs() {
-	return `import { clsx, type ClassValue } from "clsx"
+    return `import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
-`
+`;
 }
 //# sourceMappingURL=create.js.map

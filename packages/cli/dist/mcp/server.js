@@ -20,7 +20,7 @@ export async function startServer() {
     server.tool("get_component", "Get full details for a specific Substrate component including CSS variables, dependencies, usage example, and lineage.", {
         name: z.string().describe("Component name (e.g. design-canvas, toolbar, panel)"),
     }, async (args) => handleGetComponent(registry, args));
-    server.tool("install_components", "Install one or more Substrate components from substrate.vui.run into the current project. Runs shadcn add behind the scenes.", {
+    server.tool("install_components", "Install one or more Substrate components from substrate.georgedrury.co.uk into the current project. Runs shadcn add behind the scenes.", {
         components: z.array(z.string()).describe("Component names to install (e.g. ['design-canvas', 'toolbar', 'panel'])"),
     }, async (args) => handleInstall(registry, args));
     server.tool("get_theme_variables", "Get the CSS variable map for Substrate components, showing the full fallback chain. Useful for building or customising themes.", {

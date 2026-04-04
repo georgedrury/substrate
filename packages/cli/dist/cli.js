@@ -58,7 +58,7 @@ export function createCli() {
     });
     program
         .command("add")
-        .description("Install Substrate components from substrate.vui.run")
+        .description("Install Substrate components from substrate.georgedrury.co.uk")
         .argument("[components...]", "Component names to install (opens picker if omitted)")
         .option("--category <name>", "Install all components in a category")
         .option("--list-categories", "Show available categories and their components", false)
