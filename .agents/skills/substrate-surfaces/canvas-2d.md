@@ -61,7 +61,7 @@ Always convert pointer events to world space before hit-testing or element manip
 
 `useDocumentStore` holds the element map, element order, selection set, and history stack. All mutations go through store actions. Call `pushSnapshot()` before any mutation to enable undo/redo.
 
-## Wiring to Substrate chrome
+## Wiring to Substrate scaffold
 
 ### Toolbar
 

@@ -1,0 +1,40 @@
+---
+title: Layer list
+description: Reorderable layer panel with visibility, lock toggles, and inline rename.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/layer-list
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Substrate" }]} />
+
+## Examples
+
+### Default
+
+<ComponentPreview name="layer-list-demo" />
+
+## Interaction
+
+- **Click** a row to select it.
+- **Double-click** the name to rename inline. Press Enter to confirm or Escape to cancel.
+- **Visibility toggle** — hides/shows the layer.
+- **Lock toggle** — locks the layer to prevent selection or editing.
+
+## Components
+
+| Component               | Description                                              |
+| ----------------------- | -------------------------------------------------------- |
+| `LayerList`             | Vertical flex container for layer items                  |
+| `LayerItem`             | Row with selection, hover, and depth indentation         |
+| `LayerIcon`             | Colour dot or icon thumbnail                             |
+| `LayerName`             | Truncated name with double-click-to-rename               |
+| `LayerActions`          | Right-aligned action slot, visible on hover              |
+| `LayerToggle`           | Generic toggle button for layer actions                  |
+| `LayerVisibilityToggle` | Convenience eye/eye-off toggle                           |
+| `LayerLockToggle`       | Convenience lock/unlock toggle                           |

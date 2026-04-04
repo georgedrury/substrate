@@ -134,7 +134,7 @@ export function PreviewSurface() {
 }
 ```
 
-## Wiring to Substrate chrome
+## Wiring to Substrate scaffold
 
 ### Toolbar
 

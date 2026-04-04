@@ -1,12 +1,12 @@
 ---
 name: substrate-surfaces
-description: Build creative surfaces for Substrate playgrounds — 2D canvas, 3D scenes, animation timelines, image generation, data visualisation. Covers the surface abstraction, integration with Substrate chrome (toolbar, panels, stores), and architecture patterns for each surface type. Triggers when creating a new playground, choosing a rendering engine, wiring a viewport to panels, or building any creative tool with Substrate.
+description: Build creative surfaces for Substrate playgrounds — 2D canvas, 3D scenes, animation timelines, image generation, data visualisation. Covers the surface abstraction, integration with the Substrate scaffold (toolbar, panels, stores), and architecture patterns for each surface type. Triggers when creating a new playground, choosing a rendering engine, wiring a viewport to panels, or building any creative tool with Substrate.
 user-invocable: true
 ---
 
 # Substrate surfaces
 
-A surface is the central interactive area of a Substrate playground — the part where the core creative interaction happens. Substrate provides the chrome (toolbar, panels, panes, stores, shortcuts) and the surface provides the rendering and interaction model.
+A surface is the central interactive area of a Substrate playground — the part where the core creative interaction happens. Substrate provides the scaffold (toolbar, panels, panes, stores, shortcuts) and the surface provides the rendering and interaction model.
 
 ## The surface concept
 
@@ -26,7 +26,7 @@ The surface slot is a `div` with `className="absolute inset-0 bg-canvas"` that s
 
 ## Architecture
 
-### What the chrome provides (surface-agnostic)
+### What the scaffold provides (surface-agnostic)
 
 These Substrate primitives work the same regardless of surface type:
 
@@ -75,7 +75,7 @@ interface SurfaceState {
 
 The data model changes (elements for 2D, scene objects for 3D, keyframes for animation, datasets for data vis) but the store shape — selection, history, CRUD — stays consistent.
 
-### Wiring a surface to the chrome
+### Wiring a surface to the scaffold
 
 1. **Mount the surface** — render it in the layout between panels, inside a full-bleed container
 2. **Connect to useToolStore** — read the active tool to change surface behaviour (select vs create vs pan)
@@ -91,12 +91,12 @@ When creating a surface that isn't covered by the existing types:
 2. **Define the data model** — what are the "objects" the user creates/manipulates? Design the Zustand store interface.
 3. **Define the interaction model** — is it spatial (click on objects), temporal (scrub a timeline), parametric (adjust controls and regenerate), or something else?
 4. **Create the surface component** — a React component that fills `absolute inset-0`, mounts the renderer, and connects to stores
-5. **Wire to chrome** — map tools to toolbar, expose properties in panels, bind keyboard shortcuts
+5. **Wire to scaffold** — map tools to toolbar, expose properties in panels, bind keyboard shortcuts
 6. **Write a skill** — document the setup, architecture, and examples so Claude can scaffold it for others
 
 ## Surface types
 
-Each surface type has a detailed guide covering dependencies, store architecture, component structure, chrome wiring, and example apps.
+Each surface type has a detailed guide covering dependencies, store architecture, component structure, scaffold wiring, and example apps.
 
 ### 2D canvas
 

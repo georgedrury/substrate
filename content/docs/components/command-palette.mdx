@@ -1,0 +1,40 @@
+---
+title: Command palette
+description: Cmd+K search dialog for tools, actions, and keyboard shortcuts. Built on cmdk and Radix Dialog.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/command-palette
+```
+
+## Lineage
+
+<Lineage items={[{ name: "cmdk", href: "https://cmdk.paco.me" }, { name: "Radix", href: "https://radix-ui.com" }, { name: "Substrate" }]} />
+
+## Examples
+
+### Default
+
+<ComponentPreview name="command-palette-demo" />
+
+## Interaction
+
+- **⌘K / Ctrl+K** opens and closes the palette.
+- Type to fuzzy-search across all items.
+- Arrow keys to navigate, Enter to select.
+- Escape to dismiss.
+
+## Components
+
+| Component          | Description                                   |
+| ------------------ | --------------------------------------------- |
+| `CommandPalette`   | Dialog wrapper with ⌘K listener               |
+| `CommandInput`     | Search input with magnifying glass icon        |
+| `CommandList`      | Scrollable results container                   |
+| `CommandEmpty`     | Shown when no results match                    |
+| `CommandGroup`     | Labelled group of items                        |
+| `CommandItem`      | Selectable result row                          |
+| `CommandShortcut`  | Right-aligned keyboard shortcut hint           |
+| `CommandSeparator` | Horizontal divider between groups              |

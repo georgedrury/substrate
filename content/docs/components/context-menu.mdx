@@ -1,0 +1,35 @@
+---
+title: Context menu
+description: Right-click menu built on Radix ContextMenu with keyboard shortcut display and submenus.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/context-menu
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Radix", href: "https://radix-ui.com" }, { name: "Substrate" }]} />
+
+## Examples
+
+### Default
+
+<ComponentPreview name="context-menu-demo" />
+
+## Components
+
+| Component                | Description                                       |
+| ------------------------ | ------------------------------------------------- |
+| `ContextMenu`            | Root wrapper (Radix ContextMenu.Root)             |
+| `ContextMenuTrigger`     | Area that responds to right-click                 |
+| `ContextMenuContent`     | Popover menu panel                                |
+| `ContextMenuItem`        | Clickable menu item                               |
+| `ContextMenuSeparator`   | Horizontal divider                                |
+| `ContextMenuLabel`       | Non-interactive section heading                   |
+| `ContextMenuShortcut`    | Right-aligned keyboard shortcut hint              |
+| `ContextMenuSub`         | Submenu root                                      |
+| `ContextMenuSubTrigger`  | Item that opens a submenu                         |
+| `ContextMenuSubContent`  | Submenu panel                                     |

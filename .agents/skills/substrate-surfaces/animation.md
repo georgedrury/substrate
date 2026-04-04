@@ -98,7 +98,7 @@ The timeline uses horizontal dragging extensively:
 
 This is pointer-event-driven, similar to the 2D canvas interaction model but on a 1D (time) axis rather than 2D space. Consider a dedicated `useTimelineInteraction` hook following the same state machine pattern as `useCanvasInteraction`.
 
-## Wiring to Substrate chrome
+## Wiring to Substrate scaffold
 
 ### Toolbar
 

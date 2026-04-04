@@ -32,6 +32,11 @@ function Toolbar({
 				data-orientation={orientation}
 				className={cn(
 					"group/toolbar fixed z-50 flex items-center p-2 bg-background border rounded-xl shadow-lg bottom-12 left-1/2 -translate-x-1/2",
+					// Compact child components inside toolbar
+					"**:data-[slot=number-input]:h-6 **:data-[slot=number-input]:w-16 **:data-[slot=number-input]:text-[11px]",
+					"**:data-[slot=colour-swatch]:size-6",
+					"**:data-[slot=slider]:h-6 **:data-[slot=slider-track]:h-6",
+					"**:data-[slot=history-controls]:gap-0",
 					className,
 				)}
 				{...props}

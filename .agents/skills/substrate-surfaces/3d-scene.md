@@ -67,7 +67,7 @@ interface SceneObject {
 
 Store actions should include: `addObject`, `removeObject`, `updateObject`, `selectObject`, `pushSnapshot` (for undo/redo). Use the same snapshot-based undo pattern as the 2D canvas.
 
-## Wiring to Substrate chrome
+## Wiring to Substrate scaffold
 
 ### Toolbar
 

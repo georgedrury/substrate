@@ -16,7 +16,13 @@ export function PaneHeader({
 	return (
 		<div
 			data-slot="pane-header"
-			className={cn("flex justify-between items-center", className)}
+			className={cn(
+				"flex justify-between items-center",
+				// Auto-push history controls to the right and compact them
+				"**:data-[slot=history-controls]:ml-auto **:data-[slot=history-controls]:gap-0",
+				"**:data-[slot=history-button]:size-6 **:data-[slot=history-button]:[&_svg]:size-3.5",
+				className,
+			)}
 			{...props}
 		/>
 	)

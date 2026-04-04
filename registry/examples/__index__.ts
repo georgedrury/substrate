@@ -19,6 +19,14 @@ import NumberInputLabels from "./number-input-labels"
 import HistoryControlsDemo from "./history-controls-demo"
 import HistoryControlsToolbar from "./history-controls-toolbar"
 import SliderRange from "./slider-range"
+import NumberSliderDemo from "./number-slider-demo"
+import ActionColour from "./action-colour"
+import PaneHistory from "./pane-history"
+import LayerListDemo from "./layer-list-demo"
+import ContextMenuDemo from "./context-menu-demo"
+import CommandPaletteDemo from "./command-palette-demo"
+import StatusBarDemo from "./status-bar-demo"
+import DocumentTabsDemo from "./document-tabs-demo"
 
 interface ExampleEntry {
 	component: ComponentType
@@ -101,5 +109,37 @@ export const Index: Record<string, ExampleEntry> = {
 	"slider-range": {
 		component: SliderRange,
 		filePath: "registry/examples/slider-range.tsx",
+	},
+	"number-slider-demo": {
+		component: NumberSliderDemo,
+		filePath: "registry/examples/number-slider-demo.tsx",
+	},
+	"action-colour": {
+		component: ActionColour,
+		filePath: "registry/examples/action-colour.tsx",
+	},
+	"pane-history": {
+		component: PaneHistory,
+		filePath: "registry/examples/pane-history.tsx",
+	},
+	"layer-list-demo": {
+		component: LayerListDemo,
+		filePath: "registry/examples/layer-list-demo.tsx",
+	},
+	"context-menu-demo": {
+		component: ContextMenuDemo,
+		filePath: "registry/examples/context-menu-demo.tsx",
+	},
+	"command-palette-demo": {
+		component: CommandPaletteDemo,
+		filePath: "registry/examples/command-palette-demo.tsx",
+	},
+	"status-bar-demo": {
+		component: StatusBarDemo,
+		filePath: "registry/examples/status-bar-demo.tsx",
+	},
+	"document-tabs-demo": {
+		component: DocumentTabsDemo,
+		filePath: "registry/examples/document-tabs-demo.tsx",
 	},
 }
