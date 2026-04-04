@@ -54,7 +54,7 @@ export default function RootLayout({
 				"overscroll-none",
 			)}
 		>
-			<body className="min-h-full  flex flex-col">
+			<body className="min-h-full dark flex flex-col">
 				{children}
 				<Toaster theme="dark" position="bottom-center" />
 			</body>
