@@ -198,3 +198,12 @@ If it affects tool behaviour:
 2. [ ] Add entry to `registry.json` with correct type and dependencies
 3. [ ] Wire into existing hooks/renderers if part of the pipeline
 4. [ ] Verify `npm run build` passes
+
+## Related domain skills
+
+| Domain | Skill | Relevance |
+| --- | --- | --- |
+| Spatial hooks and utilities | **substrate-canvas** | Viewport, snap, bounding box, math, hit testing |
+| Surface architecture | **substrate-surfaces** | How surfaces consume canvas primitives |
+| Editing flows | **substrate-interaction** | Undo/redo, keyboard shortcuts |
+| App shell | **substrate-scaffold** | Toolbar tool buttons, panel layout |

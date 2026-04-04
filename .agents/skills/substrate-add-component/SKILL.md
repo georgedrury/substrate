@@ -138,3 +138,16 @@ Then add `"{name}"` to the `pages` array in `content/docs/components/meta.json`.
 3. [ ] Create MDX doc in `content/docs/components/{name}.mdx`
 4. [ ] Add to `content/docs/components/meta.json` pages array
 5. [ ] Verify `npm run build` passes
+
+## Where does this component belong?
+
+After creating a component, consider which domain skill it fits into and update that skill's component list:
+
+| Domain | Skill | Examples |
+| --- | --- | --- |
+| App shell and layout | **substrate-scaffold** | Toolbar, Panel, Pane, DocumentTabs, StatusBar, Resizer |
+| Inputs and selectors | **substrate-controls** | NumberInput, Slider, Select, Toggle, ColourPicker |
+| Spatial surface | **substrate-canvas** | (hooks and utilities, not components) |
+| Node graph | **substrate-nodes** | NodeCard, NodePort, NodePreview |
+| Status and communication | **substrate-feedback** | Toast, ProgressBar, Badge, EmptyState, CommandPalette |
+| Selection, undo, structure | **substrate-interaction** | HistoryControls, LayerList, TreeList |

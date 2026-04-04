@@ -137,3 +137,23 @@ Charts and dashboards using Recharts and D3. See [data-visualisation.md](./data-
 - CSV/JSON loading and column type inference
 - Single chart and dashboard grid modes
 - Brushing, linking, and axis assignment patterns
+
+---
+
+## Domain skill index
+
+These focused skills cover the individual building blocks that surfaces use:
+
+| Domain | Skill | What it covers |
+| --- | --- | --- |
+| App shell | **substrate-scaffold** | Toolbar, Panel, Pane, DocumentTabs, StatusBar, ZoomControls, Breadcrumbs, Resizer |
+| Input controls | **substrate-controls** | NumberInput, Slider, NumberSlider, Select, Toggle, TextArea, ColourPicker, SwatchPalette, EasingCurveEditor, ActionControls |
+| Spatial primitives | **substrate-canvas** | useViewport, useSelection, useDragReorder, snap, boundingBox, math, hit testing, canvas-specific hooks |
+| Node graph | **substrate-nodes** | Node cards, typed ports, port colour theming, graph architecture |
+| Status and communication | **substrate-feedback** | Toast, ProgressBar, Badge, EmptyState, CommandPalette, ContextMenu, ShortcutOverlay, Popover |
+| Editing flows | **substrate-interaction** | useUndoable, useClipboard, createKeyboardShortcuts, HistoryControls, LayerList, TreeList |
+
+For adding new items to the registry, see:
+- **substrate-add-component** — UI component conventions
+- **substrate-add-hook** — Hook conventions
+- **substrate-add-canvas-primitive** — Canvas modules, stores, and lib utilities

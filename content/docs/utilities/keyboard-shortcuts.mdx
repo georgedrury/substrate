@@ -1,0 +1,64 @@
+---
+title: createKeyboardShortcuts
+description: Declarative keyboard shortcut registration replacing switch statements.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/keyboard-shortcuts
+```
+
+## Usage
+
+```tsx
+import {
+  createKeyboardShortcuts,
+  formatShortcut,
+} from "@/components/substrate/lib/keyboard-shortcuts"
+
+// Register shortcuts – returns a dispose function
+const dispose = createKeyboardShortcuts([
+  { key: "z", meta: true, handler: undo, label: "Undo", group: "Edit" },
+  { key: "z", meta: true, shift: true, handler: redo, label: "Redo", group: "Edit" },
+  { key: "Delete", handler: deleteSelected, label: "Delete", group: "Edit" },
+  { key: "a", meta: true, handler: selectAll, label: "Select all", group: "Selection" },
+  { key: "0", meta: true, handler: resetZoom, label: "Reset zoom", group: "View" },
+])
+
+// Later, when unmounting:
+dispose()
+```
+
+## Features
+
+Each shortcut entry declares the key and modifiers it responds to. The first matching shortcut wins – so more specific shortcuts (e.g. ⌘+Shift+Z) should be listed before less specific ones (⌘+Z).
+
+By default, shortcuts are ignored when focus is inside an `<input>`, `<textarea>`, or `contentEditable` element. Set `ignoreInputs: false` on a specific entry to override this.
+
+The `formatShortcut` helper converts an entry into a human-readable string for display in toolbars and overlays – e.g. `{ key: "z", meta: true, shift: true }` becomes `"⌘+Shift+Z"`.
+
+## API
+
+### `createKeyboardShortcuts(shortcuts, options?)`
+
+Returns a dispose function that removes the event listener.
+
+### ShortcutEntry
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `key` | `string` | — | The key value (e.g. `"z"`, `"Delete"`, `"ArrowUp"`) |
+| `meta` | `boolean` | `false` | Require ⌘/Ctrl |
+| `ctrl` | `boolean` | `false` | Require Ctrl specifically |
+| `shift` | `boolean` | `false` | Require Shift |
+| `alt` | `boolean` | `false` | Require Alt/Option |
+| `handler` | `(e: KeyboardEvent) => void` | — | Callback |
+| `preventDefault` | `boolean` | `true` | Call `e.preventDefault()` |
+| `ignoreInputs` | `boolean` | `true` | Skip when focus is in an input |
+| `label` | `string` | — | Human-readable label for UI |
+| `group` | `string` | — | Group name for UI |
+
+### `formatShortcut(shortcut)`
+
+Returns a formatted string like `"⌘+Shift+Z"` or `"Alt+↑"`.

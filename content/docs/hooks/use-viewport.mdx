@@ -1,0 +1,75 @@
+---
+title: useViewport
+description: Pan and zoom state management for canvas surfaces.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/use-viewport
+```
+
+## Usage
+
+```tsx
+import { useViewport } from "@/components/substrate/hooks/use-viewport"
+
+function Canvas() {
+  const {
+    viewport,
+    handleWheel,
+    toWorld,
+    toScreen,
+    zoomIn,
+    zoomOut,
+    resetZoom,
+    zoomToFit,
+  } = useViewport({ minZoom: 0.1, maxZoom: 10 })
+
+  return (
+    <div onWheel={handleWheel} style={{ overflow: "hidden" }}>
+      <div
+        style={{
+          transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
+          transformOrigin: "0 0",
+        }}
+      >
+        {/* Canvas content */}
+      </div>
+    </div>
+  )
+}
+```
+
+## Features
+
+This is a surface-agnostic extraction of pan/zoom logic. It manages `{ x, y, zoom }` state and provides coordinate transforms between screen and world space. The `handleWheel` callback supports two modes – plain scroll for panning and Ctrl/⌘ + scroll for pinch-zoom – keeping the world point under the cursor stationary during zoom.
+
+The hook uses refs internally so that callbacks like `toWorld` and `toScreen` remain referentially stable across renders.
+
+## API
+
+### Options
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `initial` | `Partial<Viewport>` | `{ x: 0, y: 0, zoom: 1 }` | Initial viewport state |
+| `minZoom` | `number` | `0.1` | Minimum zoom level |
+| `maxZoom` | `number` | `10` | Maximum zoom level |
+| `zoomFactor` | `number` | `1.2` | Multiplier for `zoomIn` / `zoomOut` |
+
+### Returns
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `viewport` | `Viewport` | Current `{ x, y, zoom }` state |
+| `setViewport` | `(v: Viewport) => void` | Set viewport directly |
+| `toWorld` | `(screenX, screenY) => Point` | Convert screen coordinates to world |
+| `toScreen` | `(worldX, worldY) => Point` | Convert world coordinates to screen |
+| `pan` | `(dx, dy) => void` | Pan by a screen-space delta |
+| `zoomToPoint` | `(screenX, screenY, zoom) => void` | Zoom keeping a screen point stationary |
+| `zoomIn` | `(screenX?, screenY?) => void` | Zoom in by `zoomFactor` |
+| `zoomOut` | `(screenX?, screenY?) => void` | Zoom out by `zoomFactor` |
+| `resetZoom` | `() => void` | Reset to `{ x: 0, y: 0, zoom: 1 }` |
+| `zoomToFit` | `(bounds, padding?) => void` | Fit a bounding box into the viewport |
+| `handleWheel` | `(e: WheelEvent) => void` | Attach to your container's `onWheel` |

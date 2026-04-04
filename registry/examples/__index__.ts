@@ -35,6 +35,15 @@ import ShortcutOverlayDemo from "./shortcut-overlay-demo"
 import TreeListDemo from "./tree-list-demo"
 import NodeDemo from "./node-demo"
 import NodePortTypes from "./node-port-types"
+import SelectDemo from "./select-demo"
+import ToggleDemo from "./toggle-demo"
+import TextAreaDemo from "./text-area-demo"
+import ProgressBarDemo from "./progress-bar-demo"
+import BadgeDemo from "./badge-demo"
+import EmptyStateDemo from "./empty-state-demo"
+import ResizerDemo from "./resizer-demo"
+import PopoverDemo from "./popover-demo"
+import CollapsiblePaneDemo from "./collapsible-pane-demo"
 
 interface ExampleEntry {
 	component: ComponentType
@@ -181,5 +190,41 @@ export const Index: Record<string, ExampleEntry> = {
 	"node-port-types": {
 		component: NodePortTypes,
 		filePath: "registry/examples/node-port-types.tsx",
+	},
+	"select-demo": {
+		component: SelectDemo,
+		filePath: "registry/examples/select-demo.tsx",
+	},
+	"toggle-demo": {
+		component: ToggleDemo,
+		filePath: "registry/examples/toggle-demo.tsx",
+	},
+	"text-area-demo": {
+		component: TextAreaDemo,
+		filePath: "registry/examples/text-area-demo.tsx",
+	},
+	"progress-bar-demo": {
+		component: ProgressBarDemo,
+		filePath: "registry/examples/progress-bar-demo.tsx",
+	},
+	"badge-demo": {
+		component: BadgeDemo,
+		filePath: "registry/examples/badge-demo.tsx",
+	},
+	"empty-state-demo": {
+		component: EmptyStateDemo,
+		filePath: "registry/examples/empty-state-demo.tsx",
+	},
+	"resizer-demo": {
+		component: ResizerDemo,
+		filePath: "registry/examples/resizer-demo.tsx",
+	},
+	"popover-demo": {
+		component: PopoverDemo,
+		filePath: "registry/examples/popover-demo.tsx",
+	},
+	"collapsible-pane-demo": {
+		component: CollapsiblePaneDemo,
+		filePath: "registry/examples/collapsible-pane-demo.tsx",
 	},
 }

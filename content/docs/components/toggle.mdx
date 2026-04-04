@@ -1,0 +1,31 @@
+---
+title: Toggle
+description: Pressable boolean toggle button built on Radix Toggle. Use for snap, grid, rulers, and other on/off states.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/toggle
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Radix", href: "https://radix-ui.com" }, { name: "Substrate" }]} />
+
+## Examples
+
+### Default
+
+<ComponentPreview name="toggle-demo" />
+
+## Props
+
+Extends all Radix `Toggle.Root` props.
+
+| Prop              | Type                            | Default | Description                        |
+| ----------------- | ------------------------------- | ------- | ---------------------------------- |
+| `pressed`         | `boolean`                       | —       | Controlled pressed state           |
+| `onPressedChange` | `(pressed: boolean) => void`    | —       | Called when pressed state changes   |
+| `defaultPressed`  | `boolean`                       | —       | Uncontrolled initial state         |
+| `disabled`        | `boolean`                       | —       | Disables the toggle                |

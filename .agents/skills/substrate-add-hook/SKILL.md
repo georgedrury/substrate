@@ -119,3 +119,13 @@ All must be listed as `registryDependencies` with full URLs.
 2. [ ] Export public types alongside the hook
 3. [ ] Add entry to `registry.json` with correct `registryDependencies` chain
 4. [ ] Verify `npm run build` passes
+
+## Where does this hook belong?
+
+After creating a hook, consider which domain skill it fits into and update that skill's hook list:
+
+| Domain | Skill | Examples |
+| --- | --- | --- |
+| Spatial surface (pan, zoom, hit test) | **substrate-canvas** | useViewport, useSelection, useDragReorder, useCanvasTransform, useHitTest |
+| Editing flows (undo, clipboard) | **substrate-interaction** | useUndoable, useClipboard |
+| Tree/list expand state | **substrate-interaction** | useTreeExpansion (inside tree-list.tsx) |

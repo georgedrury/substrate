@@ -1,0 +1,60 @@
+---
+title: useDragReorder
+description: Pointer-based list reordering with visual feedback.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/use-drag-reorder
+```
+
+## Usage
+
+```tsx
+import { useDragReorder } from "@/components/substrate/hooks/use-drag-reorder"
+
+function SortableList() {
+  const [items, setItems] = useState(["Layer 1", "Layer 2", "Layer 3"])
+
+  const { getDragItemProps, isDragging } = useDragReorder({
+    items,
+    onReorder: setItems,
+  })
+
+  return (
+    <ul>
+      {items.map((item, i) => (
+        <li key={item} {...getDragItemProps(i)}>
+          {item}
+        </li>
+      ))}
+    </ul>
+  )
+}
+```
+
+## How it works
+
+The hook uses pointer capture to track drag movement without relying on the HTML drag-and-drop API. It calculates drop position from the vertical distance moved divided by item height, giving smooth index-based reordering. A configurable threshold (default 3px) prevents accidental drags from firing on normal clicks.
+
+The `getDragItemProps` function returns `onPointerDown`, inline `style` for opacity and CSS transforms, and a `data-dragging` attribute – so non-dragged items visually shift out of the way while the dragged item becomes translucent.
+
+## API
+
+### Options
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `items` | `T[]` | — | The current ordered list |
+| `onReorder` | `(items: T[]) => void` | — | Called with the new order on drop |
+| `threshold` | `number` | `3` | Pixels to move before a drag starts |
+
+### Returns
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `getDragItemProps` | `(index: number) => DragItemProps` | Spread on each draggable item |
+| `dragIndex` | `number \| null` | Index of the item being dragged |
+| `dropIndex` | `number \| null` | Index where it would be dropped |
+| `isDragging` | `boolean` | Whether a drag is in progress |

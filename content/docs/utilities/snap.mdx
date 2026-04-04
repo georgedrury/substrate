@@ -1,0 +1,73 @@
+---
+title: Snap
+description: Grid snapping and smart edge snapping for canvas surfaces.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/snap
+```
+
+## Usage
+
+### Grid snapping
+
+```ts
+import { snapToGrid, snapValueToGrid } from "@/components/substrate/lib/snap"
+
+snapToGrid({ x: 37, y: 63 }, 10)
+// → { x: 40, y: 60 }
+
+snapToGrid({ x: 37, y: 63 }, 10, { origin: { x: 5, y: 5 } })
+// → { x: 35, y: 65 }
+
+snapValueToGrid(37, 10) // → 40
+```
+
+### Guide snapping
+
+```ts
+import { snapToGuides, guidesFromBounds } from "@/components/substrate/lib/snap"
+
+// Generate guides from sibling elements
+const guides = guidesFromBounds(otherElements.map((el) => el.bounds))
+
+// Snap the dragged element's position
+const result = snapToGuides(dragPosition, guides, { threshold: 5 })
+
+result.point // → snapped { x, y }
+result.snappedGuides // → which guides were hit (for rendering snap lines)
+```
+
+## Functions
+
+### `snapToGrid(point, gridSize, options?)`
+
+Rounds a point to the nearest grid intersection. An optional `origin` shifts the grid.
+
+### `snapValueToGrid(value, gridSize, origin?)`
+
+Snaps a single number to the nearest grid line.
+
+### `snapToGuides(point, guides, options?)`
+
+Snaps a point to nearby guide lines. Each axis snaps independently – only if a guide is within the `threshold` distance (default 5px). Returns the snapped point and an array of matched guides, which is useful for rendering alignment lines.
+
+### `guidesFromBounds(boundsList, exclude?)`
+
+Generates alignment guides from an array of bounding boxes. Creates six guides per box – left edge, horizontal centre, right edge, top edge, vertical centre, bottom edge. Pass the element being dragged as `exclude` to avoid self-snapping.
+
+## Types
+
+```ts
+type Guide = {
+  axis: "x" | "y"
+  value: number
+}
+
+type SnapResult = {
+  point: Point
+  snappedGuides: Guide[]
+}
+```

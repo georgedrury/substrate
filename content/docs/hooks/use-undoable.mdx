@@ -1,0 +1,83 @@
+---
+title: useUndoable
+description: Lightweight undo/redo stack using refs for performance.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/use-undoable
+```
+
+## Usage
+
+```tsx
+import { useUndoable } from "@/components/substrate/hooks/use-undoable"
+
+type CanvasState = { elements: Element[] }
+
+function Editor() {
+  const [state, setState] = useState<CanvasState>({ elements: [] })
+
+  const { pushSnapshot, undo, redo, canUndo, canRedo } =
+    useUndoable<CanvasState>({ maxHistory: 100 })
+
+  function handleMove(id: string, x: number, y: number) {
+    pushSnapshot(state) // save before mutating
+    setState((prev) => ({
+      elements: prev.elements.map((el) =>
+        el.id === id ? { ...el, x, y } : el
+      ),
+    }))
+  }
+
+  function handleUndo() {
+    const previous = undo()
+    if (previous) setState(previous)
+  }
+
+  function handleRedo() {
+    const next = redo()
+    if (next) setState(next)
+  }
+
+  return (
+    <>
+      <HistoryControls
+        canUndo={canUndo}
+        canRedo={canRedo}
+        onUndo={handleUndo}
+        onRedo={handleRedo}
+      />
+      {/* Canvas */}
+    </>
+  )
+}
+```
+
+## Design
+
+The hook stores history in refs rather than state to avoid re-renders on every snapshot push. It only triggers a re-render (via a counter state) when `canUndo` or `canRedo` changes. The `undo()` and `redo()` functions return the restored state (or `null` if empty) – the caller is responsible for applying it.
+
+This pattern keeps the hook generic and framework-agnostic. It works equally well with `useState`, Zustand, or any external state management.
+
+## API
+
+### Options
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `maxHistory` | `number` | `50` | Maximum number of undo snapshots to keep |
+
+### Returns
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `pushSnapshot` | `(state: T) => void` | Save the current state before a mutation |
+| `undo` | `() => T \| null` | Pop the previous state, or `null` |
+| `redo` | `() => T \| null` | Pop the next state, or `null` |
+| `canUndo` | `boolean` | Whether undo is available |
+| `canRedo` | `boolean` | Whether redo is available |
+| `undoCount` | `number` | Number of undo states |
+| `redoCount` | `number` | Number of redo states |
+| `clear` | `() => void` | Clear all history |

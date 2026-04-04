@@ -1,0 +1,35 @@
+---
+title: Select
+description: Dropdown select for blend modes, fonts, export formats. Built on Radix Select with ActionControls awareness.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/select
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Radix", href: "https://radix-ui.com" }, { name: "Substrate" }]} />
+
+## Examples
+
+### Default
+
+Placed inside an `ActionControls` row, the trigger automatically loses its border and fills the available width.
+
+<ComponentPreview name="select-demo" />
+
+## Components
+
+| Component         | Description                                |
+| ----------------- | ------------------------------------------ |
+| `Select`          | Root wrapper (Radix Select.Root)           |
+| `SelectTrigger`   | Button that opens the dropdown             |
+| `SelectValue`     | Displays the currently selected value      |
+| `SelectContent`   | Dropdown panel with items                  |
+| `SelectItem`      | Selectable option with check indicator     |
+| `SelectGroup`     | Labelled group of items                    |
+| `SelectLabel`     | Non-interactive group heading              |
+| `SelectSeparator` | Horizontal divider                         |

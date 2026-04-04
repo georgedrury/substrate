@@ -1,0 +1,30 @@
+---
+title: Text area
+description: Auto-resizing textarea with minimal styling. Fits inside node bodies and property panels.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/text-area
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Substrate" }]} />
+
+## Examples
+
+### Default
+
+<ComponentPreview name="text-area-demo" />
+
+## Props
+
+Extends all native `<textarea>` props.
+
+| Prop         | Type      | Default | Description                              |
+| ------------ | --------- | ------- | ---------------------------------------- |
+| `autoResize` | `boolean` | `true`  | Automatically adjusts height to content  |
+| `minRows`    | `number`  | `2`     | Minimum visible rows                     |
+| `maxRows`    | `number`  | `10`    | Maximum height before scrolling          |

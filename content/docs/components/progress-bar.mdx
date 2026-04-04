@@ -1,0 +1,28 @@
+---
+title: Progress bar
+description: Thin progress indicator for exports, asset loading, and generation. Supports determinate and indeterminate states.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/progress-bar
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Substrate" }]} />
+
+## Examples
+
+### Default
+
+<ComponentPreview name="progress-bar-demo" />
+
+## Props
+
+| Prop            | Type      | Default | Description                                  |
+| --------------- | --------- | ------- | -------------------------------------------- |
+| `value`         | `number`  | —       | Current progress value                       |
+| `max`           | `number`  | `100`   | Maximum value                                |
+| `indeterminate` | `boolean` | —       | Show an animated indeterminate indicator      |

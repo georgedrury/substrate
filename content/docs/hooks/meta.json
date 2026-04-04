@@ -1,0 +1,9 @@
+{
+	"pages": [
+		"use-selection",
+		"use-drag-reorder",
+		"use-clipboard",
+		"use-viewport",
+		"use-undoable"
+	]
+}

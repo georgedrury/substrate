@@ -1,0 +1,68 @@
+---
+title: useSelection
+description: Multi-select hook with cmd-click toggle and shift-click range selection.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/use-selection
+```
+
+## Usage
+
+```tsx
+import { useSelection } from "@/components/substrate/hooks/use-selection"
+
+const itemIds = ["a", "b", "c", "d", "e"]
+
+function LayerPanel() {
+  const { selectedIds, select, selectAll, deselectAll, isSelected } =
+    useSelection({
+      items: itemIds,
+      onSelectionChange: (ids) => console.log("Selected:", ids),
+    })
+
+  return (
+    <ul>
+      {itemIds.map((id) => (
+        <li
+          key={id}
+          onClick={(e) => select(id, e)}
+          style={{ background: isSelected(id) ? "var(--accent)" : undefined }}
+        >
+          {id}
+        </li>
+      ))}
+    </ul>
+  )
+}
+```
+
+## Features
+
+The hook handles three interaction modes automatically based on modifier keys held during a click:
+
+- **Plain click** – selects only the clicked item, deselecting everything else.
+- **⌘/Ctrl + click** – toggles the clicked item without affecting the rest of the selection.
+- **Shift + click** – selects a contiguous range from the last-clicked item to the current one. When combined with ⌘/Ctrl, the range is added to the existing selection rather than replacing it.
+
+## API
+
+### Options
+
+| Option | Type | Description |
+| --- | --- | --- |
+| `items` | `T[]` | All item IDs in display order – needed for shift-click range calculation |
+| `onSelectionChange` | `(ids: Set<T>) => void` | Called whenever the selection changes |
+
+### Returns
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `selectedIds` | `Set<T>` | The current selection |
+| `select` | `(id: T, event?) => void` | Handle a click – reads `metaKey`, `ctrlKey`, `shiftKey` from the event |
+| `setSelection` | `(ids: T[]) => void` | Replace the selection with specific IDs |
+| `selectAll` | `() => void` | Select every item |
+| `deselectAll` | `() => void` | Clear the selection |
+| `isSelected` | `(id: T) => boolean` | Check whether an item is selected |

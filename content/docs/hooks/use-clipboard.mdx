@@ -1,0 +1,70 @@
+---
+title: useClipboard
+description: Copy, cut, and paste with keyboard shortcuts and system clipboard integration.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/use-clipboard
+```
+
+## Usage
+
+```tsx
+import { useClipboard } from "@/components/substrate/hooks/use-clipboard"
+
+function Canvas() {
+  const { copy, cut, paste } = useClipboard({
+    onCopy: () => {
+      // Return the items to be copied
+      return selectedElements.map((el) => ({ ...el }))
+    },
+    onPaste: (items) => {
+      // Offset pasted items slightly so they don't overlap
+      const offset = items.map((el) => ({
+        ...el,
+        id: generateId(),
+        x: el.x + 20,
+        y: el.y + 20,
+      }))
+      addElements(offset)
+    },
+    onCut: () => {
+      const items = selectedElements.map((el) => ({ ...el }))
+      removeSelected()
+      return items
+    },
+  })
+
+  return <div>...</div>
+}
+```
+
+## Features
+
+The hook automatically listens for ⌘C / ⌘X / ⌘V (Ctrl on Windows/Linux) and ignores shortcuts when the focus is inside an `<input>`, `<textarea>`, or `contentEditable` element. It writes to the system clipboard when the browser permits, falling back to an internal ref-based clipboard otherwise.
+
+Custom `serialize` and `deserialize` functions can be provided to support non-JSON data formats. The `dataType` option sets the clipboard MIME type key.
+
+## API
+
+### Options
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `onCopy` | `() => T[]` | — | Return items to copy from the current selection |
+| `onPaste` | `(items: T[]) => void` | — | Called with deserialized items when pasting |
+| `onCut` | `() => T[]` | `onCopy` | Return items to copy, then remove them |
+| `serialize` | `(items: T[]) => string` | `JSON.stringify` | Custom serialization |
+| `deserialize` | `(data: string) => T[]` | `JSON.parse` | Custom deserialization |
+| `dataType` | `string` | `"application/x-substrate-clipboard"` | Clipboard data type key |
+| `disabled` | `boolean` | `false` | Disable the hook |
+
+### Returns
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `copy` | `() => void` | Copy the current selection |
+| `cut` | `() => void` | Cut the current selection |
+| `paste` | `() => Promise<void>` | Paste from clipboard |

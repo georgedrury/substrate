@@ -1,0 +1,76 @@
+---
+title: Bounding box
+description: Compute union bounds, intersections, and containment checks.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/bounding-box
+```
+
+## Usage
+
+```ts
+import {
+  boundingBox,
+  expandBounds,
+  containsPoint,
+  intersectBounds,
+} from "@/components/substrate/lib/bounding-box"
+
+// Union of multiple element bounds
+const union = boundingBox([
+  { x: 0, y: 0, width: 100, height: 50 },
+  { x: 80, y: 30, width: 60, height: 40 },
+])
+// → { x: 0, y: 0, width: 140, height: 70 }
+
+// Add padding
+const padded = expandBounds(union!, 20)
+// → { x: -20, y: -20, width: 180, height: 110 }
+
+// Hit testing
+containsPoint(union!, { x: 50, y: 25 }) // → true
+
+// Intersection
+intersectBounds(
+  { x: 0, y: 0, width: 100, height: 100 },
+  { x: 50, y: 50, width: 100, height: 100 },
+)
+// → { x: 50, y: 50, width: 50, height: 50 }
+```
+
+## Functions
+
+### `boundingBox(items)`
+
+Computes the union bounding box of an array of `Bounds`. Returns `null` if the array is empty.
+
+### `boundingBoxFromPoints(points)`
+
+Computes the bounding box from an array of `Point` values. Returns `null` if the array is empty.
+
+### `expandBounds(bounds, padding)`
+
+Expands a bounding box by `padding` pixels on every side. Negative values contract.
+
+### `expandBoundsBy(bounds, { top?, right?, bottom?, left? })`
+
+Expands with independent padding per side.
+
+### `containsPoint(bounds, point)`
+
+Returns `true` if the point lies inside the bounds.
+
+### `containsBounds(a, b)`
+
+Returns `true` if bounds `a` fully contains bounds `b`.
+
+### `boundsCenter(bounds)`
+
+Returns the centre `{ x, y }` of a bounding box.
+
+### `intersectBounds(a, b)`
+
+Returns the intersection of two bounds, or `null` if they don't overlap.
