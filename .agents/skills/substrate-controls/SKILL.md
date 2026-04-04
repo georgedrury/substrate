@@ -33,12 +33,12 @@ This is the core design pattern of Substrate controls. Parent components style c
 
 A horizontal row that auto-styles its children:
 
-| Child slot | Styling applied |
-| --- | --- |
-| `number-input` | Strips border, sets `bg-transparent` |
+| Child slot       | Styling applied                      |
+| ---------------- | ------------------------------------ |
+| `number-input`   | Strips border, sets `bg-transparent` |
 | `select-trigger` | Strips border, sets `bg-transparent` |
-| `colour-swatch` | `size-7`, removes border |
-| `slider` | Removes border |
+| `colour-swatch`  | `size-4`, removes border             |
+| `slider`         | Removes border                       |
 
 **Exports**: `ActionControls`, `ActionLabel`, `ActionSeparator`
 
@@ -46,8 +46,8 @@ A horizontal row that auto-styles its children:
 
 ```tsx
 <ActionControls>
-  <ActionLabel>Width</ActionLabel>
-  <NumberInput value={width} onChange={setWidth} min={0} />
+	<ActionLabel>Width</ActionLabel>
+	<NumberInput value={width} onChange={setWidth} min={0} />
 </ActionControls>
 ```
 
@@ -165,30 +165,35 @@ Cubic bezier editor with draggable control points and real-time preview.
 
 ```tsx
 <CollapsiblePane>
-  <CollapsiblePaneHeader>
-    <CollapsiblePaneLabel>Transform</CollapsiblePaneLabel>
-    <HistoryControls />
-  </CollapsiblePaneHeader>
-  <CollapsiblePaneContent className="space-y-1">
-    <ActionControls>
-      <ActionLabel>X</ActionLabel>
-      <NumberInput value={x} onChange={setX} onStart={pushSnapshot} />
-      <ActionSeparator />
-      <ActionLabel>Y</ActionLabel>
-      <NumberInput value={y} onChange={setY} onStart={pushSnapshot} />
-    </ActionControls>
-    <ActionControls>
-      <ActionLabel>W</ActionLabel>
-      <NumberInput value={w} onChange={setW} min={0} onStart={pushSnapshot} />
-      <ActionSeparator />
-      <ActionLabel>H</ActionLabel>
-      <NumberInput value={h} onChange={setH} min={0} onStart={pushSnapshot} />
-    </ActionControls>
-    <ActionControls>
-      <ActionLabel>Rotation</ActionLabel>
-      <NumberInput value={r} onChange={setR} suffix="°" onStart={pushSnapshot} />
-    </ActionControls>
-  </CollapsiblePaneContent>
+	<CollapsiblePaneHeader>
+		<CollapsiblePaneLabel>Transform</CollapsiblePaneLabel>
+		<HistoryControls />
+	</CollapsiblePaneHeader>
+	<CollapsiblePaneContent className="space-y-1">
+		<ActionControls>
+			<ActionLabel>X</ActionLabel>
+			<NumberInput value={x} onChange={setX} onStart={pushSnapshot} />
+			<ActionSeparator />
+			<ActionLabel>Y</ActionLabel>
+			<NumberInput value={y} onChange={setY} onStart={pushSnapshot} />
+		</ActionControls>
+		<ActionControls>
+			<ActionLabel>W</ActionLabel>
+			<NumberInput value={w} onChange={setW} min={0} onStart={pushSnapshot} />
+			<ActionSeparator />
+			<ActionLabel>H</ActionLabel>
+			<NumberInput value={h} onChange={setH} min={0} onStart={pushSnapshot} />
+		</ActionControls>
+		<ActionControls>
+			<ActionLabel>Rotation</ActionLabel>
+			<NumberInput
+				value={r}
+				onChange={setR}
+				suffix="°"
+				onStart={pushSnapshot}
+			/>
+		</ActionControls>
+	</CollapsiblePaneContent>
 </CollapsiblePane>
 ```
 
@@ -196,8 +201,14 @@ Cubic bezier editor with draggable control points and real-time preview.
 
 ```tsx
 <ActionControls>
-  <ActionLabel>Opacity</ActionLabel>
-  <NumberSlider value={opacity} onChange={setOpacity} min={0} max={100} suffix="%" />
+	<ActionLabel>Opacity</ActionLabel>
+	<NumberSlider
+		value={opacity}
+		onChange={setOpacity}
+		min={0}
+		max={100}
+		suffix="%"
+	/>
 </ActionControls>
 ```
 
@@ -205,15 +216,17 @@ Cubic bezier editor with draggable control points and real-time preview.
 
 ```tsx
 <ActionControls>
-  <ColourPicker value={fill} onChange={setFill} />
-  <Select value={blendMode} onValueChange={setBlendMode}>
-    <SelectTrigger><SelectValue /></SelectTrigger>
-    <SelectContent>
-      <SelectItem value="normal">Normal</SelectItem>
-      <SelectItem value="multiply">Multiply</SelectItem>
-      <SelectItem value="screen">Screen</SelectItem>
-    </SelectContent>
-  </Select>
+	<ColourPicker value={fill} onChange={setFill} />
+	<Select value={blendMode} onValueChange={setBlendMode}>
+		<SelectTrigger>
+			<SelectValue />
+		</SelectTrigger>
+		<SelectContent>
+			<SelectItem value="normal">Normal</SelectItem>
+			<SelectItem value="multiply">Multiply</SelectItem>
+			<SelectItem value="screen">Screen</SelectItem>
+		</SelectContent>
+	</Select>
 </ActionControls>
 ```
 
@@ -221,9 +234,9 @@ Cubic bezier editor with draggable control points and real-time preview.
 
 ## Cross-references
 
-| Need | Skill |
-| --- | --- |
-| Pane and panel containers | **substrate-scaffold** |
+| Need                                  | Skill                     |
+| ------------------------------------- | ------------------------- |
+| Pane and panel containers             | **substrate-scaffold**    |
 | Undo support (onStart → pushSnapshot) | **substrate-interaction** |
-| Animation easing in timeline surfaces | **substrate-surfaces** |
-| Node property panels | **substrate-nodes** |
+| Animation easing in timeline surfaces | **substrate-surfaces**    |
+| Node property panels                  | **substrate-nodes**       |
