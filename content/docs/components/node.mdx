@@ -9,10 +9,6 @@ description: Compound card for node-based editors – typed ports, composable bo
 npx shadcn@latest add https://substrate.georgedrury.co.uk/r/node
 ```
 
-## Lineage
-
-<Lineage items={[{ name: "Substrate" }]} />
-
 ## Examples
 
 ### Default
@@ -31,41 +27,41 @@ Each port type maps to a CSS variable that consumers can override to match their
 
 Ports are typed. Each type has a corresponding CSS variable for its colour:
 
-| Type       | CSS variable              | Default   |
-| ---------- | ------------------------- | --------- |
-| `number`   | `--node-port-number`      | Blue      |
-| `colour`   | `--node-port-colour`      | Pink      |
-| `image`    | `--node-port-image`       | Purple    |
-| `geometry` | `--node-port-geometry`    | Green     |
-| `text`     | `--node-port-text`        | Amber     |
-| `boolean`  | `--node-port-boolean`     | Orange    |
-| `any`      | `--node-port-any`         | Grey      |
+| Type       | CSS variable           | Default |
+| ---------- | ---------------------- | ------- |
+| `number`   | `--node-port-number`   | Blue    |
+| `colour`   | `--node-port-colour`   | Pink    |
+| `image`    | `--node-port-image`    | Purple  |
+| `geometry` | `--node-port-geometry` | Green   |
+| `text`     | `--node-port-text`     | Amber   |
+| `boolean`  | `--node-port-boolean`  | Orange  |
+| `any`      | `--node-port-any`      | Grey    |
 
 Override any of these in your `globals.css` to change port colours globally.
 
 ## Node chrome variables
 
-| Variable          | Tailwind class     | Fallback     | Description                    |
-| ----------------- | ------------------ | ------------ | ------------------------------ |
-| `--node-bg`       | `bg-node-bg`       | `--card`     | Card background                |
-| `--node-border`   | `border-node-border` | `--border` | Card border                    |
-| `--node-header`   | `bg-node-header`   | `--muted`    | Header background              |
-| `--node-selected` | `ring-node-selected` | `--ring`   | Selection ring colour          |
+| Variable          | Tailwind class       | Fallback   | Description           |
+| ----------------- | -------------------- | ---------- | --------------------- |
+| `--node-bg`       | `bg-node-bg`         | `--card`   | Card background       |
+| `--node-border`   | `border-node-border` | `--border` | Card border           |
+| `--node-header`   | `bg-node-header`     | `--muted`  | Header background     |
+| `--node-selected` | `ring-node-selected` | `--ring`   | Selection ring colour |
 
 ## Components
 
-| Component      | Description                                                         |
-| -------------- | ------------------------------------------------------------------- |
-| `NodeCard`     | Outer card with border, shadow, and selected ring                   |
-| `NodeHeader`   | Title bar with optional custom `colour` background                  |
-| `NodeTitle`    | Truncated title text                                                |
-| `NodeBadge`    | Small type/category badge in the header                             |
-| `NodeBody`     | Content area for controls (compose Action, NumberSlider, etc.)      |
-| `NodePorts`    | Vertical list of input/output ports                                 |
-| `NodePort`     | A single typed port with dot, label, and direction                  |
-| `NodePortDot`  | Coloured dot indicator (filled when connected, hollow when not)     |
-| `NodePreview`  | Optional image/canvas preview area                                  |
-| `NodeDivider`  | Horizontal separator between sections                               |
+| Component     | Description                                                     |
+| ------------- | --------------------------------------------------------------- |
+| `NodeCard`    | Outer card with border, shadow, and selected ring               |
+| `NodeHeader`  | Title bar with optional custom `colour` background              |
+| `NodeTitle`   | Truncated title text                                            |
+| `NodeBadge`   | Small type/category badge in the header                         |
+| `NodeBody`    | Content area for controls (compose Action, NumberSlider, etc.)  |
+| `NodePorts`   | Vertical list of input/output ports                             |
+| `NodePort`    | A single typed port with dot, label, and direction              |
+| `NodePortDot` | Coloured dot indicator (filled when connected, hollow when not) |
+| `NodePreview` | Optional image/canvas preview area                              |
+| `NodeDivider` | Horizontal separator between sections                           |
 
 ## Composing node bodies
 
@@ -73,11 +69,17 @@ The body of a node uses the same components you'd use in a panel pane. ActionCon
 
 ```tsx
 <NodeBody>
-  <Action>
-    <ActionLabel>Radius</ActionLabel>
-    <ActionControls>
-      <NumberSlider value={blur} onChange={setBlur} min={0} max={50} suffix="px" />
-    </ActionControls>
-  </Action>
+	<Action>
+		<ActionLabel>Radius</ActionLabel>
+		<ActionControls>
+			<NumberSlider
+				value={blur}
+				onChange={setBlur}
+				min={0}
+				max={50}
+				suffix="px"
+			/>
+		</ActionControls>
+	</Action>
 </NodeBody>
 ```

@@ -11,10 +11,6 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/easing-curve-editor
 
 This also installs the `easing` utility library.
 
-## Lineage
-
-<Lineage items={[{ name: "Substrate" }]} />
-
 ## Examples
 
 ### Default
@@ -27,43 +23,43 @@ This also installs the `easing` utility library.
 
 ## Theme variables
 
-| Variable          | Tailwind class      | Fallback     | Description            |
-| ----------------- | ------------------- | ------------ | ---------------------- |
-| `--easing-curve`  | `bg-easing-curve`   | `--primary`  | Bezier curve stroke    |
-| `--easing-handle` | `bg-easing-handle`  | `--primary`  | Control point fill     |
+| Variable          | Tailwind class     | Fallback    | Description         |
+| ----------------- | ------------------ | ----------- | ------------------- |
+| `--easing-curve`  | `bg-easing-curve`  | `--primary` | Bezier curve stroke |
+| `--easing-handle` | `bg-easing-handle` | `--primary` | Control point fill  |
 
 ## Components
 
-| Component            | Description                                                                   |
-| -------------------- | ----------------------------------------------------------------------------- |
-| `EasingCurveEditor`  | Combines canvas and presets in a vertical stack                                |
-| `EasingCurveCanvas`  | Canvas-rendered bezier curve with draggable control points via pointer capture |
-| `EasingPresets`      | Row of buttons for common easing presets (linear, ease-in, ease-out, etc.)     |
+| Component           | Description                                                                    |
+| ------------------- | ------------------------------------------------------------------------------ |
+| `EasingCurveEditor` | Combines canvas and presets in a vertical stack                                |
+| `EasingCurveCanvas` | Canvas-rendered bezier curve with draggable control points via pointer capture |
+| `EasingPresets`     | Row of buttons for common easing presets (linear, ease-in, ease-out, etc.)     |
 
 ## Props
 
 ### EasingCurveEditor
 
-| Prop       | Type                             | Default | Description                  |
-| ---------- | -------------------------------- | ------- | ---------------------------- |
-| `value`    | `CubicBezier`                    | —       | Current bezier value          |
-| `onChange` | `(bezier: CubicBezier) => void`  | —       | Called when value changes      |
+| Prop       | Type                            | Default | Description               |
+| ---------- | ------------------------------- | ------- | ------------------------- |
+| `value`    | `CubicBezier`                   | —       | Current bezier value      |
+| `onChange` | `(bezier: CubicBezier) => void` | —       | Called when value changes |
 
 ### EasingCurveCanvas
 
-| Prop       | Type                             | Default | Description                   |
-| ---------- | -------------------------------- | ------- | ----------------------------- |
-| `value`    | `CubicBezier`                    | —       | Current bezier value           |
-| `onChange` | `(bezier: CubicBezier) => void`  | —       | Called when value changes       |
-| `width`    | `number`                         | `200`   | Canvas width in pixels         |
-| `height`   | `number`                         | `160`   | Canvas height in pixels        |
+| Prop       | Type                            | Default | Description               |
+| ---------- | ------------------------------- | ------- | ------------------------- |
+| `value`    | `CubicBezier`                   | —       | Current bezier value      |
+| `onChange` | `(bezier: CubicBezier) => void` | —       | Called when value changes |
+| `width`    | `number`                        | `200`   | Canvas width in pixels    |
+| `height`   | `number`                        | `160`   | Canvas height in pixels   |
 
 ### EasingPresets
 
-| Prop       | Type                             | Default | Description                  |
-| ---------- | -------------------------------- | ------- | ---------------------------- |
-| `value`    | `CubicBezier`                    | —       | Current bezier for highlight  |
-| `onChange` | `(bezier: CubicBezier) => void`  | —       | Called when preset is clicked  |
+| Prop       | Type                            | Default | Description                   |
+| ---------- | ------------------------------- | ------- | ----------------------------- |
+| `value`    | `CubicBezier`                   | —       | Current bezier for highlight  |
+| `onChange` | `(bezier: CubicBezier) => void` | —       | Called when preset is clicked |
 
 ## Easing utility
 
@@ -71,19 +67,19 @@ The `easing` library provides types and helpers:
 
 ```tsx
 import {
-  CubicBezier,
-  EASING_PRESETS,
-  evaluateCubicBezier,
-  cubicBezierToString,
-  parseCubicBezier,
+	CubicBezier,
+	EASING_PRESETS,
+	evaluateCubicBezier,
+	cubicBezierToString,
+	parseCubicBezier,
 } from "@/registry/substrate/lib/easing"
 ```
 
-| Export                 | Description                                                   |
-| ---------------------- | ------------------------------------------------------------- |
-| `CubicBezier`          | Type: `{ x1, y1, x2, y2 }`                                  |
-| `EASING_PRESETS`       | 7 named presets (linear, ease-in, ease-out, ease-in-out, ease-in-cubic, ease-out-cubic, ease-in-out-cubic) |
-| `evaluateCubicBezier`  | Evaluate curve at time `t` using Newton's method (8 iterations) |
-| `cubicBezierToString`  | Convert to CSS `cubic-bezier(x1, y1, x2, y2)` string          |
-| `parseCubicBezier`     | Parse a CSS cubic-bezier string back to object                 |
-| `isCubicBezierEqual`   | Compare two bezier values for equality                         |
+| Export                | Description                                                                                                |
+| --------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `CubicBezier`         | Type: `{ x1, y1, x2, y2 }`                                                                                 |
+| `EASING_PRESETS`      | 7 named presets (linear, ease-in, ease-out, ease-in-out, ease-in-cubic, ease-out-cubic, ease-in-out-cubic) |
+| `evaluateCubicBezier` | Evaluate curve at time `t` using Newton's method (8 iterations)                                            |
+| `cubicBezierToString` | Convert to CSS `cubic-bezier(x1, y1, x2, y2)` string                                                       |
+| `parseCubicBezier`    | Parse a CSS cubic-bezier string back to object                                                             |
+| `isCubicBezierEqual`  | Compare two bezier values for equality                                                                     |

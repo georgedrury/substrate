@@ -9,10 +9,6 @@ description: Grid of colour swatches for quick selection. Pairs with ColourPicke
 npx shadcn@latest add https://substrate.georgedrury.co.uk/r/swatch-palette
 ```
 
-## Lineage
-
-<Lineage items={[{ name: "Substrate" }]} />
-
 ## Examples
 
 ### Default
@@ -21,17 +17,20 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/swatch-palette
 
 ## Props
 
-| Prop       | Type                          | Default | Description                              |
-| ---------- | ----------------------------- | ------- | ---------------------------------------- |
-| `colours`  | `string[]`                    | —       | Array of hex colour strings              |
-| `value`    | `string`                      | —       | Currently selected colour                |
-| `onSelect` | `(colour: string) => void`    | —       | Called when a swatch is clicked           |
-| `columns`  | `number`                      | `8`     | Grid column count                        |
+| Prop       | Type                       | Default | Description                     |
+| ---------- | -------------------------- | ------- | ------------------------------- |
+| `colours`  | `string[]`                 | —       | Array of hex colour strings     |
+| `value`    | `string`                   | —       | Currently selected colour       |
+| `onSelect` | `(colour: string) => void` | —       | Called when a swatch is clicked |
+| `columns`  | `number`                   | `8`     | Grid column count               |
 
 ## Presets
 
 Two built-in palettes are exported for convenience:
 
 ```ts
-import { MATERIAL_COLOURS, TAILWIND_COLOURS } from "@/components/substrate/swatch-palette"
+import {
+	MATERIAL_COLOURS,
+	TAILWIND_COLOURS,
+} from "@/components/substrate/swatch-palette"
 ```

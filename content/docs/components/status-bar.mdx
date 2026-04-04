@@ -13,10 +13,6 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/status-bar
 npx shadcn@latest add https://substrate.georgedrury.co.uk/r/zoom-controls
 ```
 
-## Lineage
-
-<Lineage items={[{ name: "Substrate" }]} />
-
 ## Examples
 
 ### Default
@@ -27,20 +23,20 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/zoom-controls
 
 ### StatusBar
 
-| Component             | Description                                          |
-| --------------------- | ---------------------------------------------------- |
-| `StatusBar`           | Fixed-height strip with border-top                   |
-| `StatusBarSection`    | Aligned group (`left`, `center`, or `right`)         |
-| `StatusBarItem`       | Inline text item with tabular-nums                   |
-| `StatusBarSeparator`  | Thin vertical divider                                |
+| Component            | Description                                  |
+| -------------------- | -------------------------------------------- |
+| `StatusBar`          | Fixed-height strip with border-top           |
+| `StatusBarSection`   | Aligned group (`left`, `center`, or `right`) |
+| `StatusBarItem`      | Inline text item with tabular-nums           |
+| `StatusBarSeparator` | Thin vertical divider                        |
 
 ### ZoomControls
 
-| Prop           | Type                          | Default | Description                          |
-| -------------- | ----------------------------- | ------- | ------------------------------------ |
-| `zoom`         | `number`                      | —       | Current zoom level (1 = 100%)        |
-| `onZoomChange` | `(zoom: number) => void`      | —       | Called when zoom changes              |
-| `onZoomToFit`  | `() => void`                  | —       | Optional fit-to-view callback         |
-| `min`          | `number`                      | `0.1`   | Minimum zoom                          |
-| `max`          | `number`                      | `10`    | Maximum zoom                          |
-| `step`         | `number`                      | `0.25`  | Zoom increment per click              |
+| Prop           | Type                     | Default | Description                   |
+| -------------- | ------------------------ | ------- | ----------------------------- |
+| `zoom`         | `number`                 | —       | Current zoom level (1 = 100%) |
+| `onZoomChange` | `(zoom: number) => void` | —       | Called when zoom changes      |
+| `onZoomToFit`  | `() => void`             | —       | Optional fit-to-view callback |
+| `min`          | `number`                 | `0.1`   | Minimum zoom                  |
+| `max`          | `number`                 | `10`    | Maximum zoom                  |
+| `step`         | `number`                 | `0.25`  | Zoom increment per click      |

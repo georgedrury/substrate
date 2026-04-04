@@ -11,10 +11,6 @@ Requires the `sonner` package and the `Toaster` component mounted in your layout
 npx shadcn@latest add https://substrate.georgedrury.co.uk/r/toast
 ```
 
-## Lineage
-
-<Lineage items={[{ name: "sonner", href: "https://sonner.emilkowal.ski" }, { name: "Substrate" }]} />
-
 ## Examples
 
 ### Default
@@ -35,12 +31,12 @@ toast.undo("Deleted 2 elements", () => undo())
 toast.dismiss()
 ```
 
-| Method          | Default duration | Description                                |
-| --------------- | --------------- | ------------------------------------------ |
-| `toast()`       | 3s              | Neutral notification                       |
-| `toast.success` | 3s              | Success with checkmark icon                |
-| `toast.error`   | 5s              | Error with longer display time             |
-| `toast.warning` | 4s              | Warning                                    |
-| `toast.info`    | 3s              | Informational                              |
-| `toast.undo`    | 5s              | Message with an Undo action button         |
-| `toast.dismiss` | —               | Dismiss all toasts                         |
+| Method          | Default duration | Description                        |
+| --------------- | ---------------- | ---------------------------------- |
+| `toast()`       | 3s               | Neutral notification               |
+| `toast.success` | 3s               | Success with checkmark icon        |
+| `toast.error`   | 5s               | Error with longer display time     |
+| `toast.warning` | 4s               | Warning                            |
+| `toast.info`    | 3s               | Informational                      |
+| `toast.undo`    | 5s               | Message with an Undo action button |
+| `toast.dismiss` | —                | Dismiss all toasts                 |

@@ -9,10 +9,6 @@ description: Numeric input with drag-to-scrub on the label, arrow key stepping, 
 npx shadcn@latest add https://substrate.georgedrury.co.uk/r/number-input
 ```
 
-## Lineage
-
-<Lineage items={[{ name: "Substrate" }]} />
-
 ## Examples
 
 ### Default
@@ -33,16 +29,16 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/number-input
 
 ## Props
 
-| Prop        | Type                       | Default | Description                                        |
-| ----------- | -------------------------- | ------- | -------------------------------------------------- |
-| `value`     | `number`                   | —       | Current value                                       |
-| `onChange`   | `(value: number) => void` | —       | Called when the value changes                        |
+| Prop        | Type                      | Default | Description                                                                             |
+| ----------- | ------------------------- | ------- | --------------------------------------------------------------------------------------- |
+| `value`     | `number`                  | —       | Current value                                                                           |
+| `onChange`  | `(value: number) => void` | —       | Called when the value changes                                                           |
 | `onStart`   | `() => void`              | —       | Called once at the start of a drag or before a step. Useful for pushing undo snapshots. |
-| `label`     | `string`                   | —       | Inline label with drag-to-scrub cursor              |
-| `suffix`    | `string`                   | —       | Trailing text (e.g. `°`, `%`, `px`)                 |
-| `min`       | `number`                   | —       | Minimum value                                        |
-| `max`       | `number`                   | —       | Maximum value                                        |
-| `step`      | `number`                   | `1`     | Increment per pixel of drag or arrow key press       |
-| `shiftStep` | `number`                   | `10`    | Increment when Shift is held                         |
-| `precision` | `number`                   | `2`     | Decimal places for display                           |
-| `disabled`  | `boolean`                  | —       | Disables input and drag                              |
+| `label`     | `string`                  | —       | Inline label with drag-to-scrub cursor                                                  |
+| `suffix`    | `string`                  | —       | Trailing text (e.g. `°`, `%`, `px`)                                                     |
+| `min`       | `number`                  | —       | Minimum value                                                                           |
+| `max`       | `number`                  | —       | Maximum value                                                                           |
+| `step`      | `number`                  | `1`     | Increment per pixel of drag or arrow key press                                          |
+| `shiftStep` | `number`                  | `10`    | Increment when Shift is held                                                            |
+| `precision` | `number`                  | `2`     | Decimal places for display                                                              |
+| `disabled`  | `boolean`                 | —       | Disables input and drag                                                                 |

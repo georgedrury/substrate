@@ -9,10 +9,6 @@ description: Linked slider and numeric input – drag the track or type a value.
 npx shadcn@latest add https://substrate.georgedrury.co.uk/r/number-slider
 ```
 
-## Lineage
-
-<Lineage items={[{ name: "Substrate" }]} />
-
 ## Examples
 
 ### Default
@@ -21,16 +17,16 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/number-slider
 
 ## Props
 
-| Prop        | Type                       | Default | Description                                                    |
-| ----------- | -------------------------- | ------- | -------------------------------------------------------------- |
-| `value`     | `number`                   | —       | Current value                                                   |
-| `onChange`   | `(value: number) => void` | —       | Called when the value changes                                   |
+| Prop        | Type                      | Default | Description                                                       |
+| ----------- | ------------------------- | ------- | ----------------------------------------------------------------- |
+| `value`     | `number`                  | —       | Current value                                                     |
+| `onChange`  | `(value: number) => void` | —       | Called when the value changes                                     |
 | `onStart`   | `() => void`              | —       | Called once at the start of a gesture. Useful for undo snapshots. |
-| `min`       | `number`                   | `0`     | Minimum value                                                    |
-| `max`       | `number`                   | `100`   | Maximum value                                                    |
-| `step`      | `number`                   | `1`     | Increment per step                                               |
-| `shiftStep` | `number`                   | `10`    | Increment when Shift is held (number input only)                 |
-| `precision` | `number`                   | `2`     | Decimal places for display                                       |
-| `label`     | `string`                   | —       | Label on the number input (with drag-to-scrub)                   |
-| `suffix`    | `string`                   | —       | Trailing text (e.g. `%`, `px`)                                   |
-| `disabled`  | `boolean`                  | —       | Disables both slider and input                                   |
+| `min`       | `number`                  | `0`     | Minimum value                                                     |
+| `max`       | `number`                  | `100`   | Maximum value                                                     |
+| `step`      | `number`                  | `1`     | Increment per step                                                |
+| `shiftStep` | `number`                  | `10`    | Increment when Shift is held (number input only)                  |
+| `precision` | `number`                  | `2`     | Decimal places for display                                        |
+| `label`     | `string`                  | —       | Label on the number input (with drag-to-scrub)                    |
+| `suffix`    | `string`                  | —       | Trailing text (e.g. `%`, `px`)                                    |
+| `disabled`  | `boolean`                 | —       | Disables both slider and input                                    |

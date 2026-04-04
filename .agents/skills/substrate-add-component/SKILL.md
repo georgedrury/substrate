@@ -110,10 +110,6 @@ description: One-sentence description.
 npx shadcn@latest add https://substrate.georgedrury.co.uk/r/{name}
 \```
 
-## Lineage
-
-<Lineage items={[{ name: "Substrate" }]} />
-
 ## Usage
 
 \```tsx
@@ -143,11 +139,11 @@ Then add `"{name}"` to the `pages` array in `content/docs/components/meta.json`.
 
 After creating a component, consider which domain skill it fits into and update that skill's component list:
 
-| Domain | Skill | Examples |
-| --- | --- | --- |
-| App shell and layout | **substrate-scaffold** | Toolbar, Panel, Pane, DocumentTabs, StatusBar, Resizer |
-| Inputs and selectors | **substrate-controls** | NumberInput, Slider, Select, Toggle, ColourPicker |
-| Spatial surface | **substrate-canvas** | (hooks and utilities, not components) |
-| Node graph | **substrate-nodes** | NodeCard, NodePort, NodePreview |
-| Status and communication | **substrate-feedback** | Toast, ProgressBar, Badge, EmptyState, CommandPalette |
-| Selection, undo, structure | **substrate-interaction** | HistoryControls, LayerList, TreeList |
+| Domain                     | Skill                     | Examples                                               |
+| -------------------------- | ------------------------- | ------------------------------------------------------ |
+| App shell and layout       | **substrate-scaffold**    | Toolbar, Panel, Pane, DocumentTabs, StatusBar, Resizer |
+| Inputs and selectors       | **substrate-controls**    | NumberInput, Slider, Select, Toggle, ColourPicker      |
+| Spatial surface            | **substrate-canvas**      | (hooks and utilities, not components)                  |
+| Node graph                 | **substrate-nodes**       | NodeCard, NodePort, NodePreview                        |
+| Status and communication   | **substrate-feedback**    | Toast, ProgressBar, Badge, EmptyState, CommandPalette  |
+| Selection, undo, structure | **substrate-interaction** | HistoryControls, LayerList, TreeList                   |

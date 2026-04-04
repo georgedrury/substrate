@@ -9,10 +9,6 @@ description: Pane section with expand/collapse toggle. Built on Radix Collapsibl
 npx shadcn@latest add https://substrate.georgedrury.co.uk/r/collapsible-pane
 ```
 
-## Lineage
-
-<Lineage items={[{ name: "Radix", href: "https://radix-ui.com" }, { name: "Substrate" }]} />
-
 ## Examples
 
 ### Default
@@ -23,17 +19,17 @@ The first section starts open, the second starts collapsed. Click the chevron to
 
 ## Components
 
-| Component                 | Description                                       |
-| ------------------------- | ------------------------------------------------- |
-| `CollapsiblePane`         | Root wrapper with Radix Collapsible state          |
-| `CollapsiblePaneHeader`   | Header row with expand/collapse chevron            |
-| `CollapsiblePaneLabel`    | Section title text                                 |
-| `CollapsiblePaneContent`  | Animated body that collapses to zero height        |
+| Component                | Description                                 |
+| ------------------------ | ------------------------------------------- |
+| `CollapsiblePane`        | Root wrapper with Radix Collapsible state   |
+| `CollapsiblePaneHeader`  | Header row with expand/collapse chevron     |
+| `CollapsiblePaneLabel`   | Section title text                          |
+| `CollapsiblePaneContent` | Animated body that collapses to zero height |
 
 ## Props (CollapsiblePane)
 
-| Prop           | Type                          | Default | Description                       |
-| -------------- | ----------------------------- | ------- | --------------------------------- |
-| `defaultOpen`  | `boolean`                     | `true`  | Initial open state (uncontrolled) |
-| `open`         | `boolean`                     | —       | Controlled open state             |
-| `onOpenChange` | `(open: boolean) => void`     | —       | Called when open state changes     |
+| Prop           | Type                      | Default | Description                       |
+| -------------- | ------------------------- | ------- | --------------------------------- |
+| `defaultOpen`  | `boolean`                 | `true`  | Initial open state (uncontrolled) |
+| `open`         | `boolean`                 | —       | Controlled open state             |
+| `onOpenChange` | `(open: boolean) => void` | —       | Called when open state changes    |

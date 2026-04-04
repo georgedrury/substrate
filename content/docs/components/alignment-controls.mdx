@@ -9,10 +9,6 @@ description: Align and distribute selected elements – left, centre, right, top
 npx shadcn@latest add https://substrate.georgedrury.co.uk/r/alignment-controls
 ```
 
-## Lineage
-
-<Lineage items={[{ name: "Substrate" }]} />
-
 ## Examples
 
 ### Default
@@ -23,11 +19,11 @@ The first row shows all controls including distribute. The second row hides dist
 
 ## Props
 
-| Prop             | Type                             | Default | Description                              |
-| ---------------- | -------------------------------- | ------- | ---------------------------------------- |
-| `onAlign`        | `(action: AlignAction) => void`  | —       | Called with the alignment action          |
-| `showDistribute` | `boolean`                        | `true`  | Show distribute horizontal/vertical      |
-| `disabled`       | `boolean`                        | —       | Disables all buttons                     |
+| Prop             | Type                            | Default | Description                         |
+| ---------------- | ------------------------------- | ------- | ----------------------------------- |
+| `onAlign`        | `(action: AlignAction) => void` | —       | Called with the alignment action    |
+| `showDistribute` | `boolean`                       | `true`  | Show distribute horizontal/vertical |
+| `disabled`       | `boolean`                       | —       | Disables all buttons                |
 
 ### AlignAction values
 

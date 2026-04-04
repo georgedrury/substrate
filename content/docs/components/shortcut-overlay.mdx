@@ -9,10 +9,6 @@ description: Modal showing all registered keyboard shortcuts, triggered by press
 npx shadcn@latest add https://substrate.georgedrury.co.uk/r/shortcut-overlay
 ```
 
-## Lineage
-
-<Lineage items={[{ name: "Radix", href: "https://radix-ui.com" }, { name: "Substrate" }]} />
-
 ## Examples
 
 ### Default
@@ -21,19 +17,19 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/shortcut-overlay
 
 ## Props
 
-| Prop           | Type                              | Default | Description                                   |
-| -------------- | --------------------------------- | ------- | --------------------------------------------- |
-| `groups`       | `ShortcutGroup[]`                 | —       | Groups of shortcuts to display                |
-| `open`         | `boolean`                         | —       | Controlled open state                         |
-| `onOpenChange` | `(open: boolean) => void`         | —       | Controlled open change handler                |
-| `trigger`      | `string`                          | `"?"`   | Key that toggles the overlay                  |
+| Prop           | Type                      | Default | Description                    |
+| -------------- | ------------------------- | ------- | ------------------------------ |
+| `groups`       | `ShortcutGroup[]`         | —       | Groups of shortcuts to display |
+| `open`         | `boolean`                 | —       | Controlled open state          |
+| `onOpenChange` | `(open: boolean) => void` | —       | Controlled open change handler |
+| `trigger`      | `string`                  | `"?"`   | Key that toggles the overlay   |
 
 ### ShortcutGroup
 
 ```ts
 type ShortcutGroup = {
-  heading: string
-  shortcuts: { key: string; label: string }[]
+	heading: string
+	shortcuts: { key: string; label: string }[]
 }
 ```
 
@@ -41,7 +37,7 @@ The `key` string is split on `+` and each part rendered as an individual `<kbd>`
 
 ## Components
 
-| Component    | Description                                            |
-| ------------ | ------------------------------------------------------ |
-| `ShortcutOverlay` | Dialog modal with ? key listener                  |
+| Component         | Description                                          |
+| ----------------- | ---------------------------------------------------- |
+| `ShortcutOverlay` | Dialog modal with ? key listener                     |
 | `ShortcutKey`     | Inline keyboard shortcut badge (reusable standalone) |
