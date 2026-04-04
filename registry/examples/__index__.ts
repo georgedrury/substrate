@@ -27,6 +27,14 @@ import ContextMenuDemo from "./context-menu-demo"
 import CommandPaletteDemo from "./command-palette-demo"
 import StatusBarDemo from "./status-bar-demo"
 import DocumentTabsDemo from "./document-tabs-demo"
+import AlignmentControlsDemo from "./alignment-controls-demo"
+import BreadcrumbsDemo from "./breadcrumbs-demo"
+import ToastDemo from "./toast-demo"
+import SwatchPaletteDemo from "./swatch-palette-demo"
+import ShortcutOverlayDemo from "./shortcut-overlay-demo"
+import TreeListDemo from "./tree-list-demo"
+import NodeDemo from "./node-demo"
+import NodePortTypes from "./node-port-types"
 
 interface ExampleEntry {
 	component: ComponentType
@@ -141,5 +149,37 @@ export const Index: Record<string, ExampleEntry> = {
 	"document-tabs-demo": {
 		component: DocumentTabsDemo,
 		filePath: "registry/examples/document-tabs-demo.tsx",
+	},
+	"alignment-controls-demo": {
+		component: AlignmentControlsDemo,
+		filePath: "registry/examples/alignment-controls-demo.tsx",
+	},
+	"breadcrumbs-demo": {
+		component: BreadcrumbsDemo,
+		filePath: "registry/examples/breadcrumbs-demo.tsx",
+	},
+	"toast-demo": {
+		component: ToastDemo,
+		filePath: "registry/examples/toast-demo.tsx",
+	},
+	"swatch-palette-demo": {
+		component: SwatchPaletteDemo,
+		filePath: "registry/examples/swatch-palette-demo.tsx",
+	},
+	"shortcut-overlay-demo": {
+		component: ShortcutOverlayDemo,
+		filePath: "registry/examples/shortcut-overlay-demo.tsx",
+	},
+	"tree-list-demo": {
+		component: TreeListDemo,
+		filePath: "registry/examples/tree-list-demo.tsx",
+	},
+	"node-demo": {
+		component: NodeDemo,
+		filePath: "registry/examples/node-demo.tsx",
+	},
+	"node-port-types": {
+		component: NodePortTypes,
+		filePath: "registry/examples/node-port-types.tsx",
 	},
 }

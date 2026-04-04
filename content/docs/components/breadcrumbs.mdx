@@ -1,0 +1,29 @@
+---
+title: Breadcrumbs
+description: Navigation path for drilling into nested frames and groups.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/breadcrumbs
+```
+
+## Lineage
+
+<Lineage items={[{ name: "Substrate" }]} />
+
+## Examples
+
+### Default
+
+Click any ancestor to navigate back up. The active (last) item is bold and non-clickable.
+
+<ComponentPreview name="breadcrumbs-demo" />
+
+## Components
+
+| Component        | Description                                              |
+| ---------------- | -------------------------------------------------------- |
+| `Breadcrumbs`    | `nav` wrapper with horizontal flex layout                |
+| `BreadcrumbItem` | Clickable path segment with auto separator arrow         |

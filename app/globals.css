@@ -50,7 +50,20 @@
   --color-canvas: var(--canvas, var(--color-background));
   --color-canvas-foreground: var(--canvas-foreground, var(--color-foreground-muted));
   --color-panel:  var(--panel, var(--color-card));
-  --color-panel-foregorund:  var(--panel-foreground, var(--color-panel-foreground))
+  --color-panel-foregorund:  var(--panel-foreground, var(--color-panel-foreground));
+  /* Node port types */
+  --color-node-port-number: var(--node-port-number, oklch(0.623 0.214 259.815));
+  --color-node-port-colour: var(--node-port-colour, oklch(0.656 0.241 354.308));
+  --color-node-port-image: var(--node-port-image, oklch(0.606 0.25 292.717));
+  --color-node-port-geometry: var(--node-port-geometry, oklch(0.627 0.194 149.214));
+  --color-node-port-text: var(--node-port-text, oklch(0.681 0.162 75.834));
+  --color-node-port-boolean: var(--node-port-boolean, oklch(0.646 0.222 41.116));
+  --color-node-port-any: var(--node-port-any, var(--color-muted-foreground));
+  /* Node chrome */
+  --color-node-bg: var(--node-bg, var(--color-card));
+  --color-node-border: var(--node-border, var(--color-border));
+  --color-node-header: var(--node-header, var(--color-muted));
+  --color-node-selected: var(--node-selected, var(--color-ring))
 }
 
 :root {

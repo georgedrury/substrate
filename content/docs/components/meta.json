@@ -8,16 +8,23 @@
 		"pane",
 		"action",
 		"layer-list",
+		"tree-list",
+		"breadcrumbs",
 		"slider",
 		"number-input",
 		"number-slider",
+		"alignment-controls",
 		"history-controls",
+		"colour-picker",
+		"swatch-palette",
+		"easing-curve-editor",
 		"context-menu",
 		"command-palette",
+		"shortcut-overlay",
 		"status-bar",
+		"toast",
+		"node",
 		"timeline",
-		"gallery",
-		"colour-picker",
-		"easing-curve-editor"
+		"gallery"
 	]
 }
