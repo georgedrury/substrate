@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "document-tabs",
+  "title": "Document Tabs",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Tab bar for switching between open documents or canvases. Supports close button and active state.",
+  "dependencies": [
+    "radix-ui",
+    "@remixicon/react"
+  ],
+  "files": [
+    {
+      "path": "registry/substrate/components/document-tabs.tsx",
+      "content": "\"use client\"\n\nimport { Tabs as TabsPrimitive } from \"radix-ui\"\nimport { RiCloseLine } from \"@remixicon/react\"\nimport { cn } from \"@/lib/utils\"\n\n// ── DocumentTabs ──\n\nfunction DocumentTabs({\n\tclassName,\n\t...props\n}: React.ComponentProps<typeof TabsPrimitive.Root>) {\n\treturn (\n\t\t<TabsPrimitive.Root\n\t\t\tdata-slot=\"document-tabs\"\n\t\t\tclassName={cn(\"flex flex-col\", className)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\n// ── DocumentTabList ──\n\nfunction DocumentTabList({\n\tclassName,\n\t...props\n}: React.ComponentProps<typeof TabsPrimitive.List>) {\n\treturn (\n\t\t<TabsPrimitive.List\n\t\t\tdata-slot=\"document-tab-list\"\n\t\t\tclassName={cn(\n\t\t\t\t\"flex items-end h-9 bg-background border-b px-1 gap-0 overflow-x-auto\",\n\t\t\t\t\"scrollbar-none\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\n// ── DocumentTab ──\n\ntype DocumentTabProps = {\n\tonClose?: () => void\n} & React.ComponentProps<typeof TabsPrimitive.Trigger>\n\nfunction DocumentTab({\n\tonClose,\n\tclassName,\n\tchildren,\n\t...props\n}: DocumentTabProps) {\n\treturn (\n\t\t<TabsPrimitive.Trigger\n\t\t\tdata-slot=\"document-tab\"\n\t\t\tclassName={cn(\n\t\t\t\t\"group/tab relative flex items-center gap-1.5 h-8 px-3 text-xs cursor-default select-none transition-colors\",\n\t\t\t\t\"text-muted-foreground hover:text-foreground\",\n\t\t\t\t\"border border-transparent border-b-0 rounded-t-md\",\n\t\t\t\t\"data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:border-border\",\n\t\t\t\t\"outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t>\n\t\t\t<span className=\"truncate max-w-32\">{children}</span>\n\t\t\t{onClose && (\n\t\t\t\t<span\n\t\t\t\t\trole=\"button\"\n\t\t\t\t\ttabIndex={-1}\n\t\t\t\t\tdata-slot=\"document-tab-close\"\n\t\t\t\t\tonClick={(e) => {\n\t\t\t\t\t\te.stopPropagation()\n\t\t\t\t\t\te.preventDefault()\n\t\t\t\t\t\tonClose()\n\t\t\t\t\t}}\n\t\t\t\t\tonPointerDown={(e) => e.stopPropagation()}\n\t\t\t\t\tclassName={cn(\n\t\t\t\t\t\t\"size-4 inline-flex items-center justify-center rounded-sm shrink-0\",\n\t\t\t\t\t\t\"opacity-0 group-hover/tab:opacity-100 data-[state=active]:opacity-60\",\n\t\t\t\t\t\t\"hover:bg-muted hover:opacity-100 transition-all cursor-pointer\",\n\t\t\t\t\t\t\"[&_svg]:size-3\",\n\t\t\t\t\t)}\n\t\t\t\t>\n\t\t\t\t\t<RiCloseLine />\n\t\t\t\t</span>\n\t\t\t)}\n\t\t</TabsPrimitive.Trigger>\n\t)\n}\n\n// ── DocumentTabContent ──\n\nfunction DocumentTabContent({\n\tclassName,\n\t...props\n}: React.ComponentProps<typeof TabsPrimitive.Content>) {\n\treturn (\n\t\t<TabsPrimitive.Content\n\t\t\tdata-slot=\"document-tab-content\"\n\t\t\tclassName={cn(\"flex-1 relative outline-none\", className)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\nexport {\n\tDocumentTabs,\n\tDocumentTabList,\n\tDocumentTab,\n\tDocumentTabContent,\n}\n",
+      "type": "registry:ui",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "example": "<DocumentTabs tabs={tabs} activeId={activeId} onSelect={setActiveId} onClose={closeTab} />",
+    "lineage": [
+      {
+        "name": "Radix"
+      },
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "ui",
+    "chrome"
+  ],
+  "type": "registry:ui"
+}

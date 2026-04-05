@@ -1,0 +1,28 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-undoable",
+  "title": "useUndoable",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Lightweight undo/redo stack using refs for performance — pushSnapshot, undo, redo.",
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/substrate/hooks/use-undoable.ts",
+      "content": "\"use client\"\n\nimport { useCallback, useRef, useState } from \"react\"\n\ntype UseUndoableOptions = {\n\tmaxHistory?: number\n}\n\ntype UseUndoableReturn<T> = {\n\t/** Push the current state onto the undo stack. Call before mutations. */\n\tpushSnapshot: (state: T) => void\n\t/** Undo: returns the previous state, or null if nothing to undo */\n\tundo: () => T | null\n\t/** Redo: returns the next state, or null if nothing to redo */\n\tredo: () => T | null\n\t/** Whether there are states to undo to */\n\tcanUndo: boolean\n\t/** Whether there are states to redo to */\n\tcanRedo: boolean\n\t/** Number of undo states available */\n\tundoCount: number\n\t/** Number of redo states available */\n\tredoCount: number\n\t/** Clear all history */\n\tclear: () => void\n}\n\nfunction useUndoable<T>(options?: UseUndoableOptions): UseUndoableReturn<T> {\n\tconst maxHistory = options?.maxHistory ?? 50\n\tconst pastRef = useRef<T[]>([])\n\tconst futureRef = useRef<T[]>([])\n\tconst [, forceUpdate] = useState(0)\n\n\tconst rerender = useCallback(() => forceUpdate((n) => n + 1), [])\n\n\tconst pushSnapshot = useCallback(\n\t\t(state: T) => {\n\t\t\tpastRef.current = [...pastRef.current.slice(-(maxHistory - 1)), state]\n\t\t\tfutureRef.current = []\n\t\t\trerender()\n\t\t},\n\t\t[maxHistory, rerender],\n\t)\n\n\tconst undo = useCallback((): T | null => {\n\t\tif (pastRef.current.length === 0) return null\n\t\tconst previous = pastRef.current[pastRef.current.length - 1]\n\t\tpastRef.current = pastRef.current.slice(0, -1)\n\t\t// The caller should pass current state to futureRef via the return value pattern\n\t\t// This is a lightweight approach – caller saves current before restoring\n\t\trerender()\n\t\treturn previous\n\t}, [rerender])\n\n\tconst redo = useCallback((): T | null => {\n\t\tif (futureRef.current.length === 0) return null\n\t\tconst next = futureRef.current[0]\n\t\tfutureRef.current = futureRef.current.slice(1)\n\t\trerender()\n\t\treturn next\n\t}, [rerender])\n\n\tconst clear = useCallback(() => {\n\t\tpastRef.current = []\n\t\tfutureRef.current = []\n\t\trerender()\n\t}, [rerender])\n\n\treturn {\n\t\tpushSnapshot,\n\t\tundo,\n\t\tredo,\n\t\tcanUndo: pastRef.current.length > 0,\n\t\tcanRedo: futureRef.current.length > 0,\n\t\tundoCount: pastRef.current.length,\n\t\tredoCount: futureRef.current.length,\n\t\tclear,\n\t}\n}\n\nexport { useUndoable, type UseUndoableOptions, type UseUndoableReturn }\n",
+      "type": "registry:hook",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "lineage": [
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "hook"
+  ],
+  "type": "registry:hook"
+}

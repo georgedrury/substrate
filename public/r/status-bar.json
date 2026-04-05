@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "status-bar",
+  "title": "Status Bar",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Bottom bar showing tool state, selection count, zoom level, and other status indicators. Compound component with sections and items.",
+  "files": [
+    {
+      "path": "registry/substrate/components/status-bar.tsx",
+      "content": "import { cn } from \"@/lib/utils\"\n\n// ── StatusBar ──\n\nfunction StatusBar({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"status-bar\"\n\t\t\tclassName={cn(\n\t\t\t\t\"flex items-center h-7 px-3 text-[11px] text-muted-foreground bg-background border-t select-none\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\n// ── StatusBarSection ──\n\ntype StatusBarSectionProps = {\n\talign?: \"left\" | \"center\" | \"right\"\n} & React.ComponentProps<\"div\">\n\nfunction StatusBarSection({\n\talign = \"left\",\n\tclassName,\n\t...props\n}: StatusBarSectionProps) {\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"status-bar-section\"\n\t\t\tclassName={cn(\n\t\t\t\t\"flex items-center gap-3\",\n\t\t\t\talign === \"left\" && \"mr-auto\",\n\t\t\t\talign === \"center\" && \"mx-auto\",\n\t\t\t\talign === \"right\" && \"ml-auto\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\n// ── StatusBarItem ──\n\nfunction StatusBarItem({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"span\">) {\n\treturn (\n\t\t<span\n\t\t\tdata-slot=\"status-bar-item\"\n\t\t\tclassName={cn(\n\t\t\t\t\"inline-flex items-center gap-1 tabular-nums\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\n// ── StatusBarSeparator ──\n\nfunction StatusBarSeparator({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"span\">) {\n\treturn (\n\t\t<span\n\t\t\tdata-slot=\"status-bar-separator\"\n\t\t\tclassName={cn(\"w-px h-3 bg-border\", className)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\nexport {\n\tStatusBar,\n\tStatusBarSection,\n\tStatusBarItem,\n\tStatusBarSeparator,\n}\n",
+      "type": "registry:ui",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "example": "<StatusBar><StatusBarSection><StatusBarItem label=\"Tool\" value=\"Select\" /></StatusBarSection></StatusBar>",
+    "lineage": [
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "ui",
+    "chrome"
+  ],
+  "type": "registry:ui"
+}

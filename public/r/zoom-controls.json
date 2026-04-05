@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "zoom-controls",
+  "title": "Zoom Controls",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Zoom in, zoom out, and reset buttons with percentage display. Typically placed in the status bar or toolbar.",
+  "dependencies": [
+    "@remixicon/react"
+  ],
+  "files": [
+    {
+      "path": "registry/substrate/components/zoom-controls.tsx",
+      "content": "\"use client\"\n\nimport { useCallback } from \"react\"\nimport {\n\tRiAddLine,\n\tRiSubtractLine,\n\tRiFullscreenLine,\n} from \"@remixicon/react\"\nimport { cn } from \"@/lib/utils\"\n\n// ── ZoomControls ──\n\ntype ZoomControlsProps = {\n\tzoom: number\n\tonZoomChange: (zoom: number) => void\n\tonZoomToFit?: () => void\n\tmin?: number\n\tmax?: number\n\tstep?: number\n} & React.ComponentProps<\"div\">\n\nfunction ZoomControls({\n\tzoom,\n\tonZoomChange,\n\tonZoomToFit,\n\tmin = 0.1,\n\tmax = 10,\n\tstep = 0.25,\n\tclassName,\n\t...props\n}: ZoomControlsProps) {\n\tconst zoomIn = useCallback(() => {\n\t\tonZoomChange(Math.min(max, zoom + step))\n\t}, [zoom, max, step, onZoomChange])\n\n\tconst zoomOut = useCallback(() => {\n\t\tonZoomChange(Math.max(min, zoom - step))\n\t}, [zoom, min, step, onZoomChange])\n\n\tconst resetZoom = useCallback(() => {\n\t\tonZoomChange(1)\n\t}, [onZoomChange])\n\n\tconst percentage = Math.round(zoom * 100)\n\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"zoom-controls\"\n\t\t\tclassName={cn(\n\t\t\t\t\"inline-flex items-center gap-0.5\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t>\n\t\t\t<ZoomButton onClick={zoomOut} aria-label=\"Zoom out\">\n\t\t\t\t<RiSubtractLine />\n\t\t\t</ZoomButton>\n\t\t\t<button\n\t\t\t\ttype=\"button\"\n\t\t\t\tdata-slot=\"zoom-level\"\n\t\t\t\tonClick={resetZoom}\n\t\t\t\tclassName={cn(\n\t\t\t\t\t\"h-6 min-w-10 px-1.5 rounded-md text-[11px] tabular-nums text-muted-foreground\",\n\t\t\t\t\t\"hover:bg-muted hover:text-foreground transition-colors\",\n\t\t\t\t\t\"outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n\t\t\t\t)}\n\t\t\t>\n\t\t\t\t{percentage}%\n\t\t\t</button>\n\t\t\t<ZoomButton onClick={zoomIn} aria-label=\"Zoom in\">\n\t\t\t\t<RiAddLine />\n\t\t\t</ZoomButton>\n\t\t\t{onZoomToFit && (\n\t\t\t\t<ZoomButton onClick={onZoomToFit} aria-label=\"Zoom to fit\">\n\t\t\t\t\t<RiFullscreenLine />\n\t\t\t\t</ZoomButton>\n\t\t\t)}\n\t\t</div>\n\t)\n}\n\n// ── ZoomButton ──\n\nfunction ZoomButton({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"button\">) {\n\treturn (\n\t\t<button\n\t\t\ttype=\"button\"\n\t\t\tdata-slot=\"zoom-button\"\n\t\t\tclassName={cn(\n\t\t\t\t\"size-6 inline-flex items-center justify-center rounded-md\",\n\t\t\t\t\"text-muted-foreground transition-colors\",\n\t\t\t\t\"hover:bg-muted hover:text-foreground\",\n\t\t\t\t\"outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n\t\t\t\t\"disabled:opacity-30 disabled:pointer-events-none\",\n\t\t\t\t\"[&_svg]:size-3.5\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\nexport { ZoomControls, ZoomButton }\n",
+      "type": "registry:ui",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "example": "<ZoomControls zoom={zoom} onZoomIn={zoomIn} onZoomOut={zoomOut} onReset={resetZoom} />",
+    "lineage": [
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "ui",
+    "chrome"
+  ],
+  "type": "registry:ui"
+}

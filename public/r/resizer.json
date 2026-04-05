@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "resizer",
+  "title": "Resizer",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Draggable resize handle for creating split regions between panels or panes. Vertical and horizontal orientations.",
+  "files": [
+    {
+      "path": "registry/substrate/components/resizer.tsx",
+      "content": "import { cn } from \"@/lib/utils\"\n\n// ── Resizer ──\n\ntype ResizerProps = {\n\torientation?: \"horizontal\" | \"vertical\"\n} & React.ComponentProps<\"div\">\n\nfunction Resizer({\n\torientation = \"vertical\",\n\tclassName,\n\t...props\n}: ResizerProps) {\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"resizer\"\n\t\t\tdata-orientation={orientation}\n\t\t\tclassName={cn(\n\t\t\t\t\"relative shrink-0 group/resizer\",\n\t\t\t\torientation === \"vertical\" && \"w-px cursor-col-resize\",\n\t\t\t\torientation === \"horizontal\" && \"h-px cursor-row-resize\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t>\n\t\t\t{/* Visual line */}\n\t\t\t<div\n\t\t\t\tclassName={cn(\n\t\t\t\t\t\"absolute bg-border transition-colors group-hover/resizer:bg-ring group-active/resizer:bg-ring\",\n\t\t\t\t\torientation === \"vertical\" && \"inset-y-0 left-0 w-px\",\n\t\t\t\t\torientation === \"horizontal\" && \"inset-x-0 top-0 h-px\",\n\t\t\t\t)}\n\t\t\t/>\n\t\t\t{/* Wider hit area */}\n\t\t\t<div\n\t\t\t\tclassName={cn(\n\t\t\t\t\t\"absolute\",\n\t\t\t\t\torientation === \"vertical\" && \"inset-y-0 -left-1 w-2\",\n\t\t\t\t\torientation === \"horizontal\" && \"inset-x-0 -top-1 h-2\",\n\t\t\t\t)}\n\t\t\t/>\n\t\t\t{/* Grab dots */}\n\t\t\t<div\n\t\t\t\tclassName={cn(\n\t\t\t\t\t\"absolute opacity-0 group-hover/resizer:opacity-100 transition-opacity\",\n\t\t\t\t\torientation === \"vertical\" &&\n\t\t\t\t\t\t\"top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-0.5\",\n\t\t\t\t\torientation === \"horizontal\" &&\n\t\t\t\t\t\t\"top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-0.5\",\n\t\t\t\t)}\n\t\t\t>\n\t\t\t\t<span className=\"size-1 rounded-full bg-muted-foreground/50\" />\n\t\t\t\t<span className=\"size-1 rounded-full bg-muted-foreground/50\" />\n\t\t\t\t<span className=\"size-1 rounded-full bg-muted-foreground/50\" />\n\t\t\t</div>\n\t\t</div>\n\t)\n}\n\nexport { Resizer, type ResizerProps }\n",
+      "type": "registry:ui",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "example": "<Resizer orientation=\"vertical\" onResize={setWidth} />",
+    "lineage": [
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "ui",
+    "chrome"
+  ],
+  "type": "registry:ui"
+}

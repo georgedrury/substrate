@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "bounding-box",
+  "title": "Bounding box",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Bounding box computation — union, intersection, containment, expansion, and point-in-bounds testing.",
+  "registryDependencies": [
+    "https://substrate.georgedrury.co.uk/r/types"
+  ],
+  "files": [
+    {
+      "path": "registry/substrate/lib/bounding-box.ts",
+      "content": "/**\n * Bounding box computation utilities.\n *\n * ```ts\n * const union = boundingBox([rectA, rectB, ellipse])\n * // → { x, y, width, height } enclosing all elements\n *\n * expandBounds(union, 20) // add 20px padding on each side\n * ```\n */\n\nimport type { Bounds, Point } from \"../types\"\n\n/**\n * Compute the union bounding box of multiple bounds.\n * Returns null if the array is empty.\n */\nfunction boundingBox(items: Bounds[]): Bounds | null {\n\tif (items.length === 0) return null\n\n\tlet minX = Infinity\n\tlet minY = Infinity\n\tlet maxX = -Infinity\n\tlet maxY = -Infinity\n\n\tfor (const b of items) {\n\t\tminX = Math.min(minX, b.x)\n\t\tminY = Math.min(minY, b.y)\n\t\tmaxX = Math.max(maxX, b.x + b.width)\n\t\tmaxY = Math.max(maxY, b.y + b.height)\n\t}\n\n\treturn {\n\t\tx: minX,\n\t\ty: minY,\n\t\twidth: maxX - minX,\n\t\theight: maxY - minY,\n\t}\n}\n\n/**\n * Compute the bounding box from an array of points.\n * Returns null if the array is empty.\n */\nfunction boundingBoxFromPoints(points: Point[]): Bounds | null {\n\tif (points.length === 0) return null\n\n\tlet minX = Infinity\n\tlet minY = Infinity\n\tlet maxX = -Infinity\n\tlet maxY = -Infinity\n\n\tfor (const p of points) {\n\t\tminX = Math.min(minX, p.x)\n\t\tminY = Math.min(minY, p.y)\n\t\tmaxX = Math.max(maxX, p.x)\n\t\tmaxY = Math.max(maxY, p.y)\n\t}\n\n\treturn {\n\t\tx: minX,\n\t\ty: minY,\n\t\twidth: maxX - minX,\n\t\theight: maxY - minY,\n\t}\n}\n\n/**\n * Expand (or contract) a bounding box by a given amount on each side.\n * Negative padding contracts.\n */\nfunction expandBounds(bounds: Bounds, padding: number): Bounds {\n\treturn {\n\t\tx: bounds.x - padding,\n\t\ty: bounds.y - padding,\n\t\twidth: bounds.width + padding * 2,\n\t\theight: bounds.height + padding * 2,\n\t}\n}\n\n/**\n * Expand a bounding box with independent padding per side.\n */\nfunction expandBoundsBy(\n\tbounds: Bounds,\n\tpadding: { top?: number; right?: number; bottom?: number; left?: number },\n): Bounds {\n\tconst t = padding.top ?? 0\n\tconst r = padding.right ?? 0\n\tconst b = padding.bottom ?? 0\n\tconst l = padding.left ?? 0\n\treturn {\n\t\tx: bounds.x - l,\n\t\ty: bounds.y - t,\n\t\twidth: bounds.width + l + r,\n\t\theight: bounds.height + t + b,\n\t}\n}\n\n/**\n * Check whether a point lies inside a bounding box.\n */\nfunction containsPoint(bounds: Bounds, point: Point): boolean {\n\treturn (\n\t\tpoint.x >= bounds.x &&\n\t\tpoint.x <= bounds.x + bounds.width &&\n\t\tpoint.y >= bounds.y &&\n\t\tpoint.y <= bounds.y + bounds.height\n\t)\n}\n\n/**\n * Check whether bounds A fully contains bounds B.\n */\nfunction containsBounds(a: Bounds, b: Bounds): boolean {\n\treturn (\n\t\tb.x >= a.x &&\n\t\tb.y >= a.y &&\n\t\tb.x + b.width <= a.x + a.width &&\n\t\tb.y + b.height <= a.y + a.height\n\t)\n}\n\n/**\n * Get the centre point of a bounding box.\n */\nfunction boundsCenter(bounds: Bounds): Point {\n\treturn {\n\t\tx: bounds.x + bounds.width / 2,\n\t\ty: bounds.y + bounds.height / 2,\n\t}\n}\n\n/**\n * Compute the intersection of two bounds. Returns null if they don't overlap.\n */\nfunction intersectBounds(a: Bounds, b: Bounds): Bounds | null {\n\tconst x = Math.max(a.x, b.x)\n\tconst y = Math.max(a.y, b.y)\n\tconst right = Math.min(a.x + a.width, b.x + b.width)\n\tconst bottom = Math.min(a.y + a.height, b.y + b.height)\n\n\tif (right <= x || bottom <= y) return null\n\n\treturn { x, y, width: right - x, height: bottom - y }\n}\n\nexport {\n\tboundingBox,\n\tboundingBoxFromPoints,\n\texpandBounds,\n\texpandBoundsBy,\n\tcontainsPoint,\n\tcontainsBounds,\n\tboundsCenter,\n\tintersectBounds,\n}\n",
+      "type": "registry:lib",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "lineage": [
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "lib"
+  ],
+  "type": "registry:lib"
+}

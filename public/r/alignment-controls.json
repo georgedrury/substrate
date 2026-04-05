@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "alignment-controls",
+  "title": "Alignment Controls",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Horizontal and vertical alignment and distribution buttons for positioning selected elements on the canvas.",
+  "dependencies": [
+    "@remixicon/react"
+  ],
+  "files": [
+    {
+      "path": "registry/substrate/components/alignment-controls.tsx",
+      "content": "\"use client\"\n\nimport {\n\tRiAlignItemLeftLine,\n\tRiAlignItemHorizontalCenterLine,\n\tRiAlignItemRightLine,\n\tRiAlignItemTopLine,\n\tRiAlignItemVerticalCenterLine,\n\tRiAlignItemBottomLine,\n} from \"@remixicon/react\"\nimport { cn } from \"@/lib/utils\"\n\n// ── Distribute icons (not available in remixicon) ──\n\nfunction DistributeHorizontalIcon({ className }: { className?: string }) {\n\treturn (\n\t\t<svg className={className} viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" strokeWidth={1.5}>\n\t\t\t<line x1=\"2\" y1=\"2\" x2=\"2\" y2=\"14\" />\n\t\t\t<line x1=\"14\" y1=\"2\" x2=\"14\" y2=\"14\" />\n\t\t\t<rect x=\"5.5\" y=\"4.5\" width=\"5\" height=\"7\" rx=\"0.5\" />\n\t\t</svg>\n\t)\n}\n\nfunction DistributeVerticalIcon({ className }: { className?: string }) {\n\treturn (\n\t\t<svg className={className} viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" strokeWidth={1.5}>\n\t\t\t<line x1=\"2\" y1=\"2\" x2=\"14\" y2=\"2\" />\n\t\t\t<line x1=\"2\" y1=\"14\" x2=\"14\" y2=\"14\" />\n\t\t\t<rect x=\"4.5\" y=\"5.5\" width=\"7\" height=\"5\" rx=\"0.5\" />\n\t\t</svg>\n\t)\n}\n\n// ── AlignmentControls ──\n\ntype AlignAction =\n\t| \"left\"\n\t| \"center-h\"\n\t| \"right\"\n\t| \"top\"\n\t| \"center-v\"\n\t| \"bottom\"\n\t| \"distribute-h\"\n\t| \"distribute-v\"\n\ntype AlignmentControlsProps = {\n\tonAlign: (action: AlignAction) => void\n\tshowDistribute?: boolean\n\tdisabled?: boolean\n} & Omit<React.ComponentProps<\"div\">, \"children\">\n\nfunction AlignmentControls({\n\tonAlign,\n\tshowDistribute = true,\n\tdisabled,\n\tclassName,\n\t...props\n}: AlignmentControlsProps) {\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"alignment-controls\"\n\t\t\tclassName={cn(\n\t\t\t\t\"inline-flex items-center gap-0.5\",\n\t\t\t\tdisabled && \"opacity-50 pointer-events-none\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t>\n\t\t\t<AlignButton onClick={() => onAlign(\"left\")} aria-label=\"Align left\">\n\t\t\t\t<RiAlignItemLeftLine />\n\t\t\t</AlignButton>\n\t\t\t<AlignButton onClick={() => onAlign(\"center-h\")} aria-label=\"Align centre horizontally\">\n\t\t\t\t<RiAlignItemHorizontalCenterLine />\n\t\t\t</AlignButton>\n\t\t\t<AlignButton onClick={() => onAlign(\"right\")} aria-label=\"Align right\">\n\t\t\t\t<RiAlignItemRightLine />\n\t\t\t</AlignButton>\n\n\t\t\t<AlignSeparator />\n\n\t\t\t<AlignButton onClick={() => onAlign(\"top\")} aria-label=\"Align top\">\n\t\t\t\t<RiAlignItemTopLine />\n\t\t\t</AlignButton>\n\t\t\t<AlignButton onClick={() => onAlign(\"center-v\")} aria-label=\"Align centre vertically\">\n\t\t\t\t<RiAlignItemVerticalCenterLine />\n\t\t\t</AlignButton>\n\t\t\t<AlignButton onClick={() => onAlign(\"bottom\")} aria-label=\"Align bottom\">\n\t\t\t\t<RiAlignItemBottomLine />\n\t\t\t</AlignButton>\n\n\t\t\t{showDistribute && (\n\t\t\t\t<>\n\t\t\t\t\t<AlignSeparator />\n\t\t\t\t\t<AlignButton onClick={() => onAlign(\"distribute-h\")} aria-label=\"Distribute horizontally\">\n\t\t\t\t\t\t<DistributeHorizontalIcon />\n\t\t\t\t\t</AlignButton>\n\t\t\t\t\t<AlignButton onClick={() => onAlign(\"distribute-v\")} aria-label=\"Distribute vertically\">\n\t\t\t\t\t\t<DistributeVerticalIcon />\n\t\t\t\t\t</AlignButton>\n\t\t\t\t</>\n\t\t\t)}\n\t\t</div>\n\t)\n}\n\n// ── AlignButton ──\n\nfunction AlignButton({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"button\">) {\n\treturn (\n\t\t<button\n\t\t\ttype=\"button\"\n\t\t\tdata-slot=\"align-button\"\n\t\t\tclassName={cn(\n\t\t\t\t\"size-7 inline-flex items-center justify-center rounded-md\",\n\t\t\t\t\"text-muted-foreground transition-colors\",\n\t\t\t\t\"hover:bg-muted hover:text-foreground\",\n\t\t\t\t\"outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n\t\t\t\t\"disabled:opacity-30 disabled:pointer-events-none\",\n\t\t\t\t\"[&_svg]:size-4\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\n// ── AlignSeparator ──\n\nfunction AlignSeparator({ className }: { className?: string }) {\n\treturn (\n\t\t<span\n\t\t\tdata-slot=\"align-separator\"\n\t\t\tclassName={cn(\"w-px h-4 bg-border mx-0.5\", className)}\n\t\t/>\n\t)\n}\n\nexport {\n\tAlignmentControls,\n\tAlignButton,\n\tAlignSeparator,\n\ttype AlignAction,\n}\n",
+      "type": "registry:ui",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "example": "<AlignmentControls onAlign={(type) => alignElements(type)} />",
+    "lineage": [
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "ui",
+    "control"
+  ],
+  "type": "registry:ui"
+}

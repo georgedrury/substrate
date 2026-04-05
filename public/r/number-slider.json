@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "number-slider",
+  "title": "Number Slider",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Combined number input and slider in a single row. Pairs NumberInput with Slider for properties like opacity or font size.",
+  "registryDependencies": [
+    "slider",
+    "number-input"
+  ],
+  "files": [
+    {
+      "path": "registry/substrate/components/number-slider.tsx",
+      "content": "\"use client\"\n\nimport { useCallback } from \"react\"\nimport { Slider } from \"@/registry/substrate/components/slider\"\nimport { NumberInput } from \"@/registry/substrate/components/number-input\"\nimport { cn } from \"@/lib/utils\"\n\ntype NumberSliderProps = {\n\tvalue: number\n\tonChange: (value: number) => void\n\tonStart?: () => void\n\tmin?: number\n\tmax?: number\n\tstep?: number\n\tshiftStep?: number\n\tprecision?: number\n\tlabel?: string\n\tsuffix?: string\n\tdisabled?: boolean\n} & Omit<React.ComponentProps<\"div\">, \"value\" | \"onChange\" | \"defaultValue\">\n\nfunction NumberSlider({\n\tvalue,\n\tonChange,\n\tonStart,\n\tmin = 0,\n\tmax = 100,\n\tstep = 1,\n\tshiftStep = 10,\n\tprecision = 2,\n\tlabel,\n\tsuffix,\n\tdisabled,\n\tclassName,\n\t...props\n}: NumberSliderProps) {\n\tconst handleSliderChange = useCallback(\n\t\t(values: number[]) => {\n\t\t\tonChange(values[0])\n\t\t},\n\t\t[onChange],\n\t)\n\n\tconst handleSliderCommit = useCallback((_values: number[]) => {\n\t\t// onStart fires at the beginning of a drag gesture\n\t}, [])\n\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"number-slider\"\n\t\t\tclassName={cn(\n\t\t\t\t\"flex items-center gap-2 w-full\",\n\t\t\t\tdisabled && \"opacity-50 pointer-events-none\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t>\n\t\t\t<Slider\n\t\t\t\tvalue={[value]}\n\t\t\t\tonValueChange={handleSliderChange}\n\t\t\t\tonValueCommit={handleSliderCommit}\n\t\t\t\tmin={min}\n\t\t\t\tmax={max}\n\t\t\t\tstep={step}\n\t\t\t\tdisabled={disabled}\n\t\t\t\tclassName=\"flex-1\"\n\t\t\t/>\n\t\t\t<NumberInput\n\t\t\t\tvalue={value}\n\t\t\t\tonChange={onChange}\n\t\t\t\tonStart={onStart}\n\t\t\t\tmin={min}\n\t\t\t\tmax={max}\n\t\t\t\tstep={step}\n\t\t\t\tshiftStep={shiftStep}\n\t\t\t\tprecision={precision}\n\t\t\t\tlabel={label}\n\t\t\t\tsuffix={suffix}\n\t\t\t\tdisabled={disabled}\n\t\t\t\tclassName=\"w-18\"\n\t\t\t/>\n\t\t</div>\n\t)\n}\n\nexport { NumberSlider, type NumberSliderProps }\n",
+      "type": "registry:ui",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "example": "<NumberSlider label=\"Opacity\" min={0} max={100} value={opacity} onChange={setOpacity} />",
+    "lineage": [
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "ui",
+    "form"
+  ],
+  "type": "registry:ui"
+}

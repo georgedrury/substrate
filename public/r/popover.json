@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "popover",
+  "title": "Popover",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Floating content panel anchored to a trigger element. Used for colour pickers, mini inspectors, and inline editors.",
+  "dependencies": [
+    "radix-ui"
+  ],
+  "files": [
+    {
+      "path": "registry/substrate/components/popover.tsx",
+      "content": "\"use client\"\n\nimport { Popover as PopoverPrimitive } from \"radix-ui\"\nimport { cn } from \"@/lib/utils\"\n\n// ── Popover ──\n\nfunction Popover({ children, ...props }: React.ComponentProps<typeof PopoverPrimitive.Root>) {\n\treturn <PopoverPrimitive.Root {...props}>{children}</PopoverPrimitive.Root>\n}\n\n// ── PopoverTrigger ──\n\nfunction PopoverTrigger({\n\tclassName,\n\t...props\n}: React.ComponentProps<typeof PopoverPrimitive.Trigger>) {\n\treturn (\n\t\t<PopoverPrimitive.Trigger\n\t\t\tdata-slot=\"popover-trigger\"\n\t\t\tclassName={cn(\"outline-none\", className)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\n// ── PopoverContent ──\n\ntype PopoverContentProps = {\n\tshowArrow?: boolean\n} & React.ComponentProps<typeof PopoverPrimitive.Content>\n\nfunction PopoverContent({\n\tshowArrow,\n\tclassName,\n\tsideOffset = 6,\n\tchildren,\n\t...props\n}: PopoverContentProps) {\n\treturn (\n\t\t<PopoverPrimitive.Portal>\n\t\t\t<PopoverPrimitive.Content\n\t\t\t\tdata-slot=\"popover-content\"\n\t\t\t\tsideOffset={sideOffset}\n\t\t\t\tclassName={cn(\n\t\t\t\t\t\"z-50 w-56 p-3\",\n\t\t\t\t\t\"bg-popover text-popover-foreground\",\n\t\t\t\t\t\"rounded-lg shadow-md ring-1 ring-foreground/10\",\n\t\t\t\t\t\"data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95\",\n\t\t\t\t\t\"data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95\",\n\t\t\t\t\t\"data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2\",\n\t\t\t\t\t\"data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2\",\n\t\t\t\t\tclassName,\n\t\t\t\t)}\n\t\t\t\t{...props}\n\t\t\t>\n\t\t\t\t{children}\n\t\t\t\t{showArrow && (\n\t\t\t\t\t<PopoverPrimitive.Arrow className=\"fill-popover drop-shadow-sm\" />\n\t\t\t\t)}\n\t\t\t</PopoverPrimitive.Content>\n\t\t</PopoverPrimitive.Portal>\n\t)\n}\n\n// ── PopoverClose ──\n\nfunction PopoverClose({\n\tclassName,\n\t...props\n}: React.ComponentProps<typeof PopoverPrimitive.Close>) {\n\treturn (\n\t\t<PopoverPrimitive.Close\n\t\t\tdata-slot=\"popover-close\"\n\t\t\tclassName={cn(\n\t\t\t\t\"absolute top-2 right-2 size-6 inline-flex items-center justify-center rounded-md\",\n\t\t\t\t\"text-muted-foreground hover:text-foreground hover:bg-muted transition-colors\",\n\t\t\t\t\"outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\nexport {\n\tPopover,\n\tPopoverTrigger,\n\tPopoverContent,\n\tPopoverClose,\n\ttype PopoverContentProps,\n}\n",
+      "type": "registry:ui",
+      "target": ""
+    }
+  ],
+  "meta": {
+    "example": "<Popover><PopoverTrigger>Open</PopoverTrigger><PopoverContent>content</PopoverContent></Popover>",
+    "lineage": [
+      {
+        "name": "Radix"
+      },
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "ui"
+  ],
+  "type": "registry:ui"
+}
