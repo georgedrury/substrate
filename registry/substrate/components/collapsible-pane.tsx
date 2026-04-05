@@ -26,14 +26,10 @@ function CollapsiblePane({
 	const onOpenChange = controlledOnOpenChange ?? setInternalOpen
 
 	return (
-		<CollapsiblePrimitive.Root
-			open={open}
-			onOpenChange={onOpenChange}
-			asChild
-		>
+		<CollapsiblePrimitive.Root open={open} onOpenChange={onOpenChange} asChild>
 			<div
 				data-slot="collapsible-pane"
-				className={cn("space-y-2 px-3", className)}
+				className={cn("space-y-0 px-3", className)}
 				{...props}
 			>
 				{children}

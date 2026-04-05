@@ -604,6 +604,9 @@
         "substrate",
         "ui"
       ],
+      "dependencies": [
+        "scroll-area"
+      ],
       "registryDependencies": [
         "https://substrate.georgedrury.co.uk/r/panel"
       ],

@@ -4,13 +4,16 @@
   "title": "Pane",
   "author": "George Drury <info@georgedrury.co.uk>",
   "description": "Content section within a panel — Pane wrapper with PaneHeader, PaneLabel, and PaneAction for composing property editors.",
+  "dependencies": [
+    "scroll-area"
+  ],
   "registryDependencies": [
     "https://substrate.georgedrury.co.uk/r/panel"
   ],
   "files": [
     {
       "path": "registry/substrate/components/pane.tsx",
-      "content": "import { cn } from \"@/lib/utils\"\n\ntype PaneProps = {}\n\nexport function Pane({\n\tclassName,\n\t...props\n}: PaneProps & React.ComponentProps<\"div\">) {\n\treturn <div className={cn(\"space-y-2 px-3\", className)} {...props} />\n}\n\nexport function PaneHeader({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"pane-header\"\n\t\t\tclassName={cn(\n\t\t\t\t\"flex justify-between items-center\",\n\t\t\t\t// Auto-push history controls to the right and compact them\n\t\t\t\t\"**:data-[slot=history-controls]:ml-auto **:data-[slot=history-controls]:gap-0\",\n\t\t\t\t\"**:data-[slot=history-button]:size-6 **:data-[slot=history-button]:[&_svg]:size-3.5\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\nexport function PaneLabel({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<span\n\t\t\tdata-slot=\"pane-label\"\n\t\t\tclassName={cn(\"text-xs font-medium\", className)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\nexport function PaneAction({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"button\">) {\n\treturn (\n\t\t<button\n\t\t\tdata-slot=\"pane-action\"\n\t\t\tclassName={cn(\n\t\t\t\t\"size-6 flex [&>svg]:size-3 items-center justify-center transition bg-panel rounded hover:bg-accent\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n",
+      "content": "import { cn } from \"@/lib/utils\"\n\ntype PaneProps = {}\n\nexport function Pane({\n\tclassName,\n\t...props\n}: PaneProps & React.ComponentProps<\"div\">) {\n\treturn <div className={cn(\"space-y-2 px-3\", className)} {...props} />\n}\n\nexport function PaneHeader({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"pane-header\"\n\t\t\tclassName={cn(\n\t\t\t\t\"flex justify-between items-center\",\n\t\t\t\t// Auto-push history controls to the right and compact them\n\t\t\t\t\"**:data-[slot=history-controls]:ml-auto **:data-[slot=history-controls]:gap-0\",\n\t\t\t\t\"**:data-[slot=history-button]:size-6 **:data-[slot=history-button]:[&_svg]:size-3.5\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\nexport function PaneLabel({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<span\n\t\t\tdata-slot=\"pane-label\"\n\t\t\tclassName={cn(\"text-xs font-medium\", className)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\nexport function PaneAction({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"button\">) {\n\treturn (\n\t\t<button\n\t\t\tdata-slot=\"pane-action\"\n\t\t\tclassName={cn(\n\t\t\t\t\"size-6 flex [&>svg]:size-3 items-center justify-center transition bg-panel rounded hover:bg-accent\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\nexport function PaneContent({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"div\">) {\n\treturn (\n\t\t<div data-slot=\"pane-action\" className={cn(\"\", className)} {...props} />\n\t)\n}\n",
       "type": "registry:ui",
       "target": "components/substrate/pane.tsx"
     }

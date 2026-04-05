@@ -56,3 +56,12 @@ export function PaneAction({
 		/>
 	)
 }
+
+export function PaneContent({
+	className,
+	...props
+}: React.ComponentProps<"div">) {
+	return (
+		<div data-slot="pane-action" className={cn("", className)} {...props} />
+	)
+}
