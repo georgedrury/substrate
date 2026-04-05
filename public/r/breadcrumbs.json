@@ -12,7 +12,7 @@
       "path": "registry/substrate/components/breadcrumbs.tsx",
       "content": "import { RiArrowRightSLine } from \"@remixicon/react\"\nimport { cn } from \"@/lib/utils\"\n\n// ── Breadcrumbs ──\n\nfunction Breadcrumbs({\n\tclassName,\n\t...props\n}: React.ComponentProps<\"nav\">) {\n\treturn (\n\t\t<nav\n\t\t\tdata-slot=\"breadcrumbs\"\n\t\t\taria-label=\"Breadcrumb\"\n\t\t\tclassName={cn(\"flex items-center gap-0.5 text-xs\", className)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\n// ── BreadcrumbItem ──\n\ntype BreadcrumbItemProps = {\n\tactive?: boolean\n} & React.ComponentProps<\"button\">\n\nfunction BreadcrumbItem({\n\tactive,\n\tclassName,\n\t...props\n}: BreadcrumbItemProps) {\n\treturn (\n\t\t<>\n\t\t\t<button\n\t\t\t\ttype=\"button\"\n\t\t\t\tdata-slot=\"breadcrumb-item\"\n\t\t\t\tdata-active={active || undefined}\n\t\t\t\tclassName={cn(\n\t\t\t\t\t\"h-6 px-1.5 rounded-md transition-colors truncate max-w-32 outline-none\",\n\t\t\t\t\tactive\n\t\t\t\t\t\t? \"text-foreground font-medium\"\n\t\t\t\t\t\t: \"text-muted-foreground hover:text-foreground hover:bg-muted\",\n\t\t\t\t\t\"focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n\t\t\t\t\tclassName,\n\t\t\t\t)}\n\t\t\t\t{...props}\n\t\t\t/>\n\t\t\t{!active && (\n\t\t\t\t<RiArrowRightSLine\n\t\t\t\t\tdata-slot=\"breadcrumb-separator\"\n\t\t\t\t\tclassName=\"size-3.5 text-muted-foreground/50 shrink-0\"\n\t\t\t\t/>\n\t\t\t)}\n\t\t</>\n\t)\n}\n\nexport { Breadcrumbs, BreadcrumbItem }\n",
       "type": "registry:ui",
-      "target": ""
+      "target": "components/substrate/breadcrumbs.tsx"
     }
   ],
   "meta": {

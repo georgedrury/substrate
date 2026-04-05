@@ -12,7 +12,7 @@
       "path": "registry/substrate/components/toast.tsx",
       "content": "\"use client\"\n\nimport { toast as sonnerToast } from \"sonner\"\n\n// ── Thin wrapper around sonner with creative-app defaults ──\n\ntype ToastOptions = {\n\tdescription?: string\n\tduration?: number\n\taction?: {\n\t\tlabel: string\n\t\tonClick: () => void\n\t}\n}\n\nfunction toast(message: string, options?: ToastOptions) {\n\treturn sonnerToast(message, {\n\t\tduration: options?.duration ?? 3000,\n\t\tdescription: options?.description,\n\t\taction: options?.action\n\t\t\t? { label: options.action.label, onClick: options.action.onClick }\n\t\t\t: undefined,\n\t})\n}\n\ntoast.success = (message: string, options?: ToastOptions) =>\n\tsonnerToast.success(message, {\n\t\tduration: options?.duration ?? 3000,\n\t\tdescription: options?.description,\n\t})\n\ntoast.error = (message: string, options?: ToastOptions) =>\n\tsonnerToast.error(message, {\n\t\tduration: options?.duration ?? 5000,\n\t\tdescription: options?.description,\n\t})\n\ntoast.info = (message: string, options?: ToastOptions) =>\n\tsonnerToast.info(message, {\n\t\tduration: options?.duration ?? 3000,\n\t\tdescription: options?.description,\n\t})\n\ntoast.warning = (message: string, options?: ToastOptions) =>\n\tsonnerToast.warning(message, {\n\t\tduration: options?.duration ?? 4000,\n\t\tdescription: options?.description,\n\t})\n\ntoast.undo = (message: string, onUndo: () => void) =>\n\tsonnerToast(message, {\n\t\tduration: 5000,\n\t\taction: { label: \"Undo\", onClick: onUndo },\n\t})\n\ntoast.dismiss = sonnerToast.dismiss\n\nexport { toast }\n",
       "type": "registry:ui",
-      "target": ""
+      "target": "components/substrate/toast.tsx"
     }
   ],
   "meta": {

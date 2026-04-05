@@ -9,7 +9,7 @@
       "path": "registry/substrate/lib/id.ts",
       "content": "export function generateId(): string {\n  return crypto.randomUUID()\n}\n",
       "type": "registry:lib",
-      "target": ""
+      "target": "lib/substrate/id.ts"
     }
   ],
   "meta": {

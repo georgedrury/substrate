@@ -24,7 +24,7 @@
         {
           "path": "registry/substrate/types.ts",
           "type": "registry:lib",
-          "target": ""
+          "target": "lib/substrate/types.ts"
         }
       ]
     },
@@ -52,7 +52,7 @@
         {
           "path": "registry/substrate/lib/math.ts",
           "type": "registry:lib",
-          "target": ""
+          "target": "lib/substrate/math.ts"
         }
       ]
     },
@@ -77,7 +77,7 @@
         {
           "path": "registry/substrate/lib/id.ts",
           "type": "registry:lib",
-          "target": ""
+          "target": "lib/substrate/id.ts"
         }
       ]
     },
@@ -102,7 +102,7 @@
         {
           "path": "registry/substrate/lib/color.ts",
           "type": "registry:lib",
-          "target": ""
+          "target": "lib/substrate/color.ts"
         }
       ]
     },
@@ -133,7 +133,7 @@
         {
           "path": "registry/substrate/stores/document-store.ts",
           "type": "registry:lib",
-          "target": ""
+          "target": "stores/substrate/document-store.ts"
         }
       ]
     },
@@ -164,7 +164,7 @@
         {
           "path": "registry/substrate/stores/tool-store.ts",
           "type": "registry:lib",
-          "target": ""
+          "target": "stores/substrate/tool-store.ts"
         }
       ]
     },
@@ -195,7 +195,7 @@
         {
           "path": "registry/substrate/stores/panel-store.ts",
           "type": "registry:lib",
-          "target": ""
+          "target": "stores/substrate/panel-store.ts"
         }
       ]
     },
@@ -224,7 +224,7 @@
         {
           "path": "registry/substrate/lib/element-factory.ts",
           "type": "registry:lib",
-          "target": ""
+          "target": "lib/substrate/element-factory.ts"
         }
       ]
     },
@@ -252,7 +252,7 @@
         {
           "path": "registry/substrate/canvas/renderer.ts",
           "type": "registry:lib",
-          "target": ""
+          "target": "components/substrate/renderer.ts"
         }
       ]
     },
@@ -281,7 +281,7 @@
         {
           "path": "registry/substrate/canvas/hit-test.ts",
           "type": "registry:lib",
-          "target": ""
+          "target": "components/substrate/hit-test.ts"
         }
       ]
     },
@@ -309,7 +309,7 @@
         {
           "path": "registry/substrate/hooks/use-canvas-drag.ts",
           "type": "registry:hook",
-          "target": ""
+          "target": "hooks/substrate/use-canvas-drag.ts"
         }
       ]
     },
@@ -339,7 +339,7 @@
         {
           "path": "registry/substrate/hooks/use-canvas-transform.ts",
           "type": "registry:hook",
-          "target": ""
+          "target": "hooks/substrate/use-canvas-transform.ts"
         }
       ]
     },
@@ -371,7 +371,7 @@
         {
           "path": "registry/substrate/hooks/use-hit-test.ts",
           "type": "registry:hook",
-          "target": ""
+          "target": "hooks/substrate/use-hit-test.ts"
         }
       ]
     },
@@ -403,7 +403,7 @@
         {
           "path": "registry/substrate/hooks/use-canvas-renderer.ts",
           "type": "registry:hook",
-          "target": ""
+          "target": "hooks/substrate/use-canvas-renderer.ts"
         }
       ]
     },
@@ -439,7 +439,7 @@
         {
           "path": "registry/substrate/hooks/use-canvas-interaction.ts",
           "type": "registry:hook",
-          "target": ""
+          "target": "hooks/substrate/use-canvas-interaction.ts"
         }
       ]
     },
@@ -471,7 +471,7 @@
         {
           "path": "registry/substrate/hooks/use-keyboard-shortcuts.ts",
           "type": "registry:hook",
-          "target": ""
+          "target": "hooks/substrate/use-keyboard-shortcuts.ts"
         }
       ]
     },
@@ -517,7 +517,7 @@
         {
           "path": "registry/substrate/canvas/design-canvas.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/design-canvas.tsx"
         }
       ]
     },
@@ -550,7 +550,7 @@
         {
           "path": "registry/substrate/components/toolbar.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/toolbar.tsx"
         }
       ]
     },
@@ -590,7 +590,7 @@
         {
           "path": "registry/substrate/components/panel.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/panel.tsx"
         }
       ]
     },
@@ -619,7 +619,7 @@
         {
           "path": "registry/substrate/components/pane.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/pane.tsx"
         }
       ]
     },
@@ -645,7 +645,7 @@
         {
           "path": "registry/substrate/components/action.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/action.tsx"
         }
       ]
     },
@@ -677,7 +677,7 @@
         {
           "path": "registry/substrate/components/slider.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/slider.tsx"
         }
       ]
     },
@@ -718,7 +718,7 @@
         {
           "path": "registry/substrate/components/surface.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/surface.tsx"
         }
       ]
     },
@@ -744,7 +744,7 @@
         {
           "path": "registry/substrate/lib/easing.ts",
           "type": "registry:lib",
-          "target": ""
+          "target": "lib/substrate/easing.ts"
         }
       ]
     },
@@ -773,7 +773,7 @@
         {
           "path": "registry/substrate/stores/animation-store.ts",
           "type": "registry:lib",
-          "target": ""
+          "target": "stores/substrate/animation-store.ts"
         }
       ]
     },
@@ -815,7 +815,7 @@
         {
           "path": "registry/substrate/components/timeline.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/timeline.tsx"
         }
       ]
     },
@@ -906,7 +906,7 @@
         {
           "path": "registry/substrate/components/gallery.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/gallery.tsx"
         }
       ]
     },
@@ -940,7 +940,7 @@
         {
           "path": "registry/substrate/components/colour-picker.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/colour-picker.tsx"
         }
       ]
     },
@@ -978,7 +978,7 @@
         {
           "path": "registry/substrate/components/easing-curve-editor.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/easing-curve-editor.tsx"
         }
       ]
     },
@@ -1004,7 +1004,7 @@
         {
           "path": "registry/substrate/hooks/use-selection.ts",
           "type": "registry:hook",
-          "target": ""
+          "target": "hooks/substrate/use-selection.ts"
         }
       ]
     },
@@ -1030,7 +1030,7 @@
         {
           "path": "registry/substrate/hooks/use-drag-reorder.ts",
           "type": "registry:hook",
-          "target": ""
+          "target": "hooks/substrate/use-drag-reorder.ts"
         }
       ]
     },
@@ -1056,7 +1056,7 @@
         {
           "path": "registry/substrate/hooks/use-clipboard.ts",
           "type": "registry:hook",
-          "target": ""
+          "target": "hooks/substrate/use-clipboard.ts"
         }
       ]
     },
@@ -1082,7 +1082,7 @@
         {
           "path": "registry/substrate/hooks/use-viewport.ts",
           "type": "registry:hook",
-          "target": ""
+          "target": "hooks/substrate/use-viewport.ts"
         }
       ]
     },
@@ -1108,7 +1108,7 @@
         {
           "path": "registry/substrate/hooks/use-undoable.ts",
           "type": "registry:hook",
-          "target": ""
+          "target": "hooks/substrate/use-undoable.ts"
         }
       ]
     },
@@ -1134,7 +1134,7 @@
         {
           "path": "registry/substrate/lib/keyboard-shortcuts.ts",
           "type": "registry:lib",
-          "target": ""
+          "target": "lib/substrate/keyboard-shortcuts.ts"
         }
       ]
     },
@@ -1162,7 +1162,7 @@
         {
           "path": "registry/substrate/lib/snap.ts",
           "type": "registry:lib",
-          "target": ""
+          "target": "lib/substrate/snap.ts"
         }
       ]
     },
@@ -1190,7 +1190,7 @@
         {
           "path": "registry/substrate/lib/bounding-box.ts",
           "type": "registry:lib",
-          "target": ""
+          "target": "lib/substrate/bounding-box.ts"
         }
       ]
     },
@@ -1219,7 +1219,7 @@
         {
           "path": "registry/substrate/components/alignment-controls.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/alignment-controls.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1245,7 +1245,7 @@
         {
           "path": "registry/substrate/components/badge.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/badge.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1275,7 +1275,7 @@
         {
           "path": "registry/substrate/components/breadcrumbs.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/breadcrumbs.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1309,7 +1309,7 @@
         {
           "path": "registry/substrate/components/collapsible-pane.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/collapsible-pane.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1344,7 +1344,7 @@
         {
           "path": "registry/substrate/components/command-palette.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/command-palette.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1376,7 +1376,7 @@
         {
           "path": "registry/substrate/components/context-menu.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/context-menu.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1410,7 +1410,7 @@
         {
           "path": "registry/substrate/components/document-tabs.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/document-tabs.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1436,7 +1436,7 @@
         {
           "path": "registry/substrate/components/empty-state.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/empty-state.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1466,7 +1466,7 @@
         {
           "path": "registry/substrate/components/layer-list.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/layer-list.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1504,7 +1504,7 @@
         {
           "path": "registry/substrate/components/node.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/node.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1535,7 +1535,7 @@
         {
           "path": "registry/substrate/components/number-slider.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/number-slider.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1567,7 +1567,7 @@
         {
           "path": "registry/substrate/components/popover.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/popover.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1593,7 +1593,7 @@
         {
           "path": "registry/substrate/components/progress-bar.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/progress-bar.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1620,7 +1620,7 @@
         {
           "path": "registry/substrate/components/resizer.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/resizer.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1654,7 +1654,7 @@
         {
           "path": "registry/substrate/components/select.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/select.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1687,7 +1687,7 @@
         {
           "path": "registry/substrate/components/shortcut-overlay.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/shortcut-overlay.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1714,7 +1714,7 @@
         {
           "path": "registry/substrate/components/status-bar.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/status-bar.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1741,7 +1741,7 @@
         {
           "path": "registry/substrate/components/swatch-palette.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/swatch-palette.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1768,7 +1768,7 @@
         {
           "path": "registry/substrate/components/text-area.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/text-area.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1797,7 +1797,7 @@
         {
           "path": "registry/substrate/components/toast.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/toast.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1830,7 +1830,7 @@
         {
           "path": "registry/substrate/components/toggle.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/toggle.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1860,7 +1860,7 @@
         {
           "path": "registry/substrate/components/tree-list.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/tree-list.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
@@ -1890,7 +1890,7 @@
         {
           "path": "registry/substrate/components/zoom-controls.tsx",
           "type": "registry:ui",
-          "target": ""
+          "target": "components/substrate/zoom-controls.tsx"
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"

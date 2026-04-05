@@ -9,7 +9,7 @@
       "path": "registry/substrate/components/badge.tsx",
       "content": "import { cn } from \"@/lib/utils\"\n\n// ── Badge ──\n\ntype BadgeVariant = \"default\" | \"secondary\" | \"outline\" | \"muted\"\n\ntype BadgeProps = {\n\tvariant?: BadgeVariant\n} & React.ComponentProps<\"span\">\n\nfunction Badge({\n\tvariant = \"default\",\n\tclassName,\n\t...props\n}: BadgeProps) {\n\treturn (\n\t\t<span\n\t\t\tdata-slot=\"badge\"\n\t\t\tclassName={cn(\n\t\t\t\t\"inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-medium leading-none transition-colors\",\n\t\t\t\t\"[&_svg]:size-3 [&_svg]:shrink-0\",\n\t\t\t\tvariant === \"default\" && \"bg-foreground text-background\",\n\t\t\t\tvariant === \"secondary\" && \"bg-secondary text-secondary-foreground\",\n\t\t\t\tvariant === \"outline\" && \"border text-muted-foreground\",\n\t\t\t\tvariant === \"muted\" && \"bg-muted text-muted-foreground\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\nexport { Badge, type BadgeProps, type BadgeVariant }\n",
       "type": "registry:ui",
-      "target": ""
+      "target": "components/substrate/badge.tsx"
     }
   ],
   "meta": {

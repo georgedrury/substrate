@@ -9,7 +9,7 @@
       "path": "registry/substrate/lib/color.ts",
       "content": "export function parseOklch(color: string): { l: number; c: number; h: number } | null {\n  const match = color.match(/oklch\\(\\s*([\\d.]+)\\s+([\\d.]+)\\s+([\\d.]+)/)\n  if (!match) return null\n  return {\n    l: parseFloat(match[1]),\n    c: parseFloat(match[2]),\n    h: parseFloat(match[3]),\n  }\n}\n\nexport function toOklch(l: number, c: number, h: number): string {\n  return `oklch(${l} ${c} ${h})`\n}\n\nexport function adjustLightness(color: string, delta: number): string {\n  const parsed = parseOklch(color)\n  if (!parsed) return color\n  const l = Math.max(0, Math.min(1, parsed.l + delta))\n  return toOklch(l, parsed.c, parsed.h)\n}\n",
       "type": "registry:lib",
-      "target": ""
+      "target": "lib/substrate/color.ts"
     }
   ],
   "meta": {

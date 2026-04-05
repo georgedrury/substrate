@@ -12,7 +12,7 @@
       "path": "registry/substrate/components/toggle.tsx",
       "content": "\"use client\"\n\nimport { Toggle as TogglePrimitive } from \"radix-ui\"\nimport { cn } from \"@/lib/utils\"\n\n// ── Toggle ──\n\ntype ToggleProps = React.ComponentProps<typeof TogglePrimitive.Root>\n\nfunction Toggle({\n\tclassName,\n\t...props\n}: ToggleProps) {\n\treturn (\n\t\t<TogglePrimitive.Root\n\t\t\tdata-slot=\"toggle\"\n\t\t\tclassName={cn(\n\t\t\t\t\"inline-flex items-center justify-center rounded-md transition-colors outline-none\",\n\t\t\t\t\"h-7 min-w-7 px-2 gap-1.5\",\n\t\t\t\t\"text-xs text-muted-foreground\",\n\t\t\t\t\"hover:bg-muted hover:text-foreground\",\n\t\t\t\t\"focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n\t\t\t\t\"disabled:pointer-events-none disabled:opacity-50\",\n\t\t\t\t\"data-[state=on]:bg-accent data-[state=on]:text-accent-foreground\",\n\t\t\t\t\"[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-3.5\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\nexport { Toggle, type ToggleProps }\n",
       "type": "registry:ui",
-      "target": ""
+      "target": "components/substrate/toggle.tsx"
     }
   ],
   "meta": {
