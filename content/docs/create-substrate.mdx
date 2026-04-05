@@ -1,0 +1,193 @@
+---
+title: create-substrate
+description: Scaffold a new Substrate playground from the command line
+---
+
+## Quick start
+
+```bash
+npx create-substrate
+```
+
+The CLI walks you through three choices — project name, surface type, and package manager — then scaffolds a working Next.js project with the right components, stores, and skills pre-installed.
+
+```bash
+npx create-substrate my-editor --surface canvas-2d --pm pnpm
+```
+
+Pass flags to skip the prompts entirely.
+
+---
+
+## Interactive flow
+
+```
+$ npx create-substrate
+
+  ▓▓▓  substrate  ▓▓▓
+  creative app framework
+
+  Project name: my-editor
+
+  Surface type:
+  ● 2D canvas        Shape editors, whiteboards, diagram tools
+    3D scene          Product viewers, architectural tools, shader playgrounds
+    Animation         Keyframe editors, motion graphics, easing explorers
+    Node editor       Visual programming, shader graphs, data pipelines
+    Data vis          Charts, dashboards, analytics explorers
+    Image generation  AI image tools, prompt-driven workflows
+    Blank             Scaffold only – bring your own surface
+
+  Package manager:
+    npm ● pnpm   bun
+```
+
+---
+
+## Surface types
+
+Each surface type installs a meaningful starter page — not just the right imports, but something you can interact with immediately.
+
+### 2D canvas
+
+The default surface. A full spatial design tool with canvas rendering, hit testing, and element manipulation.
+
+| Detail | Description |
+| --- | --- |
+| Starter page | Toolbar with shape and selection tools, left panel with a layer list, right panel with transform and fill properties |
+| Components | design-canvas, toolbar, panel, pane, slider, layer-list, number-input, colour-picker, history-controls, status-bar, zoom-controls |
+| Stores | document-store, tool-store, panel-store |
+
+### 3D scene
+
+An interactive Three.js viewport with orbit controls and selectable objects.
+
+| Detail | Description |
+| --- | --- |
+| Starter page | A scene with sample meshes (cube, sphere, ground plane), toolbar with transform mode toggles (translate, rotate, scale), right panel with material properties |
+| Components | toolbar, panel, pane, slider, number-input, colour-picker, status-bar |
+| Extra dependencies | three, @react-three/fiber, @react-three/drei |
+
+### Animation
+
+A timeline-based motion editor with keyframe editing and playback.
+
+| Detail | Description |
+| --- | --- |
+| Starter page | Split layout with a preview stage and timeline below, sample keyframes on two tracks (position, opacity), playback controls in toolbar, right panel with easing curve editor |
+| Components | toolbar, panel, pane, timeline, easing-curve-editor, slider, number-input, history-controls, status-bar |
+| Extra dependencies | gsap |
+| Stores | animation-store |
+
+### Node editor
+
+A visual programming canvas with typed ports and SVG wire connections.
+
+| Detail | Description |
+| --- | --- |
+| Starter page | Pannable/zoomable surface with sample nodes (a "Math" node with number ports, a "Colour" node with colour and number ports) connected by wires, right panel with node properties, command palette for node search |
+| Components | toolbar, panel, pane, node, number-input, colour-picker, status-bar, zoom-controls, command-palette |
+| Hooks | useViewport, useSelection, keyboard-shortcuts, bounding-box |
+
+### Data vis
+
+An interactive chart explorer with configurable visualisations.
+
+| Detail | Description |
+| --- | --- |
+| Starter page | Chart surface rendering a sample dataset as line and bar charts, left panel with dataset selector and axis controls, right panel with chart configuration |
+| Components | toolbar, panel, pane, select, slider, colour-picker, number-input, status-bar |
+| Extra dependencies | recharts, d3 |
+
+### Image generation
+
+A prompt-driven image creation tool with gallery history.
+
+| Detail | Description |
+| --- | --- |
+| Starter page | Central preview area with placeholder images, gallery below for generation history, left panel with prompt input, seed, steps, and CFG controls |
+| Components | toolbar, panel, pane, gallery, text-area, slider, number-input, progress-bar, status-bar |
+| Extra dependencies | @fal-ai/client |
+
+### Blank
+
+Just the scaffold shell — bring your own surface.
+
+| Detail | Description |
+| --- | --- |
+| Starter page | Toolbar, two empty panels, and a Surface component in the middle with a centred empty state |
+| Components | toolbar, panel, pane, surface, empty-state, status-bar |
+
+---
+
+## What gets generated
+
+Every surface produces the same project structure with surface-specific content where it matters:
+
+| File | Notes |
+| --- | --- |
+| `package.json` | Dependencies vary by surface type |
+| `index.html` | Vite entry point with dark theme |
+| `src/globals.css` | Base tokens plus surface-specific CSS variables |
+| `src/main.tsx` | React mount |
+| `src/App.tsx` | Surface-specific starter page |
+| `src/lib/utils.ts` | `cn()` utility |
+| `vite.config.ts` | Vite with React and Tailwind plugins, `@/` alias |
+| `components.json` | Registry config |
+| `CLAUDE.md` | Substrate context and skill index |
+| `.claude/skills/` | All 16 skills (surface guides and domain references) |
+| `.mcp.json` | Substrate MCP server |
+| `tsconfig.json`, `tsconfig.app.json` | TypeScript config |
+
+---
+
+## Skills
+
+Every generated project includes 16 skills organised into two tiers.
+
+### Surface guides
+
+How-to guides for building specific types of creative tools:
+
+| Skill | Covers |
+| --- | --- |
+| scaffold-playground | Bootstrapping a new playground from scratch |
+| canvas-2d | Spatial 2D tools — shape editors, whiteboards, diagram builders |
+| 3d-scene | Three.js viewports — orbit cameras, materials, scene graphs |
+| animation | Timeline-based tools — keyframes, easing, playback |
+| data-visualisation | Charts and dashboards — Recharts, D3, dataset management |
+| image-generation | AI image tools — prompt UIs, galleries, generation pipelines |
+| composing-panels | Structuring panels, panes, and property editors |
+| wire-interactions | Connecting undo, clipboard, shortcuts, and selection |
+| create-custom-tool | Building new tools for the toolbar |
+| theming | CSS variable overrides and brand theming |
+
+### Domain references
+
+What-to-use references that catalogue every component, hook, and utility:
+
+| Skill | Covers |
+| --- | --- |
+| substrate-scaffold | Toolbar, Panel, Pane, DocumentTabs, StatusBar, ZoomControls, Breadcrumbs, Resizer |
+| substrate-controls | NumberInput, Slider, NumberSlider, Select, Toggle, TextArea, ColourPicker, ActionControls |
+| substrate-canvas | useViewport, useSelection, useDragReorder, snap, boundingBox |
+| substrate-nodes | Node cards, typed ports, port colour theming |
+| substrate-feedback | Toast, ProgressBar, Badge, EmptyState, CommandPalette, ContextMenu, ShortcutOverlay |
+| substrate-interaction | useUndoable, useClipboard, createKeyboardShortcuts, HistoryControls, LayerList, TreeList |
+
+---
+
+## CLI reference
+
+```bash
+npx create-substrate [project-name] [options]
+```
+
+| Flag | Description |
+| --- | --- |
+| `--surface <type>` | Surface type: `canvas-2d`, `3d-scene`, `animation`, `node-editor`, `data-vis`, `image-gen`, `blank` |
+| `--pm <manager>` | Package manager: `npm`, `pnpm`, `bun` |
+| `--skip-install` | Skip dependency installation |
+| `--skip-git` | Don't initialise a git repository |
+
+If you already have a project and want to add Substrate to it, use `substrate-kit init` instead — it installs skills, CLAUDE.md, and configuration without creating a new directory.

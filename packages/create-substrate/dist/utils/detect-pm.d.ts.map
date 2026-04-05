@@ -1,0 +1,1 @@
+{"version":3,"file":"detect-pm.d.ts","sourceRoot":"","sources":["../../src/utils/detect-pm.ts"],"names":[],"mappings":"AAGA,MAAM,MAAM,cAAc,GAAG,KAAK,GAAG,MAAM,GAAG,KAAK,CAAA;AAEnD,wBAAgB,oBAAoB,CAAC,GAAG,EAAE,MAAM,GAAG,cAAc,CAQhE;AAED,wBAAgB,iBAAiB,CAAC,EAAE,EAAE,cAAc,GAAG,MAAM,CAE5D;AAED,wBAAgB,aAAa,CAAC,EAAE,EAAE,cAAc,EAAE,MAAM,EAAE,MAAM,GAAG,MAAM,CAGxE"}
