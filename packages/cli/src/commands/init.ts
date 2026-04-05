@@ -41,10 +41,10 @@ Substrate skills are installed in \`.claude/skills/\`. They are organised into t
 
 \`\`\`bash
 # Core scaffold
-npx substrate add design-canvas toolbar panel pane action slider
+npx substrate-kit add design-canvas toolbar panel pane action slider
 
 # Surface components
-npx substrate add surface timeline gallery colour-picker easing-curve-editor
+npx substrate-kit add surface timeline gallery colour-picker easing-curve-editor
 \`\`\`
 
 ## Registry
@@ -147,7 +147,7 @@ export async function init(options: InitOptions = {}): Promise<void> {
 			mcpServers: {
 				substrate: {
 					command: "npx",
-					args: ["-y", "substrate", "mcp"],
+					args: ["-y", "@substrate-kit/cli", "mcp"],
 				},
 			},
 		}

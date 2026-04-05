@@ -19,7 +19,7 @@ This scaffolds a full project with dependencies, globals.css with Substrate toke
 To add Substrate to an existing project instead:
 
 ```bash
-npx substrate init
+npx substrate-kit init
 ```
 
 This installs skills, CLAUDE.md, components.json, and registers the MCP server.

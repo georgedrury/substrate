@@ -27,7 +27,7 @@ async function promptProjectName() {
 export function createCli() {
     const program = new Command();
     program
-        .name("substrate")
+        .name("substrate-kit")
         .description("Scaffold interactive canvas playgrounds with Substrate primitives")
         .version("0.1.0");
     program
@@ -43,14 +43,16 @@ export function createCli() {
     });
     program
         .command("create")
-        .description("Create a new Substrate canvas playground project")
+        .description("Create a new Substrate playground project (alias for npx create-substrate)")
         .argument("[project-name]", "Name for the new project")
+        .option("--surface <type>", "Surface type (canvas-2d, 3d-scene, animation, node-editor, data-vis, image-gen, blank)")
         .option("--skip-install", "Skip dependency installation", false)
         .option("--skip-git", "Don't initialise git", false)
         .option("--package-manager <pm>", "Force package manager (npm, pnpm, bun)")
         .action(async (projectName, options) => {
         const name = projectName || await promptProjectName();
         await create(name, {
+            surface: options.surface,
             skipInstall: options.skipInstall,
             skipGit: options.skipGit,
             packageManager: options.packageManager,

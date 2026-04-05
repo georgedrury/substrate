@@ -1,5 +1,6 @@
 import { type PackageManager } from "../utils/detect-pm.js";
 export interface CreateOptions {
+    surface?: string;
     skipInstall?: boolean;
     skipGit?: boolean;
     packageManager?: PackageManager;
