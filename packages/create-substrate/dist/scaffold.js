@@ -46,6 +46,7 @@ export async function scaffold(projectName, options) {
     writeFile(join(projectDir, "src/globals.css"), globalsCss(config));
     writeFile(join(projectDir, "src/lib/utils.ts"), utilsTs());
     writeFile(join(projectDir, "src/vite-env.d.ts"), viteEnvDts());
+    writeFile(join(projectDir, "components.json"), componentsJson());
     // Write any extra surface-specific files
     if (config.files) {
         for (const [path, content] of Object.entries(config.files)) {
@@ -92,10 +93,7 @@ export async function scaffold(projectName, options) {
     // 5. Write CLAUDE.md
     writeFile(join(projectDir, "CLAUDE.md"), claudeMd());
     log.success("Created CLAUDE.md");
-    // 6. Write components.json
-    writeFile(join(projectDir, "components.json"), componentsJson());
-    log.success("Created components.json");
-    // 7. Write .mcp.json
+    // 6. Write .mcp.json
     writeFile(join(projectDir, ".mcp.json"), mcpJson());
     log.success("Created .mcp.json");
     // 8. Initialise git
@@ -154,6 +152,11 @@ function packageJson(name, config, options) {
 }
 function tsconfig() {
     return JSON.stringify({
+        compilerOptions: {
+            paths: {
+                "@/*": ["./src/*"],
+            },
+        },
         files: [],
         references: [{ path: "./tsconfig.app.json" }],
     }, null, 2);
@@ -325,7 +328,7 @@ function viteEnvDts() {
 function componentsJson() {
     return JSON.stringify({
         $schema: "https://ui.shadcn.com/schema.json",
-        style: "new-york",
+        style: "radix-mira",
         rsc: false,
         tsx: true,
         tailwind: {
@@ -333,13 +336,18 @@ function componentsJson() {
             css: "src/globals.css",
             baseColor: "neutral",
             cssVariables: true,
+            prefix: "",
         },
+        iconLibrary: "remixicon",
         aliases: {
             components: "@/components",
             utils: "@/lib/utils",
             ui: "@/components/ui",
             lib: "@/lib",
             hooks: "@/hooks",
+        },
+        registries: {
+            "@substrate": "https://substrate.georgedrury.co.uk/r/{name}",
         },
     }, null, 2);
 }
