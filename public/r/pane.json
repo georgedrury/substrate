@@ -4,9 +4,7 @@
   "title": "Pane",
   "author": "George Drury <info@georgedrury.co.uk>",
   "description": "Content section within a panel — Pane wrapper with PaneHeader, PaneLabel, and PaneAction for composing property editors.",
-  "dependencies": [
-    "scroll-area"
-  ],
+  "dependencies": [],
   "registryDependencies": [
     "https://substrate.georgedrury.co.uk/r/panel"
   ],

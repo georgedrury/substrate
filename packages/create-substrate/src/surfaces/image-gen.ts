@@ -179,12 +179,12 @@ export default function App() {
 
       <StatusBar>
         <StatusBarSection>
-          <StatusBarItem label="Generations" value={String(generations.length)} />
-          {generating && <StatusBarItem label="Progress" value={\`\${progress}%\`} />}
+          <StatusBarItem>Generations: {generations.length}</StatusBarItem>
+          {generating && <StatusBarItem>Progress: {progress}%</StatusBarItem>}
         </StatusBarSection>
         <StatusBarSection>
-          <StatusBarItem label="Steps" value={String(steps)} />
-          <StatusBarItem label="CFG" value={String(cfg)} />
+          <StatusBarItem>Steps: {steps}</StatusBarItem>
+          <StatusBarItem>CFG: {cfg}</StatusBarItem>
         </StatusBarSection>
       </StatusBar>
     </div>

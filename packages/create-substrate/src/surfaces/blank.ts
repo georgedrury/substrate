@@ -63,7 +63,7 @@ export default function App() {
 
       <StatusBar>
         <StatusBarSection>
-          <StatusBarItem label="Tool" value={tool} />
+          <StatusBarItem>Tool: {tool}</StatusBarItem>
         </StatusBarSection>
       </StatusBar>
     </div>

@@ -4,6 +4,9 @@
   "title": "Panel",
   "author": "George Drury <info@georgedrury.co.uk>",
   "description": "Side panel container with position (left/right), variant (tool/default), border, and scroll area. Used for layers, properties, and other side panels.",
+  "registryDependencies": [
+    "scroll-area"
+  ],
   "files": [
     {
       "path": "registry/substrate/components/panel.tsx",

@@ -137,7 +137,10 @@ export default function App() {
             <PaneContent>
               <div className="grid grid-cols-2 gap-2">
                 <NumberInput label="Frame" value={currentFrame} onChange={setCurrentFrame} min={0} max={totalFrames} />
-                <NumberInput label="Value" defaultValue={0} />
+                <div>
+                  <label className="text-xs font-medium">Value</label>
+                  <NumberInput value={0} onChange={() => {}} />
+                </div>
               </div>
             </PaneContent>
           </Pane>
@@ -182,11 +185,11 @@ export default function App() {
 
       <StatusBar>
         <StatusBarSection>
-          <StatusBarItem label="Frame" value={\`\${currentFrame} / \${totalFrames}\`} />
-          <StatusBarItem label="State" value={playing ? "Playing" : "Stopped"} />
+          <StatusBarItem>Frame: {currentFrame} / {totalFrames}</StatusBarItem>
+          <StatusBarItem>State: {playing ? "Playing" : "Stopped"}</StatusBarItem>
         </StatusBarSection>
         <StatusBarSection>
-          <HistoryControls canUndo={false} canRedo={false} onUndo={() => {}} onRedo={() => {}} />
+          <HistoryControls size="sm" />
         </StatusBarSection>
       </StatusBar>
     </div>

@@ -162,9 +162,9 @@ export default function App() {
 
       <StatusBar>
         <StatusBarSection>
-          <StatusBarItem label="Chart" value={chartType} />
-          <StatusBarItem label="Metric" value={metric} />
-          <StatusBarItem label="Points" value={String(SAMPLE_DATA.length)} />
+          <StatusBarItem>Chart: {chartType}</StatusBarItem>
+          <StatusBarItem>Metric: {metric}</StatusBarItem>
+          <StatusBarItem>Points: {SAMPLE_DATA.length}</StatusBarItem>
         </StatusBarSection>
       </StatusBar>
     </div>

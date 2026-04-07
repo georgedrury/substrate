@@ -57,6 +57,11 @@ const TOOLS = [
 export default function App() {
   const [tool, setTool] = useState("select")
   const [zoom, setZoom] = useState(1)
+  const [x, setX] = useState(0)
+  const [y, setY] = useState(0)
+  const [w, setW] = useState(100)
+  const [h, setH] = useState(100)
+  const [fill, setFill] = useState("#6366f1")
 
   return (
     <div className="flex h-screen flex-col bg-background text-foreground">
@@ -90,10 +95,10 @@ export default function App() {
             </PaneHeader>
             <PaneContent>
               <div className="grid grid-cols-2 gap-2">
-                <NumberInput label="X" defaultValue={0} />
-                <NumberInput label="Y" defaultValue={0} />
-                <NumberInput label="W" defaultValue={100} />
-                <NumberInput label="H" defaultValue={100} />
+                <NumberInput label="X" value={x} onChange={setX} />
+                <NumberInput label="Y" value={y} onChange={setY} />
+                <NumberInput label="W" value={w} onChange={setW} />
+                <NumberInput label="H" value={h} onChange={setH} />
               </div>
             </PaneContent>
           </Pane>
@@ -102,7 +107,7 @@ export default function App() {
               <PaneLabel>Fill</PaneLabel>
             </PaneHeader>
             <PaneContent>
-              <ColourPicker />
+              <ColourPicker value={fill} onChange={setFill} />
             </PaneContent>
           </Pane>
         </Panel>
@@ -124,11 +129,11 @@ export default function App() {
 
       <StatusBar>
         <StatusBarSection>
-          <StatusBarItem label="Tool" value={tool} />
+          <StatusBarItem>Tool: {tool}</StatusBarItem>
         </StatusBarSection>
         <StatusBarSection>
-          <HistoryControls canUndo={false} canRedo={false} onUndo={() => {}} onRedo={() => {}} />
-          <ZoomControls zoom={zoom} onZoomIn={() => setZoom((z) => Math.min(z * 1.25, 10))} onZoomOut={() => setZoom((z) => Math.max(z / 1.25, 0.1))} onReset={() => setZoom(1)} />
+          <HistoryControls size="sm" />
+          <ZoomControls zoom={zoom} onZoomChange={setZoom} />
         </StatusBarSection>
       </StatusBar>
     </div>

@@ -564,6 +564,9 @@
         "substrate",
         "ui"
       ],
+      "registryDependencies": [
+        "scroll-area"
+      ],
       "cssVars": {
         "theme": {
           "color-panel": "var(--panel, var(--color-card))",
@@ -604,9 +607,7 @@
         "substrate",
         "ui"
       ],
-      "dependencies": [
-        "scroll-area"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "https://substrate.georgedrury.co.uk/r/panel"
       ],

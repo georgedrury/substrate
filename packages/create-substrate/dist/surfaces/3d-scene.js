@@ -9,12 +9,12 @@ export const scene3d = {
         "status-bar",
     ],
     extraDeps: {
-        three: "^0.170.0",
-        "@react-three/fiber": "^8.17.0",
-        "@react-three/drei": "^9.117.0",
+        three: "^0.172.0",
+        "@react-three/fiber": "^9.0.0",
+        "@react-three/drei": "^10.0.0",
     },
     extraDevDeps: {
-        "@types/three": "^0.170.0",
+        "@types/three": "^0.172.0",
     },
     app: () => `import { useState, useRef } from "react"
 import { Canvas } from "@react-three/fiber"
@@ -172,8 +172,8 @@ export default function App() {
 
       <StatusBar>
         <StatusBarSection>
-          <StatusBarItem label="Mode" value={mode} />
-          {selected && <StatusBarItem label="Selected" value={selected.id} />}
+          <StatusBarItem>Mode: {mode}</StatusBarItem>
+          {selected && <StatusBarItem>Selected: {selected.id}</StatusBarItem>}
         </StatusBarSection>
       </StatusBar>
     </div>

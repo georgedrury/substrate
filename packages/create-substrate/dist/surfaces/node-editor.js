@@ -163,8 +163,14 @@ export default function App() {
               </PaneHeader>
               <PaneContent>
                 <div className="grid grid-cols-2 gap-2">
-                  <NumberInput label="X" value={selected.x} />
-                  <NumberInput label="Y" value={selected.y} />
+                  <div>
+                    <label className="text-xs font-medium">X</label>
+                    <NumberInput value={selected.x} onChange={() => {}} />
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium">Y</label>
+                    <NumberInput value={selected.y} onChange={() => {}} />
+                  </div>
                 </div>
               </PaneContent>
             </Pane>
@@ -191,15 +197,13 @@ export default function App() {
 
       <StatusBar>
         <StatusBarSection>
-          <StatusBarItem label="Tool" value={tool} />
-          {selected && <StatusBarItem label="Node" value={selected.label} />}
+          <StatusBarItem>Tool: {tool}</StatusBarItem>
+          {selected && <StatusBarItem>Node: {selected.label}</StatusBarItem>}
         </StatusBarSection>
         <StatusBarSection>
           <ZoomControls
             zoom={zoom}
-            onZoomIn={() => setZoom((z) => Math.min(z * 1.25, 5))}
-            onZoomOut={() => setZoom((z) => Math.max(z / 1.25, 0.2))}
-            onReset={() => setZoom(1)}
+            onZoomChange={setZoom}
           />
         </StatusBarSection>
       </StatusBar>
