@@ -13,7 +13,7 @@
   "files": [
     {
       "path": "registry/substrate/stores/tool-store.ts",
-      "content": "import { create } from \"zustand\"\nimport type { ToolType } from \"../../lib/substrate/types\"\n\ninterface ToolState {\n  activeTool: ToolType\n  previousTool: ToolType | null\n  setTool: (tool: ToolType) => void\n  setTemporaryTool: (tool: ToolType) => void\n  restoreTool: () => void\n}\n\nexport const useToolStore = create<ToolState>()((set) => ({\n  activeTool: \"select\",\n  previousTool: null,\n\n  setTool: (tool) =>\n    set({ activeTool: tool, previousTool: null }),\n\n  setTemporaryTool: (tool) =>\n    set((s) => ({\n      activeTool: tool,\n      previousTool: s.previousTool ?? s.activeTool,\n    })),\n\n  restoreTool: () =>\n    set((s) => {\n      if (!s.previousTool) return s\n      return { activeTool: s.previousTool, previousTool: null }\n    }),\n}))\n",
+      "content": "import { create } from \"zustand\"\nimport type { ToolType } from \"../types\"\n\ninterface ToolState {\n  activeTool: ToolType\n  previousTool: ToolType | null\n  setTool: (tool: ToolType) => void\n  setTemporaryTool: (tool: ToolType) => void\n  restoreTool: () => void\n}\n\nexport const useToolStore = create<ToolState>()((set) => ({\n  activeTool: \"select\",\n  previousTool: null,\n\n  setTool: (tool) =>\n    set({ activeTool: tool, previousTool: null }),\n\n  setTemporaryTool: (tool) =>\n    set((s) => ({\n      activeTool: tool,\n      previousTool: s.previousTool ?? s.activeTool,\n    })),\n\n  restoreTool: () =>\n    set((s) => {\n      if (!s.previousTool) return s\n      return { activeTool: s.previousTool, previousTool: null }\n    }),\n}))\n",
       "type": "registry:lib",
       "target": "stores/substrate/tool-store.ts"
     }

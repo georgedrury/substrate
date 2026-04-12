@@ -1,0 +1,40 @@
+---
+title: Toggle Group
+description: Grouped set of toggles for single or multi-select choices. Built on Radix ToggleGroup.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/toggle-group
+```
+
+## Examples
+
+### Default
+
+<ComponentPreview name="toggle-group-demo" />
+
+## Props
+
+### ToggleGroup
+
+Extends all Radix `ToggleGroup.Root` props.
+
+| Prop            | Type                                                 | Default        | Description                                    |
+| --------------- | ---------------------------------------------------- | -------------- | ---------------------------------------------- |
+| `type`          | `"single" \| "multiple"`                             | —              | Single or multi-select behaviour               |
+| `value`         | `string \| string[]`                                 | —              | Controlled selected value(s)                   |
+| `defaultValue`  | `string \| string[]`                                 | —              | Uncontrolled initial value(s)                  |
+| `onValueChange` | `(value: string) => void \| (value: string[]) => void` | —            | Called when selection changes                  |
+| `orientation`   | `"horizontal" \| "vertical"`                         | `"horizontal"` | Layout direction and arrow-key navigation axis |
+| `disabled`      | `boolean`                                            | —              | Disables all items                             |
+
+### ToggleGroupItem
+
+Extends all Radix `ToggleGroup.Item` props.
+
+| Prop       | Type      | Default | Description            |
+| ---------- | --------- | ------- | ---------------------- |
+| `value`    | `string`  | —       | Unique value of item   |
+| `disabled` | `boolean` | —       | Disables this item     |

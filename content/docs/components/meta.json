@@ -16,6 +16,7 @@
 		"number-input",
 		"number-slider",
 		"toggle",
+		"toggle-group",
 		"text-area",
 		"alignment-controls",
 		"history-controls",

@@ -1840,6 +1840,42 @@
       "author": "George Drury <info@georgedrury.co.uk>"
     },
     {
+      "name": "toggle-group",
+      "type": "registry:ui",
+      "title": "Toggle Group",
+      "description": "Grouped set of toggles for single or multi-select choices. Built on Radix ToggleGroup.",
+      "categories": [
+        "substrate",
+        "ui",
+        "form"
+      ],
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "toggle"
+      ],
+      "meta": {
+        "example": "<ToggleGroup type=\"single\" value={align} onValueChange={setAlign}><ToggleGroupItem value=\"left\">Left</ToggleGroupItem><ToggleGroupItem value=\"center\">Center</ToggleGroupItem><ToggleGroupItem value=\"right\">Right</ToggleGroupItem></ToggleGroup>",
+        "lineage": [
+          {
+            "name": "Radix"
+          },
+          {
+            "name": "Substrate"
+          }
+        ]
+      },
+      "files": [
+        {
+          "path": "registry/substrate/components/toggle-group.tsx",
+          "type": "registry:ui",
+          "target": "components/substrate/toggle-group.tsx"
+        }
+      ],
+      "author": "George Drury <info@georgedrury.co.uk>"
+    },
+    {
       "name": "tree-list",
       "type": "registry:ui",
       "title": "Tree List",

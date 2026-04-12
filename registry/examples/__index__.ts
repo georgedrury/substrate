@@ -37,6 +37,7 @@ import NodeDemo from "./node-demo"
 import NodePortTypes from "./node-port-types"
 import SelectDemo from "./select-demo"
 import ToggleDemo from "./toggle-demo"
+import ToggleGroupDemo from "./toggle-group-demo"
 import TextAreaDemo from "./text-area-demo"
 import ProgressBarDemo from "./progress-bar-demo"
 import BadgeDemo from "./badge-demo"
@@ -198,6 +199,10 @@ export const Index: Record<string, ExampleEntry> = {
 	"toggle-demo": {
 		component: ToggleDemo,
 		filePath: "registry/examples/toggle-demo.tsx",
+	},
+	"toggle-group-demo": {
+		component: ToggleGroupDemo,
+		filePath: "registry/examples/toggle-group-demo.tsx",
 	},
 	"text-area-demo": {
 		component: TextAreaDemo,

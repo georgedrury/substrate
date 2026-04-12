@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-group",
+  "title": "Toggle Group",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Grouped set of toggles for single or multi-select choices. Built on Radix ToggleGroup.",
+  "dependencies": [
+    "radix-ui"
+  ],
+  "registryDependencies": [
+    "toggle"
+  ],
+  "files": [
+    {
+      "path": "registry/substrate/components/toggle-group.tsx",
+      "content": "\"use client\"\n\nimport { ToggleGroup as ToggleGroupPrimitive } from \"radix-ui\"\nimport { cn } from \"@/lib/utils\"\n\n// ── ToggleGroup ──\n\ntype ToggleGroupProps = React.ComponentProps<typeof ToggleGroupPrimitive.Root>\n\nfunction ToggleGroup({\n\tclassName,\n\torientation = \"horizontal\",\n\t...props\n}: ToggleGroupProps) {\n\treturn (\n\t\t<ToggleGroupPrimitive.Root\n\t\t\tdata-slot=\"toggle-group\"\n\t\t\torientation={orientation}\n\t\t\tclassName={cn(\n\t\t\t\t\"inline-flex items-center gap-1 data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\n// ── ToggleGroupItem ──\n\ntype ToggleGroupItemProps = React.ComponentProps<typeof ToggleGroupPrimitive.Item>\n\nfunction ToggleGroupItem({\n\tclassName,\n\t...props\n}: ToggleGroupItemProps) {\n\treturn (\n\t\t<ToggleGroupPrimitive.Item\n\t\t\tdata-slot=\"toggle-group-item\"\n\t\t\tclassName={cn(\n\t\t\t\t\"inline-flex items-center justify-center rounded-md transition-colors outline-none\",\n\t\t\t\t\"h-7 min-w-7 px-2 gap-1.5\",\n\t\t\t\t\"text-xs text-muted-foreground\",\n\t\t\t\t\"hover:bg-muted hover:text-foreground\",\n\t\t\t\t\"focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:z-10\",\n\t\t\t\t\"disabled:pointer-events-none disabled:opacity-50\",\n\t\t\t\t\"data-[state=on]:bg-accent data-[state=on]:text-accent-foreground\",\n\t\t\t\t\"aria-checked:bg-accent aria-checked:text-accent-foreground\",\n\t\t\t\t\"[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-3.5\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\t{...props}\n\t\t/>\n\t)\n}\n\nexport {\n\tToggleGroup,\n\tToggleGroupItem,\n\ttype ToggleGroupProps,\n\ttype ToggleGroupItemProps,\n}\n",
+      "type": "registry:ui",
+      "target": "components/substrate/toggle-group.tsx"
+    }
+  ],
+  "meta": {
+    "example": "<ToggleGroup type=\"single\" value={align} onValueChange={setAlign}><ToggleGroupItem value=\"left\">Left</ToggleGroupItem><ToggleGroupItem value=\"center\">Center</ToggleGroupItem><ToggleGroupItem value=\"right\">Right</ToggleGroupItem></ToggleGroup>",
+    "lineage": [
+      {
+        "name": "Radix"
+      },
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "ui",
+    "form"
+  ],
+  "type": "registry:ui"
+}

@@ -3,14 +3,14 @@
   "name": "use-canvas-drag",
   "title": "useCanvasDrag",
   "author": "George Drury <info@georgedrury.co.uk>",
-  "description": "Hook for managing drag state machine \u2014 tracks drag type (create, move, resize, marquee, pan), start/current positions, and element snapshots.",
+  "description": "Hook for managing drag state machine — tracks drag type (create, move, resize, marquee, pan), start/current positions, and element snapshots.",
   "registryDependencies": [
     "https://substrate.georgedrury.co.uk/r/types"
   ],
   "files": [
     {
       "path": "registry/substrate/hooks/use-canvas-drag.ts",
-      "content": "\"use client\"\n\nimport { useRef, useCallback } from \"react\"\nimport type { Point, HandlePosition } from \"../../lib/substrate/types\"\n\nexport type DragType = \"create\" | \"move\" | \"resize\" | \"marquee\" | \"pan\"\n\nexport interface DragInfo {\n  type: DragType\n  startWorld: Point\n  startScreen: Point\n  currentWorld: Point\n  currentScreen: Point\n  handle?: HandlePosition\n  elementStartPositions?: Record<string, { x: number; y: number; width: number; height: number }>\n}\n\nexport function useCanvasDrag() {\n  const dragRef = useRef<DragInfo | null>(null)\n\n  const startDrag = useCallback((info: DragInfo) => {\n    dragRef.current = info\n  }, [])\n\n  const updateDrag = useCallback((worldPoint: Point, screenPoint: Point) => {\n    if (dragRef.current) {\n      dragRef.current.currentWorld = worldPoint\n      dragRef.current.currentScreen = screenPoint\n    }\n  }, [])\n\n  const endDrag = useCallback((): DragInfo | null => {\n    const info = dragRef.current\n    dragRef.current = null\n    return info\n  }, [])\n\n  const isDragging = useCallback(() => dragRef.current !== null, [])\n\n  return { dragRef, startDrag, updateDrag, endDrag, isDragging }\n}\n",
+      "content": "\"use client\"\n\nimport { useRef, useCallback } from \"react\"\nimport type { Point, HandlePosition } from \"../types\"\n\nexport type DragType = \"create\" | \"move\" | \"resize\" | \"marquee\" | \"pan\"\n\nexport interface DragInfo {\n  type: DragType\n  startWorld: Point\n  startScreen: Point\n  currentWorld: Point\n  currentScreen: Point\n  handle?: HandlePosition\n  elementStartPositions?: Record<string, { x: number; y: number; width: number; height: number }>\n}\n\nexport function useCanvasDrag() {\n  const dragRef = useRef<DragInfo | null>(null)\n\n  const startDrag = useCallback((info: DragInfo) => {\n    dragRef.current = info\n  }, [])\n\n  const updateDrag = useCallback((worldPoint: Point, screenPoint: Point) => {\n    if (dragRef.current) {\n      dragRef.current.currentWorld = worldPoint\n      dragRef.current.currentScreen = screenPoint\n    }\n  }, [])\n\n  const endDrag = useCallback((): DragInfo | null => {\n    const info = dragRef.current\n    dragRef.current = null\n    return info\n  }, [])\n\n  const isDragging = useCallback(() => dragRef.current !== null, [])\n\n  return { dragRef, startDrag, updateDrag, endDrag, isDragging }\n}\n",
       "type": "registry:hook",
       "target": "hooks/substrate/use-canvas-drag.ts"
     }
