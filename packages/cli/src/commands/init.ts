@@ -27,6 +27,7 @@ Substrate skills are installed in \`.claude/skills/\`. They are organised into t
 - **scaffold-playground** — bootstrapping a new playground
 - **canvas-2d** / **3d-scene** / **animation** / **image-generation** / **data-visualisation** — surface-specific architecture
 - **composing-panels** / **wire-interactions** / **create-custom-tool** / **theming** — workflow guides
+- **install-components** — full catalogue of available components + how to install via \`substrate-kit add\`
 
 ### Component reference (what to use)
 
@@ -39,17 +40,24 @@ Substrate skills are installed in \`.claude/skills/\`. They are organised into t
 
 ## Install components
 
+**Always prefer existing Substrate components over writing custom ones.** Substrate ships sliders, number inputs, toggles, colour pickers, context menus, command palettes, toolbars, panels, timelines, and more — see the \`install-components\` skill for the full catalogue.
+
 \`\`\`bash
 # Core scaffold
 npx substrate-kit add design-canvas toolbar panel pane action slider
 
 # Surface components
 npx substrate-kit add surface timeline gallery colour-picker easing-curve-editor
+
+# Interactive picker (no args)
+npx substrate-kit add
 \`\`\`
+
+Do **not** run \`npx shadcn@latest add\` directly for Substrate components — always go through \`substrate-kit add\`.
 
 ## Registry
 
-Components are installed from \`substrate.georgedrury.co.uk/r/\` via the shadcn CLI.
+Components are installed from \`substrate.georgedrury.co.uk/r/\` via the Substrate CLI, which wraps shadcn under the hood.
 `
 }
 
