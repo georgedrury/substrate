@@ -1,0 +1,1 @@
+{"version":3,"file":"shadcn.d.ts","sourceRoot":"","sources":["../../src/utils/shadcn.ts"],"names":[],"mappings":"AAEA,MAAM,WAAW,gBAAgB;IAChC,GAAG,CAAC,EAAE,MAAM,CAAA;IACZ,qEAAqE;IACrE,MAAM,CAAC,EAAE,OAAO,CAAA;CAChB;AAKD,wBAAgB,SAAS,CAAC,GAAG,EAAE,MAAM,EAAE,OAAO,GAAE,gBAAqB,GAAG,IAAI,CAW3E"}

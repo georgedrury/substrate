@@ -1,5 +1,5 @@
-import { execSync } from "node:child_process"
 import type { Registry } from "../types.js"
+import { shadcnAdd } from "../../utils/shadcn.js"
 
 // SUBSTRATE_REGISTRY_URL points installs at a local registry for testing
 const REGISTRY_BASE =
@@ -24,10 +24,7 @@ export async function handleInstall(
 
 		const url = `${REGISTRY_BASE}/${name}`
 		try {
-			execSync(`npx shadcn@latest add ${url}`, {
-				encoding: "utf-8",
-				stdio: "pipe",
-			})
+			shadcnAdd(url, { silent: true })
 			results.push({ name, status: "installed" })
 		} catch (err) {
 			results.push({

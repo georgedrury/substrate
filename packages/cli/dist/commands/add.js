@@ -2,7 +2,7 @@ import { createInterface } from "node:readline";
 import { join, dirname } from "node:path";
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { exec } from "../utils/shell.js";
+import { shadcnAdd } from "../utils/shadcn.js";
 import { exists } from "../utils/fs.js";
 import { log } from "../utils/logger.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -293,7 +293,7 @@ export async function add(components, options = {}) {
         const url = `${REGISTRY_BASE}/${component}`;
         log.step(`Installing ${component}`);
         try {
-            exec(`npx shadcn@latest add ${url}`, { cwd });
+            shadcnAdd(url, { cwd });
             log.success(`Installed ${component}`);
             installed++;
             if (registry) {
@@ -308,5 +308,7 @@ export async function add(components, options = {}) {
     }
     log.blank();
     log.info(`Added ${installed} component${installed === 1 ? "" : "s"} from substrate.georgedrury.co.uk`);
+    if (installed < components.length)
+        process.exitCode = 1;
 }
 //# sourceMappingURL=add.js.map

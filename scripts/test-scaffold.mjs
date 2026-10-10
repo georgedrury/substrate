@@ -3,6 +3,7 @@
 //      a headless browser, failing on any runtime error
 //   2. does the same through `substrate-kit create`, which forwards to it
 //   3. installs every registry item into one project and typechecks it
+//   4. runs `substrate-kit add` with no terminal over an existing component
 // Usage: node scripts/test-scaffold.mjs [--live] [case...]   (default: all)
 // --live tests against the deployed registry instead of the local build.
 import { spawn } from "node:child_process"
@@ -17,7 +18,7 @@ import { chromium } from "playwright"
 const root = join(dirname(fileURLToPath(import.meta.url)), "..")
 const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf-8"))
 const SURFACES = ["canvas-2d", "3d-scene", "animation", "node-editor", "data-vis", "image-gen", "blank"]
-const CASES = [...SURFACES, "cli-create", "all-items"]
+const CASES = [...SURFACES, "cli-create", "cli-add", "all-items"]
 const CONCURRENCY = 3
 const COMMAND_TIMEOUT_MS = 10 * 60 * 1000
 
@@ -148,8 +149,32 @@ async function allItems() {
 	return { ok: true }
 }
 
+// number-slider depends on number-input, which is already installed and
+// differs from the registry copy once shadcn strips "use client". shadcn then
+// asks whether to overwrite, and with no terminal used to write nothing.
+async function cliAdd() {
+	const scaffolder = join(root, "packages/create-substrate/dist/index.js")
+	const cli = join(root, "packages/cli/dist/index.js")
+	const cwd = join(workspace, "cli-add")
+	const scaffold = await run("node", [scaffolder, "cli-add", "--surface", "blank", "--pm", "npm", "--skip-git"], { cwd: workspace, env })
+	if (scaffold.code !== 0) return { ok: false, stage: "scaffold", output: scaffold.output }
+
+	const first = await run("node", [cli, "add", "number-input"], { cwd, env })
+	if (first.code !== 0) return { ok: false, stage: "add number-input", output: first.output }
+	const second = await run("node", [cli, "add", "number-slider"], { cwd, env })
+	if (second.code !== 0) return { ok: false, stage: "add number-slider", output: second.output }
+	if (!existsSync(join(cwd, "src/components/substrate/number-slider.tsx"))) {
+		return { ok: false, stage: "add number-slider", output: `number-slider.tsx was not written\n${second.output}` }
+	}
+
+	const check = await run("npx", ["tsc", "-b"], { cwd, env })
+	if (check.code !== 0) return { ok: false, stage: "typecheck", output: check.output }
+	return { ok: true }
+}
+
 function runCase(name) {
 	if (name === "all-items") return allItems()
+	if (name === "cli-add") return cliAdd()
 	if (name === "cli-create") {
 		return scaffoldAndBuild(name, [join(root, "packages/cli/dist/index.js"), "create", name, "--surface", "blank", "--skip-git", "--package-manager", "npm"])
 	}

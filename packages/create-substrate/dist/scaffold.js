@@ -5,6 +5,7 @@ import { exec, execSilent } from "./utils/shell.js";
 import { log } from "./utils/logger.js";
 import { getInstallCommand } from "./utils/detect-pm.js";
 import { surfaces } from "./surfaces/index.js";
+const INSTALL_ATTEMPTS = 3;
 // SUBSTRATE_REGISTRY_URL points installs at a local registry for testing
 const REGISTRY_BASE = process.env.SUBSTRATE_REGISTRY_URL ?? "https://substrate.georgedrury.co.uk/r";
 function printBanner() {
@@ -55,6 +56,7 @@ export async function scaffold(projectName, options) {
         }
     }
     log.success("Project files created");
+    const failedComponents = [];
     // 2. Install dependencies
     if (!skipInstall) {
         log.step(`Installing dependencies with ${packageManager}...`);
@@ -64,15 +66,28 @@ export async function scaffold(projectName, options) {
         log.step("Installing Substrate components...");
         for (const component of config.components) {
             const url = `${REGISTRY_BASE}/${component}`;
-            try {
-                exec(`npx shadcn@latest add ${url}`, { cwd: projectDir });
+            // The project is new, so overwriting is safe and avoids prompts. Retry
+            // because one dropped request would otherwise leave a broken project.
+            let installed = false;
+            for (let attempt = 1; attempt <= INSTALL_ATTEMPTS && !installed; attempt++) {
+                try {
+                    exec(`npx shadcn@latest add --yes --overwrite ${url}`, { cwd: projectDir });
+                    installed = true;
+                }
+                catch {
+                    if (attempt < INSTALL_ATTEMPTS)
+                        log.warn(`  Retrying ${component}...`);
+                }
+            }
+            if (installed) {
                 log.step(`  ${component}`);
             }
-            catch {
-                log.warn(`  Failed to install ${component} — add later with: npx substrate-kit add ${component}`);
+            else {
+                failedComponents.push(component);
             }
         }
-        log.success("Substrate components installed");
+        if (failedComponents.length === 0)
+            log.success("Substrate components installed");
     }
     else {
         log.warn("Skipping dependency installation (--skip-install)");
@@ -104,6 +119,16 @@ export async function scaffold(projectName, options) {
         execSilent("git add -A", projectDir);
         execSilent('git commit -m "Initial commit from create-substrate"', projectDir);
         log.success("Git repository initialised");
+    }
+    if (failedComponents.length > 0) {
+        log.blank();
+        log.error(`These components could not be downloaded: ${failedComponents.join(", ")}`);
+        log.error("The project will not build until they are installed. Check your connection, then run:");
+        log.info(`  cd ${projectName}`);
+        log.info(`  npx substrate-kit add ${failedComponents.join(" ")}`);
+        log.blank();
+        process.exitCode = 1;
+        return;
     }
     // Done
     log.title("Your Substrate playground is ready");
