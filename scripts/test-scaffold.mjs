@@ -19,6 +19,7 @@ const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf-8"))
 const SURFACES = ["canvas-2d", "3d-scene", "animation", "node-editor", "data-vis", "image-gen", "blank"]
 const CASES = [...SURFACES, "cli-create", "all-items"]
 const CONCURRENCY = 3
+const COMMAND_TIMEOUT_MS = 10 * 60 * 1000
 
 const live = process.argv.includes("--live")
 const requested = process.argv.slice(2).filter((arg) => arg !== "--live")
@@ -35,7 +36,15 @@ function run(command, args, options = {}) {
 		let output = ""
 		child.stdout.on("data", (chunk) => (output += chunk))
 		child.stderr.on("data", (chunk) => (output += chunk))
-		child.on("close", (code) => resolve({ code, output }))
+		// A stalled install or prompt should fail with its output, not hang the run
+		const timer = setTimeout(() => {
+			output += `\nTimed out after ${COMMAND_TIMEOUT_MS / 60000} minutes`
+			child.kill("SIGKILL")
+		}, COMMAND_TIMEOUT_MS)
+		child.on("close", (code) => {
+			clearTimeout(timer)
+			resolve({ code: code ?? 1, output })
+		})
 	})
 }
 
@@ -77,8 +86,10 @@ function freePort() {
 // Serve the built app and load it, collecting anything the page throws
 async function smoke(cwd) {
 	const port = await freePort()
-	const args = ["vite", "preview", "--host", "127.0.0.1", "--port", String(port), "--strictPort"]
-	const preview = spawn("npx", args, { cwd, env, stdio: "ignore" })
+	// Run vite directly so that killing it does not leave a server behind
+	const vite = join(cwd, "node_modules/vite/bin/vite.js")
+	const args = [vite, "preview", "--host", "127.0.0.1", "--port", String(port), "--strictPort"]
+	const preview = spawn("node", args, { cwd, env, stdio: "ignore" })
 	const url = `http://127.0.0.1:${port}/`
 	const problems = []
 
@@ -154,6 +165,9 @@ await Promise.all(
 			const result = await runCase(name)
 			results.set(name, result)
 			console.log(`${result.ok ? "PASS" : "FAIL"}  ${name}${result.ok ? "" : `  (${result.stage})`}`)
+			if (!result.ok) {
+				console.log(`\n--- ${name}: ${result.stage} ---\n${result.output.trim().split("\n").slice(-60).join("\n")}\n`)
+			}
 		}
 	}),
 )
@@ -161,11 +175,6 @@ server.close()
 await browser.close()
 
 const failures = cases.filter((name) => !results.get(name).ok)
-for (const name of failures) {
-	const { stage, output } = results.get(name)
-	console.log(`\n--- ${name}: ${stage} ---\n${output.trim().split("\n").slice(-60).join("\n")}`)
-}
-
 if (failures.length > 0) {
 	console.log(`\n${failures.length} of ${cases.length} failed. Projects kept in ${workspace}`)
 	process.exit(1)
