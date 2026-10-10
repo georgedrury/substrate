@@ -46,8 +46,6 @@ next-env.d.ts
 
 # cli
 packages/cli/node_modules
-*storybook.log
-storybook-static
 packages/create-substrate/node_modules
 
 # skills
