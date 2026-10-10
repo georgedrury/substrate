@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useRef, useCallback } from "react"
-import { useDocumentStore } from "../stores/document-store"
-import { useToolStore } from "../stores/tool-store"
+import { useDocumentStore } from "@/stores/substrate/document-store"
+import { useToolStore } from "@/stores/substrate/tool-store"
 import {
 	renderGrid,
 	renderElement,
@@ -10,9 +10,9 @@ import {
 	renderResizeHandles,
 	renderCreationPreview,
 	renderMarquee,
-} from "../canvas/renderer"
-import { worldToScreen } from "../lib/math"
-import type { Point, Bounds } from "../types"
+} from "@/components/substrate/renderer"
+import { worldToScreen } from "@/lib/substrate/math"
+import type { Point, Bounds } from "@/lib/substrate/types"
 
 interface DragState {
 	isDragging: boolean

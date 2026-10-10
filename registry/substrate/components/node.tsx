@@ -171,7 +171,9 @@ function NodePort({
 			data-connected={connected || undefined}
 			className={cn(
 				"relative flex items-center gap-2 h-6 text-xs",
-				direction === "input" ? "pl-0 pr-3" : "pl-3 pr-0 flex-row-reverse",
+				// Padding on both sides keeps the label clear of the port dot
+				"px-3",
+				direction === "output" && "flex-row-reverse",
 				className,
 			)}
 			{...props}

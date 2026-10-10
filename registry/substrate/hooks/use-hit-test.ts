@@ -1,11 +1,11 @@
 "use client"
 
 import { useCallback } from "react"
-import { useDocumentStore } from "../stores/document-store"
+import { useDocumentStore } from "@/stores/substrate/document-store"
 import { useCanvasTransform } from "./use-canvas-transform"
-import { getElementAtPoint, getHandleAtPoint } from "../canvas/hit-test"
-import { worldToScreen } from "../lib/math"
-import type { Point, HandlePosition, Bounds } from "../types"
+import { getElementAtPoint, getHandleAtPoint } from "@/components/substrate/hit-test"
+import { worldToScreen } from "@/lib/substrate/math"
+import type { Point, HandlePosition, Bounds } from "@/lib/substrate/types"
 
 export function useHitTest() {
   const elements = useDocumentStore((s) => s.elements)

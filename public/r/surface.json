@@ -15,7 +15,7 @@
   "cssVars": {
     "theme": {
       "color-canvas": "var(--canvas, var(--color-background))",
-      "color-canvas-foreground": "var(--canvas-foreground, var(--color-foreground-muted))"
+      "color-canvas-foreground": "var(--canvas-foreground, var(--color-muted-foreground))"
     },
     "light": {
       "canvas": "oklch(.97 0.0 0)",

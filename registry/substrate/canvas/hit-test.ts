@@ -3,8 +3,8 @@ import type {
   Bounds,
   DesignElement,
   HandlePosition,
-} from "../types"
-import { rotatePoint, boundsCenter, pointInBounds, pointInEllipseBounds } from "../lib/math"
+} from "@/lib/substrate/types"
+import { rotatePoint, boundsCenter, pointInBounds, pointInEllipseBounds } from "@/lib/substrate/math"
 
 const HANDLE_SIZE = 8
 

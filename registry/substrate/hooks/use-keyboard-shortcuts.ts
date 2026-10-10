@@ -1,11 +1,11 @@
 "use client"
 
 import { useEffect, useRef, useCallback } from "react"
-import { useDocumentStore } from "../stores/document-store"
-import { useToolStore } from "../stores/tool-store"
+import { useDocumentStore } from "@/stores/substrate/document-store"
+import { useToolStore } from "@/stores/substrate/tool-store"
 import { useCanvasTransform } from "./use-canvas-transform"
-import { generateId } from "../lib/id"
-import type { DesignElement } from "../types"
+import { generateId } from "@/lib/substrate/id"
+import type { DesignElement } from "@/lib/substrate/types"
 
 export function useKeyboardShortcuts() {
   const elements = useDocumentStore((s) => s.elements)

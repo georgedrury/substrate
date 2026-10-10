@@ -14,8 +14,6 @@
  * ```
  */
 
-type Modifier = "meta" | "ctrl" | "shift" | "alt"
-
 type ShortcutEntry = {
 	/** The key value (e.g. "z", "Delete", "ArrowUp", " ") */
 	key: string

@@ -123,6 +123,16 @@ function NumberInput({
 		[],
 	)
 
+	const commitEdit = useCallback(() => {
+		const num = parseFloat(editValue)
+		// Skip unchanged values so a focus and blur does not add an undo step
+		if (!isNaN(num) && clamp(num) !== value) {
+			onStart?.()
+			onChange(clamp(num))
+		}
+		setIsEditing(false)
+	}, [editValue, value, clamp, onChange, onStart])
+
 	// ── Keyboard step on input ──
 
 	const handleKeyDown = useCallback(
@@ -143,7 +153,7 @@ function NumberInput({
 				inputRef.current?.blur()
 			}
 		},
-		[value, step, shiftStep, clamp, onChange, onStart],
+		[value, step, shiftStep, clamp, onChange, onStart, commitEdit],
 	)
 
 	// ── Direct editing ──
@@ -152,15 +162,6 @@ function NumberInput({
 		setIsEditing(true)
 		setEditValue(format(value))
 	}, [value, format])
-
-	const commitEdit = useCallback(() => {
-		const num = parseFloat(editValue)
-		if (!isNaN(num)) {
-			onStart?.()
-			onChange(clamp(num))
-		}
-		setIsEditing(false)
-	}, [editValue, clamp, onChange, onStart])
 
 	const handleBlur = useCallback(() => {
 		if (isEditing) commitEdit()

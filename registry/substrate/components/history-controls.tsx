@@ -2,7 +2,7 @@
 
 import { RiArrowGoBackLine, RiArrowGoForwardLine } from "@remixicon/react"
 import { cn } from "@/lib/utils"
-import { useDocumentStore } from "../stores/document-store"
+import { useDocumentStore } from "@/stores/substrate/document-store"
 
 type HistoryControlsProps = {
 	size?: "sm" | "md"

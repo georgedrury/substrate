@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useCallback } from "react"
-import type { Point, HandlePosition } from "../types"
+import type { Point, HandlePosition } from "@/lib/substrate/types"
 
 export type DragType = "create" | "move" | "resize" | "marquee" | "pan"
 

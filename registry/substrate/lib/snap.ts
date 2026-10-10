@@ -10,7 +10,7 @@
  * ```
  */
 
-import type { Point, Bounds } from "../types"
+import type { Point, Bounds } from "@/lib/substrate/types"
 
 // ── Grid snapping ──
 

@@ -19,6 +19,16 @@
       }
     ],
     "paths": {
+      "@/components/substrate/*": [
+        "./registry/substrate/components/*",
+        "./registry/substrate/canvas/*"
+      ],
+      "@/hooks/substrate/*": ["./registry/substrate/hooks/*"],
+      "@/lib/substrate/*": [
+        "./registry/substrate/lib/*",
+        "./registry/substrate/*"
+      ],
+      "@/stores/substrate/*": ["./registry/substrate/stores/*"],
       "@/*": ["./*"]
     }
   },

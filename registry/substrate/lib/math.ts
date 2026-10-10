@@ -1,4 +1,4 @@
-import type { Point, Bounds, Camera } from "../types"
+import type { Point, Bounds, Camera } from "@/lib/substrate/types"
 
 export function rotatePoint(point: Point, center: Point, angleDeg: number): Point {
   const rad = (angleDeg * Math.PI) / 180

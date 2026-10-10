@@ -1,9 +1,9 @@
 "use client"
 
 import { useCallback } from "react"
-import type { Point, Camera } from "../types"
-import { screenToWorld, worldToScreen, clamp } from "../lib/math"
-import { useDocumentStore } from "../stores/document-store"
+import type { Point, Camera } from "@/lib/substrate/types"
+import { screenToWorld, worldToScreen, clamp } from "@/lib/substrate/math"
+import { useDocumentStore } from "@/stores/substrate/document-store"
 
 const MIN_ZOOM = 0.1
 const MAX_ZOOM = 10

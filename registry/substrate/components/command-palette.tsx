@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { Command as CommandPrimitive } from "cmdk"
 import { Dialog as DialogPrimitive } from "radix-ui"
 import { RiSearchLine } from "@remixicon/react"

@@ -1,8 +1,8 @@
 "use client"
 
 import { useCallback, useRef } from "react"
-import { Slider } from "@/registry/substrate/components/slider"
-import { NumberInput } from "@/registry/substrate/components/number-input"
+import { Slider } from "@/components/substrate/slider"
+import { NumberInput } from "@/components/substrate/number-input"
 import { cn } from "@/lib/utils"
 
 type NumberSliderProps = {

@@ -9,7 +9,7 @@ import type {
 	Bounds,
 	Point,
 	ToolType,
-} from "../types"
+} from "@/lib/substrate/types"
 
 // ── Grid ──
 
@@ -226,7 +226,7 @@ export function renderElement(
 export function renderSelectionBox(
 	ctx: CanvasRenderingContext2D,
 	bounds: Bounds,
-	zoom: number,
+	_zoom: number,
 ) {
 	ctx.strokeStyle = "oklch(0.6 0.2 250)"
 	ctx.lineWidth = 1.5

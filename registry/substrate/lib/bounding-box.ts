@@ -9,7 +9,7 @@
  * ```
  */
 
-import type { Bounds, Point } from "../types"
+import type { Bounds, Point } from "@/lib/substrate/types"
 
 /**
  * Compute the union bounding box of multiple bounds.

@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import type { LeftPanelId, RightPanelId } from "../types"
+import type { LeftPanelId, RightPanelId } from "@/lib/substrate/types"
 
 interface PanelState {
   leftPanel: LeftPanelId

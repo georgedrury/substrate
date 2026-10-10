@@ -15,7 +15,7 @@ type DragItemProps = {
 	"data-dragging"?: boolean
 }
 
-type UseDragReorderReturn<T> = {
+type UseDragReorderReturn = {
 	/** Spread these props on each draggable item */
 	getDragItemProps: (index: number) => DragItemProps
 	/** Index of the item currently being dragged, or null */
@@ -30,7 +30,7 @@ function useDragReorder<T>({
 	items,
 	onReorder,
 	threshold = 3,
-}: UseDragReorderOptions<T>): UseDragReorderReturn<T> {
+}: UseDragReorderOptions<T>): UseDragReorderReturn {
 	const [dragIndex, setDragIndex] = useState<number | null>(null)
 	const [dropIndex, setDropIndex] = useState<number | null>(null)
 	const [isDragging, setIsDragging] = useState(false)

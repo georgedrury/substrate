@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import type { DesignElement, Camera } from "../types"
+import type { DesignElement, Camera } from "@/lib/substrate/types"
 
 const MAX_HISTORY = 50
 

@@ -1,10 +1,10 @@
 "use client"
 
 import { useRef } from "react"
-import { useCanvasRenderer } from "../hooks/use-canvas-renderer"
-import { useCanvasInteraction } from "../hooks/use-canvas-interaction"
-import { useKeyboardShortcuts } from "../hooks/use-keyboard-shortcuts"
-import { useToolStore } from "../stores/tool-store"
+import { useCanvasRenderer } from "@/hooks/substrate/use-canvas-renderer"
+import { useCanvasInteraction } from "@/hooks/substrate/use-canvas-interaction"
+import { useKeyboardShortcuts } from "@/hooks/substrate/use-keyboard-shortcuts"
+import { useToolStore } from "@/stores/substrate/tool-store"
 
 const CURSOR_MAP: Record<string, string> = {
 	select: "default",

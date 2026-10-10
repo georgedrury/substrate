@@ -25,7 +25,6 @@ function useClipboard<T>({
 	onCut,
 	serialize = (items) => JSON.stringify(items),
 	deserialize = (data) => JSON.parse(data) as T[],
-	dataType = "application/x-substrate-clipboard",
 	disabled,
 }: UseClipboardOptions<T>) {
 	const clipboardRef = useRef<string | null>(null)

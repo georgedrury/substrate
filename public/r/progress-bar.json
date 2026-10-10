@@ -12,6 +12,21 @@
       "target": "components/substrate/progress-bar.tsx"
     }
   ],
+  "cssVars": {
+    "theme": {
+      "animate-progress-indeterminate": "progress-indeterminate 1.5s ease-in-out infinite"
+    }
+  },
+  "css": {
+    "@keyframes progress-indeterminate": {
+      "0%": {
+        "transform": "translateX(-100%)"
+      },
+      "100%": {
+        "transform": "translateX(400%)"
+      }
+    }
+  },
   "meta": {
     "example": "<ProgressBar value={75} max={100} />",
     "lineage": [

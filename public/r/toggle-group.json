@@ -7,9 +7,6 @@
   "dependencies": [
     "radix-ui"
   ],
-  "registryDependencies": [
-    "toggle"
-  ],
   "files": [
     {
       "path": "registry/substrate/components/toggle-group.tsx",

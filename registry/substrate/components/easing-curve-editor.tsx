@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef, useEffect, useState } from "react"
+import React, { useRef, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import {
   CubicBezier,
@@ -8,7 +8,7 @@ import {
   EasingPresetName,
   evaluateCubicBezier,
   isCubicBezierEqual,
-} from "../lib/easing"
+} from "@/lib/substrate/easing"
 
 /**
  * Canvas-based visualization of cubic bezier easing curves
@@ -57,8 +57,6 @@ function EasingCurveCanvas({
     // Coordinate conversion: canvas space to bezier space [0,1]x[0,1]
     const toCanvasX = (x: number) => x * displayWidth
     const toCanvasY = (y: number) => displayHeight - y * displayHeight // Flip Y axis
-    const toBezierX = (px: number) => px / displayWidth
-    const toBezierY = (py: number) => 1 - py / displayHeight
 
     // Draw grid
     ctx.strokeStyle = "rgba(0, 0, 0, 0.05)"

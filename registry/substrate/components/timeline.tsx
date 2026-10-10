@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react"
 import { RiPlayLine, RiPauseLine, RiLoopLeftLine } from "@remixicon/react"
 import { cn } from "@/lib/utils"
-import { useAnimationStore } from "../stores/animation-store"
+import { useAnimationStore } from "@/stores/substrate/animation-store"
 
 // ── Timeline ──
 

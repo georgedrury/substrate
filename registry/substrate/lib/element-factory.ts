@@ -5,7 +5,7 @@ import type {
   TextElement,
   LineElement,
   FrameElement,
-} from "../types"
+} from "@/lib/substrate/types"
 import { generateId } from "./id"
 
 const counters: Record<string, number> = {}

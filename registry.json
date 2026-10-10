@@ -494,7 +494,7 @@
       "cssVars": {
         "theme": {
           "color-canvas": "var(--canvas, var(--color-background))",
-          "color-canvas-foreground": "var(--canvas-foreground, var(--color-foreground-muted))"
+          "color-canvas-foreground": "var(--canvas-foreground, var(--color-muted-foreground))"
         },
         "light": {
           "canvas": "oklch(.97 0.0 0)",
@@ -699,7 +699,7 @@
       "cssVars": {
         "theme": {
           "color-canvas": "var(--canvas, var(--color-background))",
-          "color-canvas-foreground": "var(--canvas-foreground, var(--color-foreground-muted))"
+          "color-canvas-foreground": "var(--canvas-foreground, var(--color-muted-foreground))"
         },
         "light": {
           "canvas": "oklch(.97 0.0 0)",
@@ -878,6 +878,9 @@
           "type": "registry:component",
           "target": "components/substrate/history-controls.tsx"
         }
+      ],
+      "registryDependencies": [
+        "https://substrate.georgedrury.co.uk/r/document-store"
       ]
     },
     {
@@ -1316,7 +1319,35 @@
           "target": "components/substrate/collapsible-pane.tsx"
         }
       ],
-      "author": "George Drury <info@georgedrury.co.uk>"
+      "author": "George Drury <info@georgedrury.co.uk>",
+      "cssVars": {
+        "theme": {
+          "animate-collapsible-down": "collapsible-down 150ms ease-out",
+          "animate-collapsible-up": "collapsible-up 150ms ease-out"
+        }
+      },
+      "css": {
+        "@keyframes collapsible-down": {
+          "from": {
+            "height": "0",
+            "opacity": "0"
+          },
+          "to": {
+            "height": "var(--radix-collapsible-content-height)",
+            "opacity": "1"
+          }
+        },
+        "@keyframes collapsible-up": {
+          "from": {
+            "height": "var(--radix-collapsible-content-height)",
+            "opacity": "1"
+          },
+          "to": {
+            "height": "0",
+            "opacity": "0"
+          }
+        }
+      }
     },
     {
       "name": "command-palette",
@@ -1493,7 +1524,11 @@
           "color-node-port-geometry": "var(--node-port-geometry, oklch(0.7 0.15 200))",
           "color-node-port-text": "var(--node-port-text, oklch(0.7 0.15 150))",
           "color-node-port-boolean": "var(--node-port-boolean, oklch(0.7 0.15 30))",
-          "color-node-port-any": "var(--node-port-any, oklch(0.6 0 0))"
+          "color-node-port-any": "var(--node-port-any, oklch(0.6 0 0))",
+          "color-node-bg": "var(--node-bg, var(--card))",
+          "color-node-border": "var(--node-border, var(--border))",
+          "color-node-header": "var(--node-header, var(--muted))",
+          "color-node-selected": "var(--node-selected, var(--ring))"
         }
       },
       "meta": {
@@ -1524,8 +1559,8 @@
         "form"
       ],
       "registryDependencies": [
-        "slider",
-        "number-input"
+        "https://substrate.georgedrury.co.uk/r/slider",
+        "https://substrate.georgedrury.co.uk/r/number-input"
       ],
       "meta": {
         "example": "<NumberSlider label=\"Opacity\" min={0} max={100} value={opacity} onChange={setOpacity} />",
@@ -1600,7 +1635,22 @@
           "target": "components/substrate/progress-bar.tsx"
         }
       ],
-      "author": "George Drury <info@georgedrury.co.uk>"
+      "author": "George Drury <info@georgedrury.co.uk>",
+      "cssVars": {
+        "theme": {
+          "animate-progress-indeterminate": "progress-indeterminate 1.5s ease-in-out infinite"
+        }
+      },
+      "css": {
+        "@keyframes progress-indeterminate": {
+          "0%": {
+            "transform": "translateX(-100%)"
+          },
+          "100%": {
+            "transform": "translateX(400%)"
+          }
+        }
+      }
     },
     {
       "name": "resizer",
@@ -1851,9 +1901,6 @@
       ],
       "dependencies": [
         "radix-ui"
-      ],
-      "registryDependencies": [
-        "toggle"
       ],
       "meta": {
         "example": "<ToggleGroup type=\"single\" value={align} onValueChange={setAlign}><ToggleGroupItem value=\"left\">Left</ToggleGroupItem><ToggleGroupItem value=\"center\">Center</ToggleGroupItem><ToggleGroupItem value=\"right\">Right</ToggleGroupItem></ToggleGroup>",

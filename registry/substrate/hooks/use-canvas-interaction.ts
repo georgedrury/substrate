@@ -1,21 +1,21 @@
 "use client"
 
 import { useCallback, useRef } from "react"
-import { useDocumentStore } from "../stores/document-store"
-import { useToolStore } from "../stores/tool-store"
+import { useDocumentStore } from "@/stores/substrate/document-store"
+import { useToolStore } from "@/stores/substrate/tool-store"
 import { useCanvasTransform } from "./use-canvas-transform"
 import { useHitTest } from "./use-hit-test"
-import { useCanvasDrag, type DragInfo } from "./use-canvas-drag"
-import { getElementsInBounds } from "../canvas/hit-test"
+import { useCanvasDrag } from "./use-canvas-drag"
+import { getElementsInBounds } from "@/components/substrate/hit-test"
 import {
   createRectangle,
   createEllipse,
   createText,
   createLine,
   createFrame,
-} from "../lib/element-factory"
-import { normalizeBounds, distance } from "../lib/math"
-import type { Point, DesignElement, HandlePosition } from "../types"
+} from "@/lib/substrate/element-factory"
+import { normalizeBounds, distance } from "@/lib/substrate/math"
+import type { Point, DesignElement, HandlePosition } from "@/lib/substrate/types"
 
 const DRAG_THRESHOLD = 3
 

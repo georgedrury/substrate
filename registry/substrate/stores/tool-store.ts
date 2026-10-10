@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import type { ToolType } from "../types"
+import type { ToolType } from "@/lib/substrate/types"
 
 interface ToolState {
   activeTool: ToolType
