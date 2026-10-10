@@ -109,7 +109,7 @@ export async function create(
 				log.step(`  ${component}`)
 			} catch {
 				log.warn(
-					`  Failed to install ${component} — you can add it later with: substrate add ${component}`,
+					`  Failed to install ${component} — you can add it later with: npx substrate-kit add ${component}`,
 				)
 			}
 		}
@@ -181,6 +181,7 @@ function packageJson(name: string): string {
 				"tw-animate-css": "^1.4.0",
 				eslint: "^9",
 				"eslint-config-next": "^15.5.0",
+				"@substrate-kit/cli": "^0.1.1",
 			},
 		},
 		null,

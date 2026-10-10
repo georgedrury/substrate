@@ -9,7 +9,7 @@ description: Scaffold a new Substrate playground from the command line
 npx create-substrate
 ```
 
-The CLI walks you through three choices — project name, surface type, and package manager — then scaffolds a working Next.js project with the right components, stores, and skills pre-installed.
+The CLI walks you through three choices — project name, surface type, and package manager — then scaffolds a working Vite + React project with the right components, stores, and skills pre-installed.
 
 ```bash
 npx create-substrate my-editor --surface canvas-2d --pm pnpm
@@ -190,4 +190,4 @@ npx create-substrate [project-name] [options]
 | `--skip-install` | Skip dependency installation |
 | `--skip-git` | Don't initialise a git repository |
 
-If you already have a project and want to add Substrate to it, use `substrate-kit init` instead — it installs skills, CLAUDE.md, and configuration without creating a new directory.
+If you already have a project and want to add Substrate to it, use `npx @substrate-kit/cli init` instead — it installs skills, CLAUDE.md, and configuration without creating a new directory.

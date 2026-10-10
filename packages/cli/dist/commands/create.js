@@ -74,7 +74,7 @@ export async function create(projectName, options = {}) {
                 log.step(`  ${component}`);
             }
             catch {
-                log.warn(`  Failed to install ${component} — you can add it later with: substrate add ${component}`);
+                log.warn(`  Failed to install ${component} — you can add it later with: npx substrate-kit add ${component}`);
             }
         }
         log.success("Substrate components installed");
@@ -136,6 +136,7 @@ function packageJson(name) {
             "tw-animate-css": "^1.4.0",
             eslint: "^9",
             "eslint-config-next": "^15.5.0",
+            "@substrate-kit/cli": "^0.1.1",
         },
     }, null, 2);
 }

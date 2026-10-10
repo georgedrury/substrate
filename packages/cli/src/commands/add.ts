@@ -296,7 +296,7 @@ export async function add(
 
 	if (!found) {
 		log.error(
-			"No components.json found. Run 'substrate init' first or ensure you're in a project directory.",
+			"No components.json found. Run 'npx @substrate-kit/cli init' first or ensure you're in a project directory.",
 		)
 		process.exit(1)
 	}
@@ -331,13 +331,13 @@ export async function add(
 		const registry = await loadRegistry()
 		if (!registry) {
 			log.error("Could not load the Substrate registry.")
-			log.info("Usage: substrate add design-canvas toolbar panel")
+			log.info("Usage: substrate-kit add design-canvas toolbar panel")
 			process.exit(1)
 		}
 
 		if (!process.stdin.isTTY) {
 			log.error(
-				"Interactive mode requires a terminal. Specify components: substrate add design-canvas toolbar",
+				"Interactive mode requires a terminal. Specify components: substrate-kit add design-canvas toolbar",
 			)
 			process.exit(1)
 		}

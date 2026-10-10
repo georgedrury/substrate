@@ -29,7 +29,7 @@ export async function handleSearch(
     title: i.title,
     description: i.description,
     categories: i.categories,
-    install: `substrate add ${i.name}`,
+    install: `npx substrate-kit add ${i.name}`,
   }))
 
   return {

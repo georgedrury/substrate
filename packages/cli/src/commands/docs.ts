@@ -106,7 +106,7 @@ function formatComponent(item: RegistryItem): void {
 
 	console.log()
 	console.log("  Install:")
-	console.log(`    substrate add ${item.name}`)
+	console.log(`    npx substrate-kit add ${item.name}`)
 
 	console.log()
 	console.log("  Docs:")

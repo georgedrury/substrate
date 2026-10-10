@@ -17,7 +17,7 @@ A Substrate playground is a creative app built from composable primitives: a **s
 A Next.js 14+ project with Tailwind CSS and the shadcn CLI configured. If you don't have one, run:
 
 ```bash
-npx substrate create my-playground
+npx create-substrate my-playground
 ```
 
 This scaffolds a full project with dependencies, globals.css with Substrate tokens, and a starter playground page.
@@ -25,7 +25,7 @@ This scaffolds a full project with dependencies, globals.css with Substrate toke
 To add Substrate to an existing project instead:
 
 ```bash
-npx substrate-kit init
+npx @substrate-kit/cli init
 ```
 
 This installs skills, CLAUDE.md, components.json, and registers the MCP server.

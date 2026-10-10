@@ -88,7 +88,7 @@ export async function scaffold(projectName, options) {
         log.success(`Installed ${skillNames.length} skills`);
     }
     catch {
-        log.warn("Could not install skills — run 'npx substrate-kit init' to add them later");
+        log.warn("Could not install skills — run 'npx @substrate-kit/cli init' to add them later");
     }
     // 5. Write CLAUDE.md
     writeFile(join(projectDir, "CLAUDE.md"), claudeMd());
@@ -132,6 +132,7 @@ function packageJson(name, config, options) {
         "@types/react-dom": "^19",
         vite: "^6.3.0",
         "@vitejs/plugin-react": "^4.4.0",
+        "@substrate-kit/cli": "^0.1.1",
         tailwindcss: "^4",
         "@tailwindcss/vite": "^4",
         ...config.extraDevDeps,

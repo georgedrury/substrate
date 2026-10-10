@@ -1,6 +1,9 @@
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { copyDir, exists, writeFile, resolveSkillsDir, listDirs, } from "../utils/fs.js";
 import { log } from "../utils/logger.js";
+const CLI_PACKAGE = "@substrate-kit/cli";
+const CLI_RANGE = "^0.1.1";
 function claudeMd() {
     return `# Substrate
 
@@ -140,6 +143,18 @@ export async function init(options = {}) {
         };
         writeFile(mcpJsonPath, JSON.stringify(mcpConfig, null, 2) + "\n");
         log.success("Created .mcp.json (Substrate MCP server registered)");
+    }
+    // 5. Add the CLI as a dev dependency so `npx substrate-kit` resolves locally
+    const packageJsonPath = join(cwd, "package.json");
+    if (exists(packageJsonPath)) {
+        const raw = readFileSync(packageJsonPath, "utf-8");
+        const pkg = JSON.parse(raw);
+        if (!pkg.dependencies?.[CLI_PACKAGE] && !pkg.devDependencies?.[CLI_PACKAGE]) {
+            pkg.devDependencies = { ...pkg.devDependencies, [CLI_PACKAGE]: CLI_RANGE };
+            const indent = raw.includes("\n\t") ? "\t" : 2;
+            writeFile(packageJsonPath, JSON.stringify(pkg, null, indent) + "\n");
+            log.success(`Added ${CLI_PACKAGE} to devDependencies (install to use npx substrate-kit)`);
+        }
     }
     log.blank();
     log.info("Substrate is ready. Claude can now use the skills for creative app development.");

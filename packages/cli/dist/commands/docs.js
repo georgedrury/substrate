@@ -79,7 +79,7 @@ function formatComponent(item) {
     }
     console.log();
     console.log("  Install:");
-    console.log(`    substrate add ${item.name}`);
+    console.log(`    npx substrate-kit add ${item.name}`);
     console.log();
     console.log("  Docs:");
     console.log(`    ${DOCS_BASE}/${item.name}`);

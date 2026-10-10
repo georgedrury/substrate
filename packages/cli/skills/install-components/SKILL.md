@@ -43,7 +43,7 @@ npx substrate-kit add --list-categories
 
 ### Requirements
 
-- Run from a project initialised with `npx substrate-kit init` (or created with `npx substrate-kit create`). The CLI looks for `components.json` — it will error if it's missing.
+- Run from a project created with `npx create-substrate` or initialised with `npx @substrate-kit/cli init`. Both add `@substrate-kit/cli` as a dev dependency, which is what makes `npx substrate-kit` resolve. The CLI looks for `components.json` — it will error if it's missing.
 - Components land in `registry/substrate/...` and related aliases defined in `components.json`.
 - Under the hood the CLI delegates to `npx shadcn@latest add` against `https://substrate.georgedrury.co.uk/r/<name>`. Do **not** use the shadcn CLI directly — always go through `substrate-kit add` so the CLI can print theme-override hints and keep the workflow uniform.
 
