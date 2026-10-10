@@ -40,7 +40,7 @@ A horizontal row that auto-styles its children:
 | `colour-swatch`  | `size-4`, removes border             |
 | `slider`         | Removes border                       |
 
-**Exports**: `ActionControls`, `ActionLabel`, `ActionSeparator`
+**Exports**: `Action`, `ActionLabel`, `ActionControls`
 
 **Typical use**: Group a label + one or more controls on a single row inside a pane.
 
@@ -173,14 +173,12 @@ Cubic bezier editor with draggable control points and real-time preview.
 		<ActionControls>
 			<ActionLabel>X</ActionLabel>
 			<NumberInput value={x} onChange={setX} onStart={pushSnapshot} />
-			<ActionSeparator />
 			<ActionLabel>Y</ActionLabel>
 			<NumberInput value={y} onChange={setY} onStart={pushSnapshot} />
 		</ActionControls>
 		<ActionControls>
 			<ActionLabel>W</ActionLabel>
 			<NumberInput value={w} onChange={setW} min={0} onStart={pushSnapshot} />
-			<ActionSeparator />
 			<ActionLabel>H</ActionLabel>
 			<NumberInput value={h} onChange={setH} min={0} onStart={pushSnapshot} />
 		</ActionControls>

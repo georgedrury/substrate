@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Substrate
 
-## Getting Started
+Primitives for building creative tools: canvases, panels, panes, controls, timelines and node editors. Components are distributed as a [shadcn registry](https://ui.shadcn.com/docs/registry), so the source is copied into your project.
 
-First, run the development server:
+Docs: [substrate.georgedrury.co.uk](https://substrate.georgedrury.co.uk)
+
+## Usage
+
+Scaffold a new playground:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm create substrate@latest
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Or add a component to an existing shadcn project:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/panel
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Repository layout
 
-## Learn More
+| Path | Contents |
+| --- | --- |
+| `registry/substrate/` | Source for components, hooks, stores and utilities |
+| `registry/examples/` | Demos rendered in the docs |
+| `registry.json` | Registry manifest; `public/r/` is built from it |
+| `content/docs/` | Documentation (fumadocs) |
+| `components/design/` | The design editor demo built from the registry |
+| `packages/cli/` | `@substrate-kit/cli`: CLI, MCP server and agent skills |
+| `packages/create-substrate/` | `create-substrate`: project scaffolder |
 
-To learn more about Next.js, take a look at the following resources:
+## Development
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run dev             # docs site on http://localhost:3000
+npm run registry:build  # rebuild public/r after changing registry sources
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Each package builds with `npm run build` from its own directory.
 
-## Deploy on Vercel
+## Licence
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
