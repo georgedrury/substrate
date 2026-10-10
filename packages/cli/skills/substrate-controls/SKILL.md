@@ -159,7 +159,7 @@ Auto-resizing textarea with `minRows` / `maxRows`. Shares border/bg styling with
 
 `registry/substrate/components/colour-picker.tsx`
 
-HSV colour picker with hex/RGB inputs and opacity slider. The swatch trigger renders `data-slot="colour-swatch"` for slot-aware composition.
+Colour picker with a hex input. `value` accepts any CSS colour (hex, `oklch()`, `rgb()`, named) and `onChange` returns hex; `onStart` fires when a drag or edit begins, for undo snapshots. The swatch trigger renders `data-slot="colour-swatch"` for slot-aware composition.
 
 **When to use**: Fill, stroke, background, text colour – any colour property.
 

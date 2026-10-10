@@ -133,7 +133,7 @@ export function ChartSurface() {
 
 For a dashboard builder, the surface contains a grid of chart tiles. Each tile is a chart config rendered at a specific position. Use the 2D canvas interaction patterns (drag to move, resize handles) for layout editing, but render each tile as a React component with Recharts inside.
 
-## Wiring to Substrate scaffold
+## Wiring to Substrate chrome
 
 ### Toolbar
 
@@ -220,3 +220,9 @@ Some examples of what this surface enables:
 - **Analytics playground** — connect to a live data source, real-time updating charts
 - **Comparison tool** — side-by-side charts with linked brushing
 - **Chart editor** — design a single publication-quality chart with fine-grained style controls
+
+## Related reference skills
+
+- **substrate-scaffold** — Toolbar, Panel, StatusBar, DocumentTabs for the app shell
+- **substrate-controls** — Select, NumberInput, Slider, ColourPicker for chart configuration
+- **substrate-feedback** — Toast, EmptyState, CommandPalette for data loading feedback

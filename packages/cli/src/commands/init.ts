@@ -10,7 +10,7 @@ import {
 import { log } from "../utils/logger.js"
 
 const CLI_PACKAGE = "@substrate-kit/cli"
-const CLI_RANGE = "^0.1.2"
+const CLI_RANGE = "^0.1.3"
 
 type PackageJson = {
 	dependencies?: Record<string, string>

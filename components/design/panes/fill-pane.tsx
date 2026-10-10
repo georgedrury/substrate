@@ -50,10 +50,8 @@ export function FillPane() {
 						<ActionControls>
 							<ColourPicker
 								value={fill.color}
-								onChange={(color) => {
-									pushSnapshot()
-									updateFill({ color })
-								}}
+								onChange={(color) => updateFill({ color })}
+								onStart={() => pushSnapshot()}
 							/>
 							<span className="text-[11px] font-mono text-muted-foreground truncate">
 								{fill.color}

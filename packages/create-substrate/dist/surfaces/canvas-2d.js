@@ -82,9 +82,6 @@ const SHAPE_TOOLS: ToolDefinition[] = [
 
 const TOOLS = [...POINTER_TOOLS, ...SHAPE_TOOLS]
 
-// The colour picker edits hex values. Shapes drawn with the tools start with
-// an oklch fill, so the picker opens on this grey until a colour is chosen.
-const PICKER_FALLBACK = "#d4d4d4"
 const ACTION_BUTTON =
   "inline-flex h-7 min-w-7 items-center justify-center rounded-md px-2 outline-none transition-all hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 data-active:bg-accent data-active:text-accent-foreground"
 
@@ -279,7 +276,6 @@ function PropertiesPanel() {
 
   const id = element.id
   const fill = element.fill
-  const fillHex = fill && fill.color.startsWith("#") ? fill.color : PICKER_FALLBACK
 
   return (
     <Panel position="right" className="shrink-0">
@@ -342,8 +338,8 @@ function PropertiesPanel() {
         <PaneContent className="flex items-center gap-2">
           {/* One undo step per drag: snapshot when the picker is pressed */}
           <ColourPicker
-            value={fillHex}
-            onPointerDown={pushSnapshot}
+            value={fill ? fill.color : "transparent"}
+            onStart={pushSnapshot}
             onChange={(color) =>
               updateElement(id, {
                 fill: { type: "solid", color, opacity: fill?.opacity ?? 1 },

@@ -38,22 +38,24 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/colour-picker
 
 | Prop       | Type                       | Default | Description                |
 | ---------- | -------------------------- | ------- | -------------------------- |
-| `value`    | `string`                   | —       | Current hex colour value   |
-| `onChange` | `(colour: string) => void` | —       | Called when colour changes |
+| `value`    | `string`                   | —       | Current colour, in any CSS format (hex, `oklch()`, `rgb()`, named) |
+| `onChange` | `(colour: string) => void` | —       | Called with the new colour as hex |
+| `onStart`  | `() => void`               | —       | Called when a drag or edit begins. Useful for undo snapshots. |
 | `children` | `React.ReactNode`          | Swatch  | Custom trigger element     |
 
 ### ColourPickerContent
 
 | Prop       | Type                       | Default | Description                |
 | ---------- | -------------------------- | ------- | -------------------------- |
-| `value`    | `string`                   | —       | Current hex colour value   |
-| `onChange` | `(colour: string) => void` | —       | Called when colour changes |
+| `value`    | `string`                   | —       | Current colour, in any CSS format |
+| `onChange` | `(colour: string) => void` | —       | Called with the new colour as hex |
+| `onStart`  | `() => void`               | —       | Called when a drag or edit begins |
 
 ### ColourSwatch
 
 | Prop     | Type           | Default | Description           |
 | -------- | -------------- | ------- | --------------------- |
-| `colour` | `string`       | —       | Hex colour to display |
+| `colour` | `string`       | —       | Any CSS colour to display |
 | `size`   | `"sm" \| "md"` | `"md"`  | Swatch size           |
 
 ### ColourInput

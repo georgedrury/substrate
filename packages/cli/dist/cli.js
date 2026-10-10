@@ -11,7 +11,7 @@ export function createCli() {
     program
         .name("substrate-kit")
         .description("Scaffold interactive canvas playgrounds with Substrate primitives")
-        .version("0.1.2");
+        .version("0.1.3");
     program
         .command("init")
         .description("Initialise Substrate skills and configuration in the current project")

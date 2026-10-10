@@ -185,7 +185,7 @@ function packageJson(name: string, config: typeof surfaces[SurfaceType], options
     "@types/react-dom": "^19",
     vite: "^6.3.0",
     "@vitejs/plugin-react": "^4.4.0",
-    "@substrate-kit/cli": "^0.1.1",
+    "@substrate-kit/cli": "^0.1.2",
     tailwindcss: "^4",
     "@tailwindcss/vite": "^4",
     "tw-animate-css": "^1.4.0",

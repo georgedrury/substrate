@@ -16,6 +16,8 @@ function nextName(base: string): string {
 }
 
 const DEFAULT_FILL = { type: "solid" as const, color: "oklch(0.85 0 0)", opacity: 1 }
+// Mid-grey reads on both the light and the dark canvas
+const DEFAULT_INK = "oklch(0.6 0 0)"
 
 export function createRectangle(bounds: Bounds): RectangleElement {
   return {
@@ -56,7 +58,7 @@ export function createText(bounds: Bounds): TextElement {
     ...bounds,
     rotation: 0,
     opacity: 1,
-    fill: { type: "solid", color: "oklch(0.145 0 0)", opacity: 1 },
+    fill: { type: "solid", color: DEFAULT_INK, opacity: 1 },
     stroke: null,
     locked: false,
     visible: true,
@@ -80,7 +82,7 @@ export function createLine(bounds: Bounds): LineElement {
     rotation: 0,
     opacity: 1,
     fill: null,
-    stroke: { color: "oklch(0.145 0 0)", width: 2, opacity: 1 },
+    stroke: { color: DEFAULT_INK, width: 2, opacity: 1 },
     locked: false,
     visible: true,
   }

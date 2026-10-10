@@ -128,7 +128,7 @@ function renderText(ctx: CanvasRenderingContext2D, el: TextElement) {
 	if (el.fill) {
 		applyFill(ctx, el)
 	} else {
-		ctx.fillStyle = "oklch(0.145 0 0)"
+		ctx.fillStyle = "oklch(0.6 0 0)"
 	}
 
 	const lineHeight = textStyle.fontSize * textStyle.lineHeight
@@ -151,7 +151,7 @@ function renderLine(ctx: CanvasRenderingContext2D, el: LineElement) {
 	if (el.stroke) {
 		applyStroke(ctx, el)
 	} else {
-		ctx.strokeStyle = "oklch(0.145 0 0)"
+		ctx.strokeStyle = "oklch(0.6 0 0)"
 		ctx.lineWidth = 2
 	}
 	ctx.stroke()

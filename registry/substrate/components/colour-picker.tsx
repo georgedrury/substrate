@@ -1,8 +1,23 @@
 "use client"
 
+import { useMemo } from "react"
 import { HexColorPicker, HexColorInput } from "react-colorful"
 import { Popover as PopoverPrimitive } from "radix-ui"
 import { cn } from "@/lib/utils"
+
+// The picker works in hex. Values can be any CSS colour (oklch, rgb, named),
+// so paint one pixel and read it back to let the browser do the conversion.
+function toHex(colour: string): string {
+	if (/^#[0-9a-f]{6}$/i.test(colour)) return colour
+	if (typeof document === "undefined") return "#000000"
+
+	const ctx = document.createElement("canvas").getContext("2d")
+	if (!ctx) return "#000000"
+	ctx.fillStyle = colour
+	ctx.fillRect(0, 0, 1, 1)
+	const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data
+	return `#${[r, g, b].map((channel) => channel.toString(16).padStart(2, "0")).join("")}`
+}
 
 // ── ColourSwatch ──
 
@@ -69,20 +84,28 @@ function ColourInput({
 // ── ColourPickerContent ──
 
 type ColourPickerContentProps = {
+	/** Any CSS colour */
 	value: string
+	/** Called with a hex colour */
 	onChange: (colour: string) => void
+	/** Called once when a drag or edit begins. Useful for undo snapshots. */
+	onStart?: () => void
 } & Omit<React.ComponentProps<"div">, "onChange">
 
 function ColourPickerContent({
 	value,
 	onChange,
+	onStart,
 	className,
 	...props
 }: ColourPickerContentProps) {
+	const hex = useMemo(() => toHex(value), [value])
+
 	return (
 		<div
 			data-slot="colour-picker-content"
 			className={cn("space-y-3", className)}
+			onPointerDownCapture={onStart}
 			{...props}
 		>
 			<style>{`
@@ -92,11 +115,11 @@ function ColourPickerContent({
 				}
 			`}</style>
 			<div className="colour-picker">
-				<HexColorPicker color={value} onChange={onChange} />
+				<HexColorPicker color={hex} onChange={onChange} />
 			</div>
 			<div className="flex items-center gap-2">
-				<ColourInput value={value} onChange={onChange} />
-				<ColourSwatch colour={value} size="sm" />
+				<ColourInput value={hex} onChange={onChange} />
+				<ColourSwatch colour={hex} size="sm" />
 			</div>
 		</div>
 	)
@@ -105,14 +128,19 @@ function ColourPickerContent({
 // ── ColourPicker ──
 
 type ColourPickerProps = {
+	/** Any CSS colour */
 	value: string
+	/** Called with a hex colour */
 	onChange: (colour: string) => void
+	/** Called once when a drag or edit begins. Useful for undo snapshots. */
+	onStart?: () => void
 	children?: React.ReactNode
 } & Omit<React.ComponentProps<"div">, "onChange">
 
 function ColourPicker({
 	value,
 	onChange,
+	onStart,
 	children,
 	className,
 	...props
@@ -138,7 +166,7 @@ function ColourPicker({
 					)}
 					{...props}
 				>
-					<ColourPickerContent value={value} onChange={onChange} />
+					<ColourPickerContent value={value} onChange={onChange} onStart={onStart} />
 					<PopoverPrimitive.Arrow className="fill-popover" />
 				</PopoverPrimitive.Content>
 			</PopoverPrimitive.Portal>

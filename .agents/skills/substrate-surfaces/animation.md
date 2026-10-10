@@ -98,7 +98,7 @@ The timeline uses horizontal dragging extensively:
 
 This is pointer-event-driven, similar to the 2D canvas interaction model but on a 1D (time) axis rather than 2D space. Consider a dedicated `useTimelineInteraction` hook following the same state machine pattern as `useCanvasInteraction`.
 
-## Wiring to Substrate scaffold
+## Wiring to Substrate chrome
 
 ### Toolbar
 
@@ -186,3 +186,9 @@ Some examples of what this surface enables:
 - **Sprite animator** — frame-by-frame sprite animation with onion skinning
 - **Motion graphics tool** — animate text and shapes along paths with timing controls
 - **Transition builder** — design page/component transitions, preview at different speeds
+
+## Related reference skills
+
+- **substrate-scaffold** — Toolbar, Panel, StatusBar for the app shell
+- **substrate-controls** — NumberInput, Slider, EasingCurveEditor, ActionControls for keyframe properties
+- **substrate-interaction** — useUndoable, createKeyboardShortcuts, LayerList for animation layers

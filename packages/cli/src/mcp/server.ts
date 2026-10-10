@@ -14,7 +14,7 @@ export async function startServer(): Promise<void> {
 
   const server = new McpServer({
     name: "substrate",
-    version: "0.1.2",
+    version: "0.1.3",
   })
 
   server.tool(

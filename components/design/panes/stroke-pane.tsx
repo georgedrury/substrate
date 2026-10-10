@@ -21,7 +21,7 @@ export function StrokePane() {
 
 	const updateStroke = (changes: Partial<Stroke>) => {
 		const current = element.stroke ?? {
-			color: "oklch(0.145 0 0)",
+			color: "oklch(0.6 0 0)",
 			width: 1,
 			opacity: 1,
 		}
@@ -33,7 +33,7 @@ export function StrokePane() {
 		updateElement(element.id, {
 			stroke: stroke
 				? null
-				: { color: "oklch(0.145 0 0)", width: 1, opacity: 1 },
+				: { color: "oklch(0.6 0 0)", width: 1, opacity: 1 },
 		})
 	}
 
@@ -51,10 +51,8 @@ export function StrokePane() {
 						<ActionControls>
 							<ColourPicker
 								value={stroke.color}
-								onChange={(color) => {
-									pushSnapshot()
-									updateStroke({ color })
-								}}
+								onChange={(color) => updateStroke({ color })}
+								onStart={() => pushSnapshot()}
 							/>
 							<span className="text-[11px] font-mono text-muted-foreground truncate">
 								{stroke.color}
