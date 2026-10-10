@@ -1,6 +1,5 @@
 "use client"
 
-import { useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { useDocumentStore } from "@/registry/substrate/stores/document-store"
 import { Pane, PaneLabel } from "@/registry/substrate/components/pane"
@@ -14,76 +13,73 @@ export function AlignmentPane() {
 	const selectedElements = [...selectedIds].map((id) => elements[id]).filter(Boolean)
 	if (selectedElements.length < 2) return null
 
-	const align = useCallback(
-		(
-			direction: "left" | "center-h" | "right" | "top" | "center-v" | "bottom",
-		) => {
-			pushSnapshot()
-			const els = selectedElements
+	const align = (
+		direction: "left" | "center-h" | "right" | "top" | "center-v" | "bottom",
+	) => {
+		pushSnapshot()
+		const els = selectedElements
 
-			switch (direction) {
-				case "left": {
-					const minX = Math.min(...els.map((e) => e.x))
-					for (const el of els) {
-						updateElement(el.id,
-							{ x: minX },
-						)
-					}
-					break
+		switch (direction) {
+			case "left": {
+				const minX = Math.min(...els.map((e) => e.x))
+				for (const el of els) {
+					updateElement(el.id,
+						{ x: minX },
+					)
 				}
-				case "center-h": {
-					const minX = Math.min(...els.map((e) => e.x))
-					const maxX = Math.max(...els.map((e) => e.x + e.width))
-					const center = (minX + maxX) / 2
-					for (const el of els) {
-						updateElement(el.id,
-							{ x: center - el.width / 2 },
-						)
-					}
-					break
-				}
-				case "right": {
-					const maxX = Math.max(...els.map((e) => e.x + e.width))
-					for (const el of els) {
-						updateElement(el.id,
-							{ x: maxX - el.width },
-						)
-					}
-					break
-				}
-				case "top": {
-					const minY = Math.min(...els.map((e) => e.y))
-					for (const el of els) {
-						updateElement(el.id,
-							{ y: minY },
-						)
-					}
-					break
-				}
-				case "center-v": {
-					const minY = Math.min(...els.map((e) => e.y))
-					const maxY = Math.max(...els.map((e) => e.y + e.height))
-					const center = (minY + maxY) / 2
-					for (const el of els) {
-						updateElement(el.id,
-							{ y: center - el.height / 2 },
-						)
-					}
-					break
-				}
-				case "bottom": {
-					const maxY = Math.max(...els.map((e) => e.y + e.height))
-					for (const el of els) {
-						updateElement(el.id,
-							{ y: maxY - el.height },
-						)
-					}
-					break
-				}
+				break
 			}
-		},
-		[selectedElements, updateElement, pushSnapshot],
-	)
+			case "center-h": {
+				const minX = Math.min(...els.map((e) => e.x))
+				const maxX = Math.max(...els.map((e) => e.x + e.width))
+				const center = (minX + maxX) / 2
+				for (const el of els) {
+					updateElement(el.id,
+						{ x: center - el.width / 2 },
+					)
+				}
+				break
+			}
+			case "right": {
+				const maxX = Math.max(...els.map((e) => e.x + e.width))
+				for (const el of els) {
+					updateElement(el.id,
+						{ x: maxX - el.width },
+					)
+				}
+				break
+			}
+			case "top": {
+				const minY = Math.min(...els.map((e) => e.y))
+				for (const el of els) {
+					updateElement(el.id,
+						{ y: minY },
+					)
+				}
+				break
+			}
+			case "center-v": {
+				const minY = Math.min(...els.map((e) => e.y))
+				const maxY = Math.max(...els.map((e) => e.y + e.height))
+				const center = (minY + maxY) / 2
+				for (const el of els) {
+					updateElement(el.id,
+						{ y: center - el.height / 2 },
+					)
+				}
+				break
+			}
+			case "bottom": {
+				const maxY = Math.max(...els.map((e) => e.y + e.height))
+				for (const el of els) {
+					updateElement(el.id,
+						{ y: maxY - el.height },
+					)
+				}
+				break
+			}
+		}
+	}
 
 	return (
 		<Pane>

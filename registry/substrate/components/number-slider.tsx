@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback } from "react"
+import { useCallback, useRef } from "react"
 import { Slider } from "@/registry/substrate/components/slider"
 import { NumberInput } from "@/registry/substrate/components/number-input"
 import { cn } from "@/lib/utils"
@@ -34,15 +34,22 @@ function NumberSlider({
 	className,
 	...props
 }: NumberSliderProps) {
+	// Radix has no gesture-start event, so the first change after a commit marks the start
+	const gestureActive = useRef(false)
+
 	const handleSliderChange = useCallback(
 		(values: number[]) => {
+			if (!gestureActive.current) {
+				gestureActive.current = true
+				onStart?.()
+			}
 			onChange(values[0])
 		},
-		[onChange],
+		[onChange, onStart],
 	)
 
-	const handleSliderCommit = useCallback((_values: number[]) => {
-		// onStart fires at the beginning of a drag gesture
+	const handleSliderCommit = useCallback(() => {
+		gestureActive.current = false
 	}, [])
 
 	return (

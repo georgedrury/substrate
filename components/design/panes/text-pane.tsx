@@ -1,6 +1,5 @@
 "use client"
 
-import { useCallback } from "react"
 import { Input } from "@/components/ui/input"
 import {
 	Select,
@@ -44,13 +43,10 @@ export function TextPane() {
 	const textEl = element as TextElement
 	const { textStyle } = textEl
 
-	const updateTextStyle = useCallback(
-		(changes: Partial<TextStyle>) => {
-			pushSnapshot()
-			updateElement(textEl.id, { textStyle: { ...textStyle, ...changes } })
-		},
-		[textEl.id, textStyle, updateElement, pushSnapshot],
-	)
+	const updateTextStyle = (changes: Partial<TextStyle>) => {
+		pushSnapshot()
+		updateElement(textEl.id, { textStyle: { ...textStyle, ...changes } })
+	}
 
 	return (
 		<Pane>

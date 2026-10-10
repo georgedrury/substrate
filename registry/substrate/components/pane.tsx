@@ -1,11 +1,9 @@
 import { cn } from "@/lib/utils"
 
-type PaneProps = {}
-
 export function Pane({
 	className,
 	...props
-}: PaneProps & React.ComponentProps<"div">) {
+}: React.ComponentProps<"div">) {
 	return <div className={cn("space-y-2 px-3", className)} {...props} />
 }
 
@@ -62,6 +60,6 @@ export function PaneContent({
 	...props
 }: React.ComponentProps<"div">) {
 	return (
-		<div data-slot="pane-action" className={cn("", className)} {...props} />
+		<div data-slot="pane-content" className={cn("", className)} {...props} />
 	)
 }

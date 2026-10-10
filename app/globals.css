@@ -48,9 +48,9 @@
   --radius-4xl: calc(var(--radius) * 2.6);
   /* Substrate */
   --color-canvas: var(--canvas, var(--color-background));
-  --color-canvas-foreground: var(--canvas-foreground, var(--color-foreground-muted));
+  --color-canvas-foreground: var(--canvas-foreground, var(--color-muted-foreground));
   --color-panel:  var(--panel, var(--color-card));
-  --color-panel-foregorund:  var(--panel-foreground, var(--color-panel-foreground));
+  --color-panel-foreground:  var(--panel-foreground, var(--color-card-foreground));
   /* Node port types */
   --color-node-port-number: var(--node-port-number, oklch(0.623 0.214 259.815));
   --color-node-port-colour: var(--node-port-colour, oklch(0.656 0.241 354.308));

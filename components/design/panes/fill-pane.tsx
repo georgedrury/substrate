@@ -1,7 +1,5 @@
 "use client"
 
-import { useCallback } from "react"
-import { Slider } from "@/registry/substrate/components/slider"
 import { useDocumentStore } from "@/registry/substrate/stores/document-store"
 import { Pane, PaneHeader, PaneLabel, PaneAction } from "@/registry/substrate/components/pane"
 import { Action, ActionLabel, ActionControls } from "@/registry/substrate/components/action"
@@ -20,27 +18,23 @@ export function FillPane() {
 
 	const fill = element.fill
 
-	const updateFill = useCallback(
-		(changes: Partial<Fill>) => {
-			pushSnapshot()
-			const current = element.fill ?? {
-				type: "solid" as const,
-				color: "oklch(0.85 0 0)",
-				opacity: 1,
-			}
-			updateElement(element.id, { fill: { ...current, ...changes } })
-		},
-		[element, updateElement, pushSnapshot],
-	)
+	const updateFill = (changes: Partial<Fill>) => {
+		const current = element.fill ?? {
+			type: "solid" as const,
+			color: "oklch(0.85 0 0)",
+			opacity: 1,
+		}
+		updateElement(element.id, { fill: { ...current, ...changes } })
+	}
 
-	const toggleFill = useCallback(() => {
+	const toggleFill = () => {
 		pushSnapshot()
 		updateElement(element.id, {
 			fill: fill
 				? null
 				: { type: "solid", color: "oklch(0.85 0 0)", opacity: 1 },
 		})
-	}, [element.id, fill, updateElement, pushSnapshot])
+	}
 
 	return (
 		<Pane>
@@ -56,7 +50,10 @@ export function FillPane() {
 						<ActionControls>
 							<ColourPicker
 								value={fill.color}
-								onChange={(color) => updateFill({ color })}
+								onChange={(color) => {
+									pushSnapshot()
+									updateFill({ color })
+								}}
 							/>
 							<span className="text-[11px] font-mono text-muted-foreground truncate">
 								{fill.color}
@@ -69,6 +66,7 @@ export function FillPane() {
 							<NumberSlider
 								value={fill.opacity * 100}
 								onChange={(v) => updateFill({ opacity: v / 100 })}
+								onStart={() => pushSnapshot()}
 								min={0}
 								max={100}
 								step={1}

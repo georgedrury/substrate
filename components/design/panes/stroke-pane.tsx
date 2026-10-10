@@ -1,6 +1,5 @@
 "use client"
 
-import { useCallback } from "react"
 import { useDocumentStore } from "@/registry/substrate/stores/document-store"
 import { Pane, PaneHeader, PaneLabel, PaneAction } from "@/registry/substrate/components/pane"
 import { Action, ActionLabel, ActionControls } from "@/registry/substrate/components/action"
@@ -20,27 +19,23 @@ export function StrokePane() {
 
 	const stroke = element.stroke
 
-	const updateStroke = useCallback(
-		(changes: Partial<Stroke>) => {
-			pushSnapshot()
-			const current = element.stroke ?? {
-				color: "oklch(0.145 0 0)",
-				width: 1,
-				opacity: 1,
-			}
-			updateElement(element.id, { stroke: { ...current, ...changes } })
-		},
-		[element, updateElement, pushSnapshot],
-	)
+	const updateStroke = (changes: Partial<Stroke>) => {
+		const current = element.stroke ?? {
+			color: "oklch(0.145 0 0)",
+			width: 1,
+			opacity: 1,
+		}
+		updateElement(element.id, { stroke: { ...current, ...changes } })
+	}
 
-	const toggleStroke = useCallback(() => {
+	const toggleStroke = () => {
 		pushSnapshot()
 		updateElement(element.id, {
 			stroke: stroke
 				? null
 				: { color: "oklch(0.145 0 0)", width: 1, opacity: 1 },
 		})
-	}, [element.id, stroke, updateElement, pushSnapshot])
+	}
 
 	return (
 		<Pane>
@@ -56,7 +51,10 @@ export function StrokePane() {
 						<ActionControls>
 							<ColourPicker
 								value={stroke.color}
-								onChange={(color) => updateStroke({ color })}
+								onChange={(color) => {
+									pushSnapshot()
+									updateStroke({ color })
+								}}
 							/>
 							<span className="text-[11px] font-mono text-muted-foreground truncate">
 								{stroke.color}
@@ -82,6 +80,7 @@ export function StrokePane() {
 							<NumberSlider
 								value={stroke.opacity * 100}
 								onChange={(v) => updateStroke({ opacity: v / 100 })}
+								onStart={() => pushSnapshot()}
 								min={0}
 								max={100}
 								step={1}
