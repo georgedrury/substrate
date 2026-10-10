@@ -1,3 +1,9 @@
+---
+name: theming
+description: "Customise the visual appearance of Substrate — CSS variable fallback chains (Tailwind v4), canvas background, chrome tokens, element colours, and per-component overrides exposed by the registry. Use when restyling, rebranding, or matching a design system. Triggers on: theme, theming, colors, palette, CSS variables, design tokens, rebrand, dark mode, Tailwind v4, canvas colour, chrome styling, override tokens."
+user-invocable: true
+---
+
 # Theming Substrate
 
 Guide to customising the visual appearance of Substrate's canvas, UI chrome, and elements.

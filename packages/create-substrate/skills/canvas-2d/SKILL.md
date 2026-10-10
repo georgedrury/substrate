@@ -1,3 +1,9 @@
+---
+name: canvas-2d
+description: "Build spatial 2D tools with Substrate — shape editors, diagram builders, whiteboards, and Figma-like design surfaces using the DesignCanvas component. Use when the app involves objects on an infinite pannable/zoomable plane. Triggers on: canvas, 2D, design canvas, shape editor, diagram, whiteboard, map builder, pan, zoom, infinite canvas, Figma-like, flat shapes."
+user-invocable: true
+---
+
 # 2D canvas
 
 Guide to building spatial 2D tools with Substrate — shape editors, diagram builders, whiteboard apps, and Figma-like design surfaces.

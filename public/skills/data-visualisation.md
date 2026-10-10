@@ -1,3 +1,9 @@
+---
+name: data-visualisation
+description: "Build interactive data exploration tools with Substrate — charts, graphs, dashboards, and visual analytics surfaces. Use when the app explores, filters, and presents data visually. Triggers on: data visualisation, dataviz, chart, graph, dashboard, analytics, D3, Observable Plot, filters, axis, aggregation, data explorer."
+user-invocable: true
+---
+
 # Data visualisation
 
 Guide to building interactive data exploration tools with Substrate — charts, graphs, dashboards, and visual analytics playgrounds.
@@ -220,3 +226,9 @@ Some examples of what this surface enables:
 - **Analytics playground** — connect to a live data source, real-time updating charts
 - **Comparison tool** — side-by-side charts with linked brushing
 - **Chart editor** — design a single publication-quality chart with fine-grained style controls
+
+## Related reference skills
+
+- **substrate-scaffold** — Toolbar, Panel, StatusBar, DocumentTabs for the app shell
+- **substrate-controls** — Select, NumberInput, Slider, ColourPicker for chart configuration
+- **substrate-feedback** — Toast, EmptyState, CommandPalette for data loading feedback

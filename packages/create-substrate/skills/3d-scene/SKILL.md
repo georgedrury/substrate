@@ -1,3 +1,9 @@
+---
+name: 3d-scene
+description: "Build interactive 3D viewports with Substrate — scene graphs, orbit cameras, object placement, materials, and lighting. Use when the app involves spatial objects in three dimensions. Triggers on: 3D, scene, viewport, three.js, react-three-fiber, r3f, orbit camera, material editor, lighting, shader playground, product viewer, scene graph."
+user-invocable: true
+---
+
 # 3D scene
 
 Guide to building interactive 3D viewports with Substrate — object placement, orbit cameras, material editors, and lighting controls.

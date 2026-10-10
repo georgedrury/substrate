@@ -8,7 +8,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsx src/index.ts"
+    "dev": "tsx src/index.ts",
+    "prepack": "node ../../scripts/sync-skills.mjs && npm run build"
   },
   "dependencies": {
     "chalk": "^5.4.0",

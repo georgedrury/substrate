@@ -1,3 +1,9 @@
+---
+name: theming
+description: "Customise the visual appearance of Substrate — CSS variable fallback chains (Tailwind v4), canvas background, chrome tokens, element colours, and per-component overrides exposed by the registry. Use when restyling, rebranding, or matching a design system. Triggers on: theme, theming, colors, palette, CSS variables, design tokens, rebrand, dark mode, Tailwind v4, canvas colour, chrome styling, override tokens."
+user-invocable: true
+---
+
 # Theming Substrate
 
 Guide to customising the visual appearance of Substrate's canvas, UI chrome, and elements.
@@ -110,3 +116,8 @@ const CURSOR_MAP: Record<string, string> = {
 ## 5. Dark mode
 
 Substrate UI components automatically respect dark mode when using `next-themes` or a `.dark` class on the document. The canvas renderer needs manual dark mode handling — check a CSS variable or a store flag and swap your colour constants accordingly.
+
+## Related reference skills
+
+- **substrate-nodes** — port type CSS variables (7 port colours + 4 node chrome vars) follow the same fallback chain
+- **substrate-controls** — ColourPicker, SwatchPalette for colour selection in property panes

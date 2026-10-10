@@ -122,7 +122,7 @@ All must be listed as `registryDependencies` with full URLs.
 
 ## Where does this hook belong?
 
-After creating a hook, consider which domain skill it fits into and update that skill's hook list:
+After creating a hook, consider which domain skill it fits into and update that skill's hook list. The domain skills live in `packages/cli/skills/`; run `npm run skills:sync` after editing them.
 
 | Domain | Skill | Examples |
 | --- | --- | --- |

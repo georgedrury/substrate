@@ -1,3 +1,9 @@
+---
+name: wire-interactions
+description: "Wire up Substrate's interaction pipeline — pointer events, drag state machine, hit testing, coordinate transforms, mutations, and keyboard shortcuts. Use when connecting a canvas surface to the document store or debugging interaction flows. Triggers on: pointer events, drag, interaction state machine, hit test, useCanvasInteraction, useCanvasDrag, useCanvasTransform, keyboard shortcut, wire up, connect canvas."
+user-invocable: true
+---
+
 # Wire interactions
 
 Guide to connecting canvas pointer events, drag state, keyboard shortcuts, and the interaction state machine in Substrate.
@@ -147,3 +153,9 @@ if (meta && e.key.toLowerCase() === "k") {
   return
 }
 ```
+
+## Related reference skills
+
+- **substrate-interaction** — full catalogue of useUndoable, useClipboard, createKeyboardShortcuts (declarative replacement for switch statements), and formatShortcut
+- **substrate-canvas** — useViewport, useSelection, useDragReorder, snap, boundingBox
+- **substrate-feedback** — CommandPalette (⌘K), ShortcutOverlay (?), ContextMenu, Toast (for delete-with-undo)

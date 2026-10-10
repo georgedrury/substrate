@@ -27,7 +27,7 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/panel
 | `registry.json` | Registry manifest; `public/r/` is built from it |
 | `content/docs/` | Documentation (fumadocs) |
 | `components/design/` | The design editor demo built from the registry |
-| `packages/cli/` | `@substrate-kit/cli`: CLI, MCP server and agent skills |
+| `packages/cli/` | `@substrate-kit/cli`: CLI, MCP server and agent skills (the source of truth for skills) |
 | `packages/create-substrate/` | `create-substrate`: project scaffolder |
 
 ## Development
@@ -36,6 +36,7 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/panel
 npm install
 npm run dev             # docs site on http://localhost:3000
 npm run registry:build  # rebuild public/r after changing registry sources
+npm run skills:sync     # copy packages/cli/skills to create-substrate and public/skills
 ```
 
 Each package builds with `npm run build` from its own directory.

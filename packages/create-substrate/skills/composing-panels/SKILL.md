@@ -1,3 +1,9 @@
+---
+name: composing-panels
+description: "Compose Substrate panel UIs — how Panel, Pane, PaneHeader, Action, and ActionControls nest together to build property inspectors, layer panels, and parameter forms. Use when laying out the side panels of a playground. Triggers on: panel, pane, sidebar, inspector, property panel, layer panel, form row, action row, compose panels, nest components."
+user-invocable: true
+---
+
 # Composing panels
 
 Guide to building property panels, layer lists, and inspector UIs using Substrate's panel component system.

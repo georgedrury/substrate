@@ -1,3 +1,9 @@
+---
+name: create-custom-tool
+description: "End-to-end guide for adding a new canvas tool to Substrate — ToolType union, element factory, renderer, hit-test, interaction handler, keyboard shortcut, and toolbar entry. Use when extending the 2D canvas with a custom drawing or editing tool. Triggers on: custom tool, new tool, tool type, element factory, toolbar toggle, canvas tool, drawing tool, add tool."
+user-invocable: true
+---
+
 # Create a custom tool
 
 End-to-end guide for adding a new canvas tool to Substrate — from type definition through to toolbar entry and keyboard shortcut.

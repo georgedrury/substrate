@@ -1,3 +1,9 @@
+---
+name: animation
+description: "Build timeline-based motion tools with Substrate — keyframes, easing curves, playback controls, and animated previews. Use when the app involves motion over time. Triggers on: animation, timeline, keyframe, easing, tween, playback, motion, GSAP, sprite animation, motion graphics, ease curve."
+user-invocable: true
+---
+
 # Animation
 
 Guide to building timeline-based motion tools with Substrate — keyframe editing, easing controls, playback, and animated previews.

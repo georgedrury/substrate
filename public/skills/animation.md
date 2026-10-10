@@ -1,3 +1,9 @@
+---
+name: animation
+description: "Build timeline-based motion tools with Substrate — keyframes, easing curves, playback controls, and animated previews. Use when the app involves motion over time. Triggers on: animation, timeline, keyframe, easing, tween, playback, motion, GSAP, sprite animation, motion graphics, ease curve."
+user-invocable: true
+---
+
 # Animation
 
 Guide to building timeline-based motion tools with Substrate — keyframe editing, easing controls, playback, and animated previews.
@@ -186,3 +192,9 @@ Some examples of what this surface enables:
 - **Sprite animator** — frame-by-frame sprite animation with onion skinning
 - **Motion graphics tool** — animate text and shapes along paths with timing controls
 - **Transition builder** — design page/component transitions, preview at different speeds
+
+## Related reference skills
+
+- **substrate-scaffold** — Toolbar, Panel, StatusBar for the app shell
+- **substrate-controls** — NumberInput, Slider, EasingCurveEditor, ActionControls for keyframe properties
+- **substrate-interaction** — useUndoable, createKeyboardShortcuts, LayerList for animation layers

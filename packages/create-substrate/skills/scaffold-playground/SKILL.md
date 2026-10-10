@@ -1,3 +1,9 @@
+---
+name: scaffold-playground
+description: "Bootstrap a new Substrate playground from scratch — choose a surface type, install chrome primitives, and compose the surface + panels + toolbar layout. Use when starting a new interactive app or initialising Substrate in an existing project. Triggers on: new playground, scaffold, bootstrap, start project, substrate create, substrate init, set up Substrate, new app, starter."
+user-invocable: true
+---
+
 # Scaffold a Substrate playground
 
 Step-by-step guide to bootstrapping a new interactive playground from Substrate primitives.

@@ -137,7 +137,7 @@ Then add `"{name}"` to the `pages` array in `content/docs/components/meta.json`.
 
 ## Where does this component belong?
 
-After creating a component, consider which domain skill it fits into and update that skill's component list:
+After creating a component, consider which domain skill it fits into and update that skill's component list. The domain skills live in `packages/cli/skills/`; run `npm run skills:sync` after editing them.
 
 | Domain                     | Skill                     | Examples                                               |
 | -------------------------- | ------------------------- | ------------------------------------------------------ |

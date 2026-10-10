@@ -1,3 +1,9 @@
+---
+name: create-custom-tool
+description: "End-to-end guide for adding a new canvas tool to Substrate — ToolType union, element factory, renderer, hit-test, interaction handler, keyboard shortcut, and toolbar entry. Use when extending the 2D canvas with a custom drawing or editing tool. Triggers on: custom tool, new tool, tool type, element factory, toolbar toggle, canvas tool, drawing tool, add tool."
+user-invocable: true
+---
+
 # Create a custom tool
 
 End-to-end guide for adding a new canvas tool to Substrate — from type definition through to toolbar entry and keyboard shortcut.
@@ -149,3 +155,9 @@ Not every tool creates elements. For tools like a measurement tool, colour picke
 3. Test the full interaction cycle: pointer down → move → up
 4. Check undo/redo works correctly (ensure `pushSnapshot()` is called before mutations)
 5. Verify the element renders and can be selected/moved/resized
+
+## Related reference skills
+
+- **substrate-canvas** — useViewport, snap, boundingBox, hit testing, coordinate maths
+- **substrate-scaffold** — Toolbar (for adding your tool button), StatusBar
+- **substrate-interaction** — createKeyboardShortcuts (for binding a shortcut key), useUndoable

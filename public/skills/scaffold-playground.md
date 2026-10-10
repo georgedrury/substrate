@@ -1,3 +1,9 @@
+---
+name: scaffold-playground
+description: "Bootstrap a new Substrate playground from scratch — choose a surface type, install chrome primitives, and compose the surface + panels + toolbar layout. Use when starting a new interactive app or initialising Substrate in an existing project. Triggers on: new playground, scaffold, bootstrap, start project, substrate create, substrate init, set up Substrate, new app, starter."
+user-invocable: true
+---
+
 # Scaffold a Substrate playground
 
 Step-by-step guide to bootstrapping a new interactive playground from Substrate primitives.
@@ -19,7 +25,7 @@ This scaffolds a full project with dependencies, globals.css with Substrate toke
 To add Substrate to an existing project instead:
 
 ```bash
-npx substrate init
+npx substrate-kit init
 ```
 
 This installs skills, CLAUDE.md, components.json, and registers the MCP server.
@@ -126,3 +132,16 @@ These are surface-agnostic — they work the same whether you're building a 3D s
 - **Wire keyboard shortcuts** — see [wire interactions](./wire-interactions.md)
 - **Create custom tools** — see [create custom tool](./create-custom-tool.md)
 - **Customise appearance** — see [theming](./theming.md)
+
+## Component reference skills
+
+For a full catalogue of available components, hooks, and utilities organised by domain:
+
+| Domain | Skill | What it covers |
+| --- | --- | --- |
+| App shell | **substrate-scaffold** | Toolbar, Panel, Pane, DocumentTabs, StatusBar, ZoomControls, Breadcrumbs, Resizer |
+| Input controls | **substrate-controls** | NumberInput, Slider, NumberSlider, Select, Toggle, TextArea, ColourPicker, ActionControls |
+| Spatial primitives | **substrate-canvas** | useViewport, useSelection, snap, boundingBox, hit testing, coordinate maths |
+| Node graph | **substrate-nodes** | Node cards, typed ports, port colour theming |
+| Status and communication | **substrate-feedback** | Toast, ProgressBar, Badge, EmptyState, CommandPalette, ContextMenu, ShortcutOverlay |
+| Editing flows | **substrate-interaction** | useUndoable, useClipboard, createKeyboardShortcuts, HistoryControls, LayerList, TreeList |
