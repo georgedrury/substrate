@@ -7,9 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "registry:build": "shadcn build",
+    "registry:build": "node scripts/check-registry.mjs && shadcn build",
     "skills:sync": "node scripts/sync-skills.mjs",
-    "prebuild": "npm run skills:sync"
+    "prebuild": "npm run skills:sync",
+    "registry:check": "node scripts/check-registry.mjs",
+    "test:scaffold": "node scripts/test-scaffold.mjs",
+    "release:check": "npm run registry:build && npm --prefix packages/cli run build && npm --prefix packages/create-substrate run build && node scripts/test-scaffold.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
@@ -48,6 +51,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.2",
+    "playwright": "^1.64.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

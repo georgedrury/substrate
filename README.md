@@ -41,6 +41,24 @@ npm run skills:sync     # copy packages/cli/skills to create-substrate and publi
 
 Each package builds with `npm run build` from its own directory.
 
+Registry sources import each other by their installed paths (`@/components/substrate/x`, `@/hooks/substrate/x`, `@/lib/substrate/x`, `@/stores/substrate/x`), which `tsconfig.json` maps back to `registry/substrate/`. `npm run registry:check` fails on imports that would not resolve after installation and on missing dependencies; `npm run registry:check -- --fix` rewrites the dependency lists.
+
+## Testing and releasing
+
+```bash
+npx playwright install chromium   # once
+npm run test:scaffold             # everything, against the local registry build
+npm run test:scaffold -- animation blank
+```
+
+`test:scaffold` scaffolds every surface with a real install, builds each project, and loads it in a headless browser, failing on any runtime error. It also runs `substrate-kit create` and installs every registry item into one project to typecheck them together.
+
+Scaffolded projects download components from the deployed site, so release in this order:
+
+1. `npm run release:check`, then push. Wait for the site to deploy.
+2. `npm run test:scaffold -- --live` to test against the deployed registry.
+3. Publish `packages/cli`, then `packages/create-substrate`. Each runs `release:check` again before publishing, so let npm prompt for the one-time password rather than passing `--otp`.
+
 ## Licence
 
 MIT
