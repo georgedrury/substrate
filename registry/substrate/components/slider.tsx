@@ -28,11 +28,11 @@ function Slider({
 		>
 			<SliderPrimitive.Track
 				data-slot="slider-track"
-				className="h-7  relative grow overflow-hidden rounded-md bg-background data-horizontal:h-7 data-horizontal:w-full data-vertical:h-full data-vertical:w-7"
+				className="h-7 relative grow overflow-hidden rounded-md bg-foreground/5 dark:bg-background data-horizontal:h-7 data-horizontal:w-full data-vertical:h-full data-vertical:w-7"
 			>
 				<SliderPrimitive.Range
 					data-slot="slider-range"
-					className="absolute bg-muted select-none data-horizontal:h-full data-vertical:w-full"
+					className="absolute bg-foreground/10 dark:bg-muted select-none data-horizontal:h-full data-vertical:w-full"
 				/>
 			</SliderPrimitive.Track>
 		</SliderPrimitive.Root>

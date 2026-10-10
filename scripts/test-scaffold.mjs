@@ -1,12 +1,13 @@
 // End-to-end release test. Serves the locally built registry, then:
 //   1. scaffolds every create-substrate surface, builds it and loads it in
-//      a headless browser, failing on any runtime error
+//      a headless browser in light and dark, failing on any runtime error
 //   2. does the same through `substrate-kit create`, which forwards to it
 //   3. installs every registry item into one project and typechecks it
 //   4. runs `substrate-kit add` with no terminal over an existing component
 // Usage: node scripts/test-scaffold.mjs [--live] [case...]   (default: all)
 // --live tests against the deployed registry instead of the local build.
 // --keep leaves the scaffolded projects on disk after a passing run.
+// SUBSTRATE_TEST_SHOTS=<dir> saves a screenshot of each starter per theme.
 import { spawn } from "node:child_process"
 import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs"
 import { createServer } from "node:http"
@@ -75,6 +76,7 @@ const env = {
 
 const workspace = mkdtempSync(join(tmpdir(), "substrate-test-"))
 const browser = await chromium.launch()
+const shots = process.env.SUBSTRATE_TEST_SHOTS
 
 function freePort() {
 	return new Promise((resolve) => {
@@ -87,7 +89,7 @@ function freePort() {
 }
 
 // Serve the built app and load it, collecting anything the page throws
-async function smoke(cwd) {
+async function smoke(cwd, name) {
 	const port = await freePort()
 	// Run vite directly so that killing it does not leave a server behind
 	const vite = join(cwd, "node_modules/vite/bin/vite.js")
@@ -104,16 +106,23 @@ async function smoke(cwd) {
 		}
 		if (!up) return ["preview server did not start"]
 
-		const page = await browser.newPage()
-		page.on("pageerror", (error) => problems.push(`uncaught: ${error.message}`))
-		page.on("console", (message) => {
-			if (message.type() === "error") problems.push(`console.error: ${message.text()}`)
-		})
-		await page.goto(url, { waitUntil: "networkidle" })
-		await page.waitForTimeout(1500)
-		const rendered = await page.evaluate(() => document.body.innerText.trim().length > 0 || document.querySelector("canvas") !== null)
-		if (!rendered) problems.push("page rendered nothing")
-		await page.close()
+		for (const scheme of ["light", "dark"]) {
+			const context = await browser.newContext({ colorScheme: scheme, viewport: { width: 1280, height: 800 } })
+			const page = await context.newPage()
+			page.on("pageerror", (error) => problems.push(`${scheme}: uncaught: ${error.message}`))
+			page.on("console", (message) => {
+				if (message.type() === "error") problems.push(`${scheme}: console.error: ${message.text()}`)
+			})
+			await page.goto(url, { waitUntil: "networkidle" })
+			await page.waitForTimeout(1500)
+			const rendered = await page.evaluate(() => document.body.innerText.trim().length > 0 || document.querySelector("canvas") !== null)
+			if (!rendered) problems.push(`${scheme}: page rendered nothing`)
+			// The starter should follow the system theme
+			const dark = await page.evaluate(() => document.documentElement.classList.contains("dark"))
+			if (dark !== (scheme === "dark")) problems.push(`${scheme}: page did not follow the system theme`)
+			if (shots) await page.screenshot({ path: join(shots, `${name}-${scheme}.png`) })
+			await context.close()
+		}
 	} finally {
 		preview.kill()
 	}
@@ -130,7 +139,7 @@ async function scaffoldAndBuild(name, command) {
 	}
 	const build = await run("npm", ["run", "build"], { cwd, env })
 	if (build.code !== 0) return { ok: false, stage: "build", output: build.output }
-	const problems = await smoke(cwd)
+	const problems = await smoke(cwd, name)
 	if (problems.length > 0) return { ok: false, stage: "runtime", output: problems.join("\n") }
 	return { ok: true }
 }

@@ -2,7 +2,8 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono, Inter } from "next/font/google"
 import localFont from "next/font/local"
 
-import { Toaster } from "sonner"
+import { Toaster } from "@/components/ui/sonner"
+import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 import { cn } from "@/lib/utils"
 
@@ -43,6 +44,7 @@ export default function RootLayout({
 	return (
 		<html
 			lang="en"
+			suppressHydrationWarning
 			className={cn(
 				"h-full",
 				"antialiased",
@@ -54,9 +56,11 @@ export default function RootLayout({
 				"overscroll-none",
 			)}
 		>
-			<body className="min-h-full dark flex flex-col">
-				{children}
-				<Toaster theme="dark" position="bottom-center" />
+			<body className="min-h-full flex flex-col">
+				<ThemeProvider>
+					{children}
+					<Toaster position="bottom-center" />
+				</ThemeProvider>
 			</body>
 		</html>
 	)

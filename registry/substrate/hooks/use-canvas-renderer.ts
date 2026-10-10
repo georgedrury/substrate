@@ -68,6 +68,24 @@ export function useCanvasRenderer(
 		return () => observer.disconnect()
 	}, [canvasRef, containerRef])
 
+	// Canvas colours come from CSS variables, so repaint when the theme changes
+	useEffect(() => {
+		const repaint = () => {
+			dirtyRef.current = true
+		}
+		const observer = new MutationObserver(repaint)
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ["class", "style", "data-theme"],
+		})
+		const media = window.matchMedia("(prefers-color-scheme: dark)")
+		media.addEventListener("change", repaint)
+		return () => {
+			observer.disconnect()
+			media.removeEventListener("change", repaint)
+		}
+	}, [])
+
 	// Render loop
 	useEffect(() => {
 		let rafId: number

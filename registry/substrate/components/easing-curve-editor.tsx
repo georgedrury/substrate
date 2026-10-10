@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef, useEffect } from "react"
+import React, { useRef, useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import {
   CubicBezier,
@@ -35,6 +35,23 @@ function EasingCurveCanvas({
     dragPoint: null,
   })
 
+  // Canvas colours are resolved once per draw, so redraw when the theme changes
+  const [themeVersion, setThemeVersion] = useState(0)
+  useEffect(() => {
+    const redraw = () => setThemeVersion((version) => version + 1)
+    const observer = new MutationObserver(redraw)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "style", "data-theme"],
+    })
+    const media = window.matchMedia("(prefers-color-scheme: dark)")
+    media.addEventListener("change", redraw)
+    return () => {
+      observer.disconnect()
+      media.removeEventListener("change", redraw)
+    }
+  }, [])
+
   // Draw the canvas
   useEffect(() => {
     const canvas = canvasRef.current
@@ -58,8 +75,17 @@ function EasingCurveCanvas({
     const toCanvasX = (x: number) => x * displayWidth
     const toCanvasY = (y: number) => displayHeight - y * displayHeight // Flip Y axis
 
+    // The canvas cannot use CSS variables directly. Guides are drawn in the
+    // element's text colour at low opacity; the curve and handles use
+    // --easing-curve and --easing-handle when set, and the text colour otherwise.
+    const styles = getComputedStyle(canvas)
+    const ink = styles.color
+    const curveColor = styles.getPropertyValue("--easing-curve").trim() || ink
+    const handleColor = styles.getPropertyValue("--easing-handle").trim() || ink
+
     // Draw grid
-    ctx.strokeStyle = "rgba(0, 0, 0, 0.05)"
+    ctx.strokeStyle = ink
+    ctx.globalAlpha = 0.08
     ctx.lineWidth = 1
     for (let i = 0; i <= 4; i++) {
       const x = (i / 4) * displayWidth
@@ -75,7 +101,7 @@ function EasingCurveCanvas({
     }
 
     // Draw diagonal reference line (linear)
-    ctx.strokeStyle = "rgba(0, 0, 0, 0.15)"
+    ctx.globalAlpha = 0.25
     ctx.lineWidth = 1
     ctx.setLineDash([2, 2])
     ctx.beginPath()
@@ -83,9 +109,10 @@ function EasingCurveCanvas({
     ctx.lineTo(displayWidth, 0)
     ctx.stroke()
     ctx.setLineDash([])
+    ctx.globalAlpha = 1
 
     // Draw cubic bezier curve
-    ctx.strokeStyle = "hsl(var(--primary))"
+    ctx.strokeStyle = curveColor
     ctx.lineWidth = 2
     ctx.beginPath()
 
@@ -106,35 +133,37 @@ function EasingCurveCanvas({
     // Draw control point handles (lines and circles)
     const handleRadius = 6
     const handleStrokeWidth = 1
-    const lineColor = "rgba(0, 0, 0, 0.3)"
-    const handleColor = "hsl(var(--primary))"
 
     // Handle 1: (0,0) to (x1, y1)
-    ctx.strokeStyle = lineColor
+    ctx.strokeStyle = ink
+    ctx.globalAlpha = 0.35
     ctx.lineWidth = handleStrokeWidth
     ctx.beginPath()
     ctx.moveTo(toCanvasX(0), toCanvasY(0))
     ctx.lineTo(toCanvasX(value.x1), toCanvasY(value.y1))
     ctx.stroke()
 
+    ctx.globalAlpha = 1
     ctx.fillStyle = handleColor
     ctx.beginPath()
     ctx.arc(toCanvasX(value.x1), toCanvasY(value.y1), handleRadius, 0, Math.PI * 2)
     ctx.fill()
 
     // Handle 2: (1,1) to (x2, y2)
-    ctx.strokeStyle = lineColor
+    ctx.strokeStyle = ink
+    ctx.globalAlpha = 0.35
     ctx.lineWidth = handleStrokeWidth
     ctx.beginPath()
     ctx.moveTo(toCanvasX(1), toCanvasY(1))
     ctx.lineTo(toCanvasX(value.x2), toCanvasY(value.y2))
     ctx.stroke()
 
+    ctx.globalAlpha = 1
     ctx.fillStyle = handleColor
     ctx.beginPath()
     ctx.arc(toCanvasX(value.x2), toCanvasY(value.y2), handleRadius, 0, Math.PI * 2)
     ctx.fill()
-  }, [value])
+  }, [value, themeVersion])
 
   // Get display dimensions for hit detection
   const getCanvasRect = () => {
@@ -235,7 +264,7 @@ function EasingCurveCanvas({
         height: `${height}px`,
         cursor: "crosshair",
       }}
-      className={cn("block border border-input rounded-md bg-background", className)}
+      className={cn("block border border-input rounded-md bg-background text-foreground", className)}
       data-slot="easing-curve-canvas"
     />
   )

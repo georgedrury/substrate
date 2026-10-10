@@ -234,11 +234,19 @@ export default defineConfig({
 }
 function indexHtml(title) {
     return `<!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${title}</title>
+    <script>
+      // Follow the system theme. To force one, remove this script and set
+      // class="dark" (or nothing, for light) on <html>.
+      const darkMode = window.matchMedia("(prefers-color-scheme: dark)")
+      const applyTheme = () => document.documentElement.classList.toggle("dark", darkMode.matches)
+      applyTheme()
+      darkMode.addEventListener("change", applyTheme)
+    </script>
   </head>
   <body class="antialiased">
     <div id="root"></div>
@@ -316,6 +324,35 @@ function globalsCss(config) {
 }
 
 :root {
+  color-scheme: light;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --radius: 0.625rem;
+  /* Substrate */
+  --canvas: oklch(0.97 0 0);
+  --canvas-foreground: oklch(0.556 0 0);
+  --panel: oklch(1 0 0);
+  --panel-foreground: oklch(0.145 0 0);${extra}
+}
+
+.dark {
+  color-scheme: dark;
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -334,12 +371,11 @@ function globalsCss(config) {
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
-  --radius: 0.625rem;
   /* Substrate */
   --canvas: oklch(17.764% 0.00002 271.152);
   --canvas-foreground: oklch(0.708 0 0);
   --panel: oklch(0.205 0 0);
-  --panel-foreground: oklch(0.985 0 0);${extra}
+  --panel-foreground: oklch(0.985 0 0);
 }
 
 @layer base {

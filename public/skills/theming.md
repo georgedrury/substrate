@@ -113,9 +113,15 @@ const CURSOR_MAP: Record<string, string> = {
 }
 ```
 
-## 5. Dark mode
+## 5. Light and dark mode
 
-Substrate UI components automatically respect dark mode when using `next-themes` or a `.dark` class on the document. The canvas renderer needs manual dark mode handling — check a CSS variable or a store flag and swap your colour constants accordingly.
+Every Substrate component works in both themes. Colours come from tokens, and the theme is chosen by a `.dark` class on `<html>`: light values live in `:root`, dark values in `.dark`.
+
+Projects made with `create-substrate` follow the system theme through a small script in `index.html`. To force a theme, remove that script and either set `class="dark"` on `<html>` or leave it off. To add a switch, toggle that class yourself (or use `next-themes` in a Next.js app).
+
+Canvas-drawn parts follow the theme too: the design canvas reads `--canvas` and `--canvas-foreground`, the easing curve editor draws in its text colour, and both repaint when the theme changes. In your own canvas code, read colours with `getComputedStyle` at draw time instead of hardcoding them, and use mid-tones for defaults that must read on both backgrounds.
+
+When writing a component, use tokens (`bg-panel`, `text-muted-foreground`, `bg-foreground/10`) and check it in both themes. Avoid `bg-background` for a control's track or well: it matches the page in light mode and disappears.
 
 ## Related reference skills
 

@@ -27,6 +27,7 @@ import {
 	CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import { Badge } from "@/components/ui/badge"
+import { ThemeToggle } from "./theme-toggle"
 
 interface DocsSidebarProps {
 	tree: PageTreeRoot
@@ -203,7 +204,9 @@ export function DocsSidebar({
 					<FolderSection key={index} node={node} flags={flags} />
 				))}
 			</SidebarContent>
-			<SidebarFooter></SidebarFooter>
+			<SidebarFooter>
+				<ThemeToggle />
+			</SidebarFooter>
 		</Sidebar>
 	)
 }
