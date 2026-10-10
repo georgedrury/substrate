@@ -57,7 +57,7 @@ Scaffolded projects download components from the deployed site, so release in th
 
 1. `npm run release:check`, then push. Wait for the site to deploy.
 2. `npm run test:scaffold -- --live` to test against the deployed registry.
-3. Publish `packages/cli`, then `packages/create-substrate`. Each runs `release:check` again before publishing, so let npm prompt for the one-time password rather than passing `--otp`.
+3. Publish `packages/cli`, then `packages/create-substrate`. Publishing is refused unless the files match the last passing `release:check`, so any change after the check means running it again.
 
 ## Licence
 

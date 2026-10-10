@@ -10,7 +10,7 @@
 		"build": "tsc",
 		"dev": "tsx src/index.ts",
 		"prepack": "cp ../../registry.json registry.json && npm run build",
-		"prepublishOnly": "npm --prefix ../.. run release:check"
+		"prepublishOnly": "node ../../scripts/release-stamp.mjs verify"
 	},
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.28.0",

@@ -12,7 +12,7 @@
     "prebuild": "npm run skills:sync",
     "registry:check": "node scripts/check-registry.mjs",
     "test:scaffold": "node scripts/test-scaffold.mjs",
-    "release:check": "npm run registry:build && npm --prefix packages/cli run build && npm --prefix packages/create-substrate run build && node scripts/test-scaffold.mjs"
+    "release:check": "npm run registry:build && npm --prefix packages/cli run build && npm --prefix packages/create-substrate run build && node scripts/test-scaffold.mjs && node scripts/release-stamp.mjs record"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",

@@ -52,3 +52,5 @@ packages/create-substrate/node_modules
 ./agents/skills/next-best-practices/
 ./agents/skills/next-cache-components/
 ./agents/skills/shadcn/
+# release check stamp
+.release-check

@@ -10,7 +10,7 @@
     "build": "tsc",
     "dev": "tsx src/index.ts",
     "prepack": "node ../../scripts/sync-skills.mjs && npm run build",
-    "prepublishOnly": "npm --prefix ../.. run release:check"
+    "prepublishOnly": "node ../../scripts/release-stamp.mjs verify"
   },
   "dependencies": {
     "chalk": "^5.4.0",
