@@ -66,6 +66,7 @@ When you catch yourself about to write a custom version of any of these, stop an
 
 | Component | Command | Use for |
 | --- | --- | --- |
+| Controls | `substrate-kit add controls` | Whole parameter panels from a config object (`useControls` + `<Controls />`) — reach for this before hand-wiring rows |
 | Slider | `substrate-kit add slider` | Any range input — opacity, volume, zoom, numeric sliders |
 | Number Input | `substrate-kit add number-input` | Numeric property fields with drag-to-scrub on the label |
 | Number Slider | `substrate-kit add number-slider` | Combined slider + numeric input on one row |

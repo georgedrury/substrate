@@ -4,12 +4,7 @@ export const dataVis: SurfaceConfig = {
   components: [
     "toolbar",
     "panel",
-    "pane",
-    "action",
-    "select",
-    "number-slider",
-    "colour-picker",
-    "toggle-group",
+    "controls",
     "status-bar",
   ],
   extraDeps: {
@@ -35,22 +30,8 @@ import {
   ToolbarToggleGroup,
 } from "@/components/substrate/toolbar"
 import { Panel } from "@/components/substrate/panel"
-import { Pane, PaneHeader, PaneLabel } from "@/components/substrate/pane"
-import {
-  Action,
-  ActionControls,
-  ActionLabel,
-} from "@/components/substrate/action"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/substrate/select"
-import { NumberSlider } from "@/components/substrate/number-slider"
-import { ColourPicker } from "@/components/substrate/colour-picker"
-import { ToggleGroup, ToggleGroupItem } from "@/components/substrate/toggle-group"
+import { Controls } from "@/components/substrate/controls"
+import { useControls } from "@/hooks/substrate/use-controls"
 import {
   StatusBar,
   StatusBarItem,
@@ -78,16 +59,16 @@ const SAMPLE_DATA = [
   { month: "Dec", revenue: 9100, users: 7400, orders: 830 },
 ]
 
-const METRICS = [
+const CHART_TYPES = ["line", "area", "bar"] as const
+
+type Metric = "revenue" | "users" | "orders"
+type ChartType = (typeof CHART_TYPES)[number]
+
+const METRICS: { value: Metric; label: string }[] = [
   { value: "revenue", label: "Revenue" },
   { value: "users", label: "Users" },
   { value: "orders", label: "Orders" },
-] as const
-
-const CHART_TYPES = ["line", "area", "bar"] as const
-
-type Metric = (typeof METRICS)[number]["value"]
-type ChartType = (typeof CHART_TYPES)[number]
+]
 
 function isMetric(value: string): value is Metric {
   return METRICS.some((metric) => metric.value === value)
@@ -108,12 +89,22 @@ const TOOLTIP_STYLE = {
 
 export default function App() {
   const [chartType, setChartType] = useState<ChartType>("line")
-  const [metric, setMetric] = useState<Metric>("revenue")
-  const [months, setMonths] = useState(12)
-  const [colour, setColour] = useState("#6366f1")
-  const [strokeWidth, setStrokeWidth] = useState(2)
-  const [fillOpacity, setFillOpacity] = useState(30)
-  const [grid, setGrid] = useState("on")
+
+  // Each useControls call is one panel; <Controls panel="..." /> renders it.
+  // Edit these objects to add, remove or retune a control.
+  const dataControls = useControls("Data", {
+    metric: { type: "select", options: METRICS, default: "revenue" },
+    months: [12, 3, SAMPLE_DATA.length, 1],
+  })
+  const style = useControls("Style", {
+    colour: "#6366f1",
+    stroke: [2, 1, 6, 0.5],
+    fill: [0.3, 0, 1, 0.05],
+    grid: true,
+  })
+
+  const metric = isMetric(dataControls.metric) ? dataControls.metric : "revenue"
+  const { months } = dataControls
 
   const data = SAMPLE_DATA.slice(0, months)
   const values = data.map((row) => row[metric])
@@ -122,7 +113,7 @@ export default function App() {
 
   const axes = (
     <>
-      {grid === "on" && (
+      {style.grid && (
         <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
       )}
       <XAxis dataKey="month" tick={AXIS_TICK} stroke="var(--border)" tickLine={false} />
@@ -141,46 +132,7 @@ export default function App() {
     <div className="flex h-screen flex-col bg-background text-foreground">
       <div className="flex min-h-0 flex-1">
         <Panel position="left" className="shrink-0">
-          <Pane>
-            <PaneHeader>
-              <PaneLabel>Data</PaneLabel>
-            </PaneHeader>
-            <Action>
-              <ActionLabel>Metric</ActionLabel>
-              <ActionControls>
-                <Select
-                  value={metric}
-                  onValueChange={(value) => {
-                    if (isMetric(value)) setMetric(value)
-                  }}
-                >
-                  <SelectTrigger aria-label="Metric">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {METRICS.map((item) => (
-                      <SelectItem key={item.value} value={item.value}>
-                        {item.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </ActionControls>
-            </Action>
-            <Action>
-              <ActionLabel>Months</ActionLabel>
-              <ActionControls>
-                <NumberSlider
-                  value={months}
-                  onChange={(value) => setMonths(Math.round(value))}
-                  min={3}
-                  max={SAMPLE_DATA.length}
-                  step={1}
-                  precision={0}
-                />
-              </ActionControls>
-            </Action>
-          </Pane>
+          <Controls panel="Data" />
         </Panel>
 
         {/* Chart surface */}
@@ -201,7 +153,7 @@ export default function App() {
                   <Bar
                     dataKey={metric}
                     name={metricLabel}
-                    fill={colour}
+                    fill={style.colour}
                     radius={[4, 4, 0, 0]}
                     maxBarSize={32}
                     isAnimationActive={false}
@@ -214,10 +166,10 @@ export default function App() {
                     type="monotone"
                     dataKey={metric}
                     name={metricLabel}
-                    stroke={colour}
-                    strokeWidth={strokeWidth}
-                    fill={colour}
-                    fillOpacity={fillOpacity / 100}
+                    stroke={style.colour}
+                    strokeWidth={style.stroke}
+                    fill={style.colour}
+                    fillOpacity={style.fill}
                     isAnimationActive={false}
                   />
                 </AreaChart>
@@ -228,9 +180,9 @@ export default function App() {
                     type="monotone"
                     dataKey={metric}
                     name={metricLabel}
-                    stroke={colour}
-                    strokeWidth={strokeWidth}
-                    dot={{ fill: colour, r: 3 }}
+                    stroke={style.colour}
+                    strokeWidth={style.stroke}
+                    dot={{ fill: style.colour, r: 3 }}
                     isAnimationActive={false}
                   />
                 </LineChart>
@@ -240,65 +192,7 @@ export default function App() {
         </main>
 
         <Panel position="right" className="shrink-0">
-          <Pane>
-            <PaneHeader>
-              <PaneLabel>Style</PaneLabel>
-            </PaneHeader>
-            <Action>
-              <ActionLabel>Colour</ActionLabel>
-              <ActionControls>
-                <ColourPicker value={colour} onChange={setColour} />
-                <span className="font-mono text-xs text-muted-foreground">{colour}</span>
-              </ActionControls>
-            </Action>
-            {chartType !== "bar" && (
-              <Action>
-                <ActionLabel>Stroke</ActionLabel>
-                <ActionControls>
-                  <NumberSlider
-                    value={strokeWidth}
-                    onChange={setStrokeWidth}
-                    min={1}
-                    max={6}
-                    step={0.5}
-                    suffix="px"
-                  />
-                </ActionControls>
-              </Action>
-            )}
-            {chartType === "area" && (
-              <Action>
-                <ActionLabel>Fill</ActionLabel>
-                <ActionControls>
-                  <NumberSlider
-                    value={fillOpacity}
-                    onChange={setFillOpacity}
-                    min={0}
-                    max={100}
-                    step={1}
-                    precision={0}
-                    suffix="%"
-                  />
-                </ActionControls>
-              </Action>
-            )}
-            <Action>
-              <ActionLabel>Grid</ActionLabel>
-              <ActionControls>
-                <ToggleGroup
-                  type="single"
-                  value={grid}
-                  onValueChange={(value) => {
-                    if (value) setGrid(value)
-                  }}
-                  aria-label="Grid lines"
-                >
-                  <ToggleGroupItem value="on">On</ToggleGroupItem>
-                  <ToggleGroupItem value="off">Off</ToggleGroupItem>
-                </ToggleGroup>
-              </ActionControls>
-            </Action>
-          </Pane>
+          <Controls panel="Style" />
         </Panel>
       </div>
 

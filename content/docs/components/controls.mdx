@@ -1,0 +1,87 @@
+---
+title: Controls
+description: Config-driven control panels – describe parameters as an object and render them with Substrate controls.
+---
+
+Describe a panel as a plain object and get typed values back. `Controls` renders every registered panel with Substrate's own components, so it sits inside a `Panel` like any hand-built pane.
+
+The config format and store come from [DialKit](https://github.com/joshpuckett/dialkit) by Josh Puckett (MIT). Substrate uses its headless store and supplies the interface.
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/controls
+```
+
+## Examples
+
+### Default
+
+<ComponentPreview name="controls-demo" />
+
+## Usage
+
+```tsx
+import { Panel } from "@/components/substrate/panel"
+import { Controls } from "@/components/substrate/controls"
+import { useControls } from "@/hooks/substrate/use-controls"
+
+function Editor() {
+  const card = useControls("Card", {
+    radius: [16, 0, 48],
+    colour: "#a78bfa",
+    visible: true,
+    shadow: { blur: [24, 0, 64] },
+  })
+
+  return (
+    <>
+      <div style={{ borderRadius: card.radius, background: card.colour }} />
+      <Panel>
+        <Controls />
+      </Panel>
+    </>
+  )
+}
+```
+
+Keys become labels, and the returned values keep the same nesting as the config.
+
+## Config
+
+| Control | Definition | Returned value | Rendered with |
+| --- | --- | --- | --- |
+| Slider | `radius: [16, 0, 48]` | `number` | NumberSlider |
+| Slider with step | `radius: [16, 0, 48, 2]` | `number` | NumberSlider |
+| Inferred slider | `scale: 1.2` | `number` | NumberSlider |
+| Toggle | `visible: true` | `boolean` | Toggle |
+| Text | `title: "Hello"` | `string` | TextArea |
+| Colour | `colour: "#a78bfa"` | `string` | ColourPicker |
+| Select | `align: { type: "select", options: ["left", "right"] }` | `string` | Select |
+| Easing | `motion: { type: "easing", duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }` | `{ type, duration, ease }` | EasingCurveEditor |
+| Action | `replay: { type: "action" }` | Calls `onAction("replay")` | Button |
+| Folder | `shadow: { blur: [24, 0, 64] }` | Nested values | CollapsiblePane |
+
+Slider tuples are `[default, min, max, step?]`. Add `_collapsed: true` inside a folder to start it closed.
+
+DialKit's spring, image and XY pad controls have no Substrate component yet. They keep their values and show a placeholder row.
+
+## useControls
+
+```ts
+const values = useControls(name, config, options)
+```
+
+| Option | Type | Description |
+| --- | --- | --- |
+| `id` | `string` | Keeps values across unmounts and shares them between mounts using the same id |
+| `persist` | `boolean \| { key?, storage?, presets? }` | Saves values to browser storage |
+| `onAction` | `(path: string) => void` | Called with the path of a clicked action control |
+
+## Controls
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `panel` | `string` | — | Render only the panel with this name or id. Renders every panel when omitted. |
+
+Each panel has a reset button that restores the config defaults.

@@ -61,6 +61,34 @@ The same pattern is used by **Toolbar** (compaction) and **PaneHeader** (auto-po
 
 ## Components in this domain
 
+### Controls and useControls
+
+`registry/substrate/components/controls.tsx`, `registry/substrate/hooks/use-controls.ts`
+
+Config-driven panels. Describe parameters as an object, get typed values back, and render every panel with `<Controls />`. Built on DialKit's headless store; the rows are the Substrate controls below.
+
+```tsx
+const chart = useControls("Chart", {
+	months: [12, 3, 12, 1], // [default, min, max, step]
+	grid: true,
+	colour: "#a78bfa",
+	metric: { type: "select", options: ["revenue", "users"] },
+	style: { strokeWidth: [2, 1, 6] }, // nested object = collapsible folder
+})
+
+<Panel>
+	<Controls />
+</Panel>
+```
+
+**Config types**: number tuple or bare number (NumberSlider), boolean (Toggle), string (TextArea), hex string (ColourPicker), `{ type: "select" }`, `{ type: "easing" }` (EasingCurveEditor), `{ type: "action" }` with the `onAction` option, nested object (folder). Spring, image and pad have no Substrate control yet.
+
+**Options**: `id`, `persist`, `onAction`. **Controls prop**: `panel` to render a single panel by name.
+
+**When to use**: The default for any panel of tunable parameters with local state – chart settings, generation parameters, material properties. Compose the individual controls by hand instead when values live in a store with selection and undo (as in the design editor's property panes), or when a row needs a custom layout.
+
+---
+
 ### NumberInput
 
 `registry/substrate/components/number-input.tsx`

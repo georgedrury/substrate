@@ -20,6 +20,7 @@ import HistoryControlsDemo from "./history-controls-demo"
 import HistoryControlsToolbar from "./history-controls-toolbar"
 import SliderRange from "./slider-range"
 import NumberSliderDemo from "./number-slider-demo"
+import ControlsDemo from "./controls-demo"
 import ActionColour from "./action-colour"
 import PaneHistory from "./pane-history"
 import LayerListDemo from "./layer-list-demo"
@@ -231,5 +232,9 @@ export const Index: Record<string, ExampleEntry> = {
 	"collapsible-pane-demo": {
 		component: CollapsiblePaneDemo,
 		filePath: "registry/examples/collapsible-pane-demo.tsx",
+	},
+	"controls-demo": {
+		component: ControlsDemo,
+		filePath: "registry/examples/controls-demo.tsx",
 	},
 }

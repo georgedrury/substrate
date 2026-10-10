@@ -6,6 +6,7 @@
 //   4. runs `substrate-kit add` with no terminal over an existing component
 // Usage: node scripts/test-scaffold.mjs [--live] [case...]   (default: all)
 // --live tests against the deployed registry instead of the local build.
+// --keep leaves the scaffolded projects on disk after a passing run.
 import { spawn } from "node:child_process"
 import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs"
 import { createServer } from "node:http"
@@ -23,7 +24,8 @@ const CONCURRENCY = 3
 const COMMAND_TIMEOUT_MS = 10 * 60 * 1000
 
 const live = process.argv.includes("--live")
-const requested = process.argv.slice(2).filter((arg) => arg !== "--live")
+const keep = process.argv.includes("--keep")
+const requested = process.argv.slice(2).filter((arg) => !arg.startsWith("--"))
 const unknown = requested.filter((name) => !CASES.includes(name))
 if (unknown.length > 0) {
 	console.error(`Unknown case: ${unknown.join(", ")}. Choose from ${CASES.join(", ")}`)
@@ -204,5 +206,6 @@ if (failures.length > 0) {
 	console.log(`\n${failures.length} of ${cases.length} failed. Projects kept in ${workspace}`)
 	process.exit(1)
 }
-rmSync(workspace, { recursive: true, force: true })
+if (keep) console.log(`\nProjects kept in ${workspace}`)
+else rmSync(workspace, { recursive: true, force: true })
 console.log(`\nAll ${cases.length} passed`)

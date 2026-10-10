@@ -1981,6 +1981,58 @@
         }
       ],
       "author": "George Drury <info@georgedrury.co.uk>"
+    },
+    {
+      "name": "controls",
+      "type": "registry:ui",
+      "title": "Controls",
+      "description": "Config-driven control panels — describe parameters as an object with useControls and render them with Controls, built on DialKit's store.",
+      "author": "George Drury <info@georgedrury.co.uk>",
+      "categories": [
+        "substrate",
+        "ui",
+        "form"
+      ],
+      "dependencies": [
+        "dialkit",
+        "@remixicon/react"
+      ],
+      "meta": {
+        "example": "const values = useControls(\"Card\", { radius: [24, 0, 64], visible: true })\n<Panel><Controls /></Panel>",
+        "lineage": [
+          {
+            "name": "DialKit",
+            "href": "https://github.com/joshpuckett/dialkit"
+          },
+          {
+            "name": "Substrate"
+          }
+        ]
+      },
+      "files": [
+        {
+          "path": "registry/substrate/components/controls.tsx",
+          "type": "registry:ui",
+          "target": "components/substrate/controls.tsx"
+        },
+        {
+          "path": "registry/substrate/hooks/use-controls.ts",
+          "type": "registry:hook",
+          "target": "hooks/substrate/use-controls.ts"
+        }
+      ],
+      "registryDependencies": [
+        "https://substrate.georgedrury.co.uk/r/pane",
+        "https://substrate.georgedrury.co.uk/r/collapsible-pane",
+        "https://substrate.georgedrury.co.uk/r/action",
+        "https://substrate.georgedrury.co.uk/r/number-slider",
+        "https://substrate.georgedrury.co.uk/r/number-input",
+        "https://substrate.georgedrury.co.uk/r/toggle",
+        "https://substrate.georgedrury.co.uk/r/select",
+        "https://substrate.georgedrury.co.uk/r/colour-picker",
+        "https://substrate.georgedrury.co.uk/r/text-area",
+        "https://substrate.georgedrury.co.uk/r/easing-curve-editor"
+      ]
     }
   ]
 }
