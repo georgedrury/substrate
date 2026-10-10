@@ -36,7 +36,7 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/slider
 ## Panel positioning
 
 ```tsx
-import { Panel } from "@/registry/substrate/components/panel"
+import { Panel } from "@/components/substrate/panel"
 
 {
 	/* Left panel — layers, tool options */
@@ -58,19 +58,19 @@ A typical properties panel reads from `useDocumentStore` and writes back via `up
 ```tsx
 "use client"
 
-import { useDocumentStore } from "@/registry/substrate/stores/document-store"
+import { useDocumentStore } from "@/stores/substrate/document-store"
 import {
 	Pane,
 	PaneHeader,
 	PaneLabel,
 	PaneAction,
-} from "@/registry/substrate/components/pane"
+} from "@/components/substrate/pane"
 import {
 	Action,
 	ActionLabel,
 	ActionControls,
-} from "@/registry/substrate/components/action"
-import { Slider } from "@/registry/substrate/components/slider"
+} from "@/components/substrate/action"
+import { Slider } from "@/components/substrate/slider"
 
 export function PropertiesPanel() {
 	const selectedIds = useDocumentStore((s) => s.selectedIds)
@@ -170,12 +170,12 @@ A layers panel lists elements in render order (bottom to top) and lets users sel
 ```tsx
 "use client"
 
-import { useDocumentStore } from "@/registry/substrate/stores/document-store"
+import { useDocumentStore } from "@/stores/substrate/document-store"
 import {
 	Pane,
 	PaneHeader,
 	PaneLabel,
-} from "@/registry/substrate/components/pane"
+} from "@/components/substrate/pane"
 
 export function LayersPanel() {
 	const elements = useDocumentStore((s) => s.elements)
@@ -224,7 +224,7 @@ export function LayersPanel() {
 Use `usePanelStore` to control panel visibility:
 
 ```tsx
-import { usePanelStore } from "@/registry/substrate/stores/panel-store"
+import { usePanelStore } from "@/stores/substrate/panel-store"
 
 const leftPanel = usePanelStore((s) => s.leftPanel)
 const rightPanel = usePanelStore((s) => s.rightPanel)

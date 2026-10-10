@@ -1,6 +1,6 @@
 {
   "name": "create-substrate",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Scaffold a Substrate creative tool playground",
   "type": "module",
   "bin": {
@@ -9,7 +9,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
-    "prepack": "node ../../scripts/sync-skills.mjs && npm run build"
+    "prepack": "node ../../scripts/sync-skills.mjs && npm run build",
+    "prepublishOnly": "npm --prefix ../.. run release:check"
   },
   "dependencies": {
     "chalk": "^5.4.0",

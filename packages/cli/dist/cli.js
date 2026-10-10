@@ -1,4 +1,3 @@
-import { createInterface } from "node:readline/promises";
 import { Command } from "commander";
 import { init } from "./commands/init.js";
 import { add } from "./commands/add.js";
@@ -7,29 +6,12 @@ import { docs } from "./commands/docs.js";
 import { browse } from "./commands/browse.js";
 import { variables } from "./commands/variables.js";
 import { startServer } from "./mcp/server.js";
-import { log } from "./utils/logger.js";
-async function promptProjectName() {
-    const rl = createInterface({ input: process.stdin, output: process.stdout });
-    try {
-        log.blank();
-        const name = await rl.question("  Project name: ");
-        const trimmed = name.trim();
-        if (!trimmed) {
-            log.error("Project name is required");
-            process.exit(1);
-        }
-        return trimmed;
-    }
-    finally {
-        rl.close();
-    }
-}
 export function createCli() {
     const program = new Command();
     program
         .name("substrate-kit")
         .description("Scaffold interactive canvas playgrounds with Substrate primitives")
-        .version("0.1.1");
+        .version("0.1.2");
     program
         .command("init")
         .description("Initialise Substrate skills and configuration in the current project")
@@ -49,9 +31,8 @@ export function createCli() {
         .option("--skip-install", "Skip dependency installation", false)
         .option("--skip-git", "Don't initialise git", false)
         .option("--package-manager <pm>", "Force package manager (npm, pnpm, bun)")
-        .action(async (projectName, options) => {
-        const name = projectName || await promptProjectName();
-        await create(name, {
+        .action((projectName, options) => {
+        create(projectName, {
             surface: options.surface,
             skipInstall: options.skipInstall,
             skipGit: options.skipGit,

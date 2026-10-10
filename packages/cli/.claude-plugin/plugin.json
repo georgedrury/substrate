@@ -1,7 +1,7 @@
 {
 	"name": "substrate",
 	"description": "Substrate creative tool framework – component skills, surface guides, scaffolding for interactive canvas playgrounds with substrate.georgedrury.co.uk registry",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"author": {
 		"name": "George Drury",
 		"url": "https://substrate.georgedrury.co.uk"

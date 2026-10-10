@@ -6,7 +6,7 @@ const program = new Command();
 program
     .name("create-substrate")
     .description("Scaffold a Substrate creative tool playground")
-    .version("0.1.4")
+    .version("0.1.5")
     .argument("[project-name]", "Name for the new project")
     .option("--surface <type>", "Surface type (canvas-2d, 3d-scene, animation, node-editor, data-vis, image-gen, blank)")
     .option("--pm <manager>", "Package manager (npm, pnpm, bun)")

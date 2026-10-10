@@ -87,8 +87,8 @@ React components that compose hooks and render a `<canvas>` element.
 "use client"
 
 import { useRef } from "react"
-import { useCanvasRenderer } from "../hooks/use-canvas-renderer"
-import { useCanvasInteraction } from "../hooks/use-canvas-interaction"
+import { useCanvasRenderer } from "@/hooks/substrate/use-canvas-renderer"
+import { useCanvasInteraction } from "@/hooks/substrate/use-canvas-interaction"
 // ... other hooks
 
 export function {Name}Canvas() {

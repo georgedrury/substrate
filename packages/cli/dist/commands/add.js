@@ -6,7 +6,8 @@ import { exec } from "../utils/shell.js";
 import { exists } from "../utils/fs.js";
 import { log } from "../utils/logger.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const REGISTRY_BASE = "https://substrate.georgedrury.co.uk/r";
+// SUBSTRATE_REGISTRY_URL points installs at a local registry for testing
+const REGISTRY_BASE = process.env.SUBSTRATE_REGISTRY_URL ?? "https://substrate.georgedrury.co.uk/r";
 const REGISTRY_URL = "https://substrate.georgedrury.co.uk/registry.json";
 async function loadRegistry() {
     const localPath = join(process.cwd(), "registry.json");

@@ -1,7 +1,9 @@
 import { execSync } from "node:child_process"
 import type { Registry } from "../types.js"
 
-const REGISTRY_BASE = "https://substrate.georgedrury.co.uk/r"
+// SUBSTRATE_REGISTRY_URL points installs at a local registry for testing
+const REGISTRY_BASE =
+	process.env.SUBSTRATE_REGISTRY_URL ?? "https://substrate.georgedrury.co.uk/r"
 
 export async function handleInstall(
 	registry: Registry,

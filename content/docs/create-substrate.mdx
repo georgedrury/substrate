@@ -55,8 +55,8 @@ The default surface. A full spatial design tool with canvas rendering, hit testi
 | Detail | Description |
 | --- | --- |
 | Starter page | Toolbar with shape and selection tools, left panel with a layer list, right panel with transform and fill properties |
-| Components | design-canvas, toolbar, panel, pane, slider, layer-list, number-input, colour-picker, history-controls, status-bar, zoom-controls |
-| Stores | document-store, tool-store, panel-store |
+| Components | design-canvas, toolbar, panel, pane, layer-list, number-input, colour-picker, history-controls, status-bar, zoom-controls |
+| Stores | document-store, tool-store |
 
 ### 3D scene
 
@@ -64,8 +64,8 @@ An interactive Three.js viewport with orbit controls and selectable objects.
 
 | Detail | Description |
 | --- | --- |
-| Starter page | A scene with sample meshes (cube, sphere, ground plane), toolbar with transform mode toggles (translate, rotate, scale), right panel with material properties |
-| Components | toolbar, panel, pane, slider, number-input, colour-picker, status-bar |
+| Starter page | A scene with sample meshes (box, sphere) on a grid, toolbar with select, move, rotate and scale modes plus add and delete, right panel with an object list, lighting, transform and material properties |
+| Components | toolbar, panel, pane, action, slider, number-input, colour-picker, status-bar |
 | Extra dependencies | three, @react-three/fiber, @react-three/drei |
 
 ### Animation
@@ -74,8 +74,8 @@ A timeline-based motion editor with keyframe editing and playback.
 
 | Detail | Description |
 | --- | --- |
-| Starter page | Split layout with a preview stage and timeline below, sample keyframes on two tracks (position, opacity), playback controls in toolbar, right panel with easing curve editor |
-| Components | toolbar, panel, pane, timeline, easing-curve-editor, slider, number-input, history-controls, status-bar |
+| Starter page | Split layout with a preview stage and timeline below, sample keyframes on two tracks (position, opacity), transport controls in the timeline, right panel with an easing curve editor and playback inputs |
+| Components | panel, pane, timeline, easing-curve-editor, number-input, status-bar |
 | Extra dependencies | gsap |
 | Stores | animation-store |
 
@@ -85,9 +85,8 @@ A visual programming canvas with typed ports and SVG wire connections.
 
 | Detail | Description |
 | --- | --- |
-| Starter page | Pannable/zoomable surface with sample nodes (a "Math" node with number ports, a "Colour" node with colour and number ports) connected by wires, right panel with node properties, command palette for node search |
-| Components | toolbar, panel, pane, node, number-input, colour-picker, status-bar, zoom-controls, command-palette |
-| Hooks | useViewport, useSelection, keyboard-shortcuts, bounding-box |
+| Starter page | Pannable, zoomable surface with a live-evaluated sample graph (number, colour, add, mix and output nodes) connected by typed wires, toolbar for adding nodes, right panel with node properties |
+| Components | toolbar, panel, pane, node, number-input, colour-picker, status-bar, zoom-controls |
 
 ### Data vis
 
@@ -95,9 +94,9 @@ An interactive chart explorer with configurable visualisations.
 
 | Detail | Description |
 | --- | --- |
-| Starter page | Chart surface rendering a sample dataset as line and bar charts, left panel with dataset selector and axis controls, right panel with chart configuration |
-| Components | toolbar, panel, pane, select, slider, colour-picker, number-input, status-bar |
-| Extra dependencies | recharts, d3 |
+| Starter page | Chart surface rendering a sample dataset as a line, area or bar chart, left panel with metric and range controls, right panel with chart styling |
+| Components | toolbar, panel, pane, action, select, number-slider, colour-picker, toggle-group, status-bar |
+| Extra dependencies | recharts |
 
 ### Image generation
 
@@ -105,9 +104,8 @@ A prompt-driven image creation tool with gallery history.
 
 | Detail | Description |
 | --- | --- |
-| Starter page | Central preview area with placeholder images, gallery below for generation history, left panel with prompt input, seed, steps, and CFG controls |
-| Components | toolbar, panel, pane, gallery, text-area, slider, number-input, progress-bar, status-bar |
-| Extra dependencies | @fal-ai/client |
+| Starter page | Central preview of the selected image, left panel with prompt input, seed, steps and CFG controls, right panel with a gallery of generation history. Generation is mocked locally; wire in your own model call |
+| Components | toolbar, panel, pane, action, gallery, text-area, slider, number-input, progress-bar, status-bar, empty-state |
 
 ### Blank
 

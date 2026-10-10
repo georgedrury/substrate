@@ -5,7 +5,8 @@ import { exec, execSilent } from "./utils/shell.js";
 import { log } from "./utils/logger.js";
 import { getInstallCommand } from "./utils/detect-pm.js";
 import { surfaces } from "./surfaces/index.js";
-const REGISTRY_BASE = "https://substrate.georgedrury.co.uk/r";
+// SUBSTRATE_REGISTRY_URL points installs at a local registry for testing
+const REGISTRY_BASE = process.env.SUBSTRATE_REGISTRY_URL ?? "https://substrate.georgedrury.co.uk/r";
 function printBanner() {
     const banner = [
         "┌──────────────────────────────────┐",
@@ -135,6 +136,8 @@ function packageJson(name, config, options) {
         "@substrate-kit/cli": "^0.1.1",
         tailwindcss: "^4",
         "@tailwindcss/vite": "^4",
+        "tw-animate-css": "^1.4.0",
+        shadcn: "^4.1.2",
         ...config.extraDevDeps,
     };
     return JSON.stringify({
@@ -235,6 +238,10 @@ createRoot(document.getElementById("root")!).render(
 function globalsCss(config) {
     const extra = config.cssVars ? `\n${config.cssVars}` : "";
     return `@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
@@ -261,9 +268,26 @@ function globalsCss(config) {
   --radius-xl: calc(var(--radius) + 4px);
   /* Substrate */
   --color-canvas: var(--canvas, var(--color-background));
-  --color-canvas-foreground: var(--canvas-foreground, var(--color-foreground-muted));
+  --color-canvas-foreground: var(--canvas-foreground, var(--color-muted-foreground));
   --color-panel: var(--panel, var(--color-card));
   --color-panel-foreground: var(--panel-foreground, var(--color-card-foreground));
+  /* Node port types */
+  --color-node-port-number: var(--node-port-number, oklch(0.623 0.214 259.815));
+  --color-node-port-colour: var(--node-port-colour, oklch(0.656 0.241 354.308));
+  --color-node-port-image: var(--node-port-image, oklch(0.606 0.25 292.717));
+  --color-node-port-geometry: var(--node-port-geometry, oklch(0.627 0.194 149.214));
+  --color-node-port-text: var(--node-port-text, oklch(0.681 0.162 75.834));
+  --color-node-port-boolean: var(--node-port-boolean, oklch(0.646 0.222 41.116));
+  --color-node-port-any: var(--node-port-any, var(--muted-foreground));
+  /* Node chrome */
+  --color-node-bg: var(--node-bg, var(--card));
+  --color-node-border: var(--node-border, var(--border));
+  --color-node-header: var(--node-header, var(--muted));
+  --color-node-selected: var(--node-selected, var(--ring));
+  /* Animations used by collapsible-pane and progress-bar */
+  --animate-collapsible-down: collapsible-down 150ms ease-out;
+  --animate-collapsible-up: collapsible-up 150ms ease-out;
+  --animate-progress-indeterminate: progress-indeterminate 1.5s ease-in-out infinite;
 }
 
 :root {
@@ -299,6 +323,37 @@ function globalsCss(config) {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@keyframes collapsible-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes collapsible-up {
+  from {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
   }
 }
 `;

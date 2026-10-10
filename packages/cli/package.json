@@ -1,6 +1,6 @@
 {
 	"name": "@substrate-kit/cli",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Scaffold interactive canvas playgrounds with Substrate primitives",
 	"type": "module",
 	"bin": {
@@ -9,7 +9,8 @@
 	"scripts": {
 		"build": "tsc",
 		"dev": "tsx src/index.ts",
-		"prepack": "npm run build"
+		"prepack": "cp ../../registry.json registry.json && npm run build",
+		"prepublishOnly": "npm --prefix ../.. run release:check"
 	},
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.28.0",

@@ -12,11 +12,14 @@ import {
   Toolbar,
   ToolbarToggleGroup,
   ToolbarToggle,
-  ToolbarSeparator,
 } from "@/components/substrate/toolbar"
 import { Panel } from "@/components/substrate/panel"
 import { Surface } from "@/components/substrate/surface"
-import { EmptyState } from "@/components/substrate/empty-state"
+import {
+  EmptyState,
+  EmptyStateTitle,
+  EmptyStateDescription,
+} from "@/components/substrate/empty-state"
 import { StatusBar, StatusBarSection, StatusBarItem } from "@/components/substrate/status-bar"
 import { RiCursorLine, RiHand } from "@remixicon/react"
 
@@ -27,24 +30,33 @@ export default function App() {
     <div className="flex h-screen flex-col bg-background text-foreground">
       <div className="relative flex flex-1 overflow-hidden">
         <Panel position="left">
-          <EmptyState
-            title="Left panel"
-            description="Add layers, assets, or navigation here"
-          />
+          <EmptyState>
+            <EmptyStateTitle>Left panel</EmptyStateTitle>
+            <EmptyStateDescription>
+              Add layers, assets, or navigation here
+            </EmptyStateDescription>
+          </EmptyState>
         </Panel>
 
-        <Surface className="flex-1">
-          <EmptyState
-            title="Your surface here"
-            description="Replace this with your rendering engine — canvas, Three.js, timeline, or anything else"
-          />
-        </Surface>
+        {/* Surface fills its nearest positioned parent */}
+        <div className="relative flex-1">
+          <Surface>
+            <EmptyState>
+              <EmptyStateTitle>Your surface here</EmptyStateTitle>
+              <EmptyStateDescription>
+                Replace this with your rendering engine — canvas, Three.js, timeline, or anything else
+              </EmptyStateDescription>
+            </EmptyState>
+          </Surface>
+        </div>
 
         <Panel position="right">
-          <EmptyState
-            title="Right panel"
-            description="Add property controls and inspectors here"
-          />
+          <EmptyState>
+            <EmptyStateTitle>Right panel</EmptyStateTitle>
+            <EmptyStateDescription>
+              Add property controls and inspectors here
+            </EmptyStateDescription>
+          </EmptyState>
         </Panel>
       </div>
 

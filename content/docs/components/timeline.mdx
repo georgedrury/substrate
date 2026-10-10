@@ -76,7 +76,7 @@ No additional props. Reads state from `useAnimationStore`.
 The timeline uses a shared Zustand store (`animation-store`) for playback state:
 
 ```tsx
-import { useAnimationStore } from "@/registry/substrate/stores/animation-store"
+import { useAnimationStore } from "@/stores/substrate/animation-store"
 
 const { currentTime, isPlaying, togglePlayback } = useAnimationStore()
 ```

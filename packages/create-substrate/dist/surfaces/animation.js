@@ -1,25 +1,18 @@
 export const animation = {
     components: [
-        "toolbar",
         "panel",
         "pane",
         "timeline",
+        "animation-store",
         "easing-curve-editor",
-        "slider",
+        "easing",
         "number-input",
-        "history-controls",
         "status-bar",
     ],
     extraDeps: {
         gsap: "^3.12.0",
     },
-    app: () => `import { useState, useRef, useEffect } from "react"
-import {
-  Toolbar,
-  ToolbarToggleGroup,
-  ToolbarToggle,
-  ToolbarSeparator,
-} from "@/components/substrate/toolbar"
+    app: () => `import { useEffect, useState } from "react"
 import { Panel } from "@/components/substrate/panel"
 import {
   Pane,
@@ -27,18 +20,19 @@ import {
   PaneLabel,
   PaneContent,
 } from "@/components/substrate/pane"
-import { Timeline } from "@/components/substrate/timeline"
+import {
+  Timeline,
+  TimelineRuler,
+  TimelinePlayhead,
+  TimelineTrack,
+  TimelineKeyframe,
+  TimelineTransport,
+} from "@/components/substrate/timeline"
 import { EasingCurveEditor } from "@/components/substrate/easing-curve-editor"
 import { NumberInput } from "@/components/substrate/number-input"
-import { Slider } from "@/components/substrate/slider"
-import { HistoryControls } from "@/components/substrate/history-controls"
 import { StatusBar, StatusBarSection, StatusBarItem } from "@/components/substrate/status-bar"
-import {
-  RiPlayLine,
-  RiPauseLine,
-  RiStopLine,
-  RiSkipBackLine,
-} from "@remixicon/react"
+import { useAnimationStore } from "@/stores/substrate/animation-store"
+import { evaluateCubicBezier, type CubicBezier } from "@/lib/substrate/easing"
 
 interface Keyframe {
   id: string
@@ -52,14 +46,15 @@ interface Track {
   keyframes: Keyframe[]
 }
 
-const INITIAL_TRACKS: Track[] = [
+// Keyframe times are in seconds, matching the animation store
+const TRACKS: Track[] = [
   {
     id: "position-x",
     label: "Position X",
     keyframes: [
-      { id: "k1", time: 0, value: 50 },
-      { id: "k2", time: 30, value: 300 },
-      { id: "k3", time: 60, value: 150 },
+      { id: "k1", time: 0, value: -150 },
+      { id: "k2", time: 2.5, value: 150 },
+      { id: "k3", time: 5, value: -150 },
     ],
   },
   {
@@ -67,53 +62,52 @@ const INITIAL_TRACKS: Track[] = [
     label: "Opacity",
     keyframes: [
       { id: "k4", time: 0, value: 100 },
-      { id: "k5", time: 20, value: 30 },
-      { id: "k6", time: 50, value: 100 },
+      { id: "k5", time: 1.5, value: 30 },
+      { id: "k6", time: 4, value: 100 },
     ],
   },
 ]
 
 export default function App() {
-  const [playing, setPlaying] = useState(false)
-  const [currentFrame, setCurrentFrame] = useState(0)
-  const [totalFrames] = useState(60)
-  const [tracks] = useState(INITIAL_TRACKS)
-  const [easing, setEasing] = useState<[number, number, number, number]>([0.4, 0, 0.2, 1])
-  const animRef = useRef<number | null>(null)
-  const boxRef = useRef<HTMLDivElement>(null)
+  const duration = useAnimationStore((s) => s.duration)
+  const currentTime = useAnimationStore((s) => s.currentTime)
+  const isPlaying = useAnimationStore((s) => s.isPlaying)
+  const zoomLevel = useAnimationStore((s) => s.zoomLevel)
+  const selectedKeyframeIds = useAnimationStore((s) => s.selectedKeyframeIds)
+  const selectKeyframe = useAnimationStore((s) => s.selectKeyframe)
+  const setCurrentTime = useAnimationStore((s) => s.setCurrentTime)
+  const setDuration = useAnimationStore((s) => s.setDuration)
+  const [easing, setEasing] = useState<CubicBezier>({ x1: 0.4, y1: 0, x2: 0.2, y2: 1 })
 
+  // Advance the store's clock while playing, looping at the end
   useEffect(() => {
-    if (!playing) {
-      if (animRef.current) cancelAnimationFrame(animRef.current)
-      return
-    }
+    if (!isPlaying) return
 
-    let frame = currentFrame
-    const tick = () => {
-      frame = (frame + 1) % totalFrames
-      setCurrentFrame(frame)
-      animRef.current = requestAnimationFrame(tick)
+    let frame = 0
+    let last = performance.now()
+    const tick = (now: number) => {
+      const state = useAnimationStore.getState()
+      const next = state.currentTime + (now - last) / 1000
+      last = now
+      state.setCurrentTime(next >= state.duration ? 0 : next)
+      frame = requestAnimationFrame(tick)
     }
-    animRef.current = requestAnimationFrame(tick)
-    return () => {
-      if (animRef.current) cancelAnimationFrame(animRef.current)
-    }
-  }, [playing])
+    frame = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frame)
+  }, [isPlaying])
 
-  // Interpolate position and opacity from keyframes
-  const posX = interpolate(tracks[0].keyframes, currentFrame)
-  const opacity = interpolate(tracks[1].keyframes, currentFrame) / 100
+  const posX = interpolate(TRACKS[0].keyframes, currentTime, easing)
+  const opacity = interpolate(TRACKS[1].keyframes, currentTime, easing) / 100
 
   return (
     <div className="flex h-screen flex-col bg-background text-foreground">
-      <div className="relative flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden">
         {/* Preview stage */}
         <div className="flex flex-1 items-center justify-center bg-canvas">
           <div
-            ref={boxRef}
             className="size-20 rounded-lg bg-primary"
             style={{
-              transform: \`translateX(\${posX - 150}px)\`,
+              transform: \`translateX(\${posX}px)\`,
               opacity,
             }}
           />
@@ -130,80 +124,78 @@ export default function App() {
           </Pane>
           <Pane>
             <PaneHeader>
-              <PaneLabel>Keyframe</PaneLabel>
+              <PaneLabel>Playback</PaneLabel>
             </PaneHeader>
             <PaneContent>
               <div className="grid grid-cols-2 gap-2">
-                <NumberInput label="Frame" value={currentFrame} onChange={setCurrentFrame} min={0} max={totalFrames} />
-                <div>
-                  <label className="text-xs font-medium">Value</label>
-                  <NumberInput value={0} onChange={() => {}} />
-                </div>
+                <NumberInput
+                  label="T"
+                  value={currentTime}
+                  onChange={setCurrentTime}
+                  min={0}
+                  max={duration}
+                  step={0.1}
+                  suffix="s"
+                />
+                <NumberInput
+                  label="D"
+                  value={duration}
+                  onChange={setDuration}
+                  min={1}
+                  max={30}
+                  step={0.5}
+                  suffix="s"
+                />
               </div>
             </PaneContent>
           </Pane>
         </Panel>
       </div>
 
-      {/* Timeline */}
-      <div className="h-48 border-t border-border bg-panel">
-        <Timeline
-          tracks={tracks}
-          currentFrame={currentFrame}
-          totalFrames={totalFrames}
-          onFrameChange={setCurrentFrame}
-        />
-      </div>
-
-      <Toolbar>
-        <ToolbarToggle
-          value="back"
-          tooltip="Go to start"
-          onPressedChange={() => { setCurrentFrame(0); setPlaying(false) }}
-        >
-          <RiSkipBackLine className="size-4" />
-        </ToolbarToggle>
-        <ToolbarToggle
-          value="play"
-          pressed={playing}
-          tooltip={playing ? "Pause" : "Play"}
-          shortcut="Space"
-          onPressedChange={() => setPlaying(!playing)}
-        >
-          {playing ? <RiPauseLine className="size-4" /> : <RiPlayLine className="size-4" />}
-        </ToolbarToggle>
-        <ToolbarToggle
-          value="stop"
-          tooltip="Stop"
-          onPressedChange={() => { setPlaying(false); setCurrentFrame(0) }}
-        >
-          <RiStopLine className="size-4" />
-        </ToolbarToggle>
-      </Toolbar>
+      <Timeline>
+        <TimelineRuler duration={duration} zoomLevel={zoomLevel} />
+        <div className="relative flex-1 overflow-y-auto">
+          {TRACKS.map((track) => (
+            <TimelineTrack key={track.id} label={track.label}>
+              {track.keyframes.map((keyframe) => (
+                <TimelineKeyframe
+                  key={keyframe.id}
+                  time={keyframe.time}
+                  duration={duration}
+                  zoomLevel={zoomLevel}
+                  selected={selectedKeyframeIds.has(keyframe.id)}
+                  onSelect={() => selectKeyframe(keyframe.id)}
+                />
+              ))}
+            </TimelineTrack>
+          ))}
+          <TimelinePlayhead time={currentTime} duration={duration} zoomLevel={zoomLevel} />
+        </div>
+        <TimelineTransport />
+      </Timeline>
 
       <StatusBar>
         <StatusBarSection>
-          <StatusBarItem>Frame: {currentFrame} / {totalFrames}</StatusBarItem>
-          <StatusBarItem>State: {playing ? "Playing" : "Stopped"}</StatusBarItem>
-        </StatusBarSection>
-        <StatusBarSection>
-          <HistoryControls size="sm" />
+          <StatusBarItem>Time: {currentTime.toFixed(2)}s / {duration.toFixed(2)}s</StatusBarItem>
+          <StatusBarItem>State: {isPlaying ? "Playing" : "Stopped"}</StatusBarItem>
         </StatusBarSection>
       </StatusBar>
     </div>
   )
 }
 
-function interpolate(keyframes: Keyframe[], frame: number): number {
+// Value at a given time, easing between the surrounding keyframes
+function interpolate(keyframes: Keyframe[], time: number, easing: CubicBezier): number {
   if (keyframes.length === 0) return 0
-  if (frame <= keyframes[0].time) return keyframes[0].value
-  if (frame >= keyframes[keyframes.length - 1].time) return keyframes[keyframes.length - 1].value
+  if (time <= keyframes[0].time) return keyframes[0].value
+  const last = keyframes[keyframes.length - 1]
+  if (time >= last.time) return last.value
 
   for (let i = 0; i < keyframes.length - 1; i++) {
     const a = keyframes[i]
     const b = keyframes[i + 1]
-    if (frame >= a.time && frame <= b.time) {
-      const t = (frame - a.time) / (b.time - a.time)
+    if (time >= a.time && time <= b.time) {
+      const t = evaluateCubicBezier(easing, (time - a.time) / (b.time - a.time))
       return a.value + (b.value - a.value) * t
     }
   }

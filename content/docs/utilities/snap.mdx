@@ -14,7 +14,7 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/snap
 ### Grid snapping
 
 ```ts
-import { snapToGrid, snapValueToGrid } from "@/components/substrate/lib/snap"
+import { snapToGrid, snapValueToGrid } from "@/lib/substrate/snap"
 
 snapToGrid({ x: 37, y: 63 }, 10)
 // → { x: 40, y: 60 }
@@ -28,7 +28,7 @@ snapValueToGrid(37, 10) // → 40
 ### Guide snapping
 
 ```ts
-import { snapToGuides, guidesFromBounds } from "@/components/substrate/lib/snap"
+import { snapToGuides, guidesFromBounds } from "@/lib/substrate/snap"
 
 // Generate guides from sibling elements
 const guides = guidesFromBounds(otherElements.map((el) => el.bounds))

@@ -70,15 +70,15 @@ Every playground follows the same layout pattern — surface in the centre, opti
 ```tsx
 "use client"
 
-import { Panel } from "@/registry/substrate/components/panel"
+import { Panel } from "@/components/substrate/panel"
 import {
 	Toolbar,
 	ToolbarToggleGroup,
 	ToolbarToggle,
 	ToolbarSeparator,
-} from "@/registry/substrate/components/toolbar"
-import { usePanelStore } from "@/registry/substrate/stores/panel-store"
-import { useToolStore } from "@/registry/substrate/stores/tool-store"
+} from "@/components/substrate/toolbar"
+import { usePanelStore } from "@/stores/substrate/panel-store"
+import { useToolStore } from "@/stores/substrate/tool-store"
 
 export default function PlaygroundPage() {
 	const leftPanel = usePanelStore((s) => s.leftPanel)

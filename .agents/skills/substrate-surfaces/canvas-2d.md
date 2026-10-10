@@ -21,7 +21,7 @@ This pulls in the canvas renderer, hit-test system, interaction hooks, transform
 ### Mount
 
 ```tsx
-import { DesignCanvas } from "@/registry/substrate/canvas/design-canvas"
+import { DesignCanvas } from "@/components/substrate/design-canvas"
 
 export default function PlaygroundPage() {
 	return (

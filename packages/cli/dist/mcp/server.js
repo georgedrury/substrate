@@ -11,7 +11,7 @@ export async function startServer() {
     const registry = await loadRegistry();
     const server = new McpServer({
         name: "substrate",
-        version: "0.1.1",
+        version: "0.1.2",
     });
     server.tool("search_components", "Search the Substrate component registry by keyword, category, or description. Returns matching components with name, description, and category.", {
         query: z.string().optional().describe("Free-text search against component name, title, and description"),

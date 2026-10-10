@@ -60,7 +60,7 @@ When a hook wraps store state (like `useHitTest` wraps `document-store` + `hit-t
 "use client"
 
 import { useCallback } from "react"
-import { useDocumentStore } from "../stores/document-store"
+import { useDocumentStore } from "@/stores/substrate/document-store"
 import { useCanvasTransform } from "./use-canvas-transform"
 // ... pure functions from lib/canvas
 
