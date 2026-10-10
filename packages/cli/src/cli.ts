@@ -31,7 +31,7 @@ export function createCli(): Command {
   program
     .name("substrate-kit")
     .description("Scaffold interactive canvas playgrounds with Substrate primitives")
-    .version("0.1.0")
+    .version("0.1.1")
 
   program
     .command("init")
