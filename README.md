@@ -51,7 +51,7 @@ npm run test:scaffold             # everything, against the local registry build
 npm run test:scaffold -- animation blank
 ```
 
-`test:scaffold` scaffolds every surface with a real install, builds each project, and loads it in a headless browser, failing on any runtime error. It also runs `substrate-kit create` and installs every registry item into one project to typecheck them together.
+`test:scaffold` scaffolds every surface with a real install, builds each project, and loads it in a headless browser, failing on any runtime error. It also runs `substrate-kit create` installs every registry item into one project to typecheck them together, and checks that `substrate-kit add` works with no terminal attached.
 
 Scaffolded projects download components from the deployed site, so release in this order:
 
