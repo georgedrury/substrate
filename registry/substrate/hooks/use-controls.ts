@@ -3,9 +3,11 @@
 import { useEffect, useId, useMemo, useRef, useSyncExternalStore } from "react"
 import {
 	DialStore,
+	flattenDialValueUpdates,
 	resolveDialValues,
 	type DialConfig,
 	type DialKitPersistOptions,
+	type DialKitValueUpdates,
 	type ResolvedValues,
 } from "dialkit/store"
 
@@ -22,11 +24,29 @@ type UseControlsOptions = {
 	onAction?: (path: string) => void
 }
 
+type ControlsController<T extends DialConfig> = {
+	values: ResolvedValues<T>
+	/** Update some values from code, using the same nesting as the config */
+	setValues: (values: DialKitValueUpdates<T>) => void
+	/** Restore the config defaults */
+	reset: () => void
+}
+
 function useControls<T extends DialConfig>(
 	name: string,
 	config: T,
 	options: UseControlsOptions = {},
 ): ResolvedValues<T> {
+	return useControlsController(name, config, options).values
+}
+
+// The same panel as useControls, plus setters for driving it from code:
+// loading a saved state, or applying a preset.
+function useControlsController<T extends DialConfig>(
+	name: string,
+	config: T,
+	options: UseControlsOptions = {},
+): ControlsController<T> {
 	const instanceId = useId()
 	const hasStableId = options.id !== undefined
 	const panelId = options.id ?? `${name}-${instanceId}`
@@ -75,12 +95,30 @@ function useControls<T extends DialConfig>(
 		() => DialStore.getValues(panelId),
 	)
 
-	return useMemo(
+	const values = useMemo(
 		() => resolveDialValues(configRef.current, flatValues),
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[flatValues, serializedConfig],
 	)
+
+	return useMemo(
+		() => ({
+			values,
+			setValues: (next: DialKitValueUpdates<T>) =>
+				DialStore.updateValues(
+					panelId,
+					flattenDialValueUpdates(configRef.current, next),
+				),
+			reset: () => DialStore.resetValues(panelId),
+		}),
+		[values, panelId],
+	)
 }
 
-export { useControls, type UseControlsOptions }
+export {
+	useControls,
+	useControlsController,
+	type UseControlsOptions,
+	type ControlsController,
+}
 export type { DialConfig as ControlsConfig, ResolvedValues as ControlsValues } from "dialkit/store"

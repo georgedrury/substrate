@@ -5,10 +5,8 @@ export const scene3d: SurfaceConfig = {
     "toolbar",
     "panel",
     "pane",
-    "action",
-    "slider",
     "number-input",
-    "colour-picker",
+    "controls",
     "status-bar",
   ],
   extraDeps: {
@@ -37,10 +35,9 @@ import {
   PaneAction,
   PaneContent,
 } from "@/components/substrate/pane"
-import { Action, ActionLabel, ActionControls } from "@/components/substrate/action"
 import { NumberInput } from "@/components/substrate/number-input"
-import { Slider } from "@/components/substrate/slider"
-import { ColourPicker } from "@/components/substrate/colour-picker"
+import { Controls } from "@/components/substrate/controls"
+import { useControls, type ControlsConfig } from "@/hooks/substrate/use-controls"
 import {
   StatusBar,
   StatusBarSection,
@@ -186,11 +183,43 @@ function SceneMesh({
   )
 }
 
+type Material = Pick<SceneObject, "colour" | "roughness" | "metalness">
+
+// Material values belong to the selected object, not to the panel. Mounting
+// this with key={object.id} gives each selection its own panel: the object's
+// values seed the config, and edits are written back through onChange.
+function MaterialControls({
+  object,
+  onChange,
+}: {
+  object: SceneObject
+  onChange: (material: Material) => void
+}) {
+  const [config] = useState(
+    () =>
+      ({
+        colour: object.colour,
+        roughness: [object.roughness, 0, 1, 0.01],
+        metalness: [object.metalness, 0, 1, 0.01],
+      }) satisfies ControlsConfig,
+  )
+  const material = useControls("Material", config)
+
+  const onChangeRef = useRef(onChange)
+  onChangeRef.current = onChange
+  useEffect(() => {
+    onChangeRef.current(material)
+  }, [material])
+
+  return <Controls panel="Material" />
+}
+
 export default function App() {
   const [mode, setMode] = useState<Mode>("select")
   const [objects, setObjects] = useState(INITIAL_OBJECTS)
   const [selectedId, setSelectedId] = useState<string | null>("box-1")
-  const [lightIntensity, setLightIntensity] = useState(1.5)
+  const lighting = useControls("Lighting", { intensity: [1.5, 0, 4, 0.05] })
+  const lightIntensity = lighting.intensity
   const nextIndex = useRef(INITIAL_OBJECTS.length + 1)
 
   const selected = objects.find((object) => object.id === selectedId) ?? null
@@ -364,25 +393,7 @@ export default function App() {
             </PaneContent>
           </Pane>
 
-          <Pane>
-            <PaneHeader>
-              <PaneLabel>Lighting</PaneLabel>
-            </PaneHeader>
-            <PaneContent>
-              <Action>
-                <ActionLabel>Intensity</ActionLabel>
-                <ActionControls>
-                  <Slider
-                    min={0}
-                    max={4}
-                    step={0.05}
-                    value={[lightIntensity]}
-                    onValueChange={([value]) => setLightIntensity(value)}
-                  />
-                </ActionControls>
-              </Action>
-            </PaneContent>
-          </Pane>
+          <Controls panel="Lighting" />
 
           {selected ? (
             <>
@@ -453,53 +464,11 @@ export default function App() {
                 </PaneContent>
               </Pane>
 
-              <Pane>
-                <PaneHeader>
-                  <PaneLabel>Material</PaneLabel>
-                </PaneHeader>
-                <PaneContent className="space-y-2">
-                  <Action>
-                    <ActionLabel>Colour</ActionLabel>
-                    <ActionControls>
-                      <ColourPicker
-                        value={selected.colour}
-                        onChange={(colour) => updateObject(selected.id, { colour })}
-                      />
-                      <span className="font-mono text-xs text-muted-foreground">
-                        {selected.colour}
-                      </span>
-                    </ActionControls>
-                  </Action>
-                  <Action>
-                    <ActionLabel>Roughness</ActionLabel>
-                    <ActionControls>
-                      <Slider
-                        min={0}
-                        max={1}
-                        step={0.01}
-                        value={[selected.roughness]}
-                        onValueChange={([value]) =>
-                          updateObject(selected.id, { roughness: value })
-                        }
-                      />
-                    </ActionControls>
-                  </Action>
-                  <Action>
-                    <ActionLabel>Metalness</ActionLabel>
-                    <ActionControls>
-                      <Slider
-                        min={0}
-                        max={1}
-                        step={0.01}
-                        value={[selected.metalness]}
-                        onValueChange={([value]) =>
-                          updateObject(selected.id, { metalness: value })
-                        }
-                      />
-                    </ActionControls>
-                  </Action>
-                </PaneContent>
-              </Pane>
+              <MaterialControls
+                key={selected.id}
+                object={selected}
+                onChange={(patch) => updateObject(selected.id, patch)}
+              />
             </>
           ) : (
             <Pane>

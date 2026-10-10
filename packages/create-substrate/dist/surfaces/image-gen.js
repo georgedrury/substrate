@@ -6,7 +6,7 @@ export const imageGen = {
         "action",
         "gallery",
         "text-area",
-        "slider",
+        "controls",
         "number-input",
         "progress-bar",
         "status-bar",
@@ -36,7 +36,8 @@ import {
   GalleryEmpty,
 } from "@/components/substrate/gallery"
 import { TextArea } from "@/components/substrate/text-area"
-import { Slider } from "@/components/substrate/slider"
+import { Controls } from "@/components/substrate/controls"
+import { useControlsController } from "@/hooks/substrate/use-controls"
 import { NumberInput } from "@/components/substrate/number-input"
 import { ProgressBar } from "@/components/substrate/progress-bar"
 import {
@@ -175,8 +176,14 @@ const TOOLBAR_BUTTON =
 
 export default function App() {
   const [prompt, setPrompt] = useState("Misty mountain valley at sunrise")
-  const [steps, setSteps] = useState(30)
-  const [cfg, setCfg] = useState(7)
+  // The Parameters pane is generated from this config. The controller form
+  // of the hook adds setValues, used below to load a past result's settings.
+  const parameters = useControlsController("Parameters", {
+    steps: [30, 1, 100, 1],
+    cfgScale: [7, 1, 20, 0.5],
+  })
+  const steps = parameters.values.steps
+  const cfg = parameters.values.cfgScale
   const [seed, setSeed] = useState(-1)
   const [aspect, setAspect] = useState<AspectRatio>("1:1")
   const [generating, setGenerating] = useState(false)
@@ -230,8 +237,7 @@ export default function App() {
   function handleSelect(generation: Generation) {
     setSelectedId(generation.id)
     setPrompt(generation.prompt)
-    setSteps(generation.steps)
-    setCfg(generation.cfg)
+    parameters.setValues({ steps: generation.steps, cfgScale: generation.cfg })
     setSeed(generation.seed)
     setAspect(generation.aspect)
   }
@@ -270,9 +276,10 @@ export default function App() {
               {generating && <ProgressBar value={progress} aria-label="Generation progress" />}
             </PaneContent>
           </Pane>
+          <Controls panel="Parameters" />
           <Pane>
             <PaneHeader>
-              <PaneLabel>Parameters</PaneLabel>
+              <PaneLabel>Seed</PaneLabel>
               <PaneAction
                 type="button"
                 title="Random seed"
@@ -283,33 +290,6 @@ export default function App() {
               </PaneAction>
             </PaneHeader>
             <PaneContent className="space-y-1">
-              <Action>
-                <ActionLabel>Steps</ActionLabel>
-                <ActionControls>
-                  <Slider
-                    aria-label="Steps"
-                    min={1}
-                    max={100}
-                    value={[steps]}
-                    onValueChange={(value) => setSteps(value[0] ?? steps)}
-                  />
-                  <span className="w-8 text-right text-xs tabular-nums">{steps}</span>
-                </ActionControls>
-              </Action>
-              <Action>
-                <ActionLabel>CFG scale</ActionLabel>
-                <ActionControls>
-                  <Slider
-                    aria-label="CFG scale"
-                    min={1}
-                    max={20}
-                    step={0.5}
-                    value={[cfg]}
-                    onValueChange={(value) => setCfg(value[0] ?? cfg)}
-                  />
-                  <span className="w-8 text-right text-xs tabular-nums">{cfg}</span>
-                </ActionControls>
-              </Action>
               <Action>
                 <ActionLabel>Seed</ActionLabel>
                 <ActionControls>

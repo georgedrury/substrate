@@ -85,6 +85,10 @@ const chart = useControls("Chart", {
 
 **Options**: `id`, `persist`, `onAction`. **Controls prop**: `panel` to render a single panel by name.
 
+**Setting values from code**: `useControlsController` returns `{ values, setValues, reset }` for loading saved state or presets.
+
+**Values that belong to a selection**: mount a small component with `key={selected.id}` that seeds its config from the selected item (hold it in `useState` so it is built once) and writes `useControls` values back in an effect. Only do this when nothing else edits those values while the item is selected.
+
 **When to use**: The default for any panel of tunable parameters with local state – chart settings, generation parameters, material properties. Compose the individual controls by hand instead when values live in a store with selection and undo (as in the design editor's property panes), or when a row needs a custom layout.
 
 ---

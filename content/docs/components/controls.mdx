@@ -78,6 +78,50 @@ const values = useControls(name, config, options)
 | `persist` | `boolean \| { key?, storage?, presets? }` | Saves values to browser storage |
 | `onAction` | `(path: string) => void` | Called with the path of a clicked action control |
 
+### Setting values from code
+
+`useControlsController` registers the same panel and also returns setters, for loading a saved state or applying a preset:
+
+```tsx
+const parameters = useControlsController("Parameters", {
+  steps: [30, 1, 100, 1],
+  cfgScale: [7, 1, 20, 0.5],
+})
+
+parameters.values.steps
+parameters.setValues({ steps: 40 })
+parameters.reset()
+```
+
+### Values that belong to a selection
+
+A panel owns its values, which suits settings with local state. When the values belong to something selectable, mount a small component per selection with `key`, seed the config from the selected item, and write edits back:
+
+```tsx
+function MaterialControls({ object, onChange }: Props) {
+  const [config] = useState(
+    () =>
+      ({
+        colour: object.colour,
+        roughness: [object.roughness, 0, 1, 0.01],
+      }) satisfies ControlsConfig,
+  )
+  const material = useControls("Material", config)
+
+  const onChangeRef = useRef(onChange)
+  onChangeRef.current = onChange
+  useEffect(() => {
+    onChangeRef.current(material)
+  }, [material])
+
+  return <Controls panel="Material" />
+}
+
+<MaterialControls key={selected.id} object={selected} onChange={update} />
+```
+
+This works when nothing else edits those values while the item is selected. If they also change elsewhere (dragging on a canvas, undo), compose the individual controls by hand so they read straight from your store.
+
 ## Controls
 
 | Prop | Type | Default | Description |
