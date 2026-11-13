@@ -2,6 +2,9 @@ export interface ShadcnAddOptions {
     cwd?: string;
     /** Capture output instead of printing it (used by the MCP server) */
     silent?: boolean;
+    /** How many times to try before giving up (default 3) */
+    attempts?: number;
 }
-export declare function shadcnAdd(url: string, options?: ShadcnAddOptions): void;
+export type RetryHandler = (attempt: number, error: unknown) => void;
+export declare function shadcnAdd(urls: string[], options?: ShadcnAddOptions, onRetry?: RetryHandler): void;
 //# sourceMappingURL=shadcn.d.ts.map

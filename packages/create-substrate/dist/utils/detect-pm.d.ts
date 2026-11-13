@@ -1,4 +1,6 @@
 export type PackageManager = "npm" | "pnpm" | "bun";
+export declare function isPackageManager(value: string): value is PackageManager;
+export declare function detectRunningPackageManager(userAgent?: string | undefined): PackageManager | null;
 export declare function detectPackageManager(cwd: string): PackageManager;
 export declare function getInstallCommand(pm: PackageManager): string;
 export declare function getRunCommand(pm: PackageManager, script: string): string;

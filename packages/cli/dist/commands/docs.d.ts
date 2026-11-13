@@ -1,4 +1,6 @@
-export declare function docs(nameOrQuery?: string, options?: {
+export interface DocsOptions {
     list?: boolean;
-}): Promise<void>;
+    open?: boolean;
+}
+export declare function docs(nameOrQuery?: string, options?: DocsOptions): Promise<void>;
 //# sourceMappingURL=docs.d.ts.map

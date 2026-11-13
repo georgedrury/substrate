@@ -1,4 +1,4 @@
-import type { Registry } from "../types.js";
+import { type Registry } from "../../registry.js";
 export declare function handleSearch(registry: Registry, args: {
     query?: string;
     category?: string;

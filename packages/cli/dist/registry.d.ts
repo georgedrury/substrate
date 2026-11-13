@@ -1,3 +1,5 @@
+export declare const SITE_URL = "https://substrate.georgedrury.co.uk";
+export declare const REGISTRY_BASE: string;
 export interface RegistryItem {
     name: string;
     type: string;
@@ -28,4 +30,7 @@ export interface RegistryItem {
 export interface Registry {
     items: RegistryItem[];
 }
-//# sourceMappingURL=types.d.ts.map
+export declare function loadRegistry(): Promise<Registry>;
+export declare function overrideKeys(item: RegistryItem): string[];
+export declare function matchesQuery(item: RegistryItem, query: string): boolean;
+//# sourceMappingURL=registry.d.ts.map

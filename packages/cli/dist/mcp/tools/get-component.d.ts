@@ -1,4 +1,4 @@
-import type { Registry } from "../types.js";
+import { type Registry } from "../../registry.js";
 export declare function handleGetComponent(registry: Registry, args: {
     name: string;
 }): Promise<{

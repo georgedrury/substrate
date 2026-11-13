@@ -1,65 +1,54 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { copyDir, exists, writeFile, resolveSkillsDir, listDirs, } from "../utils/fs.js";
+import { agentsSection, mergeSection } from "../utils/agents-file.js";
+import { VERSION } from "../utils/version.js";
 import { log } from "../utils/logger.js";
 const CLI_PACKAGE = "@substrate-kit/cli";
-const CLI_RANGE = "^0.1.3";
-function claudeMd() {
-    return `# Substrate
-
-This project uses [Substrate](https://substrate.georgedrury.co.uk) — a creative app framework that provides scaffold (toolbar, panels, panes, stores, shortcuts) around different surface types.
-
-## Skills
-
-Substrate skills are installed in \`.claude/skills/\`. They are organised into two groups:
-
-### Surface guides (how to build)
-
-- **scaffold-playground** — bootstrapping a new playground
-- **canvas-2d** / **3d-scene** / **animation** / **image-generation** / **data-visualisation** — surface-specific architecture
-- **composing-panels** / **wire-interactions** / **create-custom-tool** / **theming** — workflow guides
-- **install-components** — full catalogue of available components + how to install via \`substrate-kit add\`
-
-### Component reference (what to use)
-
-- **substrate-scaffold** — Toolbar, Panel, Pane, DocumentTabs, StatusBar, ZoomControls, Breadcrumbs, Resizer
-- **substrate-controls** — NumberInput, Slider, NumberSlider, Select, Toggle, TextArea, ColourPicker, ActionControls
-- **substrate-canvas** — useViewport, useSelection, useDragReorder, snap, boundingBox, hit testing
-- **substrate-nodes** — Node cards, typed ports, port colour theming
-- **substrate-feedback** — Toast, ProgressBar, Badge, EmptyState, CommandPalette, ContextMenu, ShortcutOverlay
-- **substrate-interaction** — useUndoable, useClipboard, createKeyboardShortcuts, HistoryControls, LayerList, TreeList
-
-## Install components
-
-**Always prefer existing Substrate components over writing custom ones.** Substrate ships sliders, number inputs, toggles, colour pickers, context menus, command palettes, toolbars, panels, timelines, and more — see the \`install-components\` skill for the full catalogue.
-
-\`\`\`bash
-# Core scaffold
-npx substrate-kit add design-canvas toolbar panel pane action slider
-
-# Surface components
-npx substrate-kit add surface timeline gallery colour-picker easing-curve-editor
-
-# Interactive picker (no args)
-npx substrate-kit add
-\`\`\`
-
-Do **not** run \`npx shadcn@latest add\` directly for Substrate components — always go through \`substrate-kit add\`.
-
-## Registry
-
-Components are installed from \`substrate.georgedrury.co.uk/r/\` via the Substrate CLI, which wraps shadcn under the hood.
-`;
+const REGISTRY_ENTRY = "https://substrate.georgedrury.co.uk/r/{name}";
+const SKILL_DIRS = [join(".claude", "skills"), join(".agents", "skills")];
+function readJson(path) {
+    try {
+        const parsed = JSON.parse(readFileSync(path, "utf-8"));
+        return typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)
+            ? parsed
+            : null;
+    }
+    catch {
+        return null;
+    }
 }
-function componentsJson() {
-    return JSON.stringify({
+function asRecord(value) {
+    return typeof value === "object" && value !== null && !Array.isArray(value)
+        ? value
+        : {};
+}
+function detectFramework(pkg) {
+    const deps = { ...pkg?.dependencies, ...pkg?.devDependencies };
+    if (deps["next"])
+        return "next";
+    if (deps["vite"])
+        return "vite";
+    return "unknown";
+}
+// The stylesheet shadcn writes theme variables into: the project's own if it
+// has one in the usual place, otherwise the framework's default.
+function detectCssFile(cwd, framework) {
+    const candidates = framework === "next"
+        ? ["app/globals.css", "src/app/globals.css", "styles/globals.css", "src/styles/globals.css"]
+        : ["src/index.css", "src/globals.css", "src/styles.css", "src/App.css"];
+    return (candidates.find((file) => exists(join(cwd, file))) ??
+        (framework === "next" ? "app/globals.css" : "src/globals.css"));
+}
+function newComponentsJson(cwd, framework) {
+    return {
         $schema: "https://ui.shadcn.com/schema.json",
         style: "radix-mira",
-        rsc: true,
+        rsc: framework === "next",
         tsx: true,
         tailwind: {
             config: "",
-            css: "app/globals.css",
+            css: detectCssFile(cwd, framework),
             baseColor: "neutral",
             cssVariables: true,
             prefix: "",
@@ -72,91 +61,138 @@ function componentsJson() {
             lib: "@/lib",
             hooks: "@/hooks",
         },
-        registries: {
-            "@substrate": "https://substrate.georgedrury.co.uk/r/{name}",
-        },
-    }, null, 2);
+        registries: { "@substrate": REGISTRY_ENTRY },
+    };
+}
+function writeJson(path, value, indent = 2) {
+    writeFile(path, JSON.stringify(value, null, indent) + "\n");
+}
+function initComponentsJson(cwd, framework, force) {
+    const path = join(cwd, "components.json");
+    if (!exists(path)) {
+        writeJson(path, newComponentsJson(cwd, framework));
+        log.success(`Created components.json for ${framework === "next" ? "Next.js" : "Vite"}`);
+        return;
+    }
+    const existing = readJson(path);
+    if (!existing) {
+        log.warn("components.json could not be read as JSON, so it was left alone");
+        return;
+    }
+    // Only the Substrate registry is added; the project's own style choices stay
+    const registries = asRecord(existing.registries);
+    if (registries["@substrate"] && !force) {
+        log.step("components.json already has the @substrate registry");
+        return;
+    }
+    writeJson(path, { ...existing, registries: { ...registries, "@substrate": REGISTRY_ENTRY } });
+    log.success("Added the @substrate registry to components.json");
+}
+function initMcpJson(cwd, force) {
+    const path = join(cwd, ".mcp.json");
+    const server = { command: "npx", args: ["-y", CLI_PACKAGE, "mcp"] };
+    if (!exists(path)) {
+        writeJson(path, { mcpServers: { substrate: server } });
+        log.success("Created .mcp.json (Substrate MCP server registered)");
+        return;
+    }
+    const existing = readJson(path);
+    if (!existing) {
+        log.warn(".mcp.json could not be read as JSON, so it was left alone");
+        return;
+    }
+    const servers = asRecord(existing.mcpServers);
+    if (servers["substrate"] && !force) {
+        log.step(".mcp.json already registers the Substrate MCP server");
+        return;
+    }
+    writeJson(path, { ...existing, mcpServers: { ...servers, substrate: server } });
+    log.success("Registered the Substrate MCP server in .mcp.json");
+}
+function describe(file, result) {
+    if (result === "created")
+        log.success(`Created ${file}`);
+    else if (result === "added")
+        log.success(`Added a Substrate section to ${file}`);
+    else if (result === "updated")
+        log.success(`Updated the Substrate section in ${file}`);
+    else
+        log.step(`${file} is up to date`);
+}
+// CLAUDE.md and AGENTS.md both get the guidance, unless CLAUDE.md just imports
+// AGENTS.md, in which case adding it to both would load it twice.
+function initAgentFiles(cwd) {
+    const claude = join(cwd, "CLAUDE.md");
+    const agents = join(cwd, "AGENTS.md");
+    const section = agentsSection();
+    if (!exists(claude) && !exists(agents)) {
+        describe("AGENTS.md", mergeSection(agents, section));
+        writeFile(claude, "@AGENTS.md\n");
+        log.success("Created CLAUDE.md (imports AGENTS.md)");
+        return;
+    }
+    const claudeImportsAgents = exists(claude) && exists(agents) && /^@AGENTS\.md\s*$/m.test(readFileSync(claude, "utf-8"));
+    if (exists(agents))
+        describe("AGENTS.md", mergeSection(agents, section));
+    if (exists(claude) && !claudeImportsAgents)
+        describe("CLAUDE.md", mergeSection(claude, section));
+}
+function initSkills(cwd, force) {
+    const source = resolveSkillsDir();
+    const skillNames = listDirs(source);
+    if (skillNames.length === 0) {
+        log.error("No skills found in the bundled skills directory");
+        process.exit(1);
+    }
+    let copied = 0;
+    let skipped = 0;
+    for (const dir of SKILL_DIRS) {
+        for (const name of skillNames) {
+            const dest = join(cwd, dir, name);
+            if (exists(dest) && !force) {
+                skipped++;
+                continue;
+            }
+            copyDir(join(source, name), dest);
+            copied++;
+        }
+    }
+    if (copied > 0) {
+        log.success(`Installed ${skillNames.length} skills into ${SKILL_DIRS.join(" and ")}`);
+    }
+    if (skipped > 0) {
+        log.warn(`Skipped ${skipped} existing skill folder${skipped === 1 ? "" : "s"} (use --force to refresh them)`);
+    }
 }
 export async function init(options = {}) {
     const cwd = process.cwd();
     const { force = false, skipComponentsJson = false } = options;
     log.title("Initialising Substrate");
-    // 1. Copy skills
-    const skillsSource = resolveSkillsDir();
-    const skillsDest = join(cwd, ".claude", "skills");
-    const skillNames = listDirs(skillsSource);
-    if (skillNames.length === 0) {
-        log.error("No skills found in the bundled skills directory");
-        process.exit(1);
-    }
-    let copiedCount = 0;
-    let skippedCount = 0;
-    for (const skillName of skillNames) {
-        const dest = join(skillsDest, skillName);
-        if (exists(dest) && !force) {
-            skippedCount++;
-            continue;
-        }
-        copyDir(join(skillsSource, skillName), dest);
-        copiedCount++;
-        log.step(`Installed skill: ${skillName}`);
-    }
-    if (copiedCount > 0) {
-        log.success(`Installed ${copiedCount} skill${copiedCount === 1 ? "" : "s"}`);
-    }
-    if (skippedCount > 0) {
-        log.warn(`Skipped ${skippedCount} existing skill${skippedCount === 1 ? "" : "s"} (use --force to overwrite)`);
-    }
-    // 2. Generate CLAUDE.md
-    const claudeMdPath = join(cwd, "CLAUDE.md");
-    if (exists(claudeMdPath) && !force) {
-        log.warn("CLAUDE.md already exists (use --force to overwrite)");
-    }
-    else {
-        writeFile(claudeMdPath, claudeMd());
-        log.success("Created CLAUDE.md");
-    }
-    // 3. Write components.json
-    if (!skipComponentsJson) {
-        const componentsJsonPath = join(cwd, "components.json");
-        if (exists(componentsJsonPath) && !force) {
-            log.warn("components.json already exists (use --force to overwrite)");
-        }
-        else {
-            writeFile(componentsJsonPath, componentsJson());
-            log.success("Created components.json");
-        }
-    }
-    // 4. Write .mcp.json
-    const mcpJsonPath = join(cwd, ".mcp.json");
-    if (exists(mcpJsonPath) && !force) {
-        log.warn(".mcp.json already exists (use --force to overwrite)");
-    }
-    else {
-        const mcpConfig = {
-            mcpServers: {
-                substrate: {
-                    command: "npx",
-                    args: ["-y", "@substrate-kit/cli", "mcp"],
-                },
-            },
-        };
-        writeFile(mcpJsonPath, JSON.stringify(mcpConfig, null, 2) + "\n");
-        log.success("Created .mcp.json (Substrate MCP server registered)");
-    }
-    // 5. Add the CLI as a dev dependency so `npx substrate-kit` resolves locally
     const packageJsonPath = join(cwd, "package.json");
-    if (exists(packageJsonPath)) {
-        const raw = readFileSync(packageJsonPath, "utf-8");
-        const pkg = JSON.parse(raw);
+    const rawPackageJson = exists(packageJsonPath) ? readFileSync(packageJsonPath, "utf-8") : null;
+    const pkg = rawPackageJson ? JSON.parse(rawPackageJson) : null;
+    const framework = detectFramework(pkg);
+    if (!pkg) {
+        log.warn("No package.json here. Run this from the root of your project.");
+    }
+    else if (framework === "unknown") {
+        log.warn("Could not tell whether this is a Next.js or Vite project, so Vite settings are used");
+    }
+    initSkills(cwd, force);
+    initAgentFiles(cwd);
+    if (!skipComponentsJson)
+        initComponentsJson(cwd, framework === "next" ? "next" : "vite", force);
+    initMcpJson(cwd, force);
+    // The CLI is added as a dev dependency so `npx substrate-kit` resolves locally
+    if (pkg && rawPackageJson) {
         if (!pkg.dependencies?.[CLI_PACKAGE] && !pkg.devDependencies?.[CLI_PACKAGE]) {
-            pkg.devDependencies = { ...pkg.devDependencies, [CLI_PACKAGE]: CLI_RANGE };
-            const indent = raw.includes("\n\t") ? "\t" : 2;
+            pkg.devDependencies = { ...pkg.devDependencies, [CLI_PACKAGE]: `^${VERSION}` };
+            const indent = rawPackageJson.includes("\n\t") ? "\t" : 2;
             writeFile(packageJsonPath, JSON.stringify(pkg, null, indent) + "\n");
             log.success(`Added ${CLI_PACKAGE} to devDependencies (install to use npx substrate-kit)`);
         }
     }
     log.blank();
-    log.info("Substrate is ready. Claude can now use the skills for creative app development.");
+    log.info("Substrate is ready. Agents in this project can now use the skills and the MCP server.");
 }
 //# sourceMappingURL=init.js.map

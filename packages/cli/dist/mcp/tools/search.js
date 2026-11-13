@@ -1,3 +1,4 @@
+import { matchesQuery } from "../../registry.js";
 export async function handleSearch(registry, args) {
     let items = registry.items;
     if (args.category) {
@@ -6,10 +7,7 @@ export async function handleSearch(registry, args) {
     }
     if (args.query) {
         const q = args.query.toLowerCase();
-        items = items.filter((i) => i.name.includes(q) ||
-            (i.title || "").toLowerCase().includes(q) ||
-            (i.description || "").toLowerCase().includes(q) ||
-            (i.categories || []).some((c) => c.toLowerCase().includes(q)));
+        items = items.filter((i) => matchesQuery(i, q));
     }
     const results = items.map((i) => ({
         name: i.name,
