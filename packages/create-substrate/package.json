@@ -1,6 +1,6 @@
 {
   "name": "create-substrate",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "description": "Scaffold a Substrate creative tool playground",
   "type": "module",
   "bin": {
@@ -23,7 +23,8 @@
   },
   "files": [
     "dist",
-    "skills"
+    "skills",
+    "templates"
   ],
   "keywords": [
     "substrate",

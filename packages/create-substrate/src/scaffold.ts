@@ -4,6 +4,7 @@ import { ensureDir, writeFile, exists, copyDir, listDirs, resolveSkillsDir } fro
 import { exec, execSilent } from "./utils/shell.js"
 import { log } from "./utils/logger.js"
 import { getInstallCommand, type PackageManager } from "./utils/detect-pm.js"
+import { CLI_RANGE, agentsSection } from "./utils/package-info.js"
 import { surfaces, type SurfaceType } from "./surfaces/index.js"
 
 export interface ScaffoldOptions {
@@ -86,28 +87,26 @@ export async function scaffold(
     exec(getInstallCommand(packageManager), { cwd: projectDir })
     log.success("Dependencies installed")
 
-    // 3. Install Substrate components
+    // 3. Install Substrate components in one call so shared dependencies are
+    // resolved once. The project is new, so overwriting is safe and avoids
+    // prompts. Retry because one dropped request would otherwise leave a
+    // broken project.
     log.step("Installing Substrate components...")
-    for (const component of config.components) {
-      const url = `${REGISTRY_BASE}/${component}`
-      // The project is new, so overwriting is safe and avoids prompts. Retry
-      // because one dropped request would otherwise leave a broken project.
-      let installed = false
-      for (let attempt = 1; attempt <= INSTALL_ATTEMPTS && !installed; attempt++) {
-        try {
-          exec(`npx shadcn@latest add --yes --overwrite ${url}`, { cwd: projectDir })
-          installed = true
-        } catch {
-          if (attempt < INSTALL_ATTEMPTS) log.warn(`  Retrying ${component}...`)
-        }
-      }
-      if (installed) {
-        log.step(`  ${component}`)
-      } else {
-        failedComponents.push(component)
+    const urls = config.components.map((component) => `${REGISTRY_BASE}/${component}`)
+    let installed = false
+    for (let attempt = 1; attempt <= INSTALL_ATTEMPTS && !installed; attempt++) {
+      try {
+        exec(`npx shadcn@latest add --yes --overwrite ${urls.join(" ")}`, { cwd: projectDir })
+        installed = true
+      } catch {
+        if (attempt < INSTALL_ATTEMPTS) log.warn("  Retrying...")
       }
     }
-    if (failedComponents.length === 0) log.success("Substrate components installed")
+    if (installed) {
+      log.success("Substrate components installed")
+    } else {
+      failedComponents.push(...config.components)
+    }
   } else {
     log.warn("Skipping dependency installation (--skip-install)")
   }
@@ -116,19 +115,22 @@ export async function scaffold(
   log.step("Installing skills...")
   try {
     const skillsSource = resolveSkillsDir()
-    const skillsDest = join(projectDir, ".claude", "skills")
     const skillNames = listDirs(skillsSource)
-    for (const skillName of skillNames) {
-      copyDir(join(skillsSource, skillName), join(skillsDest, skillName))
+    // .claude/skills is read by Claude Code, .agents/skills by other agents
+    for (const dir of [".claude/skills", ".agents/skills"]) {
+      for (const skillName of skillNames) {
+        copyDir(join(skillsSource, skillName), join(projectDir, dir, skillName))
+      }
     }
-    log.success(`Installed ${skillNames.length} skills`)
+    log.success(`Installed ${skillNames.length} skills into .claude/skills and .agents/skills`)
   } catch {
     log.warn("Could not install skills — run 'npx @substrate-kit/cli init' to add them later")
   }
 
-  // 5. Write CLAUDE.md
-  writeFile(join(projectDir, "CLAUDE.md"), claudeMd())
-  log.success("Created CLAUDE.md")
+  // 5. Write the agent guidance once in AGENTS.md; CLAUDE.md imports it
+  writeFile(join(projectDir, "AGENTS.md"), agentsSection())
+  writeFile(join(projectDir, "CLAUDE.md"), "@AGENTS.md\n")
+  log.success("Created AGENTS.md and CLAUDE.md")
 
   // 6. Write .mcp.json
   writeFile(join(projectDir, ".mcp.json"), mcpJson())
@@ -185,7 +187,7 @@ function packageJson(name: string, config: typeof surfaces[SurfaceType], _option
     "@types/react-dom": "^19",
     vite: "^6.3.0",
     "@vitejs/plugin-react": "^4.4.0",
-    "@substrate-kit/cli": "^0.1.2",
+    "@substrate-kit/cli": CLI_RANGE,
     tailwindcss: "^4",
     "@tailwindcss/vite": "^4",
     "tw-animate-css": "^1.4.0",
@@ -537,52 +539,4 @@ function mcpJson(): string {
     null,
     2,
   ) + "\n"
-}
-
-function claudeMd(): string {
-  return `# Substrate
-
-This project uses [Substrate](https://substrate.georgedrury.co.uk) — a creative app framework that provides scaffold (toolbar, panels, panes, stores, shortcuts) around different surface types.
-
-## Skills
-
-Substrate skills are installed in \`.claude/skills/\`. They are organised into two groups:
-
-### Surface guides (how to build)
-
-- **scaffold-playground** — bootstrapping a new playground
-- **canvas-2d** / **3d-scene** / **animation** / **image-generation** / **data-visualisation** — surface-specific architecture
-- **composing-panels** / **wire-interactions** / **create-custom-tool** / **theming** — workflow guides
-- **install-components** — full catalogue of available components + how to install via \`substrate-kit add\`
-
-### Component reference (what to use)
-
-- **substrate-scaffold** — Toolbar, Panel, Pane, DocumentTabs, StatusBar, ZoomControls, Breadcrumbs, Resizer
-- **substrate-controls** — NumberInput, Slider, NumberSlider, Select, Toggle, TextArea, ColourPicker, ActionControls
-- **substrate-canvas** — useViewport, useSelection, useDragReorder, snap, boundingBox, hit testing
-- **substrate-nodes** — Node cards, typed ports, port colour theming
-- **substrate-feedback** — Toast, ProgressBar, Badge, EmptyState, CommandPalette, ContextMenu, ShortcutOverlay
-- **substrate-interaction** — useUndoable, useClipboard, createKeyboardShortcuts, HistoryControls, LayerList, TreeList
-
-## Install components
-
-**Always prefer existing Substrate components over writing custom ones.** Substrate ships sliders, number inputs, toggles, colour pickers, context menus, command palettes, toolbars, panels, timelines, and more — see the \`install-components\` skill for the full catalogue.
-
-\`\`\`bash
-# Core scaffold
-npx substrate-kit add design-canvas toolbar panel pane action slider
-
-# Surface components
-npx substrate-kit add surface timeline gallery colour-picker easing-curve-editor
-
-# Interactive picker (no args)
-npx substrate-kit add
-\`\`\`
-
-Do **not** run \`npx shadcn@latest add\` directly for Substrate components — always go through \`substrate-kit add\`.
-
-## Registry
-
-Components are installed from \`substrate.georgedrury.co.uk/r/\` via the Substrate CLI, which wraps shadcn under the hood.
-`
 }

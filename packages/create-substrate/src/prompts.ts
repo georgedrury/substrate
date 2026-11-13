@@ -1,13 +1,16 @@
 import { createInterface } from "node:readline"
 import chalk from "chalk"
 import { SURFACE_OPTIONS, type SurfaceType } from "./surfaces/types.js"
-import type { PackageManager } from "./utils/detect-pm.js"
 
 function createRl() {
   return createInterface({ input: process.stdin, output: process.stdout })
 }
 
 export async function promptName(): Promise<string> {
+  if (!process.stdin.isTTY) {
+    console.error(chalk.red("  No terminal to ask in. Pass a project name, or --yes to use the default."))
+    process.exit(1)
+  }
   const rl = createRl()
   return new Promise((resolve) => {
     rl.question(`  ${chalk.bold("Project name:")} `, (answer) => {
@@ -28,8 +31,8 @@ export async function promptSurface(): Promise<SurfaceType> {
 
   return new Promise((resolve) => {
     if (!process.stdin.isTTY) {
-      resolve("canvas-2d")
-      return
+      console.error(chalk.red("  No terminal to ask in. Pass --surface <type>, or --yes to use the default (canvas-2d)."))
+      process.exit(1)
     }
 
     process.stdin.setRawMode(true)
@@ -76,59 +79,6 @@ export async function promptSurface(): Promise<SurfaceType> {
         process.stdin.removeAllListeners("data")
         console.log()
         resolve(options[cursor].value)
-      } else if (key === "\x03") {
-        process.stdin.setRawMode(false)
-        process.exit(0)
-      }
-    })
-  })
-}
-
-const PM_OPTIONS: { value: PackageManager; label: string }[] = [
-  { value: "npm", label: "npm" },
-  { value: "pnpm", label: "pnpm" },
-  { value: "bun", label: "bun" },
-]
-
-export async function promptPackageManager(): Promise<PackageManager> {
-  let cursor = 0
-
-  return new Promise((resolve) => {
-    if (!process.stdin.isTTY) {
-      resolve("npm")
-      return
-    }
-
-    process.stdin.setRawMode(true)
-    process.stdin.resume()
-
-    function render() {
-      process.stdout.write(`\x1B[1A\x1B[J`)
-      const items = PM_OPTIONS.map((opt, i) => {
-        const selected = i === cursor
-        return selected ? chalk.cyan.bold(opt.label) : chalk.dim(opt.label)
-      }).join("   ")
-      console.log(`  ${chalk.bold("Package manager:")}  ${items}`)
-    }
-
-    console.log(`  ${chalk.bold("Package manager:")}  ${PM_OPTIONS.map((o) => chalk.dim(o.label)).join("   ")}`)
-    render()
-
-    process.stdin.on("data", (data: Buffer) => {
-      const key = data.toString()
-
-      if (key === "\x1B[D" || key === "h") {
-        cursor = Math.max(0, cursor - 1)
-        render()
-      } else if (key === "\x1B[C" || key === "l") {
-        cursor = Math.min(PM_OPTIONS.length - 1, cursor + 1)
-        render()
-      } else if (key === "\r" || key === "\n") {
-        process.stdin.setRawMode(false)
-        process.stdin.pause()
-        process.stdin.removeAllListeners("data")
-        console.log()
-        resolve(PM_OPTIONS[cursor].value)
       } else if (key === "\x03") {
         process.stdin.setRawMode(false)
         process.exit(0)
