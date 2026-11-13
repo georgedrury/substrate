@@ -2,11 +2,18 @@ import type {
   Point,
   Bounds,
   DesignElement,
-  HandlePosition,
+  Handle,
 } from "@/lib/substrate/types"
-import { rotatePoint, boundsCenter, pointInBounds, pointInEllipseBounds } from "@/lib/substrate/math"
-
-const HANDLE_SIZE = 8
+import {
+  rotatePoint,
+  boundsCenter,
+  pointInBounds,
+  pointInEllipseBounds,
+  rotatedBounds,
+  handleLocalPosition,
+  HANDLE_SIZE,
+  HANDLES,
+} from "@/lib/substrate/math"
 
 function unrotatePoint(point: Point, el: DesignElement): Point {
   if (el.rotation === 0) return point
@@ -69,12 +76,13 @@ export function getElementsInBounds(
     const el = elements[id]
     if (!el || !el.visible || el.locked) continue
 
-    // Simple overlap check (ignoring rotation for marquee selection)
+    // Overlap with the rotated element's bounding box
+    const box = rotatedBounds(el, el.rotation)
     if (
-      el.x < bounds.x + bounds.width &&
-      el.x + el.width > bounds.x &&
-      el.y < bounds.y + bounds.height &&
-      el.y + el.height > bounds.y
+      box.x < bounds.x + bounds.width &&
+      box.x + box.width > bounds.x &&
+      box.y < bounds.y + bounds.height &&
+      box.y + box.height > bounds.y
     ) {
       result.push(id)
     }
@@ -82,31 +90,26 @@ export function getElementsInBounds(
   return result
 }
 
+/**
+ * Which handle is under `point`. `elementBounds` and `point` share a space
+ * (screen space, in practice) and the bounds are rotated about their centre by
+ * `rotation`. Resize handles win over the rotate handle if they ever overlap.
+ */
 export function getHandleAtPoint(
   point: Point,
   elementBounds: Bounds,
-  _zoom: number
-): HandlePosition | null {
+  _zoom: number,
+  rotation = 0,
+): Handle | null {
   const half = HANDLE_SIZE / 2 + 2 // add padding for easier grabbing
-  const b = elementBounds
+  // Handles are drawn in the element's rotated frame, so test in that frame
+  const local = rotation === 0 ? point : rotatePoint(point, boundsCenter(elementBounds), -rotation)
 
-  const handles: { pos: HandlePosition; x: number; y: number }[] = [
-    { pos: "nw", x: b.x, y: b.y },
-    { pos: "n", x: b.x + b.width / 2, y: b.y },
-    { pos: "ne", x: b.x + b.width, y: b.y },
-    { pos: "e", x: b.x + b.width, y: b.y + b.height / 2 },
-    { pos: "se", x: b.x + b.width, y: b.y + b.height },
-    { pos: "s", x: b.x + b.width / 2, y: b.y + b.height },
-    { pos: "sw", x: b.x, y: b.y + b.height },
-    { pos: "w", x: b.x, y: b.y + b.height / 2 },
-  ]
-
-  for (const handle of handles) {
-    if (
-      Math.abs(point.x - handle.x) <= half &&
-      Math.abs(point.y - handle.y) <= half
-    ) {
-      return handle.pos
+  const candidates: Handle[] = [...HANDLES, "rotate"]
+  for (const handle of candidates) {
+    const at = handleLocalPosition(handle, elementBounds)
+    if (Math.abs(local.x - at.x) <= half && Math.abs(local.y - at.y) <= half) {
+      return handle
     }
   }
 

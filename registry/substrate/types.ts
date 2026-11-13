@@ -111,6 +111,9 @@ export type RightPanelId = "properties"
 
 export type HandlePosition = "nw" | "n" | "ne" | "e" | "se" | "s" | "sw" | "w"
 
+/** A resize handle, or the rotate handle that floats above the selection */
+export type Handle = HandlePosition | "rotate"
+
 // ── Interaction State ──
 
 export type InteractionMode =

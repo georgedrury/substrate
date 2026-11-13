@@ -8,6 +8,7 @@ import {
 	renderElement,
 	renderSelectionBox,
 	renderResizeHandles,
+	renderRotateHandle,
 	renderCreationPreview,
 	renderMarquee,
 } from "@/components/substrate/renderer"
@@ -153,8 +154,12 @@ export function useCanvasRenderer(
 					width: el.width * camera.zoom,
 					height: el.height * camera.zoom,
 				}
-				renderSelectionBox(ctx, screenBounds, camera.zoom)
-				renderResizeHandles(ctx, screenBounds, camera.zoom)
+				renderSelectionBox(ctx, screenBounds, camera.zoom, el.rotation)
+				// Handles belong to a single selection; several elements can't share them
+				if (selectedIds.size === 1) {
+					renderResizeHandles(ctx, screenBounds, camera.zoom, el.rotation)
+					renderRotateHandle(ctx, screenBounds, camera.zoom, el.rotation)
+				}
 			}
 
 			// Marquee selection (screen space)

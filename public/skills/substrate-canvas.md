@@ -156,6 +156,11 @@ Core geometry functions.
 | `screenToWorld(point, camera)` / `worldToScreen(point, camera)` | Coordinate transforms |
 | `clamp(value, min, max)` | Numeric clamp |
 | `distance(a, b)` | Euclidean distance |
+| `angleBetween(from, to)` / `normalizeAngle(deg)` / `snapAngle(deg, step)` | Angle of a line, wrapped to [-180, 180), snapped to a step. Degrees, positive clockwise on screen |
+| `rotatedCorners(bounds, rotation)` / `rotatedBounds(bounds, rotation)` | The corners of a rotated box, and the axis-aligned box that contains it (for marquee, fit and alignment) |
+| `handlePosition(handle, bounds, rotation)` | Where a resize handle, or `"rotate"`, sits on a rotated box |
+| `resizeBounds(start, handle, delta, rotation)` | Resize by dragging a handle. The opposite handle stays fixed, also when rotated |
+| `HANDLE_SIZE`, `ROTATE_HANDLE_OFFSET`, `HANDLES` | Handle geometry shared by the renderer and hit-test |
 
 ---
 

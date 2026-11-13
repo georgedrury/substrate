@@ -10,6 +10,7 @@ import type {
 	Point,
 	ToolType,
 } from "@/lib/substrate/types"
+import { HANDLES, HANDLE_SIZE, handleLocalPosition } from "@/lib/substrate/math"
 
 // ── Grid ──
 
@@ -222,45 +223,101 @@ export function renderElement(
 }
 
 // ── Selection UI (drawn in screen space) ──
+//
+// `bounds` is the element's box in screen space. The selection box and its
+// handles turn with the element, so they are drawn in a context rotated about
+// the box centre.
+
+const SELECTION_COLOUR = "oklch(0.6 0.2 250)"
+
+function withRotation(
+	ctx: CanvasRenderingContext2D,
+	bounds: Bounds,
+	rotation: number,
+	draw: () => void,
+) {
+	ctx.save()
+	ctx.translate(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2)
+	ctx.rotate((rotation * Math.PI) / 180)
+	// From here on, (0, 0) is the centre of the box
+	draw()
+	ctx.restore()
+}
 
 export function renderSelectionBox(
 	ctx: CanvasRenderingContext2D,
 	bounds: Bounds,
 	_zoom: number,
+	rotation = 0,
 ) {
-	ctx.strokeStyle = "oklch(0.6 0.2 250)"
-	ctx.lineWidth = 1.5
-	ctx.setLineDash([])
-	ctx.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height)
+	withRotation(ctx, bounds, rotation, () => {
+		ctx.strokeStyle = SELECTION_COLOUR
+		ctx.lineWidth = 1.5
+		ctx.setLineDash([])
+		ctx.strokeRect(-bounds.width / 2, -bounds.height / 2, bounds.width, bounds.height)
+	})
 }
-
-const HANDLE_SIZE = 8
 
 export function renderResizeHandles(
 	ctx: CanvasRenderingContext2D,
 	bounds: Bounds,
 	_zoom: number,
+	rotation = 0,
 ) {
 	const half = HANDLE_SIZE / 2
-	const positions = [
-		{ x: bounds.x, y: bounds.y }, // nw
-		{ x: bounds.x + bounds.width / 2, y: bounds.y }, // n
-		{ x: bounds.x + bounds.width, y: bounds.y }, // ne
-		{ x: bounds.x + bounds.width, y: bounds.y + bounds.height / 2 }, // e
-		{ x: bounds.x + bounds.width, y: bounds.y + bounds.height }, // se
-		{ x: bounds.x + bounds.width / 2, y: bounds.y + bounds.height }, // s
-		{ x: bounds.x, y: bounds.y + bounds.height }, // sw
-		{ x: bounds.x, y: bounds.y + bounds.height / 2 }, // w
-	]
-
-	ctx.fillStyle = "white"
-	ctx.strokeStyle = "oklch(0.6 0.2 250)"
-	ctx.lineWidth = 1.5
-
-	for (const pos of positions) {
-		ctx.fillRect(pos.x - half, pos.y - half, HANDLE_SIZE, HANDLE_SIZE)
-		ctx.strokeRect(pos.x - half, pos.y - half, HANDLE_SIZE, HANDLE_SIZE)
+	const centred: Bounds = {
+		x: -bounds.width / 2,
+		y: -bounds.height / 2,
+		width: bounds.width,
+		height: bounds.height,
 	}
+
+	withRotation(ctx, bounds, rotation, () => {
+		ctx.fillStyle = "white"
+		ctx.strokeStyle = SELECTION_COLOUR
+		ctx.lineWidth = 1.5
+		ctx.setLineDash([])
+
+		for (const handle of HANDLES) {
+			const pos = handleLocalPosition(handle, centred)
+			ctx.fillRect(pos.x - half, pos.y - half, HANDLE_SIZE, HANDLE_SIZE)
+			ctx.strokeRect(pos.x - half, pos.y - half, HANDLE_SIZE, HANDLE_SIZE)
+		}
+	})
+}
+
+/** The round handle that floats above the selection and turns it when dragged */
+export function renderRotateHandle(
+	ctx: CanvasRenderingContext2D,
+	bounds: Bounds,
+	_zoom: number,
+	rotation = 0,
+) {
+	const centred: Bounds = {
+		x: -bounds.width / 2,
+		y: -bounds.height / 2,
+		width: bounds.width,
+		height: bounds.height,
+	}
+
+	withRotation(ctx, bounds, rotation, () => {
+		const top = handleLocalPosition("n", centred)
+		const handle = handleLocalPosition("rotate", centred)
+
+		ctx.strokeStyle = SELECTION_COLOUR
+		ctx.lineWidth = 1.5
+		ctx.setLineDash([])
+		ctx.beginPath()
+		ctx.moveTo(top.x, top.y)
+		ctx.lineTo(handle.x, handle.y)
+		ctx.stroke()
+
+		ctx.fillStyle = "white"
+		ctx.beginPath()
+		ctx.arc(handle.x, handle.y, HANDLE_SIZE / 2 + 1, 0, Math.PI * 2)
+		ctx.fill()
+		ctx.stroke()
+	})
 }
 
 // ── Creation Preview ──

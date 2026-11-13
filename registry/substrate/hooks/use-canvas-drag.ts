@@ -3,7 +3,7 @@
 import { useRef, useCallback } from "react"
 import type { Point, HandlePosition } from "@/lib/substrate/types"
 
-export type DragType = "create" | "move" | "resize" | "marquee" | "pan"
+export type DragType = "create" | "move" | "resize" | "rotate" | "marquee" | "pan"
 
 export interface DragInfo {
   type: DragType
@@ -12,6 +12,8 @@ export interface DragInfo {
   currentWorld: Point
   currentScreen: Point
   handle?: HandlePosition
+  /** Set for a rotate drag: the element, its centre in world space, and where the turn started */
+  rotate?: { id: string; center: Point; startAngle: number; startRotation: number }
   elementStartPositions?: Record<string, { x: number; y: number; width: number; height: number }>
 }
 

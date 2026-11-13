@@ -32,7 +32,7 @@
       "name": "math",
       "type": "registry:lib",
       "title": "Math",
-      "description": "Geometry helpers — rotate point, bounds checking, ellipse hit test, screen/world coordinate conversion, normalize bounds, distance, and clamping.",
+      "description": "Geometry helpers — rotate point, bounds checking, ellipse hit test, screen/world coordinate conversion, normalize bounds, distance, clamping, plus rotation and handle maths: rotated bounds, snap angle, and resizing a rotated box.",
       "author": "George Drury <info@georgedrury.co.uk>",
       "categories": [
         "substrate",
@@ -240,7 +240,8 @@
         "canvas"
       ],
       "registryDependencies": [
-        "https://substrate.georgedrury.co.uk/r/types"
+        "https://substrate.georgedrury.co.uk/r/types",
+        "https://substrate.georgedrury.co.uk/r/math"
       ],
       "meta": {
         "lineage": [
@@ -491,7 +492,9 @@
         "https://substrate.georgedrury.co.uk/r/tool-store",
         "https://substrate.georgedrury.co.uk/r/use-canvas-renderer",
         "https://substrate.georgedrury.co.uk/r/use-canvas-interaction",
-        "https://substrate.georgedrury.co.uk/r/use-keyboard-shortcuts"
+        "https://substrate.georgedrury.co.uk/r/use-keyboard-shortcuts",
+        "https://substrate.georgedrury.co.uk/r/document-store",
+        "https://substrate.georgedrury.co.uk/r/types"
       ],
       "cssVars": {
         "theme": {

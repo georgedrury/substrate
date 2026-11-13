@@ -2,7 +2,7 @@
 
 import { useCallback } from "react"
 import type { Point, Camera } from "@/lib/substrate/types"
-import { screenToWorld, worldToScreen, clamp } from "@/lib/substrate/math"
+import { screenToWorld, worldToScreen, clamp, rotatedBounds } from "@/lib/substrate/math"
 import { boundingBox } from "@/lib/substrate/bounding-box"
 import { useDocumentStore } from "@/stores/substrate/document-store"
 
@@ -79,7 +79,8 @@ export function useCanvasTransform() {
   const zoomToFit = useCallback(() => {
     const { elements, elementOrder } = useDocumentStore.getState()
     const visible = elementOrder.map((id) => elements[id]).filter((el) => el && el.visible)
-    const bounds = boundingBox(visible)
+    // Rotated shapes reach further than their unrotated box
+    const bounds = boundingBox(visible.map((el) => rotatedBounds(el, el.rotation)))
     if (!bounds) {
       setCamera({ x: 0, y: 0, zoom: 1 })
       return

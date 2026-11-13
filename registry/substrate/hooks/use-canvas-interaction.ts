@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useRef } from "react"
+import { useCallback, useRef, useState } from "react"
 import { useDocumentStore } from "@/stores/substrate/document-store"
 import { useToolStore } from "@/stores/substrate/tool-store"
 import { useCanvasTransform } from "./use-canvas-transform"
@@ -14,8 +14,19 @@ import {
   createLine,
   createFrame,
 } from "@/lib/substrate/element-factory"
-import { normalizeBounds, distance } from "@/lib/substrate/math"
-import type { Point, DesignElement, HandlePosition } from "@/lib/substrate/types"
+import {
+  normalizeBounds,
+  distance,
+  resizeBounds,
+  angleBetween,
+  normalizeAngle,
+  snapAngle,
+  boundsCenter,
+} from "@/lib/substrate/math"
+import type { Point, Handle, DesignElement } from "@/lib/substrate/types"
+
+// Holding shift while rotating snaps to this step, in degrees
+const ROTATE_SNAP = 15
 
 const DRAG_THRESHOLD = 3
 
@@ -45,6 +56,8 @@ export function useCanvasInteraction(
   const { toWorld, camera, pan, zoomToPoint } = useCanvasTransform()
   const { getElementAtScreenPoint, getHandleAtScreenPoint } = useHitTest()
   const { dragRef, startDrag, updateDrag, endDrag } = useCanvasDrag()
+  // The handle under the pointer, for the cursor (and kept during a handle drag)
+  const [activeHandle, setActiveHandle] = useState<Handle | null>(null)
   const pointerStartRef = useRef<Point | null>(null)
   const hasDraggedRef = useRef(false)
 
@@ -85,17 +98,35 @@ export function useCanvasInteraction(
           const id = [...selectedIds][0]
           const el = elements[id]
           if (el) {
-            startDrag({
-              type: "resize",
+            setActiveHandle(handle)
+            const base = {
               startWorld: worldPoint,
               startScreen: screenPoint,
               currentWorld: worldPoint,
               currentScreen: screenPoint,
-              handle,
-              elementStartPositions: {
-                [id]: { x: el.x, y: el.y, width: el.width, height: el.height },
-              },
-            })
+            }
+            if (handle === "rotate") {
+              const center = boundsCenter(el)
+              startDrag({
+                ...base,
+                type: "rotate",
+                rotate: {
+                  id,
+                  center,
+                  startAngle: angleBetween(center, worldPoint),
+                  startRotation: el.rotation,
+                },
+              })
+            } else {
+              startDrag({
+                ...base,
+                type: "resize",
+                handle,
+                elementStartPositions: {
+                  [id]: { x: el.x, y: el.y, width: el.width, height: el.height },
+                },
+              })
+            }
             return
           }
         }
@@ -169,6 +200,7 @@ export function useCanvasInteraction(
         const screenPoint = getCanvasPoint(e)
         const hitId = getElementAtScreenPoint(screenPoint)
         setHovered(hitId)
+        setActiveHandle(activeTool === "select" ? getHandleAtScreenPoint(screenPoint) : null)
         return
       }
 
@@ -180,7 +212,7 @@ export function useCanvasInteraction(
         hasDraggedRef.current = true
         // Snapshot once the drag really starts, so a click on a handle
         // doesn't leave an empty undo step
-        if (drag.type === "move" || drag.type === "resize") pushSnapshot()
+        if (drag.type === "move" || drag.type === "resize" || drag.type === "rotate") pushSnapshot()
       }
 
       updateDrag(worldPoint, screenPoint)
@@ -206,8 +238,18 @@ export function useCanvasInteraction(
           const [id, start] = Object.entries(drag.elementStartPositions)[0]
           const dx = worldPoint.x - drag.startWorld.x
           const dy = worldPoint.y - drag.startWorld.y
-          const changes = computeResize(start, drag.handle, dx, dy)
-          updateElement(id, changes)
+          const rotation = useDocumentStore.getState().elements[id]?.rotation ?? 0
+          updateElement(id, resizeBounds(start, drag.handle, { x: dx, y: dy }, rotation))
+          break
+        }
+
+        case "rotate": {
+          if (!drag.rotate) break
+          const { id, center, startAngle, startRotation } = drag.rotate
+          const turned = startRotation + angleBetween(center, worldPoint) - startAngle
+          updateElement(id, {
+            rotation: normalizeAngle(e.shiftKey ? snapAngle(turned, ROTATE_SNAP) : turned),
+          })
           break
         }
 
@@ -231,7 +273,7 @@ export function useCanvasInteraction(
     [
       dragRef, getCanvasPoint, toWorld, getElementAtScreenPoint,
       setHovered, updateDrag, pan, updateElement, markDirty,
-      pushSnapshot, dragStateRef,
+      pushSnapshot, dragStateRef, getHandleAtScreenPoint, activeTool,
     ]
   )
 
@@ -320,7 +362,7 @@ export function useCanvasInteraction(
     [camera.zoom, zoomToPoint, pan, markDirty]
   )
 
-  return { onPointerDown, onPointerMove, onPointerUp, onWheel }
+  return { onPointerDown, onPointerMove, onPointerUp, onWheel, activeHandle }
 }
 
 // ── Helpers ──
@@ -334,29 +376,4 @@ function createElement(tool: string, bounds: { x: number; y: number; width: numb
     case "frame": return createFrame(bounds)
     default: return null
   }
-}
-
-function computeResize(
-  start: { x: number; y: number; width: number; height: number },
-  handle: HandlePosition,
-  dx: number,
-  dy: number
-): Partial<DesignElement> {
-  let { x, y, width, height } = start
-
-  switch (handle) {
-    case "nw": x += dx; y += dy; width -= dx; height -= dy; break
-    case "n": y += dy; height -= dy; break
-    case "ne": y += dy; width += dx; height -= dy; break
-    case "e": width += dx; break
-    case "se": width += dx; height += dy; break
-    case "s": height += dy; break
-    case "sw": x += dx; width -= dx; height += dy; break
-    case "w": x += dx; width -= dx; break
-  }
-
-  if (width < 1) { x += width - 1; width = 1 }
-  if (height < 1) { y += height - 1; height = 1 }
-
-  return { x, y, width, height }
 }

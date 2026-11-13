@@ -5,7 +5,7 @@ import { useDocumentStore } from "@/stores/substrate/document-store"
 import { useCanvasTransform } from "./use-canvas-transform"
 import { getElementAtPoint, getHandleAtPoint } from "@/components/substrate/hit-test"
 import { worldToScreen } from "@/lib/substrate/math"
-import type { Point, HandlePosition, Bounds } from "@/lib/substrate/types"
+import type { Point, Handle, Bounds } from "@/lib/substrate/types"
 
 export function useHitTest() {
   const elements = useDocumentStore((s) => s.elements)
@@ -22,7 +22,7 @@ export function useHitTest() {
   )
 
   const getHandleAtScreenPoint = useCallback(
-    (screenPoint: Point): HandlePosition | null => {
+    (screenPoint: Point): Handle | null => {
       if (selectedIds.size !== 1) return null
       const id = [...selectedIds][0]
       const el = elements[id]
@@ -36,7 +36,7 @@ export function useHitTest() {
         height: el.height * camera.zoom,
       }
 
-      return getHandleAtPoint(screenPoint, screenBounds, camera.zoom)
+      return getHandleAtPoint(screenPoint, screenBounds, camera.zoom, el.rotation)
     },
     [selectedIds, elements, camera],
   )

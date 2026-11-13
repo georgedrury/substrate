@@ -39,6 +39,7 @@ Keyboard events (DOM)
 | `creating` | Drag with shape tool on empty canvas | Preview element dimensions | Commit new element to store |
 | `moving` | Drag on selected element | Update element positions | Commit positions |
 | `resizing` | Drag on resize handle | Update element bounds | Commit bounds |
+| `rotating` | Drag on the rotate handle above a single selection | Turn the element about its centre (hold Shift to snap to 15°) | Commit rotation |
 | `marquee_selecting` | Drag on empty canvas with select tool | Draw selection rectangle | Select contained elements |
 
 ### Pointer down logic
@@ -66,7 +67,8 @@ Keyboard events (DOM)
    - "pan": update camera
    - "create": preview element (stored on drag ref, rendered by renderer)
    - "move": update element positions (delta from start)
-   - "resize": update element bounds respecting handle position
+   - "resize": update element bounds with `resizeBounds`, which respects the handle and the element's rotation
+   - "rotate": set `rotation` from the pointer's angle around the element centre
    - "marquee": update selection rectangle
 5. Call markDirty() to trigger repaint
 ```
@@ -77,7 +79,7 @@ Keyboard events (DOM)
 1. End drag (useCanvasDrag.endDrag)
 2. Based on drag type:
    - "create": push snapshot, add element to store, select it, reset tool to select
-   - "move"/"resize": push snapshot (positions already updated during drag)
+   - "move"/"resize"/"rotate": nothing to push; the snapshot was taken when the drag first moved, so a click without a drag leaves no undo step
    - "marquee": select all elements within the marquee bounds
    - "pan": nothing to commit
 ```
@@ -104,12 +106,13 @@ Always convert pointer event coordinates to world space before doing hit-testing
 
 ```ts
 interface DragInfo {
-  type: DragType           // "create" | "move" | "resize" | "marquee" | "pan"
+  type: DragType           // "create" | "move" | "resize" | "rotate" | "marquee" | "pan"
   startWorld: Point        // Where the drag began (world space)
   startScreen: Point       // Where the drag began (screen space)
   currentWorld: Point      // Current position (updated on every move)
   currentScreen: Point
   handle?: HandlePosition  // Which resize handle, if resizing
+  rotate?: { id, center, startAngle, startRotation }  // Set for a rotate drag
   elementStartPositions?: Record<string, { x, y, width, height }>  // Snapshot for move/resize
 }
 ```

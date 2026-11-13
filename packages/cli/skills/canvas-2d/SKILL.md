@@ -98,6 +98,7 @@ See the `wire-interactions` skill for the full state machine. Key patterns:
 - Drag on empty space with select tool → marquee selection
 - Drag on selected element → move
 - Drag on resize handle → resize
+- Drag on the rotate handle → rotate (Shift snaps to 15°)
 - Drag with shape tool → create new element
 - Middle-click or hand tool → pan
 
@@ -157,7 +158,7 @@ Selection and history are not saved, which is usually what you want. Seed a star
 
 ## Current limits
 
-- **Rotation:** elements render and hit-test rotated, but the selection box and resize handles stay axis-aligned, so resizing a rotated shape behaves oddly. Avoid offering rotation on shapes people will then resize, or draw rotated handles yourself.
+- **Rotation** works on a single selection: drag the round handle above it (hold Shift to snap to 15°), and the box, handles and cursors turn with the shape. Resizing a rotated shape keeps the opposite corner fixed. Several selected elements can be moved and deleted but not rotated or resized together; there is no group transform.
 - **Text:** a click with the text tool makes a 160×32 note. Text is edited through a properties panel (`textStyle.content`); there is no on-canvas editing.
 - **Hidden and locked layers** (`visible: false`, `locked: true`) are skipped by hit-testing, so they can't be selected on the canvas.
 
