@@ -2168,6 +2168,11 @@
           "path": "registry/substrate/hooks/use-controls.ts",
           "type": "registry:hook",
           "target": "hooks/substrate/use-controls.ts"
+        },
+        {
+          "path": "registry/substrate/lib/controls-shortcuts.ts",
+          "type": "registry:lib",
+          "target": "lib/substrate/controls-shortcuts.ts"
         }
       ],
       "registryDependencies": [
@@ -2185,7 +2190,8 @@
         "https://substrate.georgedrury.co.uk/r/spring-editor",
         "https://substrate.georgedrury.co.uk/r/xy-pad",
         "https://substrate.georgedrury.co.uk/r/image-picker",
-        "https://substrate.georgedrury.co.uk/r/spring"
+        "https://substrate.georgedrury.co.uk/r/spring",
+        "https://substrate.georgedrury.co.uk/r/popover"
       ]
     }
   ]

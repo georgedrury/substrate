@@ -44,6 +44,11 @@ export default function ControlsDemo() {
 			replay: { type: "action" },
 		},
 		{
+			shortcuts: {
+				radius: { key: "r" },
+				"shadow.blur": { key: "b", interaction: "drag" },
+				visible: { key: "v" },
+			},
 			onAction: (path) => {
 				if (path !== "replay" || !cardRef.current) return
 				cardRef.current.animate(

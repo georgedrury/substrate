@@ -9,6 +9,7 @@ import {
 	type DialKitPersistOptions,
 	type DialKitValueUpdates,
 	type ResolvedValues,
+	type ShortcutConfig,
 } from "dialkit/store"
 
 // The config format and store come from DialKit (https://github.com/joshpuckett/dialkit,
@@ -22,6 +23,11 @@ type UseControlsOptions = {
 	persist?: DialKitPersistOptions
 	/** Called with the path of a clicked action control, such as "replay" */
 	onAction?: (path: string) => void
+	/**
+	 * Keyboard shortcuts by control path. Hold a slider's key and scroll, drag
+	 * or move the pointer to adjust it; press a toggle's key to flip it.
+	 */
+	shortcuts?: Record<string, ShortcutConfig>
 }
 
 type ControlsController<T extends DialConfig> = {
@@ -59,12 +65,15 @@ function useControlsController<T extends DialConfig>(
 	persistRef.current = options.persist
 	const onActionRef = useRef(options.onAction)
 	onActionRef.current = options.onAction
+	const shortcutsRef = useRef(options.shortcuts)
+	shortcutsRef.current = options.shortcuts
 
 	const serializedConfig = JSON.stringify(config)
 	const serializedPersist = JSON.stringify(options.persist)
+	const serializedShortcuts = JSON.stringify(options.shortcuts)
 
 	useEffect(() => {
-		DialStore.registerPanel(panelId, name, configRef.current, undefined, {
+		DialStore.registerPanel(panelId, name, configRef.current, shortcutsRef.current, {
 			retainOnUnmount: hasStableId,
 			persist: persistRef.current,
 		})
@@ -78,11 +87,11 @@ function useControlsController<T extends DialConfig>(
 			mounted.current = true
 			return
 		}
-		DialStore.updatePanel(panelId, name, configRef.current, undefined, {
+		DialStore.updatePanel(panelId, name, configRef.current, shortcutsRef.current, {
 			retainOnUnmount: hasStableId,
 			persist: persistRef.current,
 		})
-	}, [hasStableId, panelId, name, serializedConfig, serializedPersist])
+	}, [hasStableId, panelId, name, serializedConfig, serializedPersist, serializedShortcuts])
 
 	useEffect(
 		() => DialStore.subscribeActions(panelId, (path) => onActionRef.current?.(path)),
@@ -121,4 +130,8 @@ export {
 	type UseControlsOptions,
 	type ControlsController,
 }
-export type { DialConfig as ControlsConfig, ResolvedValues as ControlsValues } from "dialkit/store"
+export type {
+	DialConfig as ControlsConfig,
+	ResolvedValues as ControlsValues,
+	ShortcutConfig as ControlsShortcut,
+} from "dialkit/store"

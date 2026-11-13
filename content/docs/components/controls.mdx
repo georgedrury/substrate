@@ -81,6 +81,34 @@ const values = useControls(name, config, options)
 | `id` | `string` | Keeps values across unmounts and shares them between mounts using the same id |
 | `persist` | `boolean \| { key?, storage?, presets? }` | Saves values to browser storage |
 | `onAction` | `(path: string) => void` | Called with the path of a clicked action control |
+| `shortcuts` | `Record<string, ShortcutConfig>` | Keyboard shortcuts for sliders and toggles, by control path |
+
+### Shortcuts
+
+```tsx
+const card = useControls("Card", {
+  radius: [16, 0, 48],
+  shadow: { blur: [24, 0, 64] },
+  visible: true,
+}, {
+  shortcuts: {
+    radius: { key: "r", mode: "fine" },
+    "shadow.blur": { key: "b", interaction: "drag" },
+    visible: { key: "v" },
+  },
+})
+```
+
+Hold **R** and scroll to adjust the radius, hold **B** and drag to adjust the blur, and press **V** to toggle visibility. Holding a slider's key also lets the arrow keys step it. The row being adjusted is highlighted, and each row shows its key next to the label.
+
+| Field | Type | Default | Description |
+| --- | --- | --- | --- |
+| `key` | `string` | — | The key to hold or press |
+| `modifier` | `"alt" \| "shift" \| "meta"` | — | A modifier that must also be held |
+| `interaction` | `"scroll" \| "drag" \| "move" \| "scroll-only"` | `"scroll"` | How a held slider key adjusts the value. `"scroll-only"` needs no key and claims every scroll, so use it sparingly. |
+| `mode` | `"fine" \| "normal" \| "coarse"` | `"normal"` | Step size: 1% of the range, the slider's step, or 10% of the range |
+
+Shortcuts pause while a text field, select or menu has focus, so typing is never captured.
 
 ### Setting values from code
 
@@ -132,4 +160,8 @@ This works when nothing else edits those values while the item is selected. If t
 | --- | --- | --- | --- |
 | `panel` | `string` | — | Render only the panel with this name or id. Renders every panel when omitted. |
 
-Each panel has a reset button that restores the config defaults.
+Each panel header has three actions:
+
+- **Versions** switches between versions of the panel's values. Edits apply to the version you are on, and **New version** starts a copy of the current values. Version 1 is the values before any version was made. Versions last for the session, or are saved with the values when `persist` is set with `presets: true`.
+- **Copy values** copies the current values as an instruction for an agent to make them the new defaults in the `useControls` call.
+- **Reset** restores the config defaults.

@@ -83,7 +83,7 @@ const chart = useControls("Chart", {
 
 **Config types**: number tuple or bare number (NumberSlider), boolean (Toggle), string (TextArea), hex string (ColourPicker), `{ type: "select" }`, `{ type: "easing" }` (EasingCurveEditor), `{ type: "spring" }` with `visualDuration`/`bounce` or `stiffness`/`damping`/`mass` (SpringEditor; easing and spring share a row with a type switch), `{ type: "image", options }` (ImagePicker, uploads become data URLs), `{ type: "pad", x, y }` with slider-style axis tuples (XYPad, returns `{ x, y }`, positive y is up), `{ type: "action" }` with the `onAction` option, nested object (folder).
 
-**Options**: `id`, `persist`, `onAction`. **Controls prop**: `panel` to render a single panel by name.
+**Options**: `id`, `persist`, `onAction`, `shortcuts` (by control path, e.g. `{ radius: { key: "r" }, visible: { key: "v" } }`: hold a slider's key and scroll, or `interaction: "drag"`/`"move"`; press a toggle's key). **Controls prop**: `panel` to render a single panel by name. Each panel header has a versions menu (DialKit presets), a copy button that copies the values as an agent instruction, and reset.
 
 **Setting values from code**: `useControlsController` returns `{ values, setValues, reset }` for loading saved state or presets.
 
