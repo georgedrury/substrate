@@ -139,7 +139,10 @@ function ControlsPanel({
 			<PaneHeader className="gap-1">
 				<PaneLabel className="mr-auto truncate">{panel.name}</PaneLabel>
 				<ControlsVersions panelId={panel.id} panelName={panel.name} />
-				<ControlsCopy panelName={panel.name} values={values} />
+				<ControlsCopy
+					panelName={panel.name}
+					getText={() => copyInstruction(panel.name, values)}
+				/>
 				<PaneAction
 					aria-label={`Reset ${panel.name}`}
 					title="Reset"
@@ -560,19 +563,20 @@ function ControlsVersionItem({
 
 type ControlsCopyProps = {
 	panelName: string
-	values: Record<string, DialValue>
+	/** The text to copy, built when clicked */
+	getText: () => string
 }
 
 // Copies the current values as an instruction an agent can apply to the
-// useControls call, in DialKit's format
-function ControlsCopy({ panelName, values }: ControlsCopyProps) {
+// code, in DialKit's format
+function ControlsCopy({ panelName, getText }: ControlsCopyProps) {
 	const [copied, setCopied] = useState(false)
 	const timeout = useRef<ReturnType<typeof setTimeout>>(undefined)
 	useEffect(() => () => clearTimeout(timeout.current), [])
 
 	const copy = async () => {
 		try {
-			await navigator.clipboard.writeText(copyInstruction(panelName, values))
+			await navigator.clipboard.writeText(getText())
 		} catch {
 			// Clipboard access can be refused; the icon stays as it was
 			return
@@ -736,4 +740,15 @@ function decimals(step: number): number {
 	return fraction ? fraction.length : 0
 }
 
-export { Controls, ControlsPanel, type ControlsProps, type ControlsPanelProps }
+export {
+	Controls,
+	ControlsCopy,
+	ControlsField,
+	ControlsPanel,
+	ControlsVersions,
+	type ControlsCopyProps,
+	type ControlsFieldProps,
+	type ControlsProps,
+	type ControlsPanelProps,
+	type ControlsVersionsProps,
+}

@@ -1,0 +1,98 @@
+---
+title: Controls timeline
+description: Animation clips defined in code and tuned in a timeline editor.
+---
+
+Define animation clips as a plain object, bind their values to your UI, and tune their timing and curves in a timeline. `ControlsTimeline` is the editor: scrub the playhead, drag a clip to move it, drag its edges to resize it, and click it to edit its values with the same rows as [Controls](/docs/components/controls).
+
+The clip model and playback come from [DialKit](https://github.com/joshpuckett/dialkit) by Josh Puckett (MIT). Substrate uses its headless timeline and supplies the interface.
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/controls-timeline
+```
+
+## Examples
+
+### Default
+
+<ComponentPreview name="controls-timeline-demo" />
+
+## Usage
+
+```tsx
+import { ControlsTimeline } from "@/components/substrate/controls-timeline"
+import { useControlsTimeline } from "@/hooks/substrate/use-controls-timeline"
+
+function Card() {
+  const timeline = useControlsTimeline("Card", {
+    enter: {
+      at: 0,
+      duration: 0.6,
+      from: { y: 24, opacity: 0 },
+      to: { y: 0, opacity: 1 },
+      transition: { type: "spring", visualDuration: 0.5, bounce: 0.2 },
+    },
+  })
+
+  const { y, opacity } = timeline.enter.current
+
+  return (
+    <>
+      <div style={{ opacity, transform: `translateY(${y}px)` }}>Card</div>
+      <ControlsTimeline />
+    </>
+  )
+}
+```
+
+`clip.current` holds the clip's values at the playhead, so the element is exactly where the timeline says whether it is playing, paused or being scrubbed.
+
+## Clips
+
+| Clip | Definition | Editing |
+| --- | --- | --- |
+| From–to | `{ at, duration, from, to, transition }` | Drag to move, drag either edge to resize. Physics springs set their own length. |
+| Sequence | `{ at, from, steps: [{ duration, to, transition }] }` | One bar split into steps. Drag a boundary to retime a step. |
+| Property tracks | `{ at, props: { blur: { from, to, duration, delay } } }` | Expand the clip to show a row per property. Drag a row to change its delay. |
+| Group | `{ intro: { title: {...}, badge: {...} } }` | Nested clips show under a collapsible row. |
+
+Add `loop: true` to a clip to repeat it until the timeline ends. Faded bars show the repeats.
+
+## useControlsTimeline
+
+```ts
+const timeline = useControlsTimeline(name, config, options)
+```
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | — | Keeps values across unmounts and shares them between mounts using the same id |
+| `persist` | `boolean \| { key?, storage?, presets? }` | — | Saves values to browser storage |
+| `autoplay` | `boolean` | `true` | Start playing on mount |
+| `loop` | `boolean \| { from: number }` | `false` | Loop at the end, or wrap back to `from` so earlier clips play once |
+
+The result has `time`, `playing`, `duration`, `play()`, `pause()`, `replay()` and `seek(seconds)`, plus one entry per clip:
+
+| Clip value | Description |
+| --- | --- |
+| `current` | Values at the playhead |
+| `from`, `to`, `animate` | The clip's end states; `animate` is `to` once the clip has started |
+| `transition`, `css` | The clip's curve, as a Motion transition or CSS duration and timing function |
+| `started`, `active`, `done`, `progress`, `step` | Where the playhead is relative to the clip |
+
+## ControlsTimeline
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `timeline` | `string` | — | Render only the timeline with this name or id. Renders every timeline when omitted. |
+
+The header has play and pause, replay, the clock, versions and a copy button. Copy gives an agent the tuned values to apply as the new defaults. Keep the `current` bindings while tuning, then move the values into your production animation.
+
+## Theme variables
+
+| Variable | Fallback | Description |
+| --- | --- | --- |
+| `--timeline-clip` | Primary at 18% | Clip bar fill |
+| `--timeline-playhead` | `--color-destructive` | Playhead colour |

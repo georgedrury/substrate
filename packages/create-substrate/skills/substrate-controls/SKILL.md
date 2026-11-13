@@ -93,6 +93,29 @@ const chart = useControls("Chart", {
 
 ---
 
+### ControlsTimeline and useControlsTimeline
+
+`registry/substrate/components/controls-timeline.tsx`, `registry/substrate/hooks/use-controls-timeline.ts`
+
+Animation clips defined in code, tuned in a timeline editor. Built on DialKit's headless timeline. Bind `timeline.<clip>.current` to style so the UI follows the playhead; `<ControlsTimeline />` scrubs, moves and resizes clips and edits their values in a popover.
+
+```tsx
+const timeline = useControlsTimeline("Card", {
+	enter: { at: 0, duration: 0.6, from: { y: 24, opacity: 0 }, to: { y: 0, opacity: 1 }, transition: { type: "spring", visualDuration: 0.5, bounce: 0.2 } },
+	badge: { at: 0.6, from: { scale: 0 }, steps: [{ duration: 0.2, to: { scale: 1.2 } }, { duration: 0.2, to: { scale: 1 } }] },
+	glow: { at: 1, props: { blur: { from: 0, to: 24, duration: 0.6 } } },
+}, { loop: true })
+
+<div style={{ opacity: timeline.enter.current.opacity }} />
+<ControlsTimeline />
+```
+
+**Options**: `id`, `persist`, `autoplay` (default true), `loop` (`true` or `{ from }`). **Controls**: `play`, `pause`, `replay`, `seek`.
+
+**When to use**: tuning entrance and choreography timing by eye. Once tuned, copy the values and move them into the production animation.
+
+---
+
 ### NumberInput
 
 `registry/substrate/components/number-input.tsx`

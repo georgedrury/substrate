@@ -24,6 +24,7 @@ import ControlsDemo from "./controls-demo"
 import SpringEditorDemo from "./spring-editor-demo"
 import XYPadDemo from "./xy-pad-demo"
 import ImagePickerDemo from "./image-picker-demo"
+import ControlsTimelineDemo from "./controls-timeline-demo"
 import ActionColour from "./action-colour"
 import PaneHistory from "./pane-history"
 import LayerListDemo from "./layer-list-demo"
@@ -251,5 +252,9 @@ export const Index: Record<string, ExampleEntry> = {
 	"image-picker-demo": {
 		component: ImagePickerDemo,
 		filePath: "registry/examples/image-picker-demo.tsx",
+	},
+	"controls-timeline-demo": {
+		component: ControlsTimelineDemo,
+		filePath: "registry/examples/controls-timeline-demo.tsx",
 	},
 }

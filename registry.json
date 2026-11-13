@@ -2193,6 +2193,57 @@
         "https://substrate.georgedrury.co.uk/r/spring",
         "https://substrate.georgedrury.co.uk/r/popover"
       ]
+    },
+    {
+      "name": "controls-timeline",
+      "type": "registry:ui",
+      "title": "Controls Timeline",
+      "description": "Animation clips defined in code with useControlsTimeline, tuned in a timeline editor: scrub, move and resize clips, and edit their values. Built on DialKit's headless timeline.",
+      "author": "George Drury <info@georgedrury.co.uk>",
+      "categories": [
+        "substrate",
+        "ui",
+        "animation"
+      ],
+      "dependencies": [
+        "dialkit",
+        "@remixicon/react"
+      ],
+      "cssVars": {
+        "theme": {
+          "color-timeline-clip": "var(--timeline-clip, var(--color-primary))"
+        },
+        "light": {},
+        "dark": {}
+      },
+      "meta": {
+        "example": "const timeline = useControlsTimeline(\"Card\", { enter: { at: 0, duration: 0.6, from: { y: 24 }, to: { y: 0 } } })\n<ControlsTimeline />",
+        "lineage": [
+          {
+            "name": "DialKit",
+            "href": "https://github.com/joshpuckett/dialkit"
+          },
+          {
+            "name": "Substrate"
+          }
+        ]
+      },
+      "files": [
+        {
+          "path": "registry/substrate/components/controls-timeline.tsx",
+          "type": "registry:ui",
+          "target": "components/substrate/controls-timeline.tsx"
+        },
+        {
+          "path": "registry/substrate/hooks/use-controls-timeline.ts",
+          "type": "registry:hook",
+          "target": "hooks/substrate/use-controls-timeline.ts"
+        }
+      ],
+      "registryDependencies": [
+        "https://substrate.georgedrury.co.uk/r/controls",
+        "https://substrate.georgedrury.co.uk/r/popover"
+      ]
     }
   ]
 }

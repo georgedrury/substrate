@@ -124,6 +124,7 @@ When you catch yourself about to write a custom version of any of these, stop an
 | Timeline | `substrate-kit add timeline` | Ruler + playhead + tracks + keyframe diamonds |
 | Easing Curve Editor | `substrate-kit add easing-curve-editor` | Draggable cubic-bezier editor |
 | Spring Editor | `substrate-kit add spring-editor` | Spring curve preview with time or physics sliders |
+| Controls Timeline | `substrate-kit add controls-timeline` | Clips defined in code, tuned in a scrubbable timeline (`useControlsTimeline` + `<ControlsTimeline />`) |
 
 ### Visualisation — `substrate/ui/visualization`
 
