@@ -3,7 +3,7 @@
   "name": "layer-list",
   "title": "Layer List",
   "author": "George Drury <info@georgedrury.co.uk>",
-  "description": "Sortable layer panel with visibility and lock toggles, icons, and context menu support. Compound component pattern.",
+  "description": "Layer panel with selection, visibility and lock toggles, icons and inline rename. Compound component pattern; pair with use-drag-reorder to sort and context-menu for right-click actions.",
   "dependencies": [
     "@remixicon/react"
   ],

@@ -65,7 +65,9 @@ export function useCanvasInteraction(
 
       ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
 
-      if (activeTool === "hand") {
+      // The hand tool and the middle mouse button both pan
+      if (activeTool === "hand" || e.button === 1) {
+        if (e.button === 1) e.preventDefault()
         startDrag({
           type: "pan",
           startWorld: worldPoint,

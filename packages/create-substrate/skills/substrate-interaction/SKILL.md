@@ -45,7 +45,7 @@ function handleMove(id: string, x: number, y: number) {
 }
 ```
 
-**Connects to**: `HistoryControls` component, `NumberInput.onStart` (push snapshot before scrub), `createKeyboardShortcuts` (⌘Z / ⌘⇧Z).
+**Connects to**: `NumberInput.onStart` (push snapshot before scrub), `createKeyboardShortcuts` (⌘Z / ⌘⇧Z). The 2D canvas does not use this hook: `useDocumentStore` has its own history (`pushSnapshot`, `undo`, `redo`) that covers elements and their order, not the camera, so pan and zoom survive an undo. Call `pushSnapshot()` before every mutation you want to be undoable, including property edits.
 
 ---
 
@@ -139,7 +139,7 @@ formatShortcut({ key: "z", meta: true, shift: true }) // → "⌘+Shift+Z"
 
 Undo/redo button pair. Renders `data-slot="history-controls"` for auto-positioning in PaneHeader and Toolbar.
 
-**Props**: `canUndo`, `canRedo`, `onUndo`, `onRedo`
+**Props**: `size` (`"sm"` or `"md"`). It takes no undo callbacks: it reads `past`/`future` and calls `undo`/`redo` on `useDocumentStore`, so it works with the canvas store out of the box. For any other undo stack (`useUndoable`), build your own pair of buttons from `canUndo`/`undo`/`canRedo`/`redo`.
 
 **Typical placement**:
 - Inside `PaneHeader` – auto-positioned to the right via `**:data-[slot=history-controls]:ml-auto`
@@ -157,7 +157,9 @@ Flat layer panel with selection, visibility, lock, rename, and reorder.
 
 **Features**:
 - `LayerItem` supports `selected`, `hovered`, `depth` props
-- `LayerName` enables double-click inline rename
+- `LayerName` takes the name as `children` and enables double-click inline rename via `onRename`
+- `LayerVisibilityToggle` and `LayerLockToggle` are controlled: `visible`/`onVisibleChange` and `locked`/`onLockedChange`
+- Sorting is not built in: spread `useDragReorder`'s `getDragItemProps` on each `LayerItem`
 - `LayerActions` are hidden by default, visible on row hover
 - `LayerVisibilityToggle` and `LayerLockToggle` use eye/lock icons
 
@@ -199,8 +201,8 @@ Hierarchical tree with expand/collapse, depth indentation, and icons.
 │  → apply to store                               │
 ├─────────────────────────────────────────────────┤
 │  HistoryControls (in PaneHeader or Toolbar)     │
-│  → reads canUndo/canRedo                        │
-│  → calls onUndo/onRedo                          │
+│  → reads past/future from useDocumentStore      │
+│  → calls the store's undo/redo                  │
 ├─────────────────────────────────────────────────┤
 │  NumberInput.onStart                             │
 │  → pushSnapshot before scrub begins             │
@@ -231,7 +233,14 @@ Hierarchical tree with expand/collapse, depth indentation, and icons.
 ```tsx
 function LayerPanel() {
   const { selectedIds, select, isSelected } = useSelection({ items: elementIds })
-  const { getDragItemProps } = useDragReorder({ items: elements, onReorder: reorderElements })
+  const setElementOrder = useDocumentStore((s) => s.setElementOrder)
+  const { getDragItemProps } = useDragReorder({
+    items: elements,
+    onReorder: (next) => {
+      pushSnapshot()
+      setElementOrder(next.map((el) => el.id))
+    },
+  })
 
   return (
     <LayerList>
@@ -244,21 +253,21 @@ function LayerPanel() {
               {...getDragItemProps(i)}
             >
               <LayerIcon colour={el.fill?.color} />
-              <LayerName value={el.name} onRename={(name) => updateElement(el.id, { name })} />
+              <LayerName onRename={(name) => updateElement(el.id, { name })}>{el.name}</LayerName>
               <LayerActions>
                 <LayerVisibilityToggle
                   visible={el.visible}
-                  onToggle={() => updateElement(el.id, { visible: !el.visible })}
+                  onVisibleChange={(visible) => updateElement(el.id, { visible })}
                 />
                 <LayerLockToggle
                   locked={el.locked}
-                  onToggle={() => updateElement(el.id, { locked: !el.locked })}
+                  onLockedChange={(locked) => updateElement(el.id, { locked })}
                 />
               </LayerActions>
             </LayerItem>
           </ContextMenuTrigger>
           <ContextMenuContent>
-            <ContextMenuItem onSelect={() => duplicateElement(el.id)}>
+            <ContextMenuItem onSelect={() => duplicateElements([el.id])}>
               Duplicate <ContextMenuShortcut>⌘D</ContextMenuShortcut>
             </ContextMenuItem>
             <ContextMenuItem onSelect={() => deleteElement(el.id)}>

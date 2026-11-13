@@ -4,14 +4,11 @@ import { useEffect, useRef, useCallback } from "react"
 import { useDocumentStore } from "@/stores/substrate/document-store"
 import { useToolStore } from "@/stores/substrate/tool-store"
 import { useCanvasTransform } from "./use-canvas-transform"
-import { generateId } from "@/lib/substrate/id"
-import type { DesignElement } from "@/lib/substrate/types"
 
 export function useKeyboardShortcuts() {
-  const elements = useDocumentStore((s) => s.elements)
   const elementOrder = useDocumentStore((s) => s.elementOrder)
   const selectedIds = useDocumentStore((s) => s.selectedIds)
-  const addElement = useDocumentStore((s) => s.addElement)
+  const duplicateElements = useDocumentStore((s) => s.duplicateElements)
   const deleteElements = useDocumentStore((s) => s.deleteElements)
   const select = useDocumentStore((s) => s.select)
   const deselectAll = useDocumentStore((s) => s.deselectAll)
@@ -79,24 +76,7 @@ export function useKeyboardShortcuts() {
 
       if (meta && e.key.toLowerCase() === "d") {
         e.preventDefault()
-        if (selectedIds.size === 0) return
-        pushSnapshot()
-        const newIds: string[] = []
-        for (const id of selectedIds) {
-          const el = elements[id]
-          if (!el) continue
-          const newId = generateId()
-          const clone: DesignElement = {
-            ...el,
-            id: newId,
-            name: `${el.name} Copy`,
-            x: el.x + 20,
-            y: el.y + 20,
-          } as DesignElement
-          addElement(clone)
-          newIds.push(newId)
-        }
-        select(newIds)
+        duplicateElements()
         return
       }
 
@@ -123,7 +103,7 @@ export function useKeyboardShortcuts() {
       }
     },
     [
-      elements, elementOrder, selectedIds, addElement, deleteElements,
+      elementOrder, selectedIds, duplicateElements, deleteElements,
       select, deselectAll, pushSnapshot, undo, redo,
       setTool, setTemporaryTool, zoomIn, zoomOut, resetZoom,
     ]

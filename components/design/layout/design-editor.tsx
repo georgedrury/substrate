@@ -32,7 +32,6 @@ import { ShortcutOverlay } from "@/registry/substrate/components/shortcut-overla
 import { toast } from "@/registry/substrate/components/toast"
 import {
 	createKeyboardShortcuts,
-	type ShortcutEntry,
 } from "@/registry/substrate/lib/keyboard-shortcuts"
 import { useClipboard } from "@/registry/substrate/hooks/use-clipboard"
 
@@ -129,158 +128,17 @@ function useEditorClipboard() {
 
 // ── Keyboard shortcuts wiring ──
 
+// DesignCanvas already installs the core shortcuts (tools, undo and redo,
+// delete, duplicate, select all, zoom), so registering them again here would
+// run each twice. Only what the canvas doesn't cover is added.
 function useEditorShortcuts() {
-	const setTool = useToolStore((s) => s.setTool)
-	const undo = useDocumentStore((s) => s.undo)
-	const redo = useDocumentStore((s) => s.redo)
-	const pushSnapshot = useDocumentStore((s) => s.pushSnapshot)
-	const selectedIds = useDocumentStore((s) => s.selectedIds)
-	const elements = useDocumentStore((s) => s.elements)
-	const deleteElements = useDocumentStore((s) => s.deleteElements)
-	const select = useDocumentStore((s) => s.select)
-	const deselectAll = useDocumentStore((s) => s.deselectAll)
-	const elementOrder = useDocumentStore((s) => s.elementOrder)
-	const addElement = useDocumentStore((s) => s.addElement)
-	const setCamera = useDocumentStore((s) => s.setCamera)
-	const { zoomIn, zoomOut } = useCanvasTransform()
 	const toggleGrid = useDocumentStore((s) => s.toggleGrid)
 
 	useEffect(() => {
-		const shortcuts: ShortcutEntry[] = [
-			// Tools
-			{ key: "v", handler: () => setTool("select"), label: "Select", group: "Tools" },
-			{ key: "h", handler: () => setTool("hand"), label: "Hand", group: "Tools" },
-			{ key: "r", handler: () => setTool("rectangle"), label: "Rectangle", group: "Tools" },
-			{ key: "o", handler: () => setTool("ellipse"), label: "Ellipse", group: "Tools" },
-			{ key: "l", handler: () => setTool("line"), label: "Line", group: "Tools" },
-			{ key: "t", handler: () => setTool("text"), label: "Text", group: "Tools" },
-			{ key: "f", handler: () => setTool("frame"), label: "Frame", group: "Tools" },
-
-			// Edit
-			{
-				key: "z",
-				meta: true,
-				shift: true,
-				handler: () => redo(),
-				label: "Redo",
-				group: "Edit",
-			},
-			{
-				key: "z",
-				meta: true,
-				handler: () => undo(),
-				label: "Undo",
-				group: "Edit",
-			},
-			{
-				key: "d",
-				meta: true,
-				handler: () => {
-					const items = [...selectedIds].map((id) => elements[id]).filter(Boolean)
-					if (items.length === 0) return
-					pushSnapshot()
-					const newIds: string[] = []
-					for (const item of items) {
-						const id = crypto.randomUUID()
-						newIds.push(id)
-						addElement({ ...item, id, x: item.x + 20, y: item.y + 20 } as DesignElement)
-					}
-					select(newIds)
-					toast.info(`Duplicated ${items.length} element${items.length > 1 ? "s" : ""}`)
-				},
-				label: "Duplicate",
-				group: "Edit",
-			},
-			{
-				key: "a",
-				meta: true,
-				handler: () => select(elementOrder),
-				label: "Select all",
-				group: "Edit",
-			},
-			{
-				key: "Delete",
-				handler: () => {
-					if (selectedIds.size === 0) return
-					const ids = [...selectedIds]
-					const snapshot = ids.map((id) => elements[id]).filter(Boolean)
-					pushSnapshot()
-					deleteElements(ids)
-					deselectAll()
-					toast.undo(
-						`${ids.length} element${ids.length > 1 ? "s" : ""} deleted`,
-						() => {
-							pushSnapshot()
-							for (const el of snapshot) addElement(el)
-							select(ids)
-						},
-					)
-				},
-				label: "Delete",
-				group: "Edit",
-			},
-			{
-				key: "Backspace",
-				handler: () => {
-					if (selectedIds.size === 0) return
-					const ids = [...selectedIds]
-					const snapshot = ids.map((id) => elements[id]).filter(Boolean)
-					pushSnapshot()
-					deleteElements(ids)
-					deselectAll()
-					toast.undo(
-						`${ids.length} element${ids.length > 1 ? "s" : ""} deleted`,
-						() => {
-							pushSnapshot()
-							for (const el of snapshot) addElement(el)
-							select(ids)
-						},
-					)
-				},
-				label: "Delete",
-				group: "Edit",
-			},
-			{
-				key: "Escape",
-				handler: () => {
-					deselectAll()
-					setTool("select")
-				},
-				label: "Deselect",
-				group: "Edit",
-			},
-
-			// View
+		return createKeyboardShortcuts([
 			{ key: "g", handler: () => toggleGrid(), label: "Toggle grid", group: "View" },
-			{
-				key: "=",
-				meta: true,
-				handler: zoomIn,
-				label: "Zoom in",
-				group: "View",
-			},
-			{
-				key: "-",
-				meta: true,
-				handler: zoomOut,
-				label: "Zoom out",
-				group: "View",
-			},
-			{
-				key: "0",
-				meta: true,
-				handler: () => setCamera({ x: 0, y: 0, zoom: 1 }),
-				label: "Reset zoom",
-				group: "View",
-			},
-		]
-
-		return createKeyboardShortcuts(shortcuts)
-	}, [
-		setTool, undo, redo, pushSnapshot, selectedIds, elements,
-		deleteElements, select, deselectAll, elementOrder, addElement,
-		setCamera, zoomIn, zoomOut, toggleGrid,
-	])
+		])
+	}, [toggleGrid])
 }
 
 // ── Command palette items ──

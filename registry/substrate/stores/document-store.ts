@@ -1,5 +1,6 @@
 import { create } from "zustand"
 import type { DesignElement, Camera } from "@/lib/substrate/types"
+import { generateId } from "@/lib/substrate/id"
 
 const MAX_HISTORY = 50
 
@@ -33,6 +34,10 @@ interface DocumentState extends DocumentSnapshot {
   updateElement: (id: string, changes: Partial<DesignElement>) => void
   deleteElements: (ids: string[]) => void
   reorderElement: (id: string, newIndex: number) => void
+  /** Replace the whole stacking order, e.g. after a drag-to-reorder in a layer list */
+  setElementOrder: (order: string[]) => void
+  /** Clone elements (the selection by default), offset and selected. Records its own undo step. */
+  duplicateElements: (ids?: string[]) => void
 
   // Camera actions
   setCamera: (camera: Partial<Camera>) => void
@@ -121,6 +126,41 @@ export const useDocumentStore = create<DocumentState>()((set, get) => ({
       const order = s.elementOrder.filter((eid) => eid !== id)
       order.splice(newIndex, 0, id)
       return { elementOrder: order }
+    }),
+
+  setElementOrder: (order) =>
+    set((s) => {
+      const known = order.filter((id) => s.elements[id])
+      const seen = new Set(known)
+      // Anything the caller left out keeps its place at the end rather than vanishing
+      return { elementOrder: [...known, ...s.elementOrder.filter((id) => !seen.has(id))] }
+    }),
+
+  duplicateElements: (ids) =>
+    set((s) => {
+      const source = new Set(ids ?? s.selectedIds)
+      // Walk the stacking order so copies keep their relative z-order
+      const originals = s.elementOrder.filter((id) => source.has(id))
+      if (originals.length === 0) return s
+
+      const elements = { ...s.elements }
+      const elementOrder = [...s.elementOrder]
+      const copies: string[] = []
+      for (const id of originals) {
+        const el = s.elements[id]
+        const copyId = generateId()
+        elements[copyId] = { ...el, id: copyId, name: `${el.name} Copy`, x: el.x + 20, y: el.y + 20 } as DesignElement
+        elementOrder.push(copyId)
+        copies.push(copyId)
+      }
+
+      return {
+        elements,
+        elementOrder,
+        selectedIds: new Set(copies),
+        past: [...s.past.slice(-(MAX_HISTORY - 1)), takeSnapshot(s)],
+        future: [],
+      }
     }),
 
   // ── Camera actions ──
