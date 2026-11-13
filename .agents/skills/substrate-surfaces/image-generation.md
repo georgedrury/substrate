@@ -205,6 +205,7 @@ Some examples of what this surface enables:
 
 ## Related reference skills
 
+- **scaffold-playground** — the craft rules and the checklist to run before you say it's done
 - **substrate-scaffold** — Toolbar, Panel, StatusBar for the app shell
 - **substrate-controls** — Slider, NumberInput, TextArea, Select for generation parameters
 - **substrate-feedback** — Toast, ProgressBar for generation status, EmptyState for no results

@@ -260,7 +260,7 @@ type Drag =
   | { kind: "pan"; startX: number; startY: number; originX: number; originY: number }
 
 const actionButton =
-  "inline-flex h-7 items-center gap-1 rounded-md px-2 text-xs font-medium outline-none transition-all hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-3.5"
+  "inline-flex h-7 items-center gap-1 rounded-md px-2 text-xs font-medium outline-none transition-[color,background-color,box-shadow,transform] active:scale-[0.96] hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-3.5"
 
 export default function App() {
   const [tool, setTool] = useState<Tool>("select")

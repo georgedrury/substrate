@@ -78,7 +78,7 @@ function DocumentTab({
 					className={cn(
 						"size-4 inline-flex items-center justify-center rounded-sm shrink-0",
 						"opacity-0 group-hover/tab:opacity-100 data-[state=active]:opacity-60",
-						"hover:bg-muted hover:opacity-100 transition-all cursor-pointer",
+						"hover:bg-muted hover:opacity-100 transition-[background-color,opacity] cursor-pointer",
 						"[&_svg]:size-3",
 					)}
 				>

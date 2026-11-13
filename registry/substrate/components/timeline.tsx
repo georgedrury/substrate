@@ -272,7 +272,7 @@ function TimelineTransport({
       <button
         type="button"
         onClick={togglePlayback}
-        className="inline-flex items-center justify-center rounded-md h-7 min-w-7 px-1 text-xs font-medium hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 transition-all"
+        className="inline-flex items-center justify-center rounded-md h-7 min-w-7 px-1 text-xs font-medium hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 transition-[color,background-color,box-shadow]"
         aria-label={isPlaying ? "Pause" : "Play"}
       >
         {isPlaying ? (
@@ -290,7 +290,7 @@ function TimelineTransport({
       {/* Loop Toggle */}
       <button
         type="button"
-        className="inline-flex items-center justify-center rounded-md h-7 min-w-7 px-1 text-xs font-medium hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 transition-all"
+        className="inline-flex items-center justify-center rounded-md h-7 min-w-7 px-1 text-xs font-medium hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 transition-[color,background-color,box-shadow]"
         aria-label="Loop"
       >
         <RiLoopLeftLine className="size-4" />

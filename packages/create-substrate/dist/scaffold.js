@@ -388,6 +388,18 @@ function globalsCss(config) {
   }
 }
 
+/* Honour the system setting: no transitions or animations for people who
+   asked for less motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @keyframes collapsible-down {
   from {
     height: 0;

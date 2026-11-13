@@ -173,6 +173,7 @@ Some examples of what this surface enables:
 
 ## Related reference skills
 
+- **scaffold-playground** — the craft rules and the checklist to run before you say it's done
 - **substrate-scaffold** — Toolbar, Panel, StatusBar, ZoomControls for the app shell
 - **substrate-controls** — NumberInput, Slider, ColourPicker, ActionControls for property panes; `useControls` for tuning material, light and camera values from one config object
 - **substrate-interaction** — useUndoable, useClipboard, createKeyboardShortcuts, TreeList for scene hierarchy

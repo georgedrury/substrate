@@ -110,7 +110,7 @@ function ToolbarToggle({
 		<ToggleGroupPrimitive.Item
 			data-slot="toolbar-toggle"
 			className={cn(
-				"inline-flex items-center justify-center rounded-md transition-all outline-none",
+				"inline-flex items-center justify-center rounded-md transition-[color,background-color,box-shadow,transform] active:scale-[0.96] outline-none",
 				"h-7 min-w-7 px-2",
 				"text-xs font-medium",
 				"hover:bg-muted hover:text-foreground",
@@ -182,7 +182,7 @@ function ToolbarDropdown({
 			data-slot="toolbar-dropdown"
 			data-active={active || undefined}
 			className={cn(
-				"inline-flex items-center justify-center gap-1 rounded-md transition-all outline-none",
+				"inline-flex items-center justify-center gap-1 rounded-md transition-[color,background-color,box-shadow,transform] active:scale-[0.96] outline-none",
 				"h-7 min-w-7 px-2",
 				"text-xs font-medium",
 				"hover:bg-muted hover:text-foreground",

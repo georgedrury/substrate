@@ -130,6 +130,29 @@ These are surface-agnostic — they work the same whether you're building a 3D s
 - **Create custom tools** — see `create-custom-tool`
 - **Customise appearance** — see `theming`
 
+## 6. Craft rules
+
+Substrate tools are dense, so the details decide whether one feels finished. Apply these to everything you build, including your own components.
+
+- **Density:** chrome controls are 28px (`h-7`) with `text-xs`. Keep that. Don't enlarge inputs or buttons to fill space; a touch layout can use `size-9` or larger instead.
+- **Transitions:** name the properties (`transition-[color,background-color,box-shadow]`), never `transition-all`. Use about 150ms. Pressable buttons get `active:scale-[0.96]`, never below 0.95. Anything that moves must respect `prefers-reduced-motion`; the starter's `globals.css` already does.
+- **Depth:** panels are separated from the canvas by a border. Floating things (toolbar, popovers, menus) use a shadow, not a border. When a rounded child sits inside a rounded parent, its radius is the parent's minus the padding between them.
+- **Both themes:** use tokens (`bg-background`, `text-foreground`, `bg-muted`, `--canvas`), never hex values, in chrome. Content drawn on the board must be visible on both the light and the dark canvas, so check starter shapes and text in both. The element factories' default ink is safe; a hard-coded navy title is invisible on dark.
+- **Changing numbers** (zoom, coordinates, counts, timers) get `tabular-nums`, so digits don't jiggle as they update.
+- **No layout shift:** reserve space for anything that loads or appears. Empty states teach: say what goes there and give the action that creates it, using `EmptyState`.
+- **Keyboard:** every tool and action has a shortcut, listed in `ShortcutOverlay`. `DesignCanvas` already installs tool keys, undo, redo, delete, duplicate, select all and zoom, so don't register those again: they would run twice.
+- **Labels:** every icon-only button has an `aria-label`. Leave focus rings visible and neutral.
+- **First paint:** restore saved state before the first render. Defaulting first and correcting afterwards flashes the wrong state.
+
+### Before you say it's done
+
+1. `npm run build` passes and the console is clean.
+2. Open it in light and dark and look at it. Starter content, text and borders must be readable in both.
+3. Make each kind of edit, then undo and redo it: move, resize, create, delete, property changes, reorder. Pan or zoom after an edit and undo again; the view must stay put.
+4. Tab through the controls, and use every shortcut you listed.
+5. Reload. The board and the zoom come back.
+6. Click-create each tool without dragging, with a long name and with many layers.
+
 ## Component reference skills
 
 For a full catalogue of available components, hooks, and utilities organised by domain:

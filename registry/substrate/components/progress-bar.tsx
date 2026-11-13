@@ -33,7 +33,7 @@ function ProgressBar({
 			<div
 				data-slot="progress-bar-fill"
 				className={cn(
-					"h-full rounded-full bg-foreground/60 transition-all duration-300",
+					"h-full rounded-full bg-foreground/60 transition-[width] duration-300",
 					indeterminate && "animate-progress-indeterminate w-1/3",
 				)}
 				style={indeterminate ? undefined : { width: `${percentage}%` }}

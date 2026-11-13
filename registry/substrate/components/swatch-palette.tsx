@@ -57,7 +57,7 @@ function Swatch({
 			data-slot="swatch"
 			data-selected={selected || undefined}
 			className={cn(
-				"size-6 rounded-md border transition-all outline-none",
+				"size-6 rounded-md border transition-[transform,box-shadow] outline-none",
 				"hover:scale-110 hover:z-10",
 				"focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
 				selected && "ring-2 ring-ring ring-offset-1 scale-110 z-10",

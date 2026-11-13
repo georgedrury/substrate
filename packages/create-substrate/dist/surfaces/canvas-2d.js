@@ -84,7 +84,7 @@ const SHAPE_TOOLS: ToolDefinition[] = [
 const TOOLS = [...POINTER_TOOLS, ...SHAPE_TOOLS]
 
 const ACTION_BUTTON =
-  "inline-flex h-7 min-w-7 items-center justify-center rounded-md px-2 outline-none transition-all hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 data-active:bg-accent data-active:text-accent-foreground"
+  "inline-flex h-7 min-w-7 items-center justify-center rounded-md px-2 outline-none transition-[color,background-color,box-shadow,transform] active:scale-[0.96] hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 data-active:bg-accent data-active:text-accent-foreground"
 
 // Seed the document with a couple of shapes so the canvas is not empty.
 // Everything on the canvas lives in the document store; replace this with

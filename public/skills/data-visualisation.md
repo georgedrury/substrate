@@ -229,6 +229,7 @@ Some examples of what this surface enables:
 
 ## Related reference skills
 
+- **scaffold-playground** — the craft rules and the checklist to run before you say it's done
 - **substrate-scaffold** — Toolbar, Panel, StatusBar, DocumentTabs for the app shell
 - **substrate-controls** — `useControls` for chart settings from one config object (sliders, toggles, colours, selects); Select, NumberInput, Slider, ColourPicker when composing rows by hand
 - **substrate-feedback** — Toast, EmptyState, CommandPalette for data loading feedback

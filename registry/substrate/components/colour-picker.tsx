@@ -37,7 +37,7 @@ function ColourSwatch({
 			data-slot="colour-swatch"
 			data-size={size}
 			className={cn(
-				"rounded-md border transition-all",
+				"rounded-md border transition-colors",
 				size === "sm" && "size-5",
 				size === "md" && "size-7",
 				className,

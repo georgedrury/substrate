@@ -47,7 +47,7 @@ export function GalleryItem({
 			data-selected={selected}
 			className={cn(
 				"group relative aspect-square overflow-hidden rounded-md cursor-pointer",
-				"transition-all duration-200",
+				"transition-shadow duration-200",
 				selected && "ring-2 ring-primary",
 				className,
 			)}

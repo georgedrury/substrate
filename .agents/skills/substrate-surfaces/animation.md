@@ -189,6 +189,7 @@ Some examples of what this surface enables:
 
 ## Related reference skills
 
+- **scaffold-playground** — the craft rules and the checklist to run before you say it's done
 - **substrate-scaffold** — Toolbar, Panel, StatusBar for the app shell
 - **substrate-controls** — NumberInput, Slider, EasingCurveEditor, ActionControls for keyframe properties. For tuning UI motion by eye (entrances, springs, choreography), use `useControlsTimeline` with `<ControlsTimeline />` instead of building a timeline: define clips in code, bind `clip.current` to style, then copy the tuned values back. The `timeline` component is for editing user-authored keyframes.
 - **substrate-interaction** — useUndoable, createKeyboardShortcuts, LayerList for animation layers
