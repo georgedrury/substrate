@@ -59,12 +59,16 @@ Keys become labels, and the returned values keep the same nesting as the config.
 | Colour | `colour: "#a78bfa"` | `string` | ColourPicker |
 | Select | `align: { type: "select", options: ["left", "right"] }` | `string` | Select |
 | Easing | `motion: { type: "easing", duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }` | `{ type, duration, ease }` | EasingCurveEditor |
+| Spring (time) | `motion: { type: "spring", visualDuration: 0.3, bounce: 0.2 }` | `{ type, visualDuration, bounce }` | SpringEditor |
+| Spring (physics) | `motion: { type: "spring", stiffness: 200, damping: 25, mass: 1 }` | `{ type, stiffness, damping, mass }` | SpringEditor |
+| Image | `cover: { type: "image", options: ["/a.jpg", "/b.jpg"] }` | `string` (URL or data URL) | ImagePicker |
+| XY pad | `offset: { type: "pad", x: [0, -50, 50, 1], y: [0, -50, 50, 1] }` | `{ x, y }` | XYPad |
 | Action | `replay: { type: "action" }` | Calls `onAction("replay")` | Button |
 | Folder | `shadow: { blur: [24, 0, 64] }` | Nested values | CollapsiblePane |
 
 Slider tuples are `[default, min, max, step?]`. Add `_collapsed: true` inside a folder to start it closed.
 
-DialKit's spring, image and XY pad controls have no Substrate component yet. They keep their values and show a placeholder row.
+Easing and spring controls share one row with an Easing / Time / Physics switch, as in DialKit. Switching changes the shape of the returned value, and switching back restores the previous settings. Uploaded images are stored as data URLs, so prefer `options` for large images when persisting values.
 
 ## useControls
 

@@ -81,7 +81,7 @@ const chart = useControls("Chart", {
 </Panel>
 ```
 
-**Config types**: number tuple or bare number (NumberSlider), boolean (Toggle), string (TextArea), hex string (ColourPicker), `{ type: "select" }`, `{ type: "easing" }` (EasingCurveEditor), `{ type: "action" }` with the `onAction` option, nested object (folder). Spring, image and pad have no Substrate control yet.
+**Config types**: number tuple or bare number (NumberSlider), boolean (Toggle), string (TextArea), hex string (ColourPicker), `{ type: "select" }`, `{ type: "easing" }` (EasingCurveEditor), `{ type: "spring" }` with `visualDuration`/`bounce` or `stiffness`/`damping`/`mass` (SpringEditor; easing and spring share a row with a type switch), `{ type: "image", options }` (ImagePicker, uploads become data URLs), `{ type: "pad", x, y }` with slider-style axis tuples (XYPad, returns `{ x, y }`, positive y is up), `{ type: "action" }` with the `onAction` option, nested object (folder).
 
 **Options**: `id`, `persist`, `onAction`. **Controls prop**: `panel` to render a single panel by name.
 

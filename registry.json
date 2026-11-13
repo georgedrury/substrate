@@ -1983,6 +1983,155 @@
       "author": "George Drury <info@georgedrury.co.uk>"
     },
     {
+      "name": "spring",
+      "type": "registry:lib",
+      "title": "Spring",
+      "description": "Spring physics utilities: convert time-based springs (duration, bounce) to stiffness, damping and mass, and sample their progress over time.",
+      "author": "George Drury <info@georgedrury.co.uk>",
+      "categories": [
+        "substrate",
+        "lib",
+        "animation"
+      ],
+      "meta": {
+        "lineage": [
+          {
+            "name": "Substrate"
+          }
+        ]
+      },
+      "files": [
+        {
+          "path": "registry/substrate/lib/spring.ts",
+          "type": "registry:lib",
+          "target": "lib/substrate/spring.ts"
+        }
+      ]
+    },
+    {
+      "name": "spring-editor",
+      "type": "registry:ui",
+      "title": "Spring Editor",
+      "description": "Spring curve preview with duration and bounce, or stiffness, damping and mass sliders. Used for spring transitions in animation tools.",
+      "author": "George Drury <info@georgedrury.co.uk>",
+      "categories": [
+        "substrate",
+        "ui",
+        "animation"
+      ],
+      "cssVars": {
+        "theme": {
+          "color-spring-curve": "var(--spring-curve, var(--color-primary))"
+        },
+        "light": {},
+        "dark": {}
+      },
+      "meta": {
+        "example": "<SpringEditor value={{ type: \"spring\", visualDuration: 0.3, bounce: 0.2 }} onChange={setSpring} />",
+        "lineage": [
+          {
+            "name": "DialKit",
+            "href": "https://github.com/joshpuckett/dialkit"
+          },
+          {
+            "name": "Substrate"
+          }
+        ]
+      },
+      "files": [
+        {
+          "path": "registry/substrate/components/spring-editor.tsx",
+          "type": "registry:ui",
+          "target": "components/substrate/spring-editor.tsx"
+        }
+      ],
+      "registryDependencies": [
+        "https://substrate.georgedrury.co.uk/r/action",
+        "https://substrate.georgedrury.co.uk/r/number-slider",
+        "https://substrate.georgedrury.co.uk/r/toggle-group",
+        "https://substrate.georgedrury.co.uk/r/spring"
+      ]
+    },
+    {
+      "name": "xy-pad",
+      "type": "registry:ui",
+      "title": "XY Pad",
+      "description": "Two-dimensional pad for setting two values at once by dragging or with the arrow keys. Used for offsets, positions and paired parameters.",
+      "author": "George Drury <info@georgedrury.co.uk>",
+      "categories": [
+        "substrate",
+        "ui",
+        "form"
+      ],
+      "cssVars": {
+        "theme": {
+          "color-xy-pad-handle": "var(--xy-pad-handle, var(--color-primary))"
+        },
+        "light": {},
+        "dark": {}
+      },
+      "meta": {
+        "example": "<XYPad value={offset} onChange={setOffset} x={{ min: -50, max: 50, step: 1 }} y={{ min: -50, max: 50, step: 1 }} />",
+        "lineage": [
+          {
+            "name": "DialKit",
+            "href": "https://github.com/joshpuckett/dialkit"
+          },
+          {
+            "name": "Substrate"
+          }
+        ]
+      },
+      "files": [
+        {
+          "path": "registry/substrate/components/xy-pad.tsx",
+          "type": "registry:ui",
+          "target": "components/substrate/xy-pad.tsx"
+        }
+      ]
+    },
+    {
+      "name": "image-picker",
+      "type": "registry:ui",
+      "title": "Image Picker",
+      "description": "Thumbnail grid for choosing an image from a list, with upload and drag-and-drop. Uploads become data URLs.",
+      "author": "George Drury <info@georgedrury.co.uk>",
+      "categories": [
+        "substrate",
+        "ui",
+        "form"
+      ],
+      "cssVars": {
+        "theme": {
+          "color-image-picker-selection": "var(--image-picker-selection, var(--color-primary))"
+        },
+        "light": {},
+        "dark": {}
+      },
+      "meta": {
+        "example": "<ImagePicker value={image} onChange={setImage} options={[\"/a.jpg\", \"/b.jpg\"]} />",
+        "lineage": [
+          {
+            "name": "DialKit",
+            "href": "https://github.com/joshpuckett/dialkit"
+          },
+          {
+            "name": "Substrate"
+          }
+        ]
+      },
+      "files": [
+        {
+          "path": "registry/substrate/components/image-picker.tsx",
+          "type": "registry:ui",
+          "target": "components/substrate/image-picker.tsx"
+        }
+      ],
+      "dependencies": [
+        "@remixicon/react"
+      ]
+    },
+    {
       "name": "controls",
       "type": "registry:ui",
       "title": "Controls",
@@ -2031,7 +2180,12 @@
         "https://substrate.georgedrury.co.uk/r/select",
         "https://substrate.georgedrury.co.uk/r/colour-picker",
         "https://substrate.georgedrury.co.uk/r/text-area",
-        "https://substrate.georgedrury.co.uk/r/easing-curve-editor"
+        "https://substrate.georgedrury.co.uk/r/easing-curve-editor",
+        "https://substrate.georgedrury.co.uk/r/toggle-group",
+        "https://substrate.georgedrury.co.uk/r/spring-editor",
+        "https://substrate.georgedrury.co.uk/r/xy-pad",
+        "https://substrate.georgedrury.co.uk/r/image-picker",
+        "https://substrate.georgedrury.co.uk/r/spring"
       ]
     }
   ]

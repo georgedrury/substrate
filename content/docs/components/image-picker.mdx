@@ -1,0 +1,50 @@
+---
+title: Image picker
+description: Thumbnail grid for choosing an image from a list, with upload and drag-and-drop.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/image-picker
+```
+
+## Examples
+
+### Default
+
+<ComponentPreview name="image-picker-demo" />
+
+## Usage
+
+```tsx
+const [image, setImage] = useState("/textures/paper.jpg")
+
+<ImagePicker
+  value={image}
+  onChange={setImage}
+  options={[
+    { value: "/textures/paper.jpg", label: "Paper" },
+    "/textures/grain.png",
+  ]}
+/>
+```
+
+Plain string options are labelled from their file name. Uploaded and dropped files are read as data URLs and added to the grid for as long as the picker is mounted. A value that isn't in the list, such as one restored from storage, still shows as selected.
+
+## Theme variables
+
+| Variable                  | Tailwind class               | Fallback      | Description             |
+| ------------------------- | ---------------------------- | ------------- | ----------------------- |
+| `--image-picker-selection` | `bg-image-picker-selection` | Primary colour | Selected image ring    |
+
+## Props
+
+| Prop       | Type                                           | Default | Description                                   |
+| ---------- | ---------------------------------------------- | ------- | --------------------------------------------- |
+| `value`    | `string`                                       | —       | Selected image URL, or `""` for none          |
+| `onChange` | `(value: string) => void`                      | —       | Called with the chosen or uploaded image      |
+| `options`  | `(string \| { value: string, label: string })[]` | `[]`  | Images to choose from                         |
+| `upload`   | `boolean`                                      | `true`  | Show the upload tile and accept dropped files |
+| `columns`  | `number`                                       | `4`     | Thumbnails per row                            |
+| `disabled` | `boolean`                                      | `false` | Disables choosing and uploading               |

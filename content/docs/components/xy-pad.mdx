@@ -1,0 +1,49 @@
+---
+title: XY pad
+description: Two-dimensional pad for setting two values at once.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/xy-pad
+```
+
+## Examples
+
+### Default
+
+<ComponentPreview name="xy-pad-demo" />
+
+## Usage
+
+Drag anywhere on the pad, or focus it and use the arrow keys. Hold Shift for steps ten times larger. Positive y points up.
+
+```tsx
+const [offset, setOffset] = useState({ x: 0, y: 0 })
+
+<XYPad
+  aria-label="Shadow offset"
+  value={offset}
+  onChange={setOffset}
+  x={{ min: -40, max: 40, step: 1 }}
+  y={{ min: -40, max: 40, step: 1 }}
+/>
+```
+
+## Theme variables
+
+| Variable          | Tailwind class      | Fallback    | Description              |
+| ----------------- | ------------------- | ----------- | ------------------------ |
+| `--xy-pad-handle` | `bg-xy-pad-handle`  | Text colour | Handle and crosshair     |
+
+## Props
+
+| Prop       | Type                           | Default                         | Description                                          |
+| ---------- | ------------------------------ | ------------------------------- | ---------------------------------------------------- |
+| `value`    | `{ x: number, y: number }`     | —                               | Current point                                        |
+| `onChange` | `(value: XYPadValue) => void`  | —                               | Called while dragging and on each key press          |
+| `onStart`  | `() => void`                   | —                               | Fires when a drag or key press begins, for undo      |
+| `x`        | `{ min, max, step? }`          | `{ min: -1, max: 1, step: 0.01 }` | Horizontal axis                                    |
+| `y`        | `{ min, max, step? }`          | `{ min: -1, max: 1, step: 0.01 }` | Vertical axis, positive upwards                    |
+| `disabled` | `boolean`                      | `false`                         | Disables dragging and keys                           |

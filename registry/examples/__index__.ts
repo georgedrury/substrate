@@ -21,6 +21,9 @@ import HistoryControlsToolbar from "./history-controls-toolbar"
 import SliderRange from "./slider-range"
 import NumberSliderDemo from "./number-slider-demo"
 import ControlsDemo from "./controls-demo"
+import SpringEditorDemo from "./spring-editor-demo"
+import XYPadDemo from "./xy-pad-demo"
+import ImagePickerDemo from "./image-picker-demo"
 import ActionColour from "./action-colour"
 import PaneHistory from "./pane-history"
 import LayerListDemo from "./layer-list-demo"
@@ -236,5 +239,17 @@ export const Index: Record<string, ExampleEntry> = {
 	"controls-demo": {
 		component: ControlsDemo,
 		filePath: "registry/examples/controls-demo.tsx",
+	},
+	"spring-editor-demo": {
+		component: SpringEditorDemo,
+		filePath: "registry/examples/spring-editor-demo.tsx",
+	},
+	"xy-pad-demo": {
+		component: XYPadDemo,
+		filePath: "registry/examples/xy-pad-demo.tsx",
+	},
+	"image-picker-demo": {
+		component: ImagePickerDemo,
+		filePath: "registry/examples/image-picker-demo.tsx",
 	},
 }

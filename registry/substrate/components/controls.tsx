@@ -1,10 +1,14 @@
 "use client"
 
-import { useSyncExternalStore } from "react"
+import { useRef, useSyncExternalStore } from "react"
 import {
 	DialStore,
+	isEasingConfigValue,
+	isSpringConfigValue,
 	type ControlMeta,
+	type DialPadAxis,
 	type DialValue,
+	type EasingConfig,
 	type PanelConfig,
 	type TransitionConfig,
 } from "dialkit/store"
@@ -40,6 +44,18 @@ import {
 import { ColourPicker } from "@/components/substrate/colour-picker"
 import { TextArea } from "@/components/substrate/text-area"
 import { EasingCurveEditor } from "@/components/substrate/easing-curve-editor"
+import {
+	ToggleGroup,
+	ToggleGroupItem,
+} from "@/components/substrate/toggle-group"
+import { SpringCurve, SpringFields } from "@/components/substrate/spring-editor"
+import { XYPad, type XYPadAxis } from "@/components/substrate/xy-pad"
+import { ImagePicker } from "@/components/substrate/image-picker"
+import {
+	DEFAULT_PHYSICS_SPRING,
+	DEFAULT_TIME_SPRING,
+	springMode,
+} from "@/lib/substrate/spring"
 
 // Renders the panels registered with useControls. The store and config format
 // come from DialKit (MIT, © Josh Puckett); the controls are Substrate's own.
@@ -237,30 +253,62 @@ function ControlsField({ panelId, control, values }: ControlsFieldProps) {
 				</div>
 			)
 
-		case "transition": {
-			if (!isEasing(value)) {
-				return <ControlsUnsupported label={control.label} kind="spring" />
-			}
-			const [x1, y1, x2, y2] = value.ease
+		case "transition":
+			if (!isSpringConfigValue(value) && !isEasingConfigValue(value)) return null
 			return (
-				<div data-slot="controls-easing" className="space-y-1 py-1">
+				<ControlsTransition
+					panelId={panelId}
+					path={control.path}
+					label={control.label}
+					value={value}
+					onChange={update}
+				/>
+			)
+
+		case "image":
+			return (
+				<div data-slot="controls-image" className="space-y-1 py-1">
 					<ActionLabel className="w-auto">{control.label}</ActionLabel>
-					<EasingCurveEditor
-						value={{ x1, y1, x2, y2 }}
-						onChange={(bezier) =>
-							update({
-								...value,
-								ease: [bezier.x1, bezier.y1, bezier.x2, bezier.y2],
-							})
-						}
+					<ImagePicker
+						value={typeof value === "string" ? value : ""}
+						onChange={update}
+						options={control.options}
 					/>
-					<ControlsRow label="Duration">
+				</div>
+			)
+
+		case "pad": {
+			const x = padAxis(control.pad?.x)
+			const y = padAxis(control.pad?.y)
+			const point = isPadValue(value) ? value : { x: 0, y: 0 }
+			return (
+				<div data-slot="controls-pad" className="space-y-1 py-1">
+					<ActionLabel className="w-auto">{control.label}</ActionLabel>
+					<XYPad
+						aria-label={control.label}
+						value={point}
+						onChange={update}
+						x={x}
+						y={y}
+					/>
+					<ControlsRow label={control.pad?.labels?.x ?? "X"}>
 						<NumberInput
-							value={value.duration}
-							onChange={(duration) => update({ ...value, duration })}
-							min={0}
-							step={0.05}
-							suffix="s"
+							value={point.x}
+							onChange={(next) => update({ ...point, x: next })}
+							min={x.min}
+							max={x.max}
+							step={x.step}
+							precision={decimals(x.step)}
+						/>
+					</ControlsRow>
+					<ControlsRow label={control.pad?.labels?.y ?? "Y"}>
+						<NumberInput
+							value={point.y}
+							onChange={(next) => update({ ...point, y: next })}
+							min={y.min}
+							max={y.max}
+							step={y.step}
+							precision={decimals(y.step)}
 						/>
 					</ControlsRow>
 				</div>
@@ -281,12 +329,6 @@ function ControlsField({ panelId, control, values }: ControlsFieldProps) {
 					{control.label}
 				</button>
 			)
-
-		// Substrate has no component for these DialKit controls yet
-		case "spring":
-		case "image":
-		case "pad":
-			return <ControlsUnsupported label={control.label} kind={control.type} />
 
 		default:
 			return null
@@ -314,32 +356,123 @@ function ControlsRow({
 	)
 }
 
-// ── ControlsUnsupported ──
+// ── ControlsTransition ──
 
-type ControlsUnsupportedProps = {
-	label: string
-	kind: string
+type TransitionMode = "easing" | "simple" | "advanced"
+
+const DEFAULT_EASING: EasingConfig = {
+	type: "easing",
+	duration: 0.3,
+	ease: [0.25, 0.1, 0.25, 1],
 }
 
-function ControlsUnsupported({ label, kind }: ControlsUnsupportedProps) {
+type ControlsTransitionProps = {
+	panelId: string
+	path: string
+	label: string
+	value: TransitionConfig
+	onChange: (value: TransitionConfig) => void
+}
+
+// One control for easing curves and springs, as in DialKit: switching type
+// swaps the value's shape and switching back restores the previous one
+function ControlsTransition({
+	panelId,
+	path,
+	label,
+	value,
+	onChange,
+}: ControlsTransitionProps) {
+	const mode: TransitionMode =
+		value.type === "easing"
+			? "easing"
+			: springMode(value) === "physics"
+				? "advanced"
+				: "simple"
+
+	const lastByMode = useRef<Record<TransitionMode, TransitionConfig>>({
+		easing: DEFAULT_EASING,
+		simple: DEFAULT_TIME_SPRING,
+		advanced: DEFAULT_PHYSICS_SPRING,
+	})
+	const changeMode = (next: string) => {
+		if (next !== "easing" && next !== "simple" && next !== "advanced") return
+		lastByMode.current[mode] = value
+		// Keep DialKit's own record of the mode in step for presets and persistence
+		DialStore.updateTransitionMode(panelId, path, next)
+		onChange(lastByMode.current[next])
+	}
+
 	return (
-		<ControlsRow label={label} data-slot="controls-unsupported">
-			<span className="text-xs text-muted-foreground">
-				No {kind} control yet
-			</span>
-		</ControlsRow>
+		<div data-slot="controls-transition" className="space-y-1 py-1">
+			<ActionLabel className="w-auto">{label}</ActionLabel>
+			{value.type === "easing" ? (
+				<EasingCurveEditor
+					value={{
+						x1: value.ease[0],
+						y1: value.ease[1],
+						x2: value.ease[2],
+						y2: value.ease[3],
+					}}
+					onChange={(bezier) =>
+						onChange({
+							...value,
+							ease: [bezier.x1, bezier.y1, bezier.x2, bezier.y2],
+						})
+					}
+				/>
+			) : (
+				<SpringCurve value={value} />
+			)}
+			<ControlsRow label="Type">
+				<ToggleGroup
+					type="single"
+					value={mode}
+					onValueChange={changeMode}
+					className="w-full"
+				>
+					<ToggleGroupItem value="easing" className="flex-1">
+						Easing
+					</ToggleGroupItem>
+					<ToggleGroupItem value="simple" className="flex-1">
+						Time
+					</ToggleGroupItem>
+					<ToggleGroupItem value="advanced" className="flex-1">
+						Physics
+					</ToggleGroupItem>
+				</ToggleGroup>
+			</ControlsRow>
+			{value.type === "easing" ? (
+				<ControlsRow label="Duration">
+					<NumberSlider
+						value={value.duration}
+						onChange={(duration) => onChange({ ...value, duration })}
+						min={0.1}
+						max={2}
+						step={0.05}
+						suffix="s"
+					/>
+				</ControlsRow>
+			) : (
+				<SpringFields value={value} onChange={onChange} />
+			)}
+		</div>
 	)
 }
 
-function isEasing(
-	value: DialValue | undefined,
-): value is Extract<TransitionConfig, { type: "easing" }> {
+function padAxis(axis: DialPadAxis | undefined): Required<XYPadAxis> {
+	const [, min = -1, max = 1, step = 0.01] = axis ?? []
+	return { min, max, step }
+}
+
+function isPadValue(value: DialValue | undefined): value is { x: number; y: number } {
 	return (
 		typeof value === "object" &&
 		value !== null &&
-		"type" in value &&
-		value.type === "easing" &&
-		"ease" in value
+		"x" in value &&
+		"y" in value &&
+		typeof value.x === "number" &&
+		typeof value.y === "number"
 	)
 }
 

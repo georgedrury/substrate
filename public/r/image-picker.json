@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "image-picker",
+  "title": "Image Picker",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Thumbnail grid for choosing an image from a list, with upload and drag-and-drop. Uploads become data URLs.",
+  "dependencies": [
+    "@remixicon/react"
+  ],
+  "files": [
+    {
+      "path": "registry/substrate/components/image-picker.tsx",
+      "content": "\"use client\"\n\nimport { useRef, useState } from \"react\"\nimport { RiImageAddLine } from \"@remixicon/react\"\nimport { cn } from \"@/lib/utils\"\n\n// ── Types ──\n\ntype ImagePickerOption = string | { value: string; label: string }\n\ntype NamedImage = {\n\tvalue: string\n\tlabel: string\n}\n\n/** \"https://cdn/x/hero-wide.png?w=2\" -> \"hero-wide\" */\nfunction imageLabel(src: string): string {\n\tif (src.startsWith(\"data:\")) return \"Uploaded image\"\n\tconst file = src.split(/[?#]/)[0].split(\"/\").pop() ?? \"\"\n\treturn decodeURIComponent(file).replace(/\\.[a-z0-9]+$/i, \"\") || \"Image\"\n}\n\nfunction toNamed(option: ImagePickerOption): NamedImage {\n\treturn typeof option === \"string\"\n\t\t? { value: option, label: imageLabel(option) }\n\t\t: option\n}\n\nfunction readAsDataUrl(file: File): Promise<string> {\n\treturn new Promise((resolve, reject) => {\n\t\tconst reader = new FileReader()\n\t\treader.onload = () => resolve(String(reader.result))\n\t\treader.onerror = () => reject(reader.error)\n\t\treader.readAsDataURL(file)\n\t})\n}\n\n// ── ImagePicker ──\n\ntype ImagePickerProps = {\n\t/** The selected image's URL, or an empty string for none */\n\tvalue: string\n\tonChange: (value: string) => void\n\t/** Image URLs to choose from, optionally with labels */\n\toptions?: ImagePickerOption[]\n\t/** Show an upload tile and accept dropped files. Uploads become data URLs. */\n\tupload?: boolean\n\tcolumns?: number\n\tdisabled?: boolean\n}\n\nfunction ImagePicker({\n\tvalue,\n\tonChange,\n\toptions = [],\n\tupload = true,\n\tcolumns = 4,\n\tdisabled,\n\tclassName,\n\t...props\n}: ImagePickerProps & Omit<React.ComponentProps<\"div\">, \"onChange\" | \"defaultValue\">) {\n\tconst inputRef = useRef<HTMLInputElement>(null)\n\tconst [uploads, setUploads] = useState<NamedImage[]>([])\n\tconst [dragging, setDragging] = useState(false)\n\n\tconst images = [...options.map(toNamed), ...uploads]\n\t// A value from storage or code that isn't in the list still shows as selected\n\tif (value && !images.some((image) => image.value === value)) {\n\t\timages.push({ value, label: imageLabel(value) })\n\t}\n\n\tconst addFiles = async (files: FileList | null) => {\n\t\tconst imageFiles = Array.from(files ?? []).filter((file) =>\n\t\t\tfile.type.startsWith(\"image/\"),\n\t\t)\n\t\tif (imageFiles.length === 0) return\n\t\tconst added = await Promise.all(\n\t\t\timageFiles.map(async (file) => ({\n\t\t\t\tvalue: await readAsDataUrl(file),\n\t\t\t\tlabel: file.name.replace(/\\.[a-z0-9]+$/i, \"\"),\n\t\t\t})),\n\t\t)\n\t\tsetUploads((current) => [...current, ...added])\n\t\tonChange(added[added.length - 1].value)\n\t}\n\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"image-picker\"\n\t\t\tdata-dragging={dragging || undefined}\n\t\t\tclassName={cn(\n\t\t\t\t\"grid gap-1.5 rounded-md\",\n\t\t\t\tdragging && \"ring-2 ring-ring/50\",\n\t\t\t\tdisabled && \"pointer-events-none opacity-50\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\tstyle={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}\n\t\t\tonDragOver={(event) => {\n\t\t\t\tif (!upload) return\n\t\t\t\tevent.preventDefault()\n\t\t\t\tsetDragging(true)\n\t\t\t}}\n\t\t\tonDragLeave={(event) => {\n\t\t\t\t// Moving between tiles fires dragleave on the grid too\n\t\t\t\tif (!event.currentTarget.contains(event.relatedTarget as Node | null)) {\n\t\t\t\t\tsetDragging(false)\n\t\t\t\t}\n\t\t\t}}\n\t\t\tonDrop={(event) => {\n\t\t\t\tif (!upload) return\n\t\t\t\tevent.preventDefault()\n\t\t\t\tsetDragging(false)\n\t\t\t\tvoid addFiles(event.dataTransfer.files)\n\t\t\t}}\n\t\t\t{...props}\n\t\t>\n\t\t\t{images.map((image) => {\n\t\t\t\tconst selected = image.value === value\n\t\t\t\treturn (\n\t\t\t\t\t<button\n\t\t\t\t\t\tkey={image.value}\n\t\t\t\t\t\ttype=\"button\"\n\t\t\t\t\t\tdata-slot=\"image-picker-item\"\n\t\t\t\t\t\tdata-selected={selected || undefined}\n\t\t\t\t\t\taria-pressed={selected}\n\t\t\t\t\t\taria-label={image.label}\n\t\t\t\t\t\ttitle={image.label}\n\t\t\t\t\t\tdisabled={disabled}\n\t\t\t\t\t\tonClick={() => onChange(image.value)}\n\t\t\t\t\t\tclassName={cn(\n\t\t\t\t\t\t\t\"relative aspect-square overflow-hidden rounded-md bg-muted outline-none transition-shadow\",\n\t\t\t\t\t\t\t\"focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n\t\t\t\t\t\t\tselected\n\t\t\t\t\t\t\t\t? \"ring-2 ring-[var(--image-picker-selection,var(--color-primary))]\"\n\t\t\t\t\t\t\t\t: \"hover:ring-1 hover:ring-border\",\n\t\t\t\t\t\t)}\n\t\t\t\t\t>\n\t\t\t\t\t\t<img\n\t\t\t\t\t\t\tsrc={image.value}\n\t\t\t\t\t\t\talt=\"\"\n\t\t\t\t\t\t\tdraggable={false}\n\t\t\t\t\t\t\tclassName=\"size-full object-cover\"\n\t\t\t\t\t\t/>\n\t\t\t\t\t</button>\n\t\t\t\t)\n\t\t\t})}\n\t\t\t{upload && (\n\t\t\t\t<>\n\t\t\t\t\t<button\n\t\t\t\t\t\ttype=\"button\"\n\t\t\t\t\t\tdata-slot=\"image-picker-upload\"\n\t\t\t\t\t\taria-label=\"Upload image\"\n\t\t\t\t\t\ttitle=\"Upload or drop an image\"\n\t\t\t\t\t\tdisabled={disabled}\n\t\t\t\t\t\tonClick={() => inputRef.current?.click()}\n\t\t\t\t\t\tclassName={cn(\n\t\t\t\t\t\t\t\"flex aspect-square items-center justify-center rounded-md border border-dashed text-muted-foreground outline-none transition-colors\",\n\t\t\t\t\t\t\t\"hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n\t\t\t\t\t\t\t\"[&_svg]:size-4\",\n\t\t\t\t\t\t)}\n\t\t\t\t\t>\n\t\t\t\t\t\t<RiImageAddLine />\n\t\t\t\t\t</button>\n\t\t\t\t\t<input\n\t\t\t\t\t\tref={inputRef}\n\t\t\t\t\t\ttype=\"file\"\n\t\t\t\t\t\taccept=\"image/*\"\n\t\t\t\t\t\tmultiple\n\t\t\t\t\t\thidden\n\t\t\t\t\t\tonChange={(event) => {\n\t\t\t\t\t\t\tvoid addFiles(event.target.files)\n\t\t\t\t\t\t\tevent.target.value = \"\"\n\t\t\t\t\t\t}}\n\t\t\t\t\t/>\n\t\t\t\t</>\n\t\t\t)}\n\t\t</div>\n\t)\n}\n\nexport {\n\tImagePicker,\n\timageLabel,\n\ttype ImagePickerProps,\n\ttype ImagePickerOption,\n}\n",
+      "type": "registry:ui",
+      "target": "components/substrate/image-picker.tsx"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-image-picker-selection": "var(--image-picker-selection, var(--color-primary))"
+    },
+    "light": {},
+    "dark": {}
+  },
+  "meta": {
+    "example": "<ImagePicker value={image} onChange={setImage} options={[\"/a.jpg\", \"/b.jpg\"]} />",
+    "lineage": [
+      {
+        "name": "DialKit",
+        "href": "https://github.com/joshpuckett/dialkit"
+      },
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "ui",
+    "form"
+  ],
+  "type": "registry:ui"
+}

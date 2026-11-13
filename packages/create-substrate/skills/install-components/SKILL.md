@@ -79,6 +79,8 @@ When you catch yourself about to write a custom version of any of these, stop an
 | Component | Command | Use for |
 | --- | --- | --- |
 | Colour Picker | `substrate-kit add colour-picker` | HSV picker with hex/RGB + opacity |
+| XY Pad | `substrate-kit add xy-pad` | Drag or arrow-key pad that sets two values at once |
+| Image Picker | `substrate-kit add image-picker` | Thumbnail grid for choosing or uploading an image |
 | Swatch Palette | `substrate-kit add swatch-palette` | Grid of preset colours |
 | Alignment Controls | `substrate-kit add alignment-controls` | Horizontal/vertical align + distribute |
 | Collapsible Pane | `substrate-kit add collapsible-pane` | Expandable section inside a panel |
@@ -121,6 +123,7 @@ When you catch yourself about to write a custom version of any of these, stop an
 | --- | --- | --- |
 | Timeline | `substrate-kit add timeline` | Ruler + playhead + tracks + keyframe diamonds |
 | Easing Curve Editor | `substrate-kit add easing-curve-editor` | Draggable cubic-bezier editor |
+| Spring Editor | `substrate-kit add spring-editor` | Spring curve preview with time or physics sliders |
 
 ### Visualisation — `substrate/ui/visualization`
 

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spring-editor",
+  "title": "Spring Editor",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Spring curve preview with duration and bounce, or stiffness, damping and mass sliders. Used for spring transitions in animation tools.",
+  "registryDependencies": [
+    "https://substrate.georgedrury.co.uk/r/action",
+    "https://substrate.georgedrury.co.uk/r/number-slider",
+    "https://substrate.georgedrury.co.uk/r/toggle-group",
+    "https://substrate.georgedrury.co.uk/r/spring"
+  ],
+  "files": [
+    {
+      "path": "registry/substrate/components/spring-editor.tsx",
+      "content": "\"use client\"\n\nimport { useRef } from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport {\n\tAction,\n\tActionControls,\n\tActionLabel,\n} from \"@/components/substrate/action\"\nimport { NumberSlider } from \"@/components/substrate/number-slider\"\nimport {\n\tToggleGroup,\n\tToggleGroupItem,\n} from \"@/components/substrate/toggle-group\"\nimport {\n\tDEFAULT_PHYSICS_SPRING,\n\tDEFAULT_TIME_SPRING,\n\tspringMode,\n\tspringParams,\n\tspringProgress,\n\ttype Spring,\n\ttype SpringMode,\n} from \"@/lib/substrate/spring\"\n\n// ── SpringCurve ──\n\ntype SpringCurveProps = {\n\tvalue: Spring\n\t/** Seconds shown across the width */\n\tduration?: number\n}\n\nconst CURVE_WIDTH = 256\nconst CURVE_HEIGHT = 120\nconst CURVE_STEPS = 120\n\nfunction SpringCurve({\n\tvalue,\n\tduration = 2,\n\tclassName,\n\t...props\n}: SpringCurveProps & React.ComponentProps<\"svg\">) {\n\tconst params = springParams(value)\n\tconst samples: number[] = []\n\tfor (let i = 0; i <= CURVE_STEPS; i++) {\n\t\tsamples.push(springProgress((i / CURVE_STEPS) * duration, params))\n\t}\n\n\t// Always show the start and the target, plus any overshoot\n\tconst low = Math.min(0, ...samples)\n\tconst high = Math.max(1, ...samples)\n\tconst pad = CURVE_HEIGHT * 0.12\n\tconst toY = (progress: number) =>\n\t\tCURVE_HEIGHT - pad - ((progress - low) / (high - low)) * (CURVE_HEIGHT - pad * 2)\n\n\tconst path = samples\n\t\t.map((progress, i) => {\n\t\t\tconst x = (i / CURVE_STEPS) * CURVE_WIDTH\n\t\t\treturn `${i === 0 ? \"M\" : \"L\"}${x.toFixed(2)} ${toY(progress).toFixed(2)}`\n\t\t})\n\t\t.join(\" \")\n\n\treturn (\n\t\t<svg\n\t\t\tdata-slot=\"spring-curve\"\n\t\t\tviewBox={`0 0 ${CURVE_WIDTH} ${CURVE_HEIGHT}`}\n\t\t\tpreserveAspectRatio=\"none\"\n\t\t\taria-hidden=\"true\"\n\t\t\tclassName={cn(\"h-30 w-full rounded-md bg-muted/50 text-foreground\", className)}\n\t\t\t{...props}\n\t\t>\n\t\t\t{[1, 2, 3].map((i) => (\n\t\t\t\t<line\n\t\t\t\t\tkey={i}\n\t\t\t\t\tx1={(CURVE_WIDTH / 4) * i}\n\t\t\t\t\tx2={(CURVE_WIDTH / 4) * i}\n\t\t\t\t\ty1={0}\n\t\t\t\t\ty2={CURVE_HEIGHT}\n\t\t\t\t\tstroke=\"currentColor\"\n\t\t\t\t\tstrokeOpacity={0.08}\n\t\t\t\t\tvectorEffect=\"non-scaling-stroke\"\n\t\t\t\t/>\n\t\t\t))}\n\t\t\t<line\n\t\t\t\tx1={0}\n\t\t\t\tx2={CURVE_WIDTH}\n\t\t\t\ty1={toY(1)}\n\t\t\t\ty2={toY(1)}\n\t\t\t\tstroke=\"currentColor\"\n\t\t\t\tstrokeOpacity={0.25}\n\t\t\t\tstrokeDasharray=\"2 2\"\n\t\t\t\tvectorEffect=\"non-scaling-stroke\"\n\t\t\t/>\n\t\t\t<path\n\t\t\t\td={path}\n\t\t\t\tfill=\"none\"\n\t\t\t\tstroke=\"var(--spring-curve, currentColor)\"\n\t\t\t\tstrokeWidth={2}\n\t\t\t\tstrokeLinecap=\"round\"\n\t\t\t\tstrokeLinejoin=\"round\"\n\t\t\t\tvectorEffect=\"non-scaling-stroke\"\n\t\t\t/>\n\t\t</svg>\n\t)\n}\n\n// ── SpringFields ──\n\ntype SpringFieldsProps = {\n\tvalue: Spring\n\tonChange: (value: Spring) => void\n\tonStart?: () => void\n}\n\n/** Sliders for the spring's own mode: duration and bounce, or stiffness, damping and mass */\nfunction SpringFields({ value, onChange, onStart }: SpringFieldsProps) {\n\tif (springMode(value) === \"time\") {\n\t\tconst update = (key: \"visualDuration\" | \"bounce\", next: number) => {\n\t\t\tonChange({\n\t\t\t\ttype: \"spring\",\n\t\t\t\tvisualDuration: value.visualDuration ?? DEFAULT_TIME_SPRING.visualDuration,\n\t\t\t\tbounce: value.bounce ?? DEFAULT_TIME_SPRING.bounce,\n\t\t\t\t[key]: next,\n\t\t\t})\n\t\t}\n\t\treturn (\n\t\t\t<>\n\t\t\t\t<SpringRow label=\"Duration\">\n\t\t\t\t\t<NumberSlider\n\t\t\t\t\t\tvalue={value.visualDuration ?? DEFAULT_TIME_SPRING.visualDuration}\n\t\t\t\t\t\tonChange={(next) => update(\"visualDuration\", next)}\n\t\t\t\t\t\tonStart={onStart}\n\t\t\t\t\t\tmin={0.1}\n\t\t\t\t\t\tmax={1}\n\t\t\t\t\t\tstep={0.05}\n\t\t\t\t\t\tsuffix=\"s\"\n\t\t\t\t\t/>\n\t\t\t\t</SpringRow>\n\t\t\t\t<SpringRow label=\"Bounce\">\n\t\t\t\t\t<NumberSlider\n\t\t\t\t\t\tvalue={value.bounce ?? DEFAULT_TIME_SPRING.bounce}\n\t\t\t\t\t\tonChange={(next) => update(\"bounce\", next)}\n\t\t\t\t\t\tonStart={onStart}\n\t\t\t\t\t\tmin={0}\n\t\t\t\t\t\tmax={1}\n\t\t\t\t\t\tstep={0.05}\n\t\t\t\t\t/>\n\t\t\t\t</SpringRow>\n\t\t\t</>\n\t\t)\n\t}\n\n\tconst update = (key: \"stiffness\" | \"damping\" | \"mass\", next: number) => {\n\t\tonChange({\n\t\t\ttype: \"spring\",\n\t\t\tstiffness: value.stiffness ?? DEFAULT_PHYSICS_SPRING.stiffness,\n\t\t\tdamping: value.damping ?? DEFAULT_PHYSICS_SPRING.damping,\n\t\t\tmass: value.mass ?? DEFAULT_PHYSICS_SPRING.mass,\n\t\t\t[key]: next,\n\t\t})\n\t}\n\treturn (\n\t\t<>\n\t\t\t<SpringRow label=\"Stiffness\">\n\t\t\t\t<NumberSlider\n\t\t\t\t\tvalue={value.stiffness ?? DEFAULT_PHYSICS_SPRING.stiffness}\n\t\t\t\t\tonChange={(next) => update(\"stiffness\", next)}\n\t\t\t\t\tonStart={onStart}\n\t\t\t\t\tmin={1}\n\t\t\t\t\tmax={1000}\n\t\t\t\t\tstep={10}\n\t\t\t\t\tprecision={0}\n\t\t\t\t/>\n\t\t\t</SpringRow>\n\t\t\t<SpringRow label=\"Damping\">\n\t\t\t\t<NumberSlider\n\t\t\t\t\tvalue={value.damping ?? DEFAULT_PHYSICS_SPRING.damping}\n\t\t\t\t\tonChange={(next) => update(\"damping\", next)}\n\t\t\t\t\tonStart={onStart}\n\t\t\t\t\tmin={1}\n\t\t\t\t\tmax={100}\n\t\t\t\t\tstep={1}\n\t\t\t\t\tprecision={0}\n\t\t\t\t/>\n\t\t\t</SpringRow>\n\t\t\t<SpringRow label=\"Mass\">\n\t\t\t\t<NumberSlider\n\t\t\t\t\tvalue={value.mass ?? DEFAULT_PHYSICS_SPRING.mass}\n\t\t\t\t\tonChange={(next) => update(\"mass\", next)}\n\t\t\t\t\tonStart={onStart}\n\t\t\t\t\tmin={0.1}\n\t\t\t\t\tmax={10}\n\t\t\t\t\tstep={0.1}\n\t\t\t\t\tprecision={1}\n\t\t\t\t/>\n\t\t\t</SpringRow>\n\t\t</>\n\t)\n}\n\nfunction SpringRow({ label, children }: { label: string; children: React.ReactNode }) {\n\treturn (\n\t\t<Action>\n\t\t\t<ActionLabel>{label}</ActionLabel>\n\t\t\t<ActionControls>{children}</ActionControls>\n\t\t</Action>\n\t)\n}\n\n// ── SpringEditor ──\n\ntype SpringEditorProps = {\n\tvalue: Spring\n\tonChange: (value: Spring) => void\n\tonStart?: () => void\n}\n\nfunction SpringEditor({\n\tvalue,\n\tonChange,\n\tonStart,\n\tclassName,\n\t...props\n}: SpringEditorProps & Omit<React.ComponentProps<\"div\">, \"onChange\">) {\n\tconst mode = springMode(value)\n\n\t// Switching mode and back restores what was there before\n\tconst lastByMode = useRef<Record<SpringMode, Spring>>({\n\t\ttime: DEFAULT_TIME_SPRING,\n\t\tphysics: DEFAULT_PHYSICS_SPRING,\n\t})\n\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"spring-editor\"\n\t\t\tclassName={cn(\"flex flex-col gap-1\", className)}\n\t\t\t{...props}\n\t\t>\n\t\t\t<SpringCurve value={value} className=\"mb-1\" />\n\t\t\t<SpringRow label=\"Type\">\n\t\t\t\t<ToggleGroup\n\t\t\t\t\ttype=\"single\"\n\t\t\t\t\tvalue={mode}\n\t\t\t\t\tonValueChange={(next: string) => {\n\t\t\t\t\t\tif (next !== \"time\" && next !== \"physics\") return\n\t\t\t\t\t\tlastByMode.current[mode] = value\n\t\t\t\t\t\tonStart?.()\n\t\t\t\t\t\tonChange(lastByMode.current[next])\n\t\t\t\t\t}}\n\t\t\t\t\tclassName=\"w-full\"\n\t\t\t\t>\n\t\t\t\t\t<ToggleGroupItem value=\"time\" className=\"flex-1\">\n\t\t\t\t\t\tTime\n\t\t\t\t\t</ToggleGroupItem>\n\t\t\t\t\t<ToggleGroupItem value=\"physics\" className=\"flex-1\">\n\t\t\t\t\t\tPhysics\n\t\t\t\t\t</ToggleGroupItem>\n\t\t\t\t</ToggleGroup>\n\t\t\t</SpringRow>\n\t\t\t<SpringFields value={value} onChange={onChange} onStart={onStart} />\n\t\t</div>\n\t)\n}\n\nexport {\n\tSpringCurve,\n\tSpringEditor,\n\tSpringFields,\n\ttype SpringCurveProps,\n\ttype SpringEditorProps,\n\ttype SpringFieldsProps,\n}\n",
+      "type": "registry:ui",
+      "target": "components/substrate/spring-editor.tsx"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-spring-curve": "var(--spring-curve, var(--color-primary))"
+    },
+    "light": {},
+    "dark": {}
+  },
+  "meta": {
+    "example": "<SpringEditor value={{ type: \"spring\", visualDuration: 0.3, bounce: 0.2 }} onChange={setSpring} />",
+    "lineage": [
+      {
+        "name": "DialKit",
+        "href": "https://github.com/joshpuckett/dialkit"
+      },
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "ui",
+    "animation"
+  ],
+  "type": "registry:ui"
+}

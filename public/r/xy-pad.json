@@ -1,0 +1,40 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "xy-pad",
+  "title": "XY Pad",
+  "author": "George Drury <info@georgedrury.co.uk>",
+  "description": "Two-dimensional pad for setting two values at once by dragging or with the arrow keys. Used for offsets, positions and paired parameters.",
+  "files": [
+    {
+      "path": "registry/substrate/components/xy-pad.tsx",
+      "content": "\"use client\"\n\nimport { cn } from \"@/lib/utils\"\n\n// ── Types ──\n\ntype XYPadValue = {\n\tx: number\n\ty: number\n}\n\ntype XYPadAxis = {\n\tmin: number\n\tmax: number\n\tstep?: number\n}\n\nconst DEFAULT_AXIS: XYPadAxis = { min: -1, max: 1, step: 0.01 }\nconst GRID_DIVISIONS = 6\n\nfunction snap(value: number, { min, max, step }: XYPadAxis): number {\n\tconst clamped = Math.min(max, Math.max(min, value))\n\tif (!step || step <= 0) return clamped\n\tconst snapped = min + Math.round((clamped - min) / step) * step\n\t// Trim floating point noise from the step multiplication\n\tconst places = String(step).split(\".\")[1]?.length ?? 0\n\treturn Math.min(max, Number(snapped.toFixed(places)))\n}\n\n// ── XYPad ──\n\ntype XYPadProps = {\n\tvalue: XYPadValue\n\tonChange: (value: XYPadValue) => void\n\t/** Fires once when a drag or key press begins, for grouping undo steps */\n\tonStart?: () => void\n\t/** Horizontal axis; defaults to -1 to 1 in steps of 0.01 */\n\tx?: XYPadAxis\n\t/** Vertical axis, positive upwards; defaults to -1 to 1 in steps of 0.01 */\n\ty?: XYPadAxis\n\tdisabled?: boolean\n}\n\nfunction XYPad({\n\tvalue,\n\tonChange,\n\tonStart,\n\tx: xAxis = DEFAULT_AXIS,\n\ty: yAxis = DEFAULT_AXIS,\n\tdisabled,\n\tclassName,\n\t...props\n}: XYPadProps & Omit<React.ComponentProps<\"div\">, \"onChange\" | \"defaultValue\">) {\n\tconst xRange = xAxis.max - xAxis.min || 1\n\tconst yRange = yAxis.max - yAxis.min || 1\n\n\tconst fromPointer = (event: React.PointerEvent<HTMLDivElement>) => {\n\t\tconst rect = event.currentTarget.getBoundingClientRect()\n\t\tconst px = (event.clientX - rect.left) / rect.width\n\t\tconst py = (event.clientY - rect.top) / rect.height\n\t\tonChange({\n\t\t\tx: snap(xAxis.min + px * xRange, xAxis),\n\t\t\ty: snap(yAxis.max - py * yRange, yAxis),\n\t\t})\n\t}\n\n\tconst handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {\n\t\tif (disabled || event.button !== 0) return\n\t\tevent.currentTarget.setPointerCapture(event.pointerId)\n\t\tevent.currentTarget.focus()\n\t\tonStart?.()\n\t\tfromPointer(event)\n\t}\n\n\tconst handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {\n\t\tif (!event.currentTarget.hasPointerCapture(event.pointerId)) return\n\t\tfromPointer(event)\n\t}\n\n\tconst handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {\n\t\tif (disabled) return\n\t\tconst factor = event.shiftKey ? 10 : 1\n\t\tconst xStep = (xAxis.step || xRange / 100) * factor\n\t\tconst yStep = (yAxis.step || yRange / 100) * factor\n\t\tlet next: XYPadValue | undefined\n\t\tswitch (event.key) {\n\t\t\tcase \"ArrowLeft\":\n\t\t\t\tnext = { x: snap(value.x - xStep, xAxis), y: value.y }\n\t\t\t\tbreak\n\t\t\tcase \"ArrowRight\":\n\t\t\t\tnext = { x: snap(value.x + xStep, xAxis), y: value.y }\n\t\t\t\tbreak\n\t\t\tcase \"ArrowUp\":\n\t\t\t\tnext = { x: value.x, y: snap(value.y + yStep, yAxis) }\n\t\t\t\tbreak\n\t\t\tcase \"ArrowDown\":\n\t\t\t\tnext = { x: value.x, y: snap(value.y - yStep, yAxis) }\n\t\t\t\tbreak\n\t\t}\n\t\tif (!next) return\n\t\tevent.preventDefault()\n\t\tif (!event.repeat) onStart?.()\n\t\tonChange(next)\n\t}\n\n\tconst left = ((value.x - xAxis.min) / xRange) * 100\n\tconst top = ((yAxis.max - value.y) / yRange) * 100\n\t// Emphasise the zero lines when the range crosses zero\n\tconst zeroX = xAxis.min < 0 && xAxis.max > 0 ? (-xAxis.min / xRange) * 100 : undefined\n\tconst zeroY = yAxis.min < 0 && yAxis.max > 0 ? (yAxis.max / yRange) * 100 : undefined\n\n\treturn (\n\t\t<div\n\t\t\tdata-slot=\"xy-pad\"\n\t\t\trole=\"slider\"\n\t\t\ttabIndex={disabled ? -1 : 0}\n\t\t\taria-disabled={disabled || undefined}\n\t\t\taria-valuenow={value.x}\n\t\t\taria-valuemin={xAxis.min}\n\t\t\taria-valuemax={xAxis.max}\n\t\t\taria-valuetext={`x ${value.x}, y ${value.y}`}\n\t\t\tclassName={cn(\n\t\t\t\t\"relative h-40 w-full touch-none select-none overflow-hidden rounded-md bg-muted/50 text-foreground outline-none\",\n\t\t\t\t\"cursor-crosshair focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n\t\t\t\tdisabled && \"pointer-events-none opacity-50\",\n\t\t\t\tclassName,\n\t\t\t)}\n\t\t\tonPointerDown={handlePointerDown}\n\t\t\tonPointerMove={handlePointerMove}\n\t\t\tonKeyDown={handleKeyDown}\n\t\t\t{...props}\n\t\t>\n\t\t\t<svg\n\t\t\t\taria-hidden=\"true\"\n\t\t\t\tclassName=\"absolute inset-0 size-full\"\n\t\t\t\tviewBox=\"0 0 100 100\"\n\t\t\t\tpreserveAspectRatio=\"none\"\n\t\t\t>\n\t\t\t\t{Array.from({ length: GRID_DIVISIONS - 1 }, (_, i) => {\n\t\t\t\t\tconst at = ((i + 1) / GRID_DIVISIONS) * 100\n\t\t\t\t\treturn (\n\t\t\t\t\t\t<g key={i} stroke=\"currentColor\" strokeOpacity={0.08}>\n\t\t\t\t\t\t\t<line x1={at} x2={at} y1={0} y2={100} vectorEffect=\"non-scaling-stroke\" />\n\t\t\t\t\t\t\t<line x1={0} x2={100} y1={at} y2={at} vectorEffect=\"non-scaling-stroke\" />\n\t\t\t\t\t\t</g>\n\t\t\t\t\t)\n\t\t\t\t})}\n\t\t\t\t<g stroke=\"currentColor\" strokeOpacity={0.2}>\n\t\t\t\t\t{zeroX !== undefined && (\n\t\t\t\t\t\t<line x1={zeroX} x2={zeroX} y1={0} y2={100} vectorEffect=\"non-scaling-stroke\" />\n\t\t\t\t\t)}\n\t\t\t\t\t{zeroY !== undefined && (\n\t\t\t\t\t\t<line x1={0} x2={100} y1={zeroY} y2={zeroY} vectorEffect=\"non-scaling-stroke\" />\n\t\t\t\t\t)}\n\t\t\t\t</g>\n\t\t\t\t<g stroke=\"var(--xy-pad-handle, currentColor)\" strokeOpacity={0.35}>\n\t\t\t\t\t<line x1={left} x2={left} y1={0} y2={100} vectorEffect=\"non-scaling-stroke\" />\n\t\t\t\t\t<line x1={0} x2={100} y1={top} y2={top} vectorEffect=\"non-scaling-stroke\" />\n\t\t\t\t</g>\n\t\t\t</svg>\n\t\t\t<span\n\t\t\t\tdata-slot=\"xy-pad-handle\"\n\t\t\t\taria-hidden=\"true\"\n\t\t\t\tclassName=\"pointer-events-none absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-background shadow-sm\"\n\t\t\t\tstyle={{\n\t\t\t\t\tleft: `${left}%`,\n\t\t\t\t\ttop: `${top}%`,\n\t\t\t\t\tbackground: \"var(--xy-pad-handle, currentColor)\",\n\t\t\t\t}}\n\t\t\t/>\n\t\t</div>\n\t)\n}\n\nexport { XYPad, type XYPadProps, type XYPadValue, type XYPadAxis }\n",
+      "type": "registry:ui",
+      "target": "components/substrate/xy-pad.tsx"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-xy-pad-handle": "var(--xy-pad-handle, var(--color-primary))"
+    },
+    "light": {},
+    "dark": {}
+  },
+  "meta": {
+    "example": "<XYPad value={offset} onChange={setOffset} x={{ min: -50, max: 50, step: 1 }} y={{ min: -50, max: 50, step: 1 }} />",
+    "lineage": [
+      {
+        "name": "DialKit",
+        "href": "https://github.com/joshpuckett/dialkit"
+      },
+      {
+        "name": "Substrate"
+      }
+    ]
+  },
+  "categories": [
+    "substrate",
+    "ui",
+    "form"
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,85 @@
+---
+title: Spring editor
+description: Spring curve preview with duration and bounce, or stiffness, damping and mass.
+---
+
+## Install
+
+```bash
+npx shadcn@latest add https://substrate.georgedrury.co.uk/r/spring-editor
+```
+
+This also installs the `spring` utility library.
+
+## Examples
+
+### Default
+
+<ComponentPreview name="spring-editor-demo" />
+
+## Usage
+
+A spring is described one of two ways. A time spring sets how long the motion appears to take and how much it overshoots. A physics spring sets stiffness, damping and mass directly. The editor shows the sliders for whichever shape the value has, and the Type switch converts between them, restoring the previous settings when you switch back.
+
+```tsx
+const [spring, setSpring] = useState<Spring>({
+  type: "spring",
+  visualDuration: 0.3,
+  bounce: 0.2,
+})
+
+<SpringEditor value={spring} onChange={setSpring} />
+```
+
+The value matches Motion's spring transition, so it can be passed straight to `transition`.
+
+## Theme variables
+
+| Variable        | Tailwind class   | Fallback    | Description         |
+| --------------- | ---------------- | ----------- | ------------------- |
+| `--spring-curve` | `bg-spring-curve` | Text colour | Spring curve stroke |
+
+## Components
+
+| Component      | Description                                                       |
+| -------------- | ----------------------------------------------------------------- |
+| `SpringEditor` | Curve, Time / Physics switch and sliders in a vertical stack      |
+| `SpringCurve`  | SVG plot of the spring's progress over time, overshoot included   |
+| `SpringFields` | The sliders alone, for the value's own mode                       |
+
+## Props
+
+### SpringEditor and SpringFields
+
+| Prop       | Type                       | Default | Description                                    |
+| ---------- | -------------------------- | ------- | ---------------------------------------------- |
+| `value`    | `Spring`                   | —       | Current spring                                 |
+| `onChange` | `(spring: Spring) => void` | —       | Called when the spring changes                 |
+| `onStart`  | `() => void`               | —       | Fires when a drag or edit begins, for undo     |
+
+### SpringCurve
+
+| Prop       | Type     | Default | Description                  |
+| ---------- | -------- | ------- | ---------------------------- |
+| `value`    | `Spring` | —       | Spring to plot               |
+| `duration` | `number` | `2`     | Seconds shown across the width |
+
+## Spring utility
+
+```tsx
+import {
+  type Spring,
+  springMode,
+  springParams,
+  springProgress,
+  springSettleDuration,
+} from "@/lib/substrate/spring"
+```
+
+| Export                 | Description                                                          |
+| ---------------------- | -------------------------------------------------------------------- |
+| `Spring`               | Type: `{ type: "spring", visualDuration?, bounce?, stiffness?, damping?, mass? }` |
+| `springMode`           | `"physics"` when stiffness, damping or mass is set, `"time"` otherwise |
+| `springParams`         | Resolves either shape to stiffness, damping and mass                 |
+| `springProgress`       | Progress at a time in seconds; goes past 1 when the spring overshoots |
+| `springSettleDuration` | Seconds until the spring is within 0.5% of its target                |
