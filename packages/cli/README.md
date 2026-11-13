@@ -41,6 +41,10 @@ npx substrate-kit add slider number-input colour-picker
 
 0.2.0 removes `create` (use `npx create-substrate`), `browse` (use `docs <name> --open`) and `variables` (theme variables are in `docs <name>` and the MCP `get_component` tool). The MCP `get_theme_variables` tool is folded into `get_component`.
 
+## Acknowledgements
+
+The `controls` and `controls-timeline` components that this CLI installs are built on [DialKit](https://github.com/joshpuckett/dialkit) by Josh Puckett (MIT). DialKit provides the config format, the store and the timeline model; Substrate supplies the interface. Installed projects depend on the `dialkit` package.
+
 ## Licence
 
-MIT
+MIT, see [LICENSE](LICENSE).

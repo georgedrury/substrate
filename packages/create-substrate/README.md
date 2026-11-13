@@ -51,6 +51,10 @@ To add Substrate to an existing project instead, run `npx @substrate-kit/cli ini
 
 Docs: [substrate.georgedrury.co.uk/docs/create-substrate](https://substrate.georgedrury.co.uk/docs/create-substrate)
 
+## Acknowledgements
+
+The 3D scene and image generation starters use Substrate's `Controls`, which is built on [DialKit](https://github.com/joshpuckett/dialkit) by Josh Puckett (MIT). Those projects depend on the `dialkit` package.
+
 ## Licence
 
-MIT
+MIT, see [LICENSE](LICENSE).

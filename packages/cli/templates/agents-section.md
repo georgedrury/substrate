@@ -30,7 +30,7 @@ const card = useControls("Card", {
 // <Panel><Controls /></Panel> renders every registered panel
 ```
 
-The returned values keep the shape of the config. Panels have versions, reset, keyboard shortcuts (`shortcuts` option) and a copy button that gives an agent the tuned values to paste back in as the new defaults. Install with `npx substrate-kit add controls`, and read `docs controls` for every control type and option.
+The returned values keep the shape of the config. Panels have versions, reset, keyboard shortcuts (`shortcuts` option) and a copy button that gives an agent the tuned values to paste back in as the new defaults. Install with `npx substrate-kit add controls`, and read `docs controls` for every control type and option. Controls and the timeline are built on [DialKit](https://github.com/joshpuckett/dialkit) (MIT, by Josh Puckett), which installs as the `dialkit` dependency.
 
 ## Tune animation with the timeline
 

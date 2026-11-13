@@ -12,11 +12,14 @@ Scaffold a new playground:
 npm create substrate@latest
 ```
 
-Or add a component to an existing shadcn project:
+Or add Substrate to an existing Vite or Next.js project, then install components by name:
 
 ```bash
-npx shadcn@latest add https://substrate.georgedrury.co.uk/r/panel
+npx @substrate-kit/cli init
+npx substrate-kit add panel slider
 ```
+
+Components are a standard shadcn registry, so `npx shadcn@latest add https://substrate.georgedrury.co.uk/r/panel` works too.
 
 ## Repository layout
 
@@ -29,6 +32,7 @@ npx shadcn@latest add https://substrate.georgedrury.co.uk/r/panel
 | `components/design/` | The design editor demo built from the registry |
 | `packages/cli/` | `@substrate-kit/cli`: CLI, MCP server and agent skills (the source of truth for skills) |
 | `packages/create-substrate/` | `create-substrate`: project scaffolder |
+| `scripts/` | Registry checks, skill sync, plugin build, scaffold test and release stamp |
 
 ## Development
 
@@ -57,8 +61,12 @@ Scaffolded projects download components from the deployed site, so release in th
 
 1. `npm run release:check`, then push. Wait for the site to deploy.
 2. `npm run test:scaffold -- --live` to test against the deployed registry.
-3. Publish `packages/cli`, then `packages/create-substrate`. Publishing is refused unless the files match the last passing `release:check`, so any change after the check means running it again.
+3. Publish `packages/cli`, then `packages/create-substrate`. Publishing is refused unless the files match the last passing `release:check`, so any change after the check means running it again. `release:check` also builds the Claude plugin to `build/substrate.plugin` from the current skills and version.
+
+## Acknowledgements
+
+Substrate's `Controls` and `ControlsTimeline` are built on [DialKit](https://github.com/joshpuckett/dialkit) by Josh Puckett, used under its MIT licence. DialKit provides the config format, the headless store (values, persistence, versions) and the timeline's clip model and playback, and installed projects depend on the `dialkit` package. Substrate supplies the interface from its own components, and several behaviours follow DialKit's design: keyboard shortcuts, the shared easing and spring row, copying tuned values for an agent, and the timeline's loop region, zoom and resizable dock. Thank you to Josh for making it open source.
 
 ## Licence
 
-MIT
+MIT, see [LICENSE](LICENSE).

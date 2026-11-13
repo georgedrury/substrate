@@ -42,14 +42,28 @@ Substrate's 35+ components, 5 hooks, and 3 utilities are organised into six doma
 
 ## Install
 
-Add any component individually:
+Start a new project with `npx create-substrate`, or add Substrate to an existing Vite or Next.js project:
 
 ```bash
-npx shadcn@latest add https://substrate.georgedrury.co.uk/r/toolbar
+npx @substrate-kit/cli init
+```
+
+Then add any component by name:
+
+```bash
+npx substrate-kit add toolbar
 ```
 
 Or start with the full canvas scaffold:
 
 ```bash
-npx shadcn@latest add https://substrate.georgedrury.co.uk/r/design-canvas
+npx substrate-kit add design-canvas
 ```
+
+Every component is also a standard shadcn registry item, so `npx shadcn@latest add https://substrate.georgedrury.co.uk/r/toolbar` works too.
+
+---
+
+## Acknowledgements
+
+Substrate's `Controls` and `ControlsTimeline` are built on [DialKit](https://github.com/joshpuckett/dialkit) by Josh Puckett, used under its MIT licence. DialKit provides the config format, the headless store (values, persistence, versions) and the timeline's clip model and playback, and installed projects depend on the `dialkit` package. Substrate supplies the interface from its own components, and several behaviours follow DialKit's design: keyboard shortcuts, the shared easing and spring row, copying tuned values for an agent, and the timeline's loop region, zoom and resizable dock. Thank you to Josh for making it open source.
