@@ -3,10 +3,25 @@
 import { useCallback } from "react"
 import type { Point, Camera } from "@/lib/substrate/types"
 import { screenToWorld, worldToScreen, clamp } from "@/lib/substrate/math"
+import { boundingBox } from "@/lib/substrate/bounding-box"
 import { useDocumentStore } from "@/stores/substrate/document-store"
 
 const MIN_ZOOM = 0.1
 const MAX_ZOOM = 10
+
+const FIT_PADDING = 64
+
+// Zooming "to the centre" means the centre of the canvas, not the window: side
+// panels would otherwise pull the view sideways on every step. Screen points
+// here are relative to the canvas element, which DesignCanvas marks with
+// data-slot="design-canvas".
+function canvasSize(): { width: number; height: number } {
+  const canvas = document.querySelector<HTMLElement>('[data-slot="design-canvas"]')
+  const rect = canvas?.getBoundingClientRect()
+  return rect && rect.width > 0
+    ? { width: rect.width, height: rect.height }
+    : { width: window.innerWidth, height: window.innerHeight }
+}
 
 export function useCanvasTransform() {
   const camera = useDocumentStore((s) => s.camera)
@@ -43,23 +58,47 @@ export function useCanvasTransform() {
     [camera, setCamera]
   )
 
-  const zoomIn = useCallback(() => {
-    zoomToPoint(
-      { x: window.innerWidth / 2, y: window.innerHeight / 2 },
-      camera.zoom * 1.2
-    )
-  }, [camera.zoom, zoomToPoint])
+  // Zoom around the middle of the canvas, as zoom buttons and +/- keys expect
+  const setZoom = useCallback(
+    (zoom: number) => {
+      const { width, height } = canvasSize()
+      zoomToPoint({ x: width / 2, y: height / 2 }, zoom)
+    },
+    [zoomToPoint]
+  )
 
-  const zoomOut = useCallback(() => {
-    zoomToPoint(
-      { x: window.innerWidth / 2, y: window.innerHeight / 2 },
-      camera.zoom / 1.2
-    )
-  }, [camera.zoom, zoomToPoint])
+  const zoomIn = useCallback(() => setZoom(camera.zoom * 1.2), [camera.zoom, setZoom])
+
+  const zoomOut = useCallback(() => setZoom(camera.zoom / 1.2), [camera.zoom, setZoom])
 
   const resetZoom = useCallback(() => {
     setCamera({ x: 0, y: 0, zoom: 1 })
   }, [setCamera])
 
-  return { camera, toWorld, toScreen, zoomToPoint, pan, zoomIn, zoomOut, resetZoom }
+  // Frame every visible element in the canvas, or go back to 1:1 on an empty board
+  const zoomToFit = useCallback(() => {
+    const { elements, elementOrder } = useDocumentStore.getState()
+    const visible = elementOrder.map((id) => elements[id]).filter((el) => el && el.visible)
+    const bounds = boundingBox(visible)
+    if (!bounds) {
+      setCamera({ x: 0, y: 0, zoom: 1 })
+      return
+    }
+    const { width, height } = canvasSize()
+    const zoom = clamp(
+      Math.min(
+        (width - FIT_PADDING * 2) / Math.max(bounds.width, 1),
+        (height - FIT_PADDING * 2) / Math.max(bounds.height, 1),
+      ),
+      MIN_ZOOM,
+      MAX_ZOOM,
+    )
+    setCamera({
+      zoom,
+      x: width / 2 - (bounds.x + bounds.width / 2) * zoom,
+      y: height / 2 - (bounds.y + bounds.height / 2) * zoom,
+    })
+  }, [setCamera])
+
+  return { camera, toWorld, toScreen, zoomToPoint, pan, setZoom, zoomIn, zoomOut, zoomToFit, resetZoom }
 }

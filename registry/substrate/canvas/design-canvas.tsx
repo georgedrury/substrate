@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import { useCanvasRenderer } from "@/hooks/substrate/use-canvas-renderer"
 import { useCanvasInteraction } from "@/hooks/substrate/use-canvas-interaction"
 import { useKeyboardShortcuts } from "@/hooks/substrate/use-keyboard-shortcuts"
@@ -27,16 +27,24 @@ export function DesignCanvas() {
 
 	useKeyboardShortcuts()
 
+	// React attaches wheel listeners as passive, so preventDefault() there
+	// can't stop the browser's own pinch-zoom or page scroll. Attach natively.
+	useEffect(() => {
+		const canvas = canvasRef.current
+		if (!canvas) return
+		canvas.addEventListener("wheel", onWheel, { passive: false })
+		return () => canvas.removeEventListener("wheel", onWheel)
+	}, [onWheel])
+
 	return (
-		<div ref={containerRef} className="relative h-full w-full overflow-hidden ">
+		<div ref={containerRef} data-slot="design-canvas" className="relative h-full w-full overflow-hidden">
 			<canvas
 				ref={canvasRef}
-				className="absolute inset-0 "
+				className="absolute inset-0"
 				style={{ cursor: CURSOR_MAP[activeTool] ?? "default" }}
 				onPointerDown={onPointerDown}
 				onPointerMove={onPointerMove}
 				onPointerUp={onPointerUp}
-				onWheel={onWheel}
 			/>
 		</div>
 	)

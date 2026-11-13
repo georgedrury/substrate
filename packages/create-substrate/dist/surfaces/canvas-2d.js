@@ -45,6 +45,7 @@ import {
 } from "@/components/substrate/status-bar"
 import { ZoomControls } from "@/components/substrate/zoom-controls"
 import { useDocumentStore } from "@/stores/substrate/document-store"
+import { useCanvasTransform } from "@/hooks/substrate/use-canvas-transform"
 import { useToolStore } from "@/stores/substrate/tool-store"
 import { createRectangle, createEllipse } from "@/lib/substrate/element-factory"
 import type { DesignElement, ToolType } from "@/lib/substrate/types"
@@ -363,7 +364,7 @@ function PropertiesPanel() {
 function EditorStatusBar() {
   const activeTool = useToolStore((s) => s.activeTool)
   const zoom = useDocumentStore((s) => s.camera.zoom)
-  const setCamera = useDocumentStore((s) => s.setCamera)
+  const { setZoom, zoomToFit } = useCanvasTransform()
   const selectedCount = useDocumentStore((s) => s.selectedIds.size)
   const elementCount = useDocumentStore((s) => s.elementOrder.length)
 
@@ -386,8 +387,8 @@ function EditorStatusBar() {
       <StatusBarSection align="right">
         <ZoomControls
           zoom={zoom}
-          onZoomChange={(next) => setCamera({ zoom: next })}
-          onZoomToFit={() => setCamera({ x: 0, y: 0, zoom: 1 })}
+          onZoomChange={setZoom}
+          onZoomToFit={zoomToFit}
           min={0.1}
           max={10}
           step={0.1}

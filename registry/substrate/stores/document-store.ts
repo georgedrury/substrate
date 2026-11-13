@@ -12,6 +12,11 @@ export interface DocumentSnapshot {
   showGrid: boolean
 }
 
+// Undo and redo cover the document's content only. Pan, zoom and the grid are
+// view state: undoing an edit must not move the viewport back to where it was
+// when that edit was made.
+export type HistoryEntry = Pick<DocumentSnapshot, "elements" | "elementOrder">
+
 // ── State + Actions ──
 
 interface DocumentState extends DocumentSnapshot {
@@ -20,8 +25,8 @@ interface DocumentState extends DocumentSnapshot {
   hoveredId: string | null
 
   // History
-  past: DocumentSnapshot[]
-  future: DocumentSnapshot[]
+  past: HistoryEntry[]
+  future: HistoryEntry[]
 
   // Element actions
   addElement: (element: DesignElement) => void
@@ -46,12 +51,24 @@ interface DocumentState extends DocumentSnapshot {
   loadState: (snapshot: DocumentSnapshot) => void
 }
 
-function takeSnapshot(state: DocumentState): DocumentSnapshot {
+function takeSnapshot(state: DocumentState): HistoryEntry {
   return {
     elements: state.elements,
     elementOrder: state.elementOrder,
-    camera: state.camera,
-    showGrid: state.showGrid,
+  }
+}
+
+// Ids of elements that undo or redo removed must not stay selected or hovered
+function applyHistoryEntry(
+  entry: HistoryEntry,
+  state: DocumentState,
+): Pick<DocumentState, "elements" | "elementOrder" | "selectedIds" | "hoveredId"> {
+  const selectedIds = new Set([...state.selectedIds].filter((id) => entry.elements[id]))
+  return {
+    elements: entry.elements,
+    elementOrder: entry.elementOrder,
+    selectedIds: selectedIds.size === state.selectedIds.size ? state.selectedIds : selectedIds,
+    hoveredId: state.hoveredId && entry.elements[state.hoveredId] ? state.hoveredId : null,
   }
 }
 
@@ -159,12 +176,9 @@ export const useDocumentStore = create<DocumentState>()((set, get) => ({
     if (s.past.length === 0) return
     const previous = s.past[s.past.length - 1]
     set({
-      ...previous,
+      ...applyHistoryEntry(previous, s),
       past: s.past.slice(0, -1),
       future: [takeSnapshot(s), ...s.future],
-      // Preserve selection and hover
-      selectedIds: s.selectedIds,
-      hoveredId: s.hoveredId,
     })
   },
 
@@ -173,11 +187,9 @@ export const useDocumentStore = create<DocumentState>()((set, get) => ({
     if (s.future.length === 0) return
     const next = s.future[0]
     set({
-      ...next,
+      ...applyHistoryEntry(next, s),
       past: [...s.past, takeSnapshot(s)],
       future: s.future.slice(1),
-      selectedIds: s.selectedIds,
-      hoveredId: s.hoveredId,
     })
   },
 

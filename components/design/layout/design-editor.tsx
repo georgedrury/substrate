@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { DesignCanvas } from "@/registry/substrate/canvas/design-canvas"
 import { usePanelStore } from "@/registry/substrate/stores/panel-store"
 import { useDocumentStore } from "@/registry/substrate/stores/document-store"
+import { useCanvasTransform } from "@/registry/substrate/hooks/use-canvas-transform"
 import { useToolStore } from "@/registry/substrate/stores/tool-store"
 
 import { LayersPanel } from "../panels/layers-panel"
@@ -141,7 +142,7 @@ function useEditorShortcuts() {
 	const elementOrder = useDocumentStore((s) => s.elementOrder)
 	const addElement = useDocumentStore((s) => s.addElement)
 	const setCamera = useDocumentStore((s) => s.setCamera)
-	const camera = useDocumentStore((s) => s.camera)
+	const { zoomIn, zoomOut } = useCanvasTransform()
 	const toggleGrid = useDocumentStore((s) => s.toggleGrid)
 
 	useEffect(() => {
@@ -254,14 +255,14 @@ function useEditorShortcuts() {
 			{
 				key: "=",
 				meta: true,
-				handler: () => setCamera({ zoom: Math.min(camera.zoom * 1.2, 10) }),
+				handler: zoomIn,
 				label: "Zoom in",
 				group: "View",
 			},
 			{
 				key: "-",
 				meta: true,
-				handler: () => setCamera({ zoom: Math.max(camera.zoom / 1.2, 0.1) }),
+				handler: zoomOut,
 				label: "Zoom out",
 				group: "View",
 			},
@@ -278,7 +279,7 @@ function useEditorShortcuts() {
 	}, [
 		setTool, undo, redo, pushSnapshot, selectedIds, elements,
 		deleteElements, select, deselectAll, elementOrder, addElement,
-		setCamera, camera, toggleGrid,
+		setCamera, zoomIn, zoomOut, toggleGrid,
 	])
 }
 
@@ -352,7 +353,7 @@ function EditorCommandPalette() {
 
 function EditorStatusBar() {
 	const zoom = useDocumentStore((s) => s.camera.zoom)
-	const setCamera = useDocumentStore((s) => s.setCamera)
+	const { setZoom, zoomToFit } = useCanvasTransform()
 	const selectedIds = useDocumentStore((s) => s.selectedIds)
 	const elementOrder = useDocumentStore((s) => s.elementOrder)
 	const activeTool = useToolStore((s) => s.activeTool)
@@ -383,8 +384,8 @@ function EditorStatusBar() {
 			<StatusBarSection align="right">
 				<ZoomControls
 					zoom={zoom}
-					onZoomChange={(z) => setCamera({ zoom: z })}
-					onZoomToFit={() => setCamera({ x: 0, y: 0, zoom: 1 })}
+					onZoomChange={setZoom}
+					onZoomToFit={zoomToFit}
 					min={0.1}
 					max={10}
 					step={0.1}

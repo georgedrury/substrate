@@ -326,7 +326,8 @@
       "registryDependencies": [
         "https://substrate.georgedrury.co.uk/r/types",
         "https://substrate.georgedrury.co.uk/r/math",
-        "https://substrate.georgedrury.co.uk/r/document-store"
+        "https://substrate.georgedrury.co.uk/r/document-store",
+        "https://substrate.georgedrury.co.uk/r/bounding-box"
       ],
       "meta": {
         "lineage": [

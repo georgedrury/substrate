@@ -83,7 +83,6 @@ export function useCanvasInteraction(
           const id = [...selectedIds][0]
           const el = elements[id]
           if (el) {
-            pushSnapshot()
             startDrag({
               type: "resize",
               startWorld: worldPoint,
@@ -177,7 +176,9 @@ export function useCanvasInteraction(
       if (!hasDraggedRef.current && pointerStartRef.current) {
         if (distance(screenPoint, pointerStartRef.current) < DRAG_THRESHOLD) return
         hasDraggedRef.current = true
-        if (drag.type === "move") pushSnapshot()
+        // Snapshot once the drag really starts, so a click on a handle
+        // doesn't leave an empty undo step
+        if (drag.type === "move" || drag.type === "resize") pushSnapshot()
       }
 
       updateDrag(worldPoint, screenPoint)
@@ -248,11 +249,12 @@ export function useCanvasInteraction(
       switch (drag.type) {
         case "create": {
           if (!hasDraggedRef.current) {
+            // A click makes a default-size shape; a text note is a single line
             const bounds = {
               x: drag.startWorld.x,
               y: drag.startWorld.y,
-              width: 100,
-              height: activeTool === "line" ? 0 : 100,
+              width: activeTool === "text" ? 160 : 100,
+              height: activeTool === "line" ? 0 : activeTool === "text" ? 32 : 100,
             }
             const element = createElement(activeTool, bounds)
             if (element) {
@@ -296,10 +298,12 @@ export function useCanvasInteraction(
     ]
   )
 
+  // A native listener (see DesignCanvas): React's onWheel is passive
   const onWheel = useCallback(
-    (e: React.WheelEvent<HTMLCanvasElement>) => {
+    (e: WheelEvent) => {
       e.preventDefault()
-      const screenPoint = getCanvasPoint(e as unknown as React.PointerEvent)
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+      const screenPoint = { x: e.clientX - rect.left, y: e.clientY - rect.top }
 
       if (e.ctrlKey || e.metaKey) {
         const delta = -e.deltaY * 0.01
@@ -311,7 +315,7 @@ export function useCanvasInteraction(
 
       markDirty()
     },
-    [getCanvasPoint, camera.zoom, zoomToPoint, pan, markDirty]
+    [camera.zoom, zoomToPoint, pan, markDirty]
   )
 
   return { onPointerDown, onPointerMove, onPointerUp, onWheel }
