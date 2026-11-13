@@ -1,6 +1,5 @@
 "use client"
 
-import { useCallback } from "react"
 import { useDocumentStore } from "@/registry/substrate/stores/document-store"
 import {
 	CollapsiblePane,

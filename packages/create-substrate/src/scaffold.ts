@@ -165,7 +165,7 @@ export async function scaffold(
 
 // --- Template functions ---
 
-function packageJson(name: string, config: typeof surfaces[SurfaceType], options: ScaffoldOptions): string {
+function packageJson(name: string, config: typeof surfaces[SurfaceType], _options: ScaffoldOptions): string {
   const deps: Record<string, string> = {
     react: "^19.1.0",
     "react-dom": "^19.1.0",

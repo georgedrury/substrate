@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react"
 import { Pane, PaneHeader, PaneLabel } from "@/registry/substrate/components/pane"
-import { Action, ActionLabel, ActionControls } from "@/registry/substrate/components/action"
 import { HistoryButton } from "@/registry/substrate/components/history-controls"
 import { NumberInput } from "@/registry/substrate/components/number-input"
 import { RiArrowGoBackLine, RiArrowGoForwardLine } from "@remixicon/react"

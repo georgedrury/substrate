@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import * as React from "react"
 import { RiArrowRightSLine } from "@remixicon/react"
 
 import type { PageTreeRoot, PageTreeNode } from "@/types/fumadocs"

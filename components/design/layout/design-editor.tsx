@@ -31,7 +31,6 @@ import { ShortcutOverlay } from "@/registry/substrate/components/shortcut-overla
 import { toast } from "@/registry/substrate/components/toast"
 import {
 	createKeyboardShortcuts,
-	formatShortcut,
 	type ShortcutEntry,
 } from "@/registry/substrate/lib/keyboard-shortcuts"
 import { useClipboard } from "@/registry/substrate/hooks/use-clipboard"
@@ -44,14 +43,9 @@ import {
 	RiSubtractLine,
 	RiText,
 	RiArtboardLine,
-	RiDeleteBinLine,
-	RiFileCopyLine,
-	RiClipboardLine,
-	RiScissorsCutLine,
 	RiGridLine,
 } from "@remixicon/react"
 
-import type { ToolType } from "@/registry/substrate/types"
 import type { DesignElement } from "@/registry/substrate/types"
 
 // ── Shortcut definitions ──
@@ -359,7 +353,6 @@ function EditorCommandPalette() {
 function EditorStatusBar() {
 	const zoom = useDocumentStore((s) => s.camera.zoom)
 	const setCamera = useDocumentStore((s) => s.setCamera)
-	const camera = useDocumentStore((s) => s.camera)
 	const selectedIds = useDocumentStore((s) => s.selectedIds)
 	const elementOrder = useDocumentStore((s) => s.elementOrder)
 	const activeTool = useToolStore((s) => s.activeTool)
