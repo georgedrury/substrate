@@ -239,7 +239,7 @@ export async function add(components, options = {}) {
     log.title("Adding Substrate components");
     log.step(`Installing ${components.join(", ")}`);
     try {
-        shadcnAdd(components.map((name) => `${REGISTRY_BASE}/${name}`), { cwd }, (attempt) => log.warn(`Install failed (attempt ${attempt}), retrying...`));
+        shadcnAdd(components.map((name) => `${REGISTRY_BASE}/${name}`), { cwd, yes: options.yes }, (attempt) => log.warn(`Install failed (attempt ${attempt}), retrying...`));
     }
     catch {
         log.error("Install failed. Check your connection and try again.");

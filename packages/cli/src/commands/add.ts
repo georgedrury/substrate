@@ -196,6 +196,7 @@ function printThemeHint(item: RegistryItem): void {
 export interface AddOptions {
 	category?: string
 	listCategories?: boolean
+	yes?: boolean
 }
 
 function printCategories(registry: Registry): void {
@@ -294,7 +295,7 @@ export async function add(
 	try {
 		shadcnAdd(
 			components.map((name) => `${REGISTRY_BASE}/${name}`),
-			{ cwd },
+			{ cwd, yes: options.yes },
 			(attempt) => log.warn(`Install failed (attempt ${attempt}), retrying...`),
 		)
 	} catch {

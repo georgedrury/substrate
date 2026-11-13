@@ -37,6 +37,7 @@ function LayerItem({
 	hovered,
 	depth = 0,
 	className,
+	style,
 	...props
 }: LayerItemProps) {
 	return (
@@ -51,7 +52,7 @@ function LayerItem({
 				hovered && !selected && "bg-muted/30",
 				className,
 			)}
-			style={{ paddingLeft: `${8 + depth * 12}px` }}
+			style={{ paddingLeft: `${8 + depth * 12}px`, ...style }}
 			{...props}
 		/>
 	)

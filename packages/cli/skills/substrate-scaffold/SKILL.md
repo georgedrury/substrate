@@ -39,9 +39,9 @@ Floating bottom bar. Renders tool buttons, separators, and groups. Uses `data-sl
 | `slider` / `slider-track` | h-6 |
 | `history-controls` | gap-0 |
 
-**Exports**: `Toolbar`, `ToolbarButton`, `ToolbarSeparator`, `ToolbarGroup`
+**Exports**: `Toolbar`, `ToolbarToggleGroup`, `ToolbarToggle`, `ToolbarSeparator`, `ToolbarDropdown`
 
-**Typical use**: One per playground, positioned at the bottom. Connect each `ToolbarButton` to `useToolStore` for active-tool state.
+**Typical use**: One per playground, positioned at the bottom. Put the tool buttons in a `ToolbarToggleGroup` of `ToolbarToggle`s and connect it to `useToolStore` for active-tool state.
 
 **Related**: substrate-controls (for inputs inside the toolbar), substrate-interaction (for keyboard shortcuts bound to tools)
 
@@ -181,11 +181,11 @@ Breadcrumbs show the path into nested node groups. Right panel shows properties 
 <div className="flex h-screen flex-col">
   <DocumentTabList>{/* tabs */}</DocumentTabList>
   <div className="flex flex-1 overflow-hidden">
-    <Panel side="left">{/* layers/tree */}</Panel>
+    <Panel position="left">{/* layers/tree */}</Panel>
     <div className="relative flex-1">
       <Surface />{/* central area */}
     </div>
-    <Panel side="right">{/* property panes */}</Panel>
+    <Panel position="right">{/* property panes */}</Panel>
   </div>
   <StatusBar>{/* metadata */}</StatusBar>
   <Toolbar>{/* tools */}</Toolbar>

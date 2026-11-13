@@ -31,8 +31,9 @@ export function createCli(): Command {
 		.argument("[components...]", "Component names to install (opens picker if omitted)")
 		.option("--category <name>", "Install all components in a category")
 		.option("--list-categories", "Show available categories and their components", false)
+		.option("-y, --yes", "Skip shadcn's confirmation prompts", false)
 		.action(async (components: string[], options) => {
-			await add(components, { category: options.category, listCategories: options.listCategories })
+			await add(components, { category: options.category, listCategories: options.listCategories, yes: options.yes })
 		})
 
 	program

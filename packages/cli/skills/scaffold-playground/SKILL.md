@@ -74,7 +74,7 @@ import {
 	ToolbarToggle,
 	ToolbarSeparator,
 } from "@/components/substrate/toolbar"
-import { usePanelStore } from "@/stores/substrate/panel-store"
+import { usePanelStore } from "@/stores/substrate/panel-store" // npx substrate-kit add panel-store
 import { useToolStore } from "@/stores/substrate/tool-store"
 
 export default function PlaygroundPage() {
