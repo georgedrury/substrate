@@ -1,7 +1,7 @@
 {
 	"name": "@substrate-kit/cli",
-	"version": "0.1.3",
-	"description": "Scaffold interactive canvas playgrounds with Substrate primitives",
+	"version": "0.2.0",
+	"description": "Add Substrate components, skills and docs to a project, with an MCP server for agents",
 	"type": "module",
 	"bin": {
 		"substrate-kit": "./dist/index.js"
@@ -9,7 +9,7 @@
 	"scripts": {
 		"build": "tsc",
 		"dev": "tsx src/index.ts",
-		"prepack": "cp ../../registry.json registry.json && npm run build",
+		"prepack": "node ../../scripts/bundle-cli-assets.mjs && npm run build",
 		"prepublishOnly": "node ../../scripts/release-stamp.mjs verify"
 	},
 	"dependencies": {
@@ -26,6 +26,8 @@
 	"files": [
 		"dist",
 		"skills",
+		"templates",
+		"docs",
 		"registry.json",
 		".claude-plugin"
 	],

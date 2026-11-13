@@ -52,9 +52,8 @@ npx substrate-kit add --list-categories
 | Command | What it does |
 | --- | --- |
 | `substrate-kit add <name>` | Install one or more components |
-| `substrate-kit docs <name>` | Read component docs in the terminal |
-| `substrate-kit browse <name>` | Open component docs in the browser |
-| `substrate-kit variables <name>` | Print the theme-override CSS variables for a component |
+| `substrate-kit docs <name>` | Read component docs in the terminal: props, theme variables, usage |
+| `substrate-kit docs <name> --open` | Open the component's docs page in the browser |
 
 ---
 

@@ -1,4 +1,4 @@
-// Copies the skills in packages/cli/skills (the source of truth) to the
+// Copies the skills and agent templates in packages/cli (the source of truth) to the
 // places that ship them: create-substrate's bundle, the docs downloads, and
 // the surface guides bundled into this repo's own substrate-surfaces skill.
 import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs"
@@ -8,6 +8,8 @@ import { fileURLToPath } from "node:url"
 const root = join(dirname(fileURLToPath(import.meta.url)), "..")
 const source = join(root, "packages/cli/skills")
 const bundle = join(root, "packages/create-substrate/skills")
+const templates = join(root, "packages/cli/templates")
+const templatesBundle = join(root, "packages/create-substrate/templates")
 const downloads = join(root, "public/skills")
 const surfaces = join(root, ".agents/skills/substrate-surfaces")
 
@@ -17,6 +19,9 @@ const names = readdirSync(source, { withFileTypes: true })
 
 rmSync(bundle, { recursive: true, force: true })
 cpSync(source, bundle, { recursive: true })
+
+rmSync(templatesBundle, { recursive: true, force: true })
+cpSync(templates, templatesBundle, { recursive: true })
 
 rmSync(downloads, { recursive: true, force: true })
 mkdirSync(downloads, { recursive: true })

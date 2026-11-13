@@ -6,7 +6,7 @@ Scaffold a [Substrate](https://substrate.georgedrury.co.uk) playground: a Vite +
 npx create-substrate
 ```
 
-You are asked for a project name, a surface type and a package manager. Pass flags to skip the prompts:
+You are asked for a project name and a surface type. The package manager is the one you ran it with. Pass flags to skip the prompts:
 
 ```bash
 npx create-substrate my-editor --surface canvas-2d --pm pnpm
@@ -29,14 +29,17 @@ npx create-substrate my-editor --surface canvas-2d --pm pnpm
 | Flag | Description |
 | --- | --- |
 | `--surface <type>` | Surface type from the table above |
-| `--pm <manager>` | Package manager: `npm`, `pnpm` or `bun` |
+| `--pm <manager>` | Package manager: `npm`, `pnpm` or `bun`. Defaults to the one that ran the command |
+| `-y, --yes` | Accept defaults for anything not passed: name `my-substrate-app`, surface `canvas-2d` |
 | `--skip-install` | Skip dependency installation |
 | `--skip-git` | Don't initialise a git repository |
+
+With no terminal (a script or CI), `--surface` is required unless you pass `--yes`.
 
 ## What you get
 
 - A starter page for the chosen surface, built from Substrate components copied into `src/components/substrate/`
-- `CLAUDE.md` and `.claude/skills/` so coding agents know which components exist and how to compose them
+- `AGENTS.md`, `CLAUDE.md` and skills in `.claude/skills/` and `.agents/skills/` so coding agents know which components exist and how to compose them
 - `.mcp.json` registering the Substrate MCP server
 - [`@substrate-kit/cli`](https://www.npmjs.com/package/@substrate-kit/cli) as a dev dependency, for adding more components later:
 

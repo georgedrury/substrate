@@ -54,3 +54,4 @@ packages/create-substrate/node_modules
 ./agents/skills/shadcn/
 # release check stamp
 .release-check
+/packages/cli/docs/

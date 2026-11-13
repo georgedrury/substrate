@@ -9,13 +9,13 @@ description: Scaffold a new Substrate playground from the command line
 npx create-substrate
 ```
 
-The CLI walks you through three choices — project name, surface type, and package manager — then scaffolds a working Vite + React project with the right components, stores, and skills pre-installed.
+The CLI asks for a project name and a surface type, and uses the package manager you ran it with (npx, pnpm dlx or bunx). It then scaffolds a working Vite + React project with the right components, stores, and skills pre-installed.
 
 ```bash
 npx create-substrate my-editor --surface canvas-2d --pm pnpm
 ```
 
-Pass flags to skip the prompts entirely.
+Pass flags to skip the prompts. With no terminal (a script or CI), `--surface` is required, or pass `--yes` to accept the defaults for anything you left out.
 
 ---
 
@@ -37,9 +37,6 @@ $ npx create-substrate
     Data vis          Charts, dashboards, analytics explorers
     Image generation  AI image tools, prompt-driven workflows
     Blank             Scaffold only – bring your own surface
-
-  Package manager:
-    npm ● pnpm   bun
 ```
 
 ---
@@ -132,8 +129,8 @@ Every surface produces the same project structure with surface-specific content 
 | `src/lib/utils.ts` | `cn()` utility |
 | `vite.config.ts` | Vite with React and Tailwind plugins, `@/` alias |
 | `components.json` | Registry config |
-| `CLAUDE.md` | Substrate context and skill index |
-| `.claude/skills/` | All 17 skills (surface guides and domain references) |
+| `AGENTS.md`, `CLAUDE.md` | Guidance for coding agents: use Substrate components, Controls and the timeline. `CLAUDE.md` imports `AGENTS.md` |
+| `.claude/skills/`, `.agents/skills/` | All 17 skills (surface guides and domain references), for Claude Code and other agents |
 | `.mcp.json` | Substrate MCP server |
 | `tsconfig.json`, `tsconfig.app.json` | TypeScript config |
 
@@ -184,8 +181,9 @@ npx create-substrate [project-name] [options]
 | Flag | Description |
 | --- | --- |
 | `--surface <type>` | Surface type: `canvas-2d`, `3d-scene`, `animation`, `node-editor`, `data-vis`, `image-gen`, `blank` |
-| `--pm <manager>` | Package manager: `npm`, `pnpm`, `bun` |
+| `--pm <manager>` | Package manager: `npm`, `pnpm`, `bun`. Defaults to the one that ran the command |
+| `-y, --yes` | Accept defaults for anything not passed: name `my-substrate-app`, surface `canvas-2d` |
 | `--skip-install` | Skip dependency installation |
 | `--skip-git` | Don't initialise a git repository |
 
-If you already have a project and want to add Substrate to it, use `npx @substrate-kit/cli init` instead — it installs skills, CLAUDE.md, and configuration without creating a new directory.
+If you already have a project and want to add Substrate to it, use `npx @substrate-kit/cli init` instead — it detects Vite or Next, installs skills, merges Substrate guidance into your `CLAUDE.md` and `AGENTS.md`, and updates `components.json` and `.mcp.json` without overwriting what is already there.

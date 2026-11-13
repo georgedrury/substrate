@@ -1,7 +1,8 @@
 // End-to-end release test. Serves the locally built registry, then:
 //   1. scaffolds every create-substrate surface, builds it and loads it in
 //      a headless browser in light and dark, failing on any runtime error
-//   2. does the same through `substrate-kit create`, which forwards to it
+//   2. runs `substrate-kit init` on a bare Vite project and a Next one,
+//      checking it merges into existing files and is safe to repeat
 //   3. installs every registry item into one project and typechecks it
 //   4. runs `substrate-kit add` with no terminal over an existing component
 // Usage: node scripts/test-scaffold.mjs [--live] [case...]   (default: all)
@@ -9,7 +10,7 @@
 // --keep leaves the scaffolded projects on disk after a passing run.
 // SUBSTRATE_TEST_SHOTS=<dir> saves a screenshot of each starter per theme.
 import { spawn } from "node:child_process"
-import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs"
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { createServer } from "node:http"
 import { createServer as createTcpServer } from "node:net"
 import { tmpdir } from "node:os"
@@ -20,7 +21,7 @@ import { chromium } from "playwright"
 const root = join(dirname(fileURLToPath(import.meta.url)), "..")
 const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf-8"))
 const SURFACES = ["canvas-2d", "3d-scene", "animation", "node-editor", "data-vis", "image-gen", "blank"]
-const CASES = [...SURFACES, "cli-create", "cli-add", "all-items"]
+const CASES = [...SURFACES, "cli-init", "cli-add", "all-items"]
 const CONCURRENCY = 3
 const COMMAND_TIMEOUT_MS = 10 * 60 * 1000
 
@@ -70,11 +71,22 @@ console.log(`Registry: ${base}`)
 const env = {
 	...process.env,
 	SUBSTRATE_REGISTRY_URL: base,
-	SUBSTRATE_CREATE_BIN: join(root, "packages/create-substrate/dist/index.js"),
 	CI: "1",
 }
 
 const workspace = mkdtempSync(join(tmpdir(), "substrate-test-"))
+
+// Scaffolded projects depend on @substrate-kit/cli, which may not be published
+// yet (the live run happens before publishing), so install the CLI from a
+// tarball of the local build.
+const cliVersion = JSON.parse(readFileSync(join(root, "packages/cli/package.json"), "utf-8")).version
+const pack = await run("npm", ["pack", "--pack-destination", workspace], { cwd: join(root, "packages/cli"), env })
+if (pack.code !== 0) {
+	console.error(`Could not pack the CLI\n${pack.output}`)
+	process.exit(1)
+}
+env.SUBSTRATE_CLI_SPEC = `file:${join(workspace, `substrate-kit-cli-${cliVersion}.tgz`)}`
+
 const browser = await chromium.launch()
 const shots = process.env.SUBSTRATE_TEST_SHOTS
 
@@ -134,7 +146,7 @@ async function scaffoldAndBuild(name, command) {
 	const scaffold = await run("node", command, { cwd: workspace, env })
 	if (scaffold.code !== 0) return { ok: false, stage: "scaffold", output: scaffold.output }
 	// The scaffolders warn and carry on when a component fails to install
-	if (/Failed to install|Could not install/.test(scaffold.output)) {
+	if (/Install failed|could not be downloaded|Could not install/.test(scaffold.output)) {
 		return { ok: false, stage: "component install", output: scaffold.output }
 	}
 	const build = await run("npm", ["run", "build"], { cwd, env })
@@ -183,12 +195,56 @@ async function cliAdd() {
 	return { ok: true }
 }
 
+// init must write the guidance and config for the framework it finds, merge
+// into files the project already has, and leave the project's own content.
+async function cliInit() {
+	const cli = join(root, "packages/cli/dist/index.js")
+	const read = (cwd, file) => readFileSync(join(cwd, file), "utf-8")
+	const problems = []
+
+	const vite = join(workspace, "init-vite")
+	mkdirSync(join(vite, "src"), { recursive: true })
+	writeFileSync(join(vite, "package.json"), JSON.stringify({ name: "v", devDependencies: { vite: "^6" } }))
+	writeFileSync(join(vite, "src/index.css"), "")
+
+	const next = join(workspace, "init-next")
+	mkdirSync(join(next, "app"), { recursive: true })
+	writeFileSync(join(next, "package.json"), JSON.stringify({ name: "n", dependencies: { next: "16" } }))
+	writeFileSync(join(next, "app/globals.css"), "")
+	writeFileSync(join(next, "CLAUDE.md"), "# Mine\n")
+	writeFileSync(join(next, ".mcp.json"), JSON.stringify({ mcpServers: { other: { command: "x" } } }))
+	writeFileSync(join(next, "components.json"), JSON.stringify({ style: "new-york", registries: { "@x": "y" } }))
+
+	for (const cwd of [vite, next]) {
+		for (let pass = 1; pass <= 2; pass++) {
+			const result = await run("node", [cli, "init"], { cwd, env })
+			if (result.code !== 0) return { ok: false, stage: `init pass ${pass}`, output: result.output }
+		}
+	}
+
+	const viteConfig = JSON.parse(read(vite, "components.json"))
+	if (viteConfig.rsc !== false || viteConfig.tailwind.css !== "src/index.css") problems.push("vite components.json is wrong")
+	const nextConfig = JSON.parse(read(next, "components.json"))
+	if (nextConfig.style !== "new-york" || !nextConfig.registries["@x"] || !nextConfig.registries["@substrate"]) {
+		problems.push("next components.json was not merged")
+	}
+	const mcp = JSON.parse(read(next, ".mcp.json"))
+	if (!mcp.mcpServers.other || !mcp.mcpServers.substrate) problems.push(".mcp.json was not merged")
+	const claude = read(next, "CLAUDE.md")
+	if (!claude.startsWith("# Mine") || claude.split("substrate:start").length !== 2) problems.push("CLAUDE.md was not merged once")
+	if (read(vite, "CLAUDE.md").trim() !== "@AGENTS.md") problems.push("new project CLAUDE.md should import AGENTS.md")
+	for (const cwd of [vite, next]) {
+		for (const dir of [".claude/skills", ".agents/skills"]) {
+			if (!existsSync(join(cwd, dir, "substrate-controls/SKILL.md"))) problems.push(`${cwd}: skills missing from ${dir}`)
+		}
+	}
+	return problems.length > 0 ? { ok: false, stage: "init", output: problems.join("\n") } : { ok: true }
+}
+
 function runCase(name) {
 	if (name === "all-items") return allItems()
 	if (name === "cli-add") return cliAdd()
-	if (name === "cli-create") {
-		return scaffoldAndBuild(name, [join(root, "packages/cli/dist/index.js"), "create", name, "--surface", "blank", "--skip-git", "--package-manager", "npm"])
-	}
+	if (name === "cli-init") return cliInit()
 	return scaffoldAndBuild(name, [join(root, "packages/create-substrate/dist/index.js"), name, "--surface", name, "--pm", "npm", "--skip-git"])
 }
 
