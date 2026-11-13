@@ -29,6 +29,8 @@ import {
 	RiPauseFill,
 	RiPlayFill,
 	RiRestartLine,
+	RiZoomInLine,
+	RiZoomOutLine,
 } from "@remixicon/react"
 import { cn } from "@/lib/utils"
 import {
@@ -53,6 +55,26 @@ const LABEL_WIDTH = 112
 /** Candidate ruler intervals in seconds; the first that leaves room for labels wins */
 const TICK_STEPS = [0.01, 0.02, 0.05, 0.1, 0.2, 0.25, 0.5, 1, 2, 5, 10, 15, 30, 60]
 const MIN_TICK_SPACING = 56
+/** The tightest zoom shows this many seconds across the lane */
+const MIN_VISIBLE_SECONDS = 0.2
+const ZOOM_STEP = 1.5
+
+type View = { zoom: number; start: number }
+
+function clampView(view: View, duration: number): View {
+	const maxZoom = Math.max(1, duration / MIN_VISIBLE_SECONDS)
+	const zoom = Math.min(maxZoom, Math.max(1, view.zoom))
+	const visible = duration / zoom
+	return { zoom, start: Math.min(Math.max(0, view.start), duration - visible) }
+}
+
+/** Zoom while keeping the time at `anchor` (0–1 across the lane) in place */
+function zoomAround(view: View, nextZoom: number, anchor: number, duration: number): View {
+	const visible = duration / view.zoom
+	const anchorTime = view.start + anchor * visible
+	const nextVisible = duration / nextZoom
+	return clampView({ zoom: nextZoom, start: anchorTime - anchor * nextVisible }, duration)
+}
 
 // ── ControlsTimeline ──
 
@@ -125,7 +147,62 @@ function ControlsTimelineSection({ meta }: { meta: TimelineMeta }) {
 	const [openTracks, setOpenTracks] = useState<Set<string>>(() => new Set())
 
 	const duration = Math.max(meta.duration, 0.01)
-	const pxPerSecond = laneWidth / duration
+	const [rawView, setView] = useState<View>({ zoom: 1, start: 0 })
+	const view = clampView(rawView, duration)
+	const visibleDuration = duration / view.zoom
+	const viewStart = view.start
+	const pxPerSecond = laneWidth / visibleDuration
+	const zoomed = view.zoom > 1.0001
+
+	// While playing zoomed in, page the view along with the playhead
+	if (
+		zoomed &&
+		transport.playing &&
+		(transport.time < viewStart || transport.time > viewStart + visibleDuration)
+	) {
+		setView(clampView({ zoom: view.zoom, start: transport.time }, duration))
+	}
+
+	// Ctrl or Cmd + scroll (and trackpad pinch) zooms around the pointer;
+	// horizontal scroll or Shift + scroll pans. Native listener so the page
+	// doesn't scroll or zoom as well.
+	const bodyRef = useRef<HTMLDivElement>(null)
+	const durationRef = useRef(duration)
+	const viewRef = useRef(view)
+	useEffect(() => {
+		durationRef.current = duration
+		viewRef.current = view
+	})
+	useEffect(() => {
+		const body = bodyRef.current
+		const lane = laneRef.current
+		if (!body || !lane) return
+		const handleWheel = (event: WheelEvent) => {
+			const rect = lane.getBoundingClientRect()
+			const total = durationRef.current
+			if (event.ctrlKey || event.metaKey) {
+				event.preventDefault()
+				const anchor = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width))
+				setView((current) =>
+					zoomAround(clampView(current, total), current.zoom * Math.exp(-event.deltaY * 0.01), anchor, total),
+				)
+				return
+			}
+			const horizontal = event.shiftKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)
+			const delta = event.shiftKey ? event.deltaY || event.deltaX : event.deltaX
+			if (!horizontal || !delta || viewRef.current.zoom <= 1) return
+			event.preventDefault()
+			setView((current) => {
+				const secondsPerPx = total / current.zoom / rect.width
+				return clampView({ ...current, start: current.start + delta * secondsPerPx }, total)
+			})
+		}
+		body.addEventListener("wheel", handleWheel, { passive: false })
+		return () => body.removeEventListener("wheel", handleWheel)
+	}, [])
+
+	const zoomBy = (factor: number) =>
+		setView((current) => zoomAround(clampView(current, duration), current.zoom * factor, 0.5, duration))
 
 	const toggle = (set: Set<string>, key: string) => {
 		const next = new Set(set)
@@ -186,6 +263,7 @@ function ControlsTimelineSection({ meta }: { meta: TimelineMeta }) {
 					fixedDuration={isProps || stat.isPhysics}
 					composite={isProps}
 					pxPerSecond={pxPerSecond}
+					viewStart={viewStart}
 					timelineDuration={meta.duration}
 					selection={selection}
 					onSelect={setSelection}
@@ -227,6 +305,7 @@ function ControlsTimelineSection({ meta }: { meta: TimelineMeta }) {
 						baseAt={stat.at}
 						delayMode
 						pxPerSecond={pxPerSecond}
+						viewStart={viewStart}
 						timelineDuration={meta.duration}
 						selection={selection}
 						onSelect={setSelection}
@@ -257,6 +336,21 @@ function ControlsTimelineSection({ meta }: { meta: TimelineMeta }) {
 				<span className="ml-1 mr-auto font-mono text-[11px] tabular-nums text-muted-foreground">
 					{formatClock(transport.time, true)} / {formatClock(meta.duration, true)}
 				</span>
+				{zoomed && (
+					<button
+						type="button"
+						onClick={() => setView({ zoom: 1, start: 0 })}
+						className="h-6 rounded px-1.5 text-xs text-muted-foreground outline-none transition-colors hover:bg-accent hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
+					>
+						Fit
+					</button>
+				)}
+				<TimelineButton aria-label="Zoom out" disabled={!zoomed} onClick={() => zoomBy(1 / ZOOM_STEP)}>
+					<RiZoomOutLine />
+				</TimelineButton>
+				<TimelineButton aria-label="Zoom in" onClick={() => zoomBy(ZOOM_STEP)}>
+					<RiZoomInLine />
+				</TimelineButton>
 				<ControlsVersions panelId={meta.id} panelName={meta.name} />
 				<ControlsCopy
 					panelName={meta.name}
@@ -264,22 +358,39 @@ function ControlsTimelineSection({ meta }: { meta: TimelineMeta }) {
 				/>
 			</header>
 
-			<div className="relative">
+			<div ref={bodyRef} className="relative overflow-hidden">
 				<TimelineRow
 					label={null}
 					laneRef={laneRef}
 					laneProps={{
 						className: "h-6 cursor-ew-resize border-b",
-						...scrubHandlers(meta.id, duration),
+						...scrubHandlers(meta.id, viewStart, visibleDuration),
 					}}
 				>
-					<TimelineRuler duration={duration} pxPerSecond={pxPerSecond} />
+					<TimelineRuler
+						viewStart={viewStart}
+						visibleDuration={visibleDuration}
+						pxPerSecond={pxPerSecond}
+					/>
 				</TimelineRow>
 				<div className="flex flex-col py-1">{rows}</div>
-				<TimelinePlayhead
-					left={LABEL_WIDTH + Math.min(transport.time, duration) * pxPerSecond}
-				/>
+				{transport.time >= viewStart - 1e-6 &&
+					transport.time <= viewStart + visibleDuration + 1e-6 && (
+						<TimelinePlayhead
+							left={LABEL_WIDTH + (Math.min(transport.time, duration) - viewStart) * pxPerSecond}
+						/>
+					)}
 			</div>
+			{zoomed && (
+				<TimelineRow label={null}>
+					<TimelineOverview
+						duration={duration}
+						view={view}
+						time={transport.time}
+						onNavigate={(start) => setView(clampView({ zoom: view.zoom, start }, duration))}
+					/>
+				</TimelineRow>
+			)}
 		</section>
 	)
 }
@@ -309,7 +420,7 @@ function TimelineRow({ label, indent, laneRef, laneProps, children }: TimelineRo
 			</div>
 			<div
 				ref={laneRef}
-				className={cn("relative mr-3 flex-1", laneClassName)}
+				className={cn("relative mr-3 flex-1 overflow-hidden", laneClassName)}
 				{...restLaneProps}
 			>
 				{children}
@@ -358,22 +469,29 @@ function TimelineButton({ className, ...props }: React.ComponentProps<"button">)
 	)
 }
 
-function TimelineRuler({ duration, pxPerSecond }: { duration: number; pxPerSecond: number }) {
+type TimelineRulerProps = {
+	viewStart: number
+	visibleDuration: number
+	pxPerSecond: number
+}
+
+function TimelineRuler({ viewStart, visibleDuration, pxPerSecond }: TimelineRulerProps) {
 	if (pxPerSecond <= 0) return null
 	const step =
 		TICK_STEPS.find((candidate) => candidate * pxPerSecond >= MIN_TICK_SPACING) ??
 		TICK_STEPS[TICK_STEPS.length - 1]
-	const count = Math.floor(duration / step + 1e-6)
-	const decimals = step < 0.1 ? 2 : step < 1 ? 1 : 0
+	const first = Math.ceil(viewStart / step - 1e-6)
+	const last = Math.floor((viewStart + visibleDuration) / step + 1e-6)
+	const decimals = String(step).split(".")[1]?.length ?? 0
 	return (
 		<div aria-hidden="true" className="pointer-events-none absolute inset-0">
-			{Array.from({ length: count + 1 }, (_, i) => {
-				const time = i * step
+			{Array.from({ length: Math.max(0, last - first + 1) }, (_, i) => {
+				const time = (first + i) * step
 				return (
 					<div
-						key={i}
+						key={first + i}
 						className="absolute bottom-0 flex h-full flex-col justify-end"
-						style={{ left: time * pxPerSecond }}
+						style={{ left: (time - viewStart) * pxPerSecond }}
 					>
 						<span className="mb-0.5 font-mono text-[10px] tabular-nums text-muted-foreground">
 							{time.toFixed(decimals)}s
@@ -399,12 +517,73 @@ function TimelinePlayhead({ left }: { left: number }) {
 	)
 }
 
+type TimelineOverviewProps = {
+	duration: number
+	view: View
+	time: number
+	onNavigate: (start: number) => void
+}
+
+/** The whole timeline in miniature; drag the window to pan */
+function TimelineOverview({ duration, view, time, onNavigate }: TimelineOverviewProps) {
+	const visible = duration / view.zoom
+	const grab = useRef<number | null>(null)
+
+	const timeAt = (event: React.PointerEvent<HTMLDivElement>) => {
+		const rect = event.currentTarget.getBoundingClientRect()
+		return (Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width))) * duration
+	}
+
+	return (
+		<div
+			data-slot="controls-timeline-overview"
+			className="relative my-1.5 h-2 cursor-grab touch-none rounded-full bg-muted active:cursor-grabbing"
+			onPointerDown={(event) => {
+				if (event.button !== 0) return
+				event.currentTarget.setPointerCapture(event.pointerId)
+				const at = timeAt(event)
+				const inside = at >= view.start && at <= view.start + visible
+				// Grab the window where it was pressed, or centre it on the press
+				grab.current = inside ? at - view.start : visible / 2
+				onNavigate(at - grab.current)
+			}}
+			onPointerMove={(event) => {
+				if (grab.current === null) return
+				onNavigate(timeAt(event) - grab.current)
+			}}
+			onPointerUp={() => {
+				grab.current = null
+			}}
+			onLostPointerCapture={() => {
+				grab.current = null
+			}}
+		>
+			<div
+				className="absolute inset-y-0 rounded-full bg-foreground/25"
+				style={{
+					left: `${(view.start / duration) * 100}%`,
+					width: `${(visible / duration) * 100}%`,
+				}}
+			/>
+			<div
+				aria-hidden="true"
+				className="absolute -inset-y-0.5 w-px bg-[var(--timeline-playhead,var(--color-destructive))]"
+				style={{ left: `${(Math.min(time, duration) / duration) * 100}%` }}
+			/>
+		</div>
+	)
+}
+
 /** Pointer handlers that seek to wherever the pointer is on the ruler */
-function scrubHandlers(timelineId: string, duration: number): React.ComponentProps<"div"> {
+function scrubHandlers(
+	timelineId: string,
+	viewStart: number,
+	visibleDuration: number,
+): React.ComponentProps<"div"> {
 	const seek = (event: React.PointerEvent<HTMLDivElement>) => {
 		const rect = event.currentTarget.getBoundingClientRect()
 		const fraction = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width))
-		TimelineStore.seek(timelineId, fraction * duration)
+		TimelineStore.seek(timelineId, viewStart + fraction * visibleDuration)
 	}
 	return {
 		onPointerDown: (event) => {
@@ -449,6 +628,8 @@ type TimelineClipBarProps = {
 	delayMode?: boolean
 	baseAt?: number
 	pxPerSecond: number
+	/** Time at the lane's left edge */
+	viewStart: number
 	timelineDuration: number
 	selection: Selection | null
 	onSelect: (selection: Selection | null) => void
@@ -467,6 +648,7 @@ function TimelineClipBar({
 	delayMode = false,
 	baseAt = 0,
 	pxPerSecond,
+	viewStart,
 	timelineDuration,
 	selection,
 	onSelect,
@@ -590,7 +772,7 @@ function TimelineClipBar({
 				dragging && "cursor-grabbing",
 				selected && "ring-2 ring-primary",
 			)}
-			style={{ left: at * pxPerSecond, width }}
+			style={{ left: (at - viewStart) * pxPerSecond, width }}
 			onPointerDown={handlePointerDown}
 			onPointerMove={handlePointerMove}
 			onPointerUp={handlePointerUp}
@@ -649,7 +831,7 @@ function TimelineClipBar({
 					key={ghost.start}
 					aria-hidden="true"
 					className="pointer-events-none absolute top-1 bottom-1 rounded border border-dashed border-primary/25 bg-primary/5"
-					style={{ left: ghost.start * pxPerSecond + 1, width: Math.max(1, ghost.length * pxPerSecond - 2) }}
+					style={{ left: (ghost.start - viewStart) * pxPerSecond + 1, width: Math.max(1, ghost.length * pxPerSecond - 2) }}
 				/>
 			))}
 			<Popover
