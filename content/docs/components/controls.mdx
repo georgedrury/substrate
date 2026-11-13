@@ -160,8 +160,9 @@ This works when nothing else edits those values while the item is selected. If t
 | --- | --- | --- | --- |
 | `panel` | `string` | — | Render only the panel with this name or id. Renders every panel when omitted. |
 
-Each panel header has three actions:
+Each panel header has these actions:
 
+- **Keyboard shortcuts** lists the panel's shortcuts. It only appears when the panel has some.
 - **Versions** switches between versions of the panel's values. Edits apply to the version you are on, and **New version** starts a copy of the current values. Version 1 is the values before any version was made. Versions last for the session, or are saved with the values when `persist` is set with `presets: true`.
 - **Copy values** copies the current values as an instruction for an agent to make them the new defaults in the `useControls` call.
 - **Reset** restores the config defaults.

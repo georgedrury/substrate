@@ -26,6 +26,7 @@ import {
 } from "dialkit/timeline"
 import {
 	RiArrowRightSLine,
+	RiRepeatLine,
 	RiPauseFill,
 	RiPlayFill,
 	RiRestartLine,
@@ -81,11 +82,27 @@ function zoomAround(view: View, nextZoom: number, anchor: number, duration: numb
 type ControlsTimelineProps = {
 	/** Render only the timeline with this name or id; all timelines when omitted */
 	timeline?: string
+	/**
+	 * Where the drag handle for resizing the height sits: "top" for a timeline
+	 * docked at the bottom of the screen, "bottom" for one docked at the top,
+	 * or false for no handle. Defaults to "top".
+	 */
+	resize?: "top" | "bottom" | false
+	/** Starting height limit in pixels; content scrolls beyond it. Unlimited when omitted. */
+	defaultHeight?: number
+	/** Smallest height the handle allows. Defaults to 120. */
+	minHeight?: number
 }
+
+const KEYBOARD_RESIZE_STEP = 16
 
 function ControlsTimeline({
 	timeline,
+	resize = "top",
+	defaultHeight,
+	minHeight = 120,
 	className,
+	style,
 	...props
 }: ControlsTimelineProps & React.ComponentProps<"div">) {
 	const timelines = useSyncExternalStore(
@@ -97,15 +114,84 @@ function ControlsTimeline({
 		? timelines.filter((t) => t.name === timeline || t.id === timeline)
 		: timelines
 
-	return (
+	const rootRef = useRef<HTMLDivElement>(null)
+	const [height, setHeight] = useState<number | undefined>(defaultHeight)
+	const resizeStart = useRef<{ pointerY: number; height: number } | null>(null)
+
+	const clampHeight = (next: number) =>
+		Math.round(Math.min(Math.max(minHeight, next), window.innerHeight - 24))
+	// Dragging away from the content makes it taller
+	const direction = resize === "top" ? -1 : 1
+
+	const handle = resize && (
 		<div
-			data-slot="controls-timeline"
-			className={cn("flex flex-col divide-y", className)}
-			{...props}
+			role="separator"
+			aria-orientation="horizontal"
+			aria-label="Resize timeline"
+			aria-valuenow={height}
+			aria-valuemin={minHeight}
+			tabIndex={0}
+			title="Drag to resize, double-click to fit"
+			data-slot="controls-timeline-resize"
+			className={cn(
+				"group/resize relative z-40 h-2 shrink-0 cursor-row-resize touch-none outline-none",
+				resize === "top" ? "-mb-2" : "-mt-2",
+			)}
+			onPointerDown={(event) => {
+				if (event.button !== 0 || !rootRef.current) return
+				event.preventDefault()
+				event.currentTarget.setPointerCapture(event.pointerId)
+				resizeStart.current = {
+					pointerY: event.clientY,
+					height: rootRef.current.getBoundingClientRect().height,
+				}
+			}}
+			onPointerMove={(event) => {
+				const start = resizeStart.current
+				if (!start) return
+				setHeight(clampHeight(start.height + direction * (event.clientY - start.pointerY)))
+			}}
+			onPointerUp={() => {
+				resizeStart.current = null
+			}}
+			onLostPointerCapture={() => {
+				resizeStart.current = null
+			}}
+			onDoubleClick={() => setHeight(undefined)}
+			onKeyDown={(event) => {
+				const grow = event.key === "ArrowUp" ? -direction : event.key === "ArrowDown" ? direction : 0
+				if (!grow || !rootRef.current) return
+				event.preventDefault()
+				const current = height ?? rootRef.current.getBoundingClientRect().height
+				setHeight(clampHeight(current + grow * KEYBOARD_RESIZE_STEP))
+			}}
 		>
-			{visible.map((meta) => (
-				<ControlsTimelineSection key={meta.id} meta={meta} />
-			))}
+			<span
+				aria-hidden="true"
+				className={cn(
+					"absolute inset-x-0 h-px bg-ring opacity-0 transition-opacity",
+					"group-hover/resize:opacity-100 group-focus-visible/resize:opacity-100",
+					resize === "top" ? "top-0" : "bottom-0",
+				)}
+			/>
+		</div>
+	)
+
+	return (
+		<div data-slot="controls-timeline-frame" className="flex flex-col">
+			{resize === "top" && handle}
+			<div
+				ref={rootRef}
+				data-slot="controls-timeline"
+				className={cn("flex flex-col divide-y overflow-y-auto overscroll-contain", className)}
+				style={{ maxHeight: height, ...style }}
+				{...props}
+			>
+				{visible.map((meta) => (
+					<ControlsTimelineSection key={meta.id} meta={meta} />
+				))}
+			</div>
+			{resize === "bottom" && handle}
 		</div>
 	)
 }
@@ -318,7 +404,7 @@ function ControlsTimelineSection({ meta }: { meta: TimelineMeta }) {
 
 	return (
 		<section data-slot="controls-timeline-section" className="flex flex-col py-2">
-			<header className="flex items-center gap-1 px-3 pb-2">
+			<header className="sticky top-0 z-30 -mt-2 flex items-center gap-1 bg-panel px-3 pt-2 pb-2">
 				<span className="mr-2 truncate text-xs font-medium">{meta.name}</span>
 				<TimelineButton
 					aria-label={transport.playing ? "Pause" : "Play"}
@@ -358,15 +444,24 @@ function ControlsTimelineSection({ meta }: { meta: TimelineMeta }) {
 				/>
 			</header>
 
-			<div ref={bodyRef} className="relative overflow-hidden">
+			<div ref={bodyRef} className="relative overflow-x-clip">
 				<TimelineRow
 					label={null}
+					sticky
 					laneRef={laneRef}
 					laneProps={{
 						className: "h-6 cursor-ew-resize border-b",
 						...scrubHandlers(meta.id, viewStart, visibleDuration),
 					}}
 				>
+					{meta.loop && (
+						<TimelineLoopRegion
+							from={meta.loopStart}
+							duration={duration}
+							viewStart={viewStart}
+							pxPerSecond={pxPerSecond}
+						/>
+					)}
 					<TimelineRuler
 						viewStart={viewStart}
 						visibleDuration={visibleDuration}
@@ -400,15 +495,23 @@ function ControlsTimelineSection({ meta }: { meta: TimelineMeta }) {
 type TimelineRowProps = {
 	label: React.ReactNode
 	indent?: boolean
+	/** Stay below the timeline header while the rows scroll */
+	sticky?: boolean
 	laneRef?: React.Ref<HTMLDivElement>
 	laneProps?: React.ComponentProps<"div">
 	children?: React.ReactNode
 }
 
-function TimelineRow({ label, indent, laneRef, laneProps, children }: TimelineRowProps) {
+function TimelineRow({ label, indent, sticky, laneRef, laneProps, children }: TimelineRowProps) {
 	const { className: laneClassName, ...restLaneProps } = laneProps ?? {}
 	return (
-		<div data-slot="controls-timeline-row" className="flex min-h-7 items-stretch">
+		<div
+			data-slot="controls-timeline-row"
+			className={cn(
+				"flex min-h-7 items-stretch",
+				sticky && "sticky top-10 z-10 bg-panel",
+			)}
+		>
 			<div
 				className={cn(
 					"flex shrink-0 items-center px-3 text-xs",
@@ -509,10 +612,36 @@ function TimelinePlayhead({ left }: { left: number }) {
 		<div
 			aria-hidden="true"
 			data-slot="controls-timeline-playhead"
-			className="pointer-events-none absolute top-0 bottom-0 w-px bg-[var(--timeline-playhead,var(--color-destructive))]"
+			className="pointer-events-none absolute top-0 bottom-0 z-20 w-px bg-[var(--timeline-playhead,var(--color-destructive))]"
 			style={{ left }}
 		>
 			<span className="absolute -top-0.5 left-1/2 size-2 -translate-x-1/2 rotate-45 rounded-[1px] bg-[var(--timeline-playhead,var(--color-destructive))]" />
+		</div>
+	)
+}
+
+type TimelineLoopRegionProps = {
+	from: number
+	duration: number
+	viewStart: number
+	pxPerSecond: number
+}
+
+/** Shades the part of the ruler that repeats, from the loop start to the end */
+function TimelineLoopRegion({ from, duration, viewStart, pxPerSecond }: TimelineLoopRegionProps) {
+	const start = from > 0 && from < duration ? from : 0
+	return (
+		<div
+			data-slot="controls-timeline-loop"
+			title={start > 0 ? `Loops from ${formatSeconds(start)}` : "Loops"}
+			className="pointer-events-none absolute inset-y-0 bg-primary/8"
+			style={{ left: (start - viewStart) * pxPerSecond, width: (duration - start) * pxPerSecond }}
+		>
+			{start > 0 && <span className="absolute inset-y-0 left-0 w-px bg-primary/40" />}
+			<RiRepeatLine
+				aria-hidden="true"
+				className="absolute top-1 right-1 size-3 text-muted-foreground"
+			/>
 		</div>
 	)
 }

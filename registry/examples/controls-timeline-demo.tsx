@@ -37,7 +37,7 @@ export default function ControlsTimelineDemo() {
 				},
 			},
 		},
-		{ loop: true },
+		{ loop: { from: 1.2 } },
 	)
 
 	const { card, title, badge, glow } = timeline

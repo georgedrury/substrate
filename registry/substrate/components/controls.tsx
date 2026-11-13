@@ -19,6 +19,7 @@ import {
 	RiCheckLine,
 	RiDeleteBinLine,
 	RiFileCopyLine,
+	RiKeyboardLine,
 	RiRestartLine,
 } from "@remixicon/react"
 import { cn } from "@/lib/utils"
@@ -138,6 +139,7 @@ function ControlsPanel({
 		<Pane data-slot="controls-panel" {...props}>
 			<PaneHeader className="gap-1">
 				<PaneLabel className="mr-auto truncate">{panel.name}</PaneLabel>
+				<ControlsShortcuts panel={panel} />
 				<ControlsVersions panelId={panel.id} panelName={panel.name} />
 				<ControlsCopy
 					panelName={panel.name}
@@ -556,6 +558,64 @@ function ControlsVersionItem({
 				</button>
 			)}
 		</div>
+	)
+}
+
+// ── ControlsShortcuts ──
+
+type ControlsShortcutsProps = {
+	panel: PanelConfig
+}
+
+function shortcutRows(controls: ControlMeta[]): { control: ControlMeta; text: string }[] {
+	return controls.flatMap((control) => {
+		if (control.children) return shortcutRows(control.children)
+		const shortcut = control.shortcut
+		if (!shortcut?.key && !shortcut?.interaction) return []
+		return [{ control, text: formatShortcut(control, shortcut) }]
+	})
+}
+
+/** Lists the panel's keyboard shortcuts; hidden when it has none */
+function ControlsShortcuts({ panel }: ControlsShortcutsProps) {
+	const rows = shortcutRows(panel.controls)
+	if (rows.length === 0) return null
+
+	return (
+		<Popover>
+			<PopoverTrigger asChild>
+				<PaneAction
+					data-slot="controls-shortcuts"
+					aria-label={`${panel.name} keyboard shortcuts`}
+					title="Keyboard shortcuts"
+				>
+					<RiKeyboardLine />
+				</PaneAction>
+			</PopoverTrigger>
+			<PopoverContent align="end" className="w-56 p-2">
+				<div className="px-1 pb-1.5 text-xs font-medium">Keyboard shortcuts</div>
+				<dl className="flex flex-col">
+					{rows.map(({ control, text }) => (
+						<div
+							key={control.path}
+							className="flex h-7 items-center gap-2 px-1 text-xs"
+						>
+							<dt className="min-w-0 flex-1 truncate text-muted-foreground">
+								{control.label}
+							</dt>
+							<dd>
+								<kbd className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-foreground">
+									{text}
+								</kbd>
+							</dd>
+						</div>
+					))}
+				</dl>
+				<p className="px-1 pt-1.5 text-[11px] text-muted-foreground">
+					Hold a slider&apos;s key and scroll, drag or move to adjust it.
+				</p>
+			</PopoverContent>
+		</Popover>
 	)
 }
 
