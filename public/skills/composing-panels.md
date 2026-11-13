@@ -27,10 +27,7 @@ Panel (side panel shell — left or right)
 ## Install
 
 ```bash
-npx shadcn@latest add https://substrate.georgedrury.co.uk/r/panel
-npx shadcn@latest add https://substrate.georgedrury.co.uk/r/pane
-npx shadcn@latest add https://substrate.georgedrury.co.uk/r/action
-npx shadcn@latest add https://substrate.georgedrury.co.uk/r/slider
+npx substrate-kit add panel pane action slider
 ```
 
 ## Panel positioning

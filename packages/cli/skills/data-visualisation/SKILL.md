@@ -230,5 +230,5 @@ Some examples of what this surface enables:
 ## Related reference skills
 
 - **substrate-scaffold** — Toolbar, Panel, StatusBar, DocumentTabs for the app shell
-- **substrate-controls** — Select, NumberInput, Slider, ColourPicker for chart configuration
+- **substrate-controls** — `useControls` for chart settings from one config object (sliders, toggles, colours, selects); Select, NumberInput, Slider, ColourPicker when composing rows by hand
 - **substrate-feedback** — Toast, EmptyState, CommandPalette for data loading feedback

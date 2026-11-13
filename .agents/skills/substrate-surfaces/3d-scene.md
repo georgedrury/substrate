@@ -168,5 +168,5 @@ Some examples of what this surface enables:
 ## Related reference skills
 
 - **substrate-scaffold** — Toolbar, Panel, StatusBar, ZoomControls for the app shell
-- **substrate-controls** — NumberInput, Slider, ColourPicker, ActionControls for property panes
+- **substrate-controls** — NumberInput, Slider, ColourPicker, ActionControls for property panes; `useControls` for tuning material, light and camera values from one config object
 - **substrate-interaction** — useUndoable, useClipboard, createKeyboardShortcuts, TreeList for scene hierarchy

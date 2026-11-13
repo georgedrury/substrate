@@ -13,7 +13,7 @@ This is Substrate's default surface. The `DesignCanvas` component provides a ful
 ### Install
 
 ```bash
-npx shadcn@latest add https://substrate.georgedrury.co.uk/r/design-canvas
+npx substrate-kit add design-canvas
 ```
 
 This pulls in the canvas renderer, hit-test system, interaction hooks, transform utilities, and all required stores.
@@ -79,14 +79,14 @@ The default tool set for a 2D canvas:
 
 ### Panels
 
-See the [composing panels](./composing-panels.md) skill for full details. In summary:
+See the `composing-panels` skill for full details. In summary:
 
 - **Left panel** — layers list (render order, visibility toggles, selection)
 - **Right panel** — properties inspector (transform, fill, stroke, opacity, type-specific properties)
 
 ### Interactions
 
-See the [wire interactions](./wire-interactions.md) skill for the full state machine. Key patterns:
+See the `wire-interactions` skill for the full state machine. Key patterns:
 
 - Click to select, shift-click to multi-select
 - Drag on empty space with select tool → marquee selection
@@ -99,7 +99,7 @@ See the [wire interactions](./wire-interactions.md) skill for the full state mac
 
 ### Custom elements
 
-To add a new element type (e.g. star, arrow, image), follow the [create custom tool](./create-custom-tool.md) skill. The pipeline is: type definition → factory → renderer → hit-test → interaction → shortcut → cursor → toolbar.
+To add a new element type (e.g. star, arrow, image), follow the `create-custom-tool` skill. The pipeline is: type definition → factory → renderer → hit-test → interaction → shortcut → cursor → toolbar.
 
 ### Custom rendering
 
@@ -111,7 +111,7 @@ For UI elements that sit on top of the canvas (selection indicators, context men
 
 ## Theming
 
-The canvas background is driven by the `--canvas` CSS variable, read at render time via `getComputedStyle`. Grid dots use `--canvas-foreground`. See the [theming](./theming.md) skill for the full token table.
+The canvas background is driven by the `--canvas` CSS variable, read at render time via `getComputedStyle`. Grid dots use `--canvas-foreground`. See the `theming` skill for the full token table.
 
 ## What to build
 

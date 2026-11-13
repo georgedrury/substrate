@@ -25,8 +25,8 @@ npx substrate-kit add slider number-input toggle colour-picker
 Install every component in a category:
 
 ```bash
-npx substrate-kit add --category substrate/ui/form
-npx substrate-kit add --category substrate/ui/control
+npx substrate-kit add --category form
+npx substrate-kit add --category control
 ```
 
 Open an interactive picker (no arguments):
@@ -45,7 +45,8 @@ npx substrate-kit add --list-categories
 
 - Run from a project created with `npx create-substrate` or initialised with `npx @substrate-kit/cli init`. Both add `@substrate-kit/cli` as a dev dependency, which is what makes `npx substrate-kit` resolve. The CLI looks for `components.json` — it will error if it's missing.
 - Components land in `registry/substrate/...` and related aliases defined in `components.json`.
-- Under the hood the CLI delegates to `npx shadcn@latest add` against `https://substrate.georgedrury.co.uk/r/<name>`. Do **not** use the shadcn CLI directly — always go through `substrate-kit add` so the CLI can print theme-override hints and keep the workflow uniform.
+- Under the hood the CLI delegates to `npx shadcn@latest add` against `https://substrate.georgedrury.co.uk/r/<name>`, in one call for all the names you give it, retrying if the network drops. Do **not** use the shadcn CLI directly — always go through `substrate-kit add` so the CLI can print theme-override hints and keep the workflow uniform.
+- If the Substrate MCP server is connected, `search_components`, `get_component`, `get_docs` and `install_components` do the same jobs without a shell.
 
 ### Related CLI commands
 
@@ -54,6 +55,7 @@ npx substrate-kit add --list-categories
 | `substrate-kit add <name>` | Install one or more components |
 | `substrate-kit docs <name>` | Read component docs in the terminal: props, theme variables, usage |
 | `substrate-kit docs <name> --open` | Open the component's docs page in the browser |
+| `substrate-kit docs --list` | List every component |
 
 ---
 
@@ -61,7 +63,7 @@ npx substrate-kit add --list-categories
 
 When you catch yourself about to write a custom version of any of these, stop and run `substrate-kit add <name>` instead.
 
-### Form controls — `substrate/ui/form`
+### Form controls — `form`
 
 | Component | Command | Use for |
 | --- | --- | --- |
@@ -73,7 +75,7 @@ When you catch yourself about to write a custom version of any of these, stop an
 | Toggle | `substrate-kit add toggle` | Binary on/off switches (snap, visibility, lock) |
 | Text Area | `substrate-kit add text-area` | Auto-resizing multi-line text input |
 
-### Higher-level controls — `substrate/ui/control`
+### Higher-level controls — `control`
 
 | Component | Command | Use for |
 | --- | --- | --- |
@@ -87,7 +89,7 @@ When you catch yourself about to write a custom version of any of these, stop an
 | Tree List | `substrate-kit add tree-list` | Hierarchical tree with expand/collapse and drag reorder |
 | Node | `substrate-kit add node` | Card-based node with typed input/output ports |
 
-### Chrome (app shell) — `substrate/ui/chrome`
+### Chrome (app shell) — `chrome`
 
 | Component | Command | Use for |
 | --- | --- | --- |
@@ -101,7 +103,7 @@ When you catch yourself about to write a custom version of any of these, stop an
 | Status Bar | `substrate-kit add status-bar` | Bottom bar for tool/selection/zoom info |
 | Zoom Controls | `substrate-kit add zoom-controls` | Zoom in/out/reset with percentage display |
 
-### Core UI — `substrate/ui`
+### Core UI — `ui`
 
 | Component | Command | Use for |
 | --- | --- | --- |
@@ -116,7 +118,7 @@ When you catch yourself about to write a custom version of any of these, stop an
 | Progress Bar | `substrate-kit add progress-bar` | Horizontal progress indicator |
 | Toast | `substrate-kit add toast` | Notifications with undo, powered by Sonner |
 
-### Animation — `substrate/ui/animation`
+### Animation — `animation`
 
 | Component | Command | Use for |
 | --- | --- | --- |
@@ -125,13 +127,13 @@ When you catch yourself about to write a custom version of any of these, stop an
 | Spring Editor | `substrate-kit add spring-editor` | Spring curve preview with time or physics sliders |
 | Controls Timeline | `substrate-kit add controls-timeline` | Clips defined in code, tuned in a scrubbable timeline (`useControlsTimeline` + `<ControlsTimeline />`) |
 
-### Visualisation — `substrate/ui/visualization`
+### Visualisation — `visualization`
 
 | Component | Command | Use for |
 | --- | --- | --- |
 | Gallery | `substrate-kit add gallery` | Responsive thumbnail grid with selection and actions |
 
-### 2D canvas — `substrate/canvas`
+### 2D canvas — `canvas`
 
 | Component | Command | Use for |
 | --- | --- | --- |
@@ -140,7 +142,7 @@ When you catch yourself about to write a custom version of any of these, stop an
 | Hit Test | `substrate-kit add hit-test` | Point-in-element geometry |
 | Element Factory | `substrate-kit add element-factory` | Factories for rectangle/ellipse/text/etc |
 
-### Canvas hooks — `substrate/canvas` & `substrate/hook`
+### Canvas hooks — `canvas` and `hook`
 
 | Hook | Command | Use for |
 | --- | --- | --- |
@@ -156,7 +158,7 @@ When you catch yourself about to write a custom version of any of these, stop an
 | useViewport | `substrate-kit add use-viewport` | Pan/zoom state for canvas surfaces |
 | useUndoable | `substrate-kit add use-undoable` | Lightweight undo/redo stack |
 
-### Stores — `substrate/store`
+### Stores — `store`
 
 | Store | Command | Use for |
 | --- | --- | --- |
@@ -165,7 +167,7 @@ When you catch yourself about to write a custom version of any of these, stop an
 | panel-store | `substrate-kit add panel-store` | Left/right panel visibility, open panes |
 | animation-store | `substrate-kit add animation-store` | Playback: duration, time, play/pause |
 
-### Libraries — `substrate/lib`
+### Libraries — `lib`
 
 | Lib | Command | Use for |
 | --- | --- | --- |

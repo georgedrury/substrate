@@ -167,7 +167,7 @@ Use Pane/Action/Slider to build parameter controls:
 - **Parameters pane** — sliders for inference steps, CFG scale, seed, image size selector
 - **Style pane** (optional) — style preset buttons, LoRA weight sliders
 
-The Action/ActionLabel/ActionControls pattern works well for each parameter row.
+For this kind of local, tunable state, prefer `useControlsController` with `<Controls />` over hand-built rows: one config object gives the sliders, selects and seed field, plus reset, versions and a copy button, and `setValues` loads a saved generation (see **substrate-controls**). Use the Action/ActionLabel/ActionControls pattern when a row needs a custom layout.
 
 ## Interaction patterns
 

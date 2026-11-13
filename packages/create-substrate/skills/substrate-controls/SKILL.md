@@ -1,6 +1,6 @@
 ---
 name: substrate-controls
-description: "Substrate input and selection primitives: number input, slider, number slider, select, toggle, text area, colour picker, easing curve editor, swatch palette, and action controls. Use when building property editors, parameter forms, or any interactive control surface. Triggers on: input, slider, select, toggle, colour picker, swatch, easing, action controls, property editor, form control."
+description: "Substrate input and selection primitives and config-driven panels: Controls and useControls (describe parameters as an object, get a tuning panel), the controls timeline for tuning animation clips, number input, slider, number slider, select, toggle, text area, colour picker, easing curve editor, spring editor, XY pad, image picker, swatch palette, and action controls. Use when building property editors, parameter or settings panels, tuning values by eye, or any interactive control surface. Triggers on: useControls, Controls, controls panel, tweak values, tuning, parameters, input, slider, select, toggle, colour picker, spring, easing, XY pad, swatch, action controls, property editor, form control, useControlsTimeline."
 user-invocable: true
 ---
 

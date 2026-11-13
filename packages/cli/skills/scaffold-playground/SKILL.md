@@ -14,13 +14,13 @@ A Substrate playground is a creative app built from composable primitives: a **s
 
 ## Prerequisites
 
-A Next.js 14+ project with Tailwind CSS and the shadcn CLI configured. If you don't have one, run:
+A Vite or Next.js project with React and Tailwind CSS v4. If you don't have one, run:
 
 ```bash
 npx create-substrate my-playground
 ```
 
-This scaffolds a full project with dependencies, globals.css with Substrate tokens, and a starter playground page.
+This scaffolds a Vite + React project with dependencies, `globals.css` with Substrate tokens, and a starter page for the surface you pick. It asks for a name and a surface; pass `--surface <type>` (or `--yes`) when there is no terminal.
 
 To add Substrate to an existing project instead:
 
@@ -28,7 +28,7 @@ To add Substrate to an existing project instead:
 npx @substrate-kit/cli init
 ```
 
-This installs skills, CLAUDE.md, components.json, and registers the MCP server.
+This detects Vite or Next, installs the skills, adds Substrate guidance to `CLAUDE.md` and `AGENTS.md` without touching the rest of them, adds the `@substrate` registry to `components.json`, and registers the MCP server in `.mcp.json`.
 
 ## 1. Choose your surface
 
@@ -36,11 +36,12 @@ The surface is the heart of the playground — the central area where the main i
 
 | Surface            | Best for                                                  | Skill                                         |
 | ------------------ | --------------------------------------------------------- | --------------------------------------------- |
-| 2D canvas          | Shape editors, diagrams, whiteboards, node graphs         | [canvas-2d](./canvas-2d.md)                   |
-| 3D scene           | Product viewers, scene builders, shader playgrounds       | [3d-scene](./3d-scene.md)                     |
-| Animation          | Timeline editors, motion prototyping, easing explorers    | [animation](./animation.md)                   |
-| Image generation   | Prompt-driven image tools, texture generators, inpainting | [image-generation](./image-generation.md)     |
-| Data visualisation | Chart editors, dashboard builders, data explorers         | [data-visualisation](./data-visualisation.md) |
+| 2D canvas          | Shape editors, diagrams, whiteboards, node graphs         | `canvas-2d`                   |
+| 3D scene           | Product viewers, scene builders, shader playgrounds       | `3d-scene`                     |
+| Animation          | Timeline editors, motion prototyping, easing explorers    | `animation`                   |
+| Image generation   | Prompt-driven image tools, texture generators, inpainting | `image-generation`     |
+| Data visualisation | Chart editors, dashboard builders, data explorers         | `data-visualisation` |
+| Node editor        | Visual programming, shader graphs, data pipelines         | `substrate-nodes`       |
 
 Read the relevant surface skill for setup instructions, dependencies, and architecture patterns.
 
@@ -50,17 +51,13 @@ Regardless of surface type, most playgrounds use the same chrome components:
 
 ```bash
 # UI chrome
-npx shadcn@latest add https://substrate.georgedrury.co.uk/r/toolbar
-npx shadcn@latest add https://substrate.georgedrury.co.uk/r/panel
-npx shadcn@latest add https://substrate.georgedrury.co.uk/r/pane
-npx shadcn@latest add https://substrate.georgedrury.co.uk/r/action
-npx shadcn@latest add https://substrate.georgedrury.co.uk/r/slider
+npx substrate-kit add toolbar panel pane action slider
 ```
 
 For the 2D canvas surface specifically, also install:
 
 ```bash
-npx shadcn@latest add https://substrate.georgedrury.co.uk/r/design-canvas
+npx substrate-kit add design-canvas
 ```
 
 ## 3. Compose the layout
@@ -128,10 +125,10 @@ These are surface-agnostic — they work the same whether you're building a 3D s
 ## 5. Next steps
 
 - **Build your surface** — read the surface skill for your chosen type
-- **Add property panels** — see [composing panels](./composing-panels.md)
-- **Wire keyboard shortcuts** — see [wire interactions](./wire-interactions.md)
-- **Create custom tools** — see [create custom tool](./create-custom-tool.md)
-- **Customise appearance** — see [theming](./theming.md)
+- **Add property panels** — see `composing-panels`
+- **Wire keyboard shortcuts** — see `wire-interactions`
+- **Create custom tools** — see `create-custom-tool`
+- **Customise appearance** — see `theming`
 
 ## Component reference skills
 
