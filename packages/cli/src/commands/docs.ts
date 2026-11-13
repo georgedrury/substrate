@@ -1,65 +1,7 @@
-import { readFileSync, existsSync } from "node:fs"
-import { join, dirname } from "node:path"
-import { fileURLToPath } from "node:url"
+import { spawnSync } from "node:child_process"
 import { log } from "../utils/logger.js"
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const REGISTRY_URL = "https://substrate.georgedrury.co.uk/registry.json"
-const DOCS_BASE = "https://substrate.georgedrury.co.uk/docs/components"
-
-interface RegistryItem {
-	name: string
-	title?: string
-	description?: string
-	categories?: string[]
-	dependencies?: string[]
-	registryDependencies?: string[]
-	meta?: {
-		example?: string
-		lineage?: Array<{ name: string; href?: string }>
-	}
-	cssVars?: {
-		theme?: Record<string, string>
-	}
-}
-
-interface Registry {
-	items: RegistryItem[]
-}
-
-async function loadRegistry(): Promise<Registry> {
-	const localPath = join(process.cwd(), "registry.json")
-	if (existsSync(localPath)) {
-		try {
-			return JSON.parse(readFileSync(localPath, "utf-8"))
-		} catch {
-			/* fall through */
-		}
-	}
-
-	try {
-		const res = await fetch(REGISTRY_URL)
-		if (res.ok) return (await res.json()) as Registry
-	} catch {
-		/* fall through */
-	}
-
-	const bundledPaths = [
-		join(__dirname, "..", "..", "registry.json"),
-		join(__dirname, "..", "..", "..", "registry.json"),
-	]
-	for (const p of bundledPaths) {
-		if (existsSync(p)) {
-			try {
-				return JSON.parse(readFileSync(p, "utf-8"))
-			} catch {
-				/* fall through */
-			}
-		}
-	}
-
-	throw new Error("Could not load Substrate registry")
-}
+import { docsUrl } from "../utils/docs.js"
+import { loadRegistry, matchesQuery, type Registry, type RegistryItem } from "../registry.js"
 
 function formatComponent(item: RegistryItem): void {
 	const title = item.title || item.name
@@ -110,20 +52,12 @@ function formatComponent(item: RegistryItem): void {
 
 	console.log()
 	console.log("  Docs:")
-	console.log(`    ${DOCS_BASE}/${item.name}`)
+	console.log(`    ${docsUrl(item.name)}`)
 	console.log()
 }
 
 function formatList(items: RegistryItem[], query?: string): void {
-	const filtered = query
-		? items.filter(
-				(i) =>
-					i.name.includes(query) ||
-					(i.title || "").toLowerCase().includes(query) ||
-					(i.description || "").toLowerCase().includes(query) ||
-					(i.categories || []).some((c) => c.toLowerCase().includes(query)),
-			)
-		: items
+	const filtered = query ? items.filter((i) => matchesQuery(i, query)) : items
 
 	if (filtered.length === 0) {
 		log.warn(
@@ -157,35 +91,52 @@ function formatList(items: RegistryItem[], query?: string): void {
 	}
 }
 
-export async function docs(
-	nameOrQuery?: string,
-	options: { list?: boolean } = {},
-): Promise<void> {
+function openInBrowser(url: string): void {
+	log.info(`Opening ${url}`)
+	const [command, args] =
+		process.platform === "darwin"
+			? ["open", [url]]
+			: process.platform === "win32"
+				? ["cmd", ["/c", "start", "", url]]
+				: ["xdg-open", [url]]
+	const result = spawnSync(command, args, { stdio: "ignore" })
+	if (result.error || result.status !== 0) log.error(`Could not open a browser. Visit: ${url}`)
+}
+
+export interface DocsOptions {
+	list?: boolean
+	open?: boolean
+}
+
+export async function docs(nameOrQuery?: string, options: DocsOptions = {}): Promise<void> {
 	let registry: Registry
 	try {
 		registry = await loadRegistry()
 	} catch {
-		log.error(
-			"Could not load the Substrate registry. Check your network connection.",
-		)
+		log.error("Could not load the Substrate registry. Check your network connection.")
 		process.exit(1)
 	}
 
 	if (options.list || !nameOrQuery) {
+		if (options.open && !nameOrQuery) {
+			openInBrowser("https://substrate.georgedrury.co.uk/docs")
+			return
+		}
 		formatList(registry.items, nameOrQuery?.toLowerCase())
 		return
 	}
 
-	const item = registry.items.find((i) => i.name === nameOrQuery)
+	const query = nameOrQuery.toLowerCase()
+	const item =
+		registry.items.find((i) => i.name === query) ??
+		(() => {
+			const matches = registry.items.filter((i) => matchesQuery(i, query))
+			return matches.length === 1 ? matches[0] : undefined
+		})()
+
 	if (!item) {
-		const matches = registry.items.filter(
-			(i) =>
-				i.name.includes(nameOrQuery.toLowerCase()) ||
-				(i.title || "").toLowerCase().includes(nameOrQuery.toLowerCase()),
-		)
-		if (matches.length === 1) {
-			formatComponent(matches[0])
-		} else if (matches.length > 1) {
+		const matches = registry.items.filter((i) => matchesQuery(i, query))
+		if (matches.length > 1) {
 			log.warn(`No exact match for "${nameOrQuery}". Did you mean:`)
 			console.log()
 			for (const m of matches.slice(0, 10)) {
@@ -194,9 +145,14 @@ export async function docs(
 			console.log()
 		} else {
 			log.error(`Component "${nameOrQuery}" not found in registry`)
+			process.exitCode = 1
 		}
 		return
 	}
 
+	if (options.open) {
+		openInBrowser(docsUrl(item.name))
+		return
+	}
 	formatComponent(item)
 }

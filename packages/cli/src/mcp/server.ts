@@ -3,18 +3,19 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod"
-import { loadRegistry } from "./registry.js"
+import { loadRegistry } from "../registry.js"
+import { VERSION } from "../utils/version.js"
 import { handleSearch } from "./tools/search.js"
 import { handleGetComponent } from "./tools/get-component.js"
 import { handleInstall } from "./tools/install.js"
-import { handleGetThemeVariables } from "./tools/theme.js"
+import { handleGetDocs } from "./tools/get-docs.js"
 
 export async function startServer(): Promise<void> {
   const registry = await loadRegistry()
 
   const server = new McpServer({
     name: "substrate",
-    version: "0.1.3",
+    version: VERSION,
   })
 
   server.tool(
@@ -29,7 +30,7 @@ export async function startServer(): Promise<void> {
 
   server.tool(
     "get_component",
-    "Get full details for a specific Substrate component including CSS variables, dependencies, usage example, and lineage.",
+    "Get details for a Substrate component: CSS variables and the theme override keys, dependencies, usage example, lineage, install command and docs link.",
     {
       name: z.string().describe("Component name (e.g. design-canvas, toolbar, panel)"),
     },
@@ -46,12 +47,12 @@ export async function startServer(): Promise<void> {
   )
 
   server.tool(
-    "get_theme_variables",
-    "Get the CSS variable map for Substrate components, showing the full fallback chain. Useful for building or customising themes.",
+    "get_docs",
+    "Get the full documentation page for a component, hook or utility: install, usage, every prop and option, and theme variables. Use after get_component when you need to know how to use it.",
     {
-      components: z.array(z.string()).optional().describe("Component names to get variables for (omit for all)"),
+      name: z.string().describe("Component, hook or utility name (e.g. controls, controls-timeline, use-undoable)"),
     },
-    async (args) => handleGetThemeVariables(registry, args as { components?: string[] }),
+    async (args) => handleGetDocs(registry, args as { name: string }),
   )
 
   const transport = new StdioServerTransport()

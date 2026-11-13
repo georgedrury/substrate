@@ -1,46 +1,32 @@
-import type { Registry } from "../types.js"
+import { REGISTRY_BASE, type Registry } from "../../registry.js"
 import { shadcnAdd } from "../../utils/shadcn.js"
-
-// SUBSTRATE_REGISTRY_URL points installs at a local registry for testing
-const REGISTRY_BASE =
-	process.env.SUBSTRATE_REGISTRY_URL ?? "https://substrate.georgedrury.co.uk/r"
 
 export async function handleInstall(
 	registry: Registry,
 	args: { components: string[] },
 ) {
-	const results: Array<{ name: string; status: string; error?: string }> = []
+	const known = new Set(registry.items.map((i) => i.name))
+	const unknown = args.components.filter((name) => !known.has(name))
+	const valid = args.components.filter((name) => known.has(name))
 
-	for (const name of args.components) {
-		const item = registry.items.find((i) => i.name === name)
-		if (!item) {
-			results.push({
-				name,
-				status: "not_found",
-				error: `Component "${name}" not in registry`,
-			})
-			continue
-		}
+	const results: Array<{ name: string; status: string; error?: string }> = unknown.map((name) => ({
+		name,
+		status: "not_found",
+		error: `Component "${name}" not in registry`,
+	}))
 
-		const url = `${REGISTRY_BASE}/${name}`
+	if (valid.length > 0) {
 		try {
-			shadcnAdd(url, { silent: true })
-			results.push({ name, status: "installed" })
+			shadcnAdd(valid.map((name) => `${REGISTRY_BASE}/${name}`), { silent: true })
+			for (const name of valid) results.push({ name, status: "installed" })
 		} catch (err) {
-			results.push({
-				name,
-				status: "failed",
-				error: err instanceof Error ? err.message : String(err),
-			})
+			const error = err instanceof Error ? err.message : String(err)
+			for (const name of valid) results.push({ name, status: "failed", error })
 		}
 	}
 
 	return {
-		content: [
-			{
-				type: "text" as const,
-				text: JSON.stringify(results, null, 2),
-			},
-		],
+		content: [{ type: "text" as const, text: JSON.stringify(results, null, 2) }],
+		isError: results.some((r) => r.status !== "installed"),
 	}
 }

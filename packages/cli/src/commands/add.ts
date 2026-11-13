@@ -1,64 +1,15 @@
 import { createInterface } from "node:readline"
-import { join, dirname } from "node:path"
-import { readFileSync, existsSync } from "node:fs"
-import { fileURLToPath } from "node:url"
-import { shadcnAdd } from "../utils/shadcn.js"
+import { dirname, join } from "node:path"
 import { exists } from "../utils/fs.js"
+import { shadcnAdd } from "../utils/shadcn.js"
 import { log } from "../utils/logger.js"
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
-// SUBSTRATE_REGISTRY_URL points installs at a local registry for testing
-const REGISTRY_BASE =
-	process.env.SUBSTRATE_REGISTRY_URL ?? "https://substrate.georgedrury.co.uk/r"
-const REGISTRY_URL = "https://substrate.georgedrury.co.uk/registry.json"
-
-interface RegistryItem {
-	name: string
-	title?: string
-	description?: string
-	categories?: string[]
-	cssVars?: {
-		theme?: Record<string, string>
-	}
-}
-
-interface Registry {
-	items: RegistryItem[]
-}
-
-async function loadRegistry(): Promise<Registry | null> {
-	const localPath = join(process.cwd(), "registry.json")
-	if (existsSync(localPath)) {
-		try {
-			return JSON.parse(readFileSync(localPath, "utf-8"))
-		} catch {
-			/* fall through */
-		}
-	}
-
-	try {
-		const res = await fetch(REGISTRY_URL)
-		if (res.ok) return (await res.json()) as Registry
-	} catch {
-		/* fall through */
-	}
-
-	const bundledPaths = [
-		join(__dirname, "..", "..", "registry.json"),
-		join(__dirname, "..", "..", "..", "registry.json"),
-	]
-	for (const p of bundledPaths) {
-		if (existsSync(p)) {
-			try {
-				return JSON.parse(readFileSync(p, "utf-8"))
-			} catch {
-				/* fall through */
-			}
-		}
-	}
-
-	return null
-}
+import {
+	REGISTRY_BASE,
+	loadRegistry,
+	overrideKeys,
+	type Registry,
+	type RegistryItem,
+} from "../registry.js"
 
 function getCategories(registry: Registry): Map<string, RegistryItem[]> {
 	const cats = new Map<string, RegistryItem[]>()
@@ -232,19 +183,8 @@ async function interactivePicker(registry: Registry): Promise<string[]> {
 	})
 }
 
-function extractOverrideKeys(item: RegistryItem): string[] {
-	const theme = item.cssVars?.theme
-	if (!theme) return []
-	const keys: string[] = []
-	for (const value of Object.values(theme)) {
-		const match = value.match(/^var\(--([^,)]+)/)
-		if (match) keys.push(`--${match[1]}`)
-	}
-	return keys
-}
-
 function printThemeHint(item: RegistryItem): void {
-	const keys = extractOverrideKeys(item)
+	const keys = overrideKeys(item)
 	if (keys.length === 0) return
 	console.log()
 	console.log(`  Theme overrides:`)
@@ -272,50 +212,48 @@ function printCategories(registry: Registry): void {
 	}
 }
 
+function findProjectRoot(from: string): string | null {
+	let dir = from
+	for (;;) {
+		if (exists(join(dir, "components.json"))) return dir
+		const parent = dirname(dir)
+		if (parent === dir) return null
+		dir = parent
+	}
+}
+
+async function requireRegistry(): Promise<Registry> {
+	try {
+		return await loadRegistry()
+	} catch {
+		log.error("Could not load the Substrate registry. Check your network connection.")
+		process.exit(1)
+	}
+}
+
 export async function add(
 	components: string[],
 	options: AddOptions = {},
 ): Promise<void> {
 	if (options.listCategories) {
-		const registry = await loadRegistry()
-		if (!registry) {
-			log.error("Could not load the Substrate registry.")
-			process.exit(1)
-		}
-		printCategories(registry)
+		printCategories(await requireRegistry())
 		return
 	}
 
-	let cwd = process.cwd()
-	let found = false
-	while (cwd !== "/") {
-		if (exists(join(cwd, "components.json"))) {
-			found = true
-			break
-		}
-		cwd = join(cwd, "..")
-	}
-
-	if (!found) {
+	const cwd = findProjectRoot(process.cwd())
+	if (!cwd) {
 		log.error(
-			"No components.json found. Run 'npx @substrate-kit/cli init' first or ensure you're in a project directory.",
+			"No components.json found. Run 'npx @substrate-kit/cli init' first, or run this from inside your project.",
 		)
 		process.exit(1)
 	}
 
+	const registry = await requireRegistry()
+
 	if (options.category && components.length === 0) {
-		const registry = await loadRegistry()
-		if (!registry) {
-			log.error("Could not load the Substrate registry.")
-			process.exit(1)
-		}
-
-		const cats = getCategories(registry)
-		const catItems = cats.get(options.category.toLowerCase())
-
+		const catItems = getCategories(registry).get(options.category.toLowerCase())
 		if (!catItems) {
 			log.error(`Category "${options.category}" not found.`)
-			console.log()
 			printCategories(registry)
 			process.exit(1)
 		}
@@ -323,20 +261,11 @@ export async function add(
 		components = catItems.map((i) => i.name)
 		console.log()
 		console.log(`  ${options.category} (${components.length} components)`)
-		for (const name of components) {
-			console.log(`    ${name}`)
-		}
+		for (const name of components) console.log(`    ${name}`)
 		console.log()
 	}
 
 	if (components.length === 0) {
-		const registry = await loadRegistry()
-		if (!registry) {
-			log.error("Could not load the Substrate registry.")
-			log.info("Usage: substrate-kit add design-canvas toolbar panel")
-			process.exit(1)
-		}
-
 		if (!process.stdin.isTTY) {
 			log.error(
 				"Interactive mode requires a terminal. Specify components: substrate-kit add design-canvas toolbar",
@@ -345,38 +274,41 @@ export async function add(
 		}
 
 		components = await interactivePicker(registry)
-
 		if (components.length === 0) {
 			log.info("No components selected.")
 			return
 		}
 	}
 
-	const registry = await loadRegistry()
+	const known = new Set(registry.items.map((i) => i.name))
+	const unknown = components.filter((name) => !known.has(name))
+	if (unknown.length > 0) {
+		log.error(`Not in the registry: ${unknown.join(", ")}`)
+		log.info("Run 'substrate-kit docs --list' to see every component.")
+		process.exit(1)
+	}
 
 	log.title("Adding Substrate components")
+	log.step(`Installing ${components.join(", ")}`)
 
-	let installed = 0
-	for (const component of components) {
-		const url = `${REGISTRY_BASE}/${component}`
-		log.step(`Installing ${component}`)
-		try {
-			shadcnAdd(url, { cwd })
-			log.success(`Installed ${component}`)
-			installed++
+	try {
+		shadcnAdd(
+			components.map((name) => `${REGISTRY_BASE}/${name}`),
+			{ cwd },
+			(attempt) => log.warn(`Install failed (attempt ${attempt}), retrying...`),
+		)
+	} catch {
+		log.error("Install failed. Check your connection and try again.")
+		process.exit(1)
+	}
 
-			if (registry) {
-				const item = registry.items.find((i) => i.name === component)
-				if (item) printThemeHint(item)
-			}
-		} catch {
-			log.error(`Failed to install ${component}`)
-		}
+	for (const name of components) {
+		const item = registry.items.find((i) => i.name === name)
+		if (item) printThemeHint(item)
 	}
 
 	log.blank()
-	log.info(
-		`Added ${installed} component${installed === 1 ? "" : "s"} from substrate.georgedrury.co.uk`,
+	log.success(
+		`Added ${components.length} component${components.length === 1 ? "" : "s"} from substrate.georgedrury.co.uk`,
 	)
-	if (installed < components.length) process.exitCode = 1
 }
