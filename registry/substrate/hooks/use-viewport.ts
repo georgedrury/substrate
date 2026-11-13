@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback, useRef, useLayoutEffect } from "react"
 
 type Viewport = {
 	x: number
@@ -27,8 +27,11 @@ function useViewport({
 		zoom: initial?.zoom ?? 1,
 	})
 
+	// Event handlers read the latest viewport without re-subscribing
 	const viewportRef = useRef(viewport)
-	viewportRef.current = viewport
+	useLayoutEffect(() => {
+		viewportRef.current = viewport
+	}, [viewport])
 
 	const clampZoom = useCallback(
 		(z: number) => Math.min(maxZoom, Math.max(minZoom, z)),

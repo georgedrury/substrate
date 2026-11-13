@@ -29,9 +29,18 @@ function useUndoable<T>(options?: UseUndoableOptions): UseUndoableReturn<T> {
 	const maxHistory = options?.maxHistory ?? 50
 	const pastRef = useRef<T[]>([])
 	const futureRef = useRef<T[]>([])
-	const [, forceUpdate] = useState(0)
+	// The stacks live in refs so undo and redo can return synchronously; the
+	// counts are mirrored into state so rendering never reads a ref
+	const [counts, setCounts] = useState({ undo: 0, redo: 0 })
 
-	const rerender = useCallback(() => forceUpdate((n) => n + 1), [])
+	const rerender = useCallback(
+		() =>
+			setCounts({
+				undo: pastRef.current.length,
+				redo: futureRef.current.length,
+			}),
+		[],
+	)
 
 	const pushSnapshot = useCallback(
 		(state: T) => {
@@ -70,10 +79,10 @@ function useUndoable<T>(options?: UseUndoableOptions): UseUndoableReturn<T> {
 		pushSnapshot,
 		undo,
 		redo,
-		canUndo: pastRef.current.length > 0,
-		canRedo: futureRef.current.length > 0,
-		undoCount: pastRef.current.length,
-		redoCount: futureRef.current.length,
+		canUndo: counts.undo > 0,
+		canRedo: counts.redo > 0,
+		undoCount: counts.undo,
+		redoCount: counts.redo,
 		clear,
 	}
 }

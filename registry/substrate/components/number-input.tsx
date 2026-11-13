@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState, useCallback, useEffect } from "react"
+import { useRef, useState, useCallback } from "react"
 import { cn } from "@/lib/utils"
 
 type NumberInputProps = {
@@ -167,11 +167,13 @@ function NumberInput({
 		if (isEditing) commitEdit()
 	}, [isEditing, commitEdit])
 
-	// Keep edit value in sync when value changes externally during editing
-	useEffect(() => {
-		if (!isEditing) return
-		setEditValue(format(value))
-	}, [value, isEditing, format])
+	// Keep the draft in sync when the value changes externally during editing.
+	// Adjusting state while rendering avoids an extra pass through an effect.
+	const [syncedValue, setSyncedValue] = useState(value)
+	if (value !== syncedValue) {
+		setSyncedValue(value)
+		if (isEditing) setEditValue(format(value))
+	}
 
 	return (
 		<div
