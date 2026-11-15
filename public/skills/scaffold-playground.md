@@ -146,6 +146,8 @@ Substrate tools are dense, so the details decide whether one feels finished. App
 
 ### Before you say it's done
 
+Some of these need a browser. If you can't run the app (no dev server or browser tool), do the checks you can, such as the build and typecheck, and finish your report with a plain list of the ones you couldn't do. Never say it works when you only know it compiles.
+
 1. `npm run build` passes and the console is clean.
 2. Open it in light and dark and look at it. Starter content, text and borders must be readable in both.
 3. Make each kind of edit, then undo and redo it: move, resize, create, delete, property changes, reorder. Pan or zoom after an edit and undo again; the view must stay put.
