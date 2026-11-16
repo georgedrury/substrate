@@ -172,7 +172,7 @@ const INITIAL_GENERATIONS: Generation[] = [
 ]
 
 const TOOLBAR_BUTTON =
-  "inline-flex h-7 items-center justify-center gap-1.5 rounded-md px-2 text-xs font-medium outline-none transition-[color,background-color,box-shadow,transform] active:scale-[0.96] hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50"
+  "inline-flex h-7 items-center justify-center gap-1.5 rounded-sm px-2 text-xs font-medium outline-none transition-[color,background-color,box-shadow,transform] active:scale-[0.96] hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50"
 
 export default function App() {
   const [prompt, setPrompt] = useState("Misty mountain valley at sunrise")

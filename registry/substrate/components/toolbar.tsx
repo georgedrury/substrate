@@ -31,7 +31,7 @@ function Toolbar({
 				data-position={position}
 				data-orientation={orientation}
 				className={cn(
-					"group/toolbar fixed z-50 flex items-center p-2 bg-background border rounded-xl shadow-lg bottom-12 left-1/2 -translate-x-1/2",
+					"group/toolbar fixed z-50 flex items-center p-2 bg-background rounded-xl shadow-lg ring-1 ring-foreground/10 bottom-12 left-1/2 -translate-x-1/2",
 					// Compact child components inside toolbar
 					"**:data-[slot=number-input]:h-6 **:data-[slot=number-input]:w-16 **:data-[slot=number-input]:text-[11px]",
 					"**:data-[slot=colour-swatch]:size-6",
@@ -110,7 +110,7 @@ function ToolbarToggle({
 		<ToggleGroupPrimitive.Item
 			data-slot="toolbar-toggle"
 			className={cn(
-				"inline-flex items-center justify-center rounded-md transition-[color,background-color,box-shadow,transform] active:scale-[0.96] outline-none",
+				"inline-flex items-center justify-center rounded-sm transition-[color,background-color,box-shadow,transform] active:scale-[0.96] outline-none",
 				"h-7 min-w-7 px-2",
 				"text-xs font-medium",
 				"hover:bg-muted hover:text-foreground",
@@ -182,7 +182,7 @@ function ToolbarDropdown({
 			data-slot="toolbar-dropdown"
 			data-active={active || undefined}
 			className={cn(
-				"inline-flex items-center justify-center gap-1 rounded-md transition-[color,background-color,box-shadow,transform] active:scale-[0.96] outline-none",
+				"inline-flex items-center justify-center gap-1 rounded-sm transition-[color,background-color,box-shadow,transform] active:scale-[0.96] outline-none",
 				"h-7 min-w-7 px-2",
 				"text-xs font-medium",
 				"hover:bg-muted hover:text-foreground",
@@ -236,7 +236,7 @@ function ToolbarDropdown({
 							<DropdownMenuPrimitive.RadioItem
 								key={item.value}
 								value={item.value}
-								className="relative flex min-h-7 cursor-default items-center gap-2 rounded-md py-1.5 pr-8 pl-2 text-xs outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5"
+								className="relative flex min-h-7 cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-xs outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5"
 							>
 								<span className="pointer-events-none absolute right-2 flex items-center justify-center">
 									<DropdownMenuPrimitive.ItemIndicator>

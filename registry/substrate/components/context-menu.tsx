@@ -60,7 +60,7 @@ function ContextMenuItem({
 			data-slot="context-menu-item"
 			disabled={disabled}
 			className={cn(
-				"relative flex min-h-7 cursor-default items-center gap-2 rounded-md px-2 py-1.5 text-xs outline-none select-none",
+				"relative flex min-h-7 cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-xs outline-none select-none",
 				"focus:bg-accent focus:text-accent-foreground",
 				"data-disabled:opacity-40 data-disabled:pointer-events-none",
 				"[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-3.5",
@@ -137,7 +137,7 @@ function ContextMenuSubTrigger({
 		<ContextMenuPrimitive.SubTrigger
 			data-slot="context-menu-sub-trigger"
 			className={cn(
-				"relative flex min-h-7 cursor-default items-center gap-2 rounded-md px-2 py-1.5 text-xs outline-none select-none",
+				"relative flex min-h-7 cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-xs outline-none select-none",
 				"focus:bg-accent focus:text-accent-foreground",
 				"data-open:bg-accent data-open:text-accent-foreground",
 				"[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-3.5",

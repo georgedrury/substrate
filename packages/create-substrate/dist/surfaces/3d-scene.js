@@ -104,7 +104,7 @@ const INITIAL_OBJECTS: SceneObject[] = [
 ]
 
 const toolbarButton =
-  "inline-flex h-7 min-w-7 items-center justify-center rounded-md px-2 outline-none transition-[color,background-color,box-shadow,transform] active:scale-[0.96] hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50"
+  "inline-flex h-7 min-w-7 items-center justify-center rounded-sm px-2 outline-none transition-[color,background-color,box-shadow,transform] active:scale-[0.96] hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50"
 
 function isMode(value: string): value is Mode {
   return MODES.some((mode) => mode === value)

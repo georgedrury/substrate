@@ -67,7 +67,7 @@ function TimelineRuler({
             >
               <div className="flex flex-col items-center h-full">
                 <div className="h-2 w-px bg-border" />
-                <div className="text-[10px] text-muted-foreground pt-0.5 whitespace-nowrap pr-1">
+                <div className="text-[10px] text-muted-foreground pt-0.5 whitespace-nowrap pr-1 tabular-nums">
                   {timeLabel}
                 </div>
               </div>
