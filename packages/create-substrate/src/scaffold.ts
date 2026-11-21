@@ -80,13 +80,21 @@ export async function scaffold(
   log.success("Project files created")
 
   const failedComponents: string[] = []
+  let installFailed = false
 
   // 2. Install dependencies
   if (!skipInstall) {
     log.step(`Installing dependencies with ${packageManager}...`)
-    exec(getInstallCommand(packageManager), { cwd: projectDir })
-    log.success("Dependencies installed")
+    try {
+      exec(getInstallCommand(packageManager), { cwd: projectDir })
+      log.success("Dependencies installed")
+    } catch {
+      // The project files are already written, so keep going and say how to finish
+      installFailed = true
+    }
+  }
 
+  if (!skipInstall && !installFailed) {
     // 3. Install Substrate components in one call so shared dependencies are
     // resolved once. The project is new, so overwriting is safe and avoids
     // prompts. Retry because one dropped request would otherwise leave a
@@ -107,7 +115,7 @@ export async function scaffold(
     } else {
       failedComponents.push(...config.components)
     }
-  } else {
+  } else if (skipInstall) {
     log.warn("Skipping dependency installation (--skip-install)")
   }
 
@@ -143,6 +151,25 @@ export async function scaffold(
     execSilent("git add -A", projectDir)
     execSilent('git commit -m "Initial commit from create-substrate"', projectDir)
     log.success("Git repository initialised")
+  }
+
+  if (installFailed) {
+    const components = config.components.join(" ")
+    log.blank()
+    log.error(`${packageManager} could not install the dependencies. The project was created in ./${projectName}, without its Substrate components.`)
+    log.blank()
+    log.info("Read the error above first. If it mentions EACCES, EEXIST or permission denied on ~/.npm, the npm cache has files owned by another user, often from an earlier `sudo npm`. Fix it with:")
+    log.info("  sudo chown -R $(id -u):$(id -g) ~/.npm")
+    log.info("or retry with a throwaway cache:")
+    log.info("  npm_config_cache=/tmp/npm-cache npm install")
+    log.blank()
+    log.info("Then finish the setup:")
+    log.info(`  cd ${projectName}`)
+    log.info(`  ${getInstallCommand(packageManager)}`)
+    log.info(`  npx substrate-kit add ${components}`)
+    log.blank()
+    process.exitCode = 1
+    return
   }
 
   if (failedComponents.length > 0) {
