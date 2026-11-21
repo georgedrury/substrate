@@ -1,5 +1,6 @@
-import { REGISTRY_BASE, type Registry } from "../../registry.js"
-import { shadcnAdd } from "../../utils/shadcn.js"
+import type { Registry } from "../../registry.js"
+import { installAndRecord } from "../../install.js"
+import { findProjectRoot } from "../../commands/doctor.js"
 
 export async function handleInstall(
 	registry: Registry,
@@ -16,8 +17,17 @@ export async function handleInstall(
 	}))
 
 	if (valid.length > 0) {
+		const root = findProjectRoot(process.cwd())
+		if (!root) {
+			const error = "No components.json found. Run `npx @substrate-kit/cli init` in the project first."
+			for (const name of valid) results.push({ name, status: "failed", error })
+			return {
+				content: [{ type: "text" as const, text: JSON.stringify(results, null, 2) }],
+				isError: true,
+			}
+		}
 		try {
-			shadcnAdd(valid.map((name) => `${REGISTRY_BASE}/${name}`), { silent: true })
+			await installAndRecord(root, valid, { silent: true })
 			for (const name of valid) results.push({ name, status: "installed" })
 		} catch (err) {
 			const error = err instanceof Error ? err.message : String(err)

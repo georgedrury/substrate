@@ -1,14 +1,10 @@
 import { createInterface } from "node:readline"
 import { dirname, join } from "node:path"
 import { exists } from "../utils/fs.js"
-import { shadcnAdd } from "../utils/shadcn.js"
-import { hashesBefore, recordAfterInstall } from "../lock.js"
+import { installAndRecord } from "../install.js"
 import { log } from "../utils/logger.js"
 import {
-	REGISTRY_BASE,
-	collectItems,
 	loadRegistry,
-	type ItemDetail,
 	overrideKeys,
 	type Registry,
 	type RegistryItem,
@@ -295,21 +291,12 @@ export async function add(
 	log.title("Adding Substrate components")
 	log.step(`Installing ${components.join(", ")}`)
 
-	// Note what is on disk first, so afterwards we can tell what was written
-	let closure: Map<string, ItemDetail> | null = null
+	let recorded = 0
 	try {
-		closure = await collectItems(components)
-	} catch {
-		closure = null
-	}
-	const before = closure ? hashesBefore(cwd, closure) : null
-
-	try {
-		shadcnAdd(
-			components.map((name) => `${REGISTRY_BASE}/${name}`),
-			{ cwd, yes: options.yes },
-			(attempt) => log.warn(`Install failed (attempt ${attempt}), retrying...`),
-		)
+		;({ recorded } = await installAndRecord(cwd, components, {
+			yes: options.yes,
+			onRetry: (attempt) => log.warn(`Install failed (attempt ${attempt}), retrying...`),
+		}))
 	} catch {
 		log.error("Install failed. Check your connection and try again.")
 		process.exit(1)
@@ -320,10 +307,7 @@ export async function add(
 		if (item) printThemeHint(item)
 	}
 
-	if (closure && before) {
-		const recorded = recordAfterInstall(cwd, closure, before)
-		if (recorded > 0) log.step(`Recorded ${recorded} component${recorded === 1 ? "" : "s"} in substrate.lock.json`)
-	}
+	if (recorded > 0) log.step(`Recorded ${recorded} component${recorded === 1 ? "" : "s"} in substrate.lock.json`)
 
 	log.blank()
 	log.success(

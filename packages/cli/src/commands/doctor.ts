@@ -94,6 +94,20 @@ async function adopt(root: string, current: boolean): Promise<number> {
 	return added
 }
 
+export type Report =
+	| { tracked: false }
+	| { tracked: true; reachable: boolean; items: ItemReport[] }
+
+/** The state of every tracked component, without printing anything */
+export async function buildReport(root: string): Promise<Report> {
+	const lock = readLock(root)
+	if (!lock) return { tracked: false }
+	const names = Object.keys(lock.items)
+	const current = await fetchCurrent(names)
+	const reachable = names.length === 0 || [...current.values()].some((detail) => detail !== null)
+	return { tracked: true, reachable, items: assess(root, lock, current) }
+}
+
 const LABEL: Record<Status, string> = {
 	ok: "up to date",
 	behind: "behind the registry",

@@ -1,10 +1,9 @@
 import { createInterface } from "node:readline";
 import { dirname, join } from "node:path";
 import { exists } from "../utils/fs.js";
-import { shadcnAdd } from "../utils/shadcn.js";
-import { hashesBefore, recordAfterInstall } from "../lock.js";
+import { installAndRecord } from "../install.js";
 import { log } from "../utils/logger.js";
-import { REGISTRY_BASE, collectItems, loadRegistry, overrideKeys, } from "../registry.js";
+import { loadRegistry, overrideKeys, } from "../registry.js";
 function getCategories(registry) {
     const cats = new Map();
     for (const item of registry.items) {
@@ -239,17 +238,13 @@ export async function add(components, options = {}) {
     }
     log.title("Adding Substrate components");
     log.step(`Installing ${components.join(", ")}`);
-    // Note what is on disk first, so afterwards we can tell what was written
-    let closure = null;
+    let recorded = 0;
     try {
-        closure = await collectItems(components);
-    }
-    catch {
-        closure = null;
-    }
-    const before = closure ? hashesBefore(cwd, closure) : null;
-    try {
-        shadcnAdd(components.map((name) => `${REGISTRY_BASE}/${name}`), { cwd, yes: options.yes }, (attempt) => log.warn(`Install failed (attempt ${attempt}), retrying...`));
+        ;
+        ({ recorded } = await installAndRecord(cwd, components, {
+            yes: options.yes,
+            onRetry: (attempt) => log.warn(`Install failed (attempt ${attempt}), retrying...`),
+        }));
     }
     catch {
         log.error("Install failed. Check your connection and try again.");
@@ -260,11 +255,8 @@ export async function add(components, options = {}) {
         if (item)
             printThemeHint(item);
     }
-    if (closure && before) {
-        const recorded = recordAfterInstall(cwd, closure, before);
-        if (recorded > 0)
-            log.step(`Recorded ${recorded} component${recorded === 1 ? "" : "s"} in substrate.lock.json`);
-    }
+    if (recorded > 0)
+        log.step(`Recorded ${recorded} component${recorded === 1 ? "" : "s"} in substrate.lock.json`);
     log.blank();
     log.success(`Added ${components.length} component${components.length === 1 ? "" : "s"} from substrate.georgedrury.co.uk`);
 }

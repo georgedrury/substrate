@@ -60,6 +60,8 @@ Or start with the full canvas scaffold:
 npx substrate-kit add design-canvas
 ```
 
+Components are copied into your project, so fixes don't arrive on their own. `npx substrate-kit doctor` shows which installed components are behind the registry or have been edited, and `npx substrate-kit update` updates the ones you haven't touched. Both read `substrate.lock.json`, which `add` writes; commit it.
+
 Every component is also a standard shadcn registry item, so `npx shadcn@latest add https://substrate.georgedrury.co.uk/r/toolbar` works too.
 
 ---

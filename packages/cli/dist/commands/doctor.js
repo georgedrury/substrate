@@ -69,6 +69,16 @@ async function adopt(root, current) {
     writeLock(root, lock);
     return added;
 }
+/** The state of every tracked component, without printing anything */
+export async function buildReport(root) {
+    const lock = readLock(root);
+    if (!lock)
+        return { tracked: false };
+    const names = Object.keys(lock.items);
+    const current = await fetchCurrent(names);
+    const reachable = names.length === 0 || [...current.values()].some((detail) => detail !== null);
+    return { tracked: true, reachable, items: assess(root, lock, current) };
+}
 const LABEL = {
     ok: "up to date",
     behind: "behind the registry",

@@ -8,6 +8,7 @@ import { handleSearch } from "./tools/search.js";
 import { handleGetComponent } from "./tools/get-component.js";
 import { handleInstall } from "./tools/install.js";
 import { handleGetDocs } from "./tools/get-docs.js";
+import { handleCheckComponents, handleUpdateComponents } from "./tools/project-components.js";
 export async function startServer() {
     const registry = await loadRegistry();
     const server = new McpServer({
@@ -27,6 +28,11 @@ export async function startServer() {
     server.tool("get_docs", "Get the full documentation page for a component, hook or utility: install, usage, every prop and option, and theme variables. Use after get_component when you need to know how to use it.", {
         name: z.string().describe("Component, hook or utility name (e.g. controls, controls-timeline, use-undoable)"),
     }, async (args) => handleGetDocs(registry, args));
+    server.tool("check_components", "Check which Substrate components installed in this project are behind the registry or have been edited locally. Read-only. Uses substrate.lock.json.", {}, async () => handleCheckComponents());
+    server.tool("update_components", "Update Substrate components in this project that are behind the registry. Only components you have not edited are replaced; edited ones are left alone and reported. Use dry_run to preview.", {
+        components: z.array(z.string()).optional().describe("Component names to update (omit for every one that is behind)"),
+        dry_run: z.boolean().optional().describe("Report what would change without changing anything"),
+    }, async (args) => handleUpdateComponents(args));
     const transport = new StdioServerTransport();
     await server.connect(transport);
 }

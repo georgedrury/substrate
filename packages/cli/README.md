@@ -51,7 +51,16 @@ Projects made before the lockfile existed can start tracking with `npx substrate
 
 ## MCP server
 
-`substrate-kit mcp` gives agents these tools: `search_components`, `get_component` (details and theme variables), `get_docs` (a component's full docs page), and `install_components`.
+`substrate-kit mcp` gives agents these tools:
+
+| Tool | Does |
+| --- | --- |
+| `search_components` | Find components by keyword or category |
+| `get_component` | Details and theme variables for one component |
+| `get_docs` | A component's full docs page |
+| `install_components` | Install components, and record them in `substrate.lock.json` |
+| `check_components` | Read-only: which installed components are behind the registry or edited |
+| `update_components` | Update components that are behind. Edited components are never replaced; that takes the CLI's `update --force` |
 
 ## Upgrading from 0.1
 

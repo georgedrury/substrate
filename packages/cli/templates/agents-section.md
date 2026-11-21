@@ -14,7 +14,7 @@ npx substrate-kit docs <component> --open    # open its docs page in the browser
 npx substrate-kit docs --list                # every component
 ```
 
-Before writing a custom slider, input, panel, timeline or colour picker, check `docs --list`. If the Substrate MCP server is connected, use `search_components`, `get_component` and `get_docs` instead of the commands above, and `install_components` to install.
+Before writing a custom slider, input, panel, timeline or colour picker, check `docs --list`. If the Substrate MCP server is connected, use `search_components`, `get_component` and `get_docs` instead of the commands above, `install_components` to install, and `check_components` and `update_components` to keep installed components current.
 
 Components are copied into the project and are yours to edit. `substrate.lock.json` records what was installed, so `npx substrate-kit doctor` shows which components have fallen behind the registry or been edited, and `npx substrate-kit update` updates the ones you haven't edited (`--force` replaces edited ones after backing them up). Commit the lockfile.
 

@@ -246,6 +246,46 @@ async function cliInit() {
 
 // The lockfile tells "the registry moved on" apart from "you edited this", and
 // update must replace only what is safe to replace.
+// Talk to `substrate-kit mcp` over stdio: send tool calls, get each result back
+function mcpCalls(cwd, calls) {
+	const cli = join(root, "packages/cli/dist/index.js")
+	return new Promise((resolve, reject) => {
+		const child = spawn("node", [cli, "mcp"], { cwd, env, stdio: ["pipe", "pipe", "ignore"] })
+		const responses = new Map()
+		let buffer = ""
+		const timer = setTimeout(() => {
+			child.kill()
+			reject(new Error("the MCP server did not answer in time"))
+		}, 180000)
+		child.stdout.on("data", (chunk) => {
+			buffer += chunk
+			let newline
+			while ((newline = buffer.indexOf("\n")) >= 0) {
+				const line = buffer.slice(0, newline)
+				buffer = buffer.slice(newline + 1)
+				try {
+					const message = JSON.parse(line)
+					if (message.id !== undefined) responses.set(message.id, message)
+				} catch {
+					/* not a JSON-RPC line */
+				}
+			}
+			if (responses.size >= calls.length + 1) {
+				clearTimeout(timer)
+				child.kill()
+				resolve(calls.map((_, index) => responses.get(index + 2)))
+			}
+		})
+		const send = (message) => child.stdin.write(`${JSON.stringify({ jsonrpc: "2.0", ...message })}\n`)
+		send({ id: 1, method: "initialize", params: { protocolVersion: "2024-11-05", capabilities: {}, clientInfo: { name: "test", version: "1" } } })
+		send({ method: "notifications/initialized" })
+		calls.forEach((call, index) => send({ id: index + 2, ...call }))
+	})
+}
+
+const toolCall = (name, args = {}) => ({ method: "tools/call", params: { name, arguments: args } })
+const toolText = (response) => JSON.parse(response.result.content[0].text)
+
 async function cliLock() {
 	const scaffolder = join(root, "packages/create-substrate/dist/index.js")
 	const cli = join(root, "packages/cli/dist/index.js")
@@ -306,6 +346,45 @@ async function cliLock() {
 		if (!existsSync(join(cwd, ".substrate/backup"))) problems.push("update --force made no backup")
 		status = await report()
 		if (status[edited] !== "ok") problems.push(`${edited} should be up to date after a forced update, got ${status[edited]}`)
+
+		// The same through MCP, where an agent must never replace an edited component
+		const [list] = await mcpCalls(cwd, [{ method: "tools/list" }])
+		const tools = list.result.tools.map((tool) => tool.name)
+		for (const name of ["check_components", "update_components"]) {
+			if (!tools.includes(name)) problems.push(`the MCP server has no ${name} tool`)
+		}
+
+		appendFileSync(editedPath, "\n// my second edit\n")
+		const again = readLock()
+		again.items[stale].registryHash = "deadbeefdeadbeef"
+		writeFileSync(lockPath, JSON.stringify(again, null, 2))
+
+		const [checked] = await mcpCalls(cwd, [toolCall("check_components")])
+		const attention = Object.fromEntries(toolText(checked).needsAttention.map((item) => [item.name, item.status]))
+		if (attention[stale] !== "behind" || attention[edited] !== "modified") {
+			problems.push(`check_components reported ${JSON.stringify(attention)}`)
+		}
+
+		const [dryRun] = await mcpCalls(cwd, [toolCall("update_components", { dry_run: true })])
+		const planned = toolText(dryRun)
+		if (planned.kind !== "dry-run" || !planned.toUpdate.includes(stale) || planned.toUpdate.includes(edited)) {
+			problems.push(`update_components dry run planned ${JSON.stringify(planned)}`)
+		}
+
+		const [refusedByAgent] = await mcpCalls(cwd, [toolCall("update_components", { components: [edited] })])
+		if (!refusedByAgent.result.isError) problems.push("update_components replaced an edited component")
+		if (!readFileSync(editedPath, "utf-8").includes("my second edit")) problems.push("an agent update changed an edited file")
+
+		const [applied] = await mcpCalls(cwd, [toolCall("update_components")])
+		if (toolText(applied).kind !== "updated") problems.push(`update_components did not update: ${JSON.stringify(toolText(applied))}`)
+		status = await report()
+		if (status[stale] !== "ok") problems.push(`${stale} should be up to date after the agent update, got ${status[stale]}`)
+		if (!readFileSync(editedPath, "utf-8").includes("my second edit")) problems.push("the agent update replaced an edited file")
+
+		// An agent-installed component is recorded as well
+		const [installed] = await mcpCalls(cwd, [toolCall("install_components", { components: ["toggle"] })])
+		if (installed.result.isError) problems.push(`install_components failed: ${installed.result.content[0].text}`)
+		if (!readLock().items.toggle) problems.push("install_components did not record toggle in the lockfile")
 	} catch (error) {
 		return { ok: false, stage: "lifecycle", output: String(error) }
 	}

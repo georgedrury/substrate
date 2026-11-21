@@ -23,6 +23,15 @@ export interface UpdateOptions {
 	dryRun?: boolean
 }
 
+export type UpdateResult =
+	| { kind: "no-lock" }
+	| { kind: "untracked"; names: string[] }
+	| { kind: "blocked"; items: Array<{ name: string; status: string }> }
+	| { kind: "up-to-date" }
+	| { kind: "dry-run"; toUpdate: string[]; keeping: string[] }
+	| { kind: "failed" }
+	| { kind: "updated"; updated: string[]; keeping: string[]; restored: number; backups: number; backupDir: string | null }
+
 const SAFE = new Set(["behind"])
 
 // Backups are for you to look at, not to commit
@@ -34,23 +43,22 @@ function ignoreBackups(root: string): void {
 	appendFileSync(path, `${current.endsWith("\n") ? "" : "\n"}.substrate/\n`)
 }
 
-export async function update(names: string[], options: UpdateOptions = {}): Promise<void> {
-	const root = findProjectRoot(process.cwd())
-	if (!root) {
-		log.error("No components.json found. Run this from inside your project.")
-		process.exit(1)
-	}
+/**
+ * Update tracked components. Without names, that is everything simply behind.
+ * Edited components, and ones of unknown version, are only replaced with
+ * `force`, and are backed up first. Prints nothing and never exits, so the CLI
+ * and the MCP server can both use it.
+ */
+export async function runUpdate(
+	root: string,
+	names: string[],
+	options: UpdateOptions & { silent?: boolean; onRetry?: (attempt: number) => void } = {},
+): Promise<UpdateResult> {
 	const lock = readLock(root)
-	if (!lock) {
-		log.error(`No ${LOCK_FILE} yet. Run \`substrate-kit doctor --adopt\` first so there is something to compare with.`)
-		process.exit(1)
-	}
+	if (!lock) return { kind: "no-lock" }
 
-	const unknown = names.filter((name) => !lock.items[name])
-	if (unknown.length > 0) {
-		log.error(`Not tracked in ${LOCK_FILE}: ${unknown.join(", ")}`)
-		process.exit(1)
-	}
+	const untracked = names.filter((name) => !lock.items[name])
+	if (untracked.length > 0) return { kind: "untracked", names: untracked }
 
 	const current = await fetchCurrent(Object.keys(lock.items))
 	const reports = assess(root, lock, current)
@@ -63,46 +71,34 @@ export async function update(names: string[], options: UpdateOptions = {}): Prom
 		return status !== undefined && !SAFE.has(status) && status !== "ok" && !options.force
 	})
 	if (blocked.length > 0) {
-		log.error("These have local edits or an unknown version, so they were not touched:")
-		for (const name of blocked) console.log(`  ${name} (${byName.get(name)?.status})`)
-		log.info("Update them anyway with `substrate-kit update --force <name>`. Your files are backed up first.")
-		process.exit(1)
+		return { kind: "blocked", items: blocked.map((name) => ({ name, status: byName.get(name)?.status ?? "unknown" })) }
 	}
 	const toUpdate = chosen.filter((name) => {
 		const status = byName.get(name)?.status
 		return status !== "ok" && status !== "removed" && status !== undefined
 	})
-	if (toUpdate.length === 0) {
-		log.success("Everything is up to date.")
-		return
-	}
+	if (toUpdate.length === 0) return { kind: "up-to-date" }
 
 	// shadcn also overwrites an item's dependencies, so look at the whole group
 	const group = await collectItems(toUpdate)
-	const protectedDeps = [...group.keys()].filter((name) => {
+	const keeping = [...group.keys()].filter((name) => {
 		const status = byName.get(name)?.status
 		return !toUpdate.includes(name) && status !== undefined && !SAFE.has(status) && status !== "ok"
 	})
-
-	console.log()
-	console.log(`  Updating: ${toUpdate.join(", ")}`)
-	if (protectedDeps.length > 0) {
-		console.log(`  Keeping your versions of: ${protectedDeps.join(", ")}`)
-	}
-	if (options.dryRun) {
-		log.info("Dry run: nothing was changed.")
-		return
-	}
+	if (options.dryRun) return { kind: "dry-run", toUpdate, keeping }
 
 	// Back up anything that differs from what we wrote, before it is replaced
 	const stamp = new Date().toISOString().replace(/[:.]/g, "-")
-	const backups: string[] = []
+	let backups = 0
 	for (const name of toUpdate) {
 		const report = byName.get(name)
 		if (!report || SAFE.has(report.status)) continue
 		for (const target of targetsOf(group.get(name) as ItemDetail)) {
 			const path = installedPath(root, target)
-			if (path && existsSync(path)) backups.push(backupFile(root, path, stamp))
+			if (path && existsSync(path)) {
+				backupFile(root, path, stamp)
+				backups++
+			}
 		}
 	}
 
@@ -111,28 +107,77 @@ export async function update(names: string[], options: UpdateOptions = {}): Prom
 	try {
 		shadcnAdd(
 			toUpdate.map((name) => `${REGISTRY_BASE}/${name}`),
-			{ cwd: root, overwrite: true, yes: true },
-			(attempt) => log.warn(`Update failed (attempt ${attempt}), retrying...`),
+			{ cwd: root, overwrite: true, yes: true, silent: options.silent },
+			options.onRetry,
 		)
 	} catch {
 		restoreUnlessAllowed(snapshot, new Set())
-		log.error("Update failed. Your files were put back as they were.")
-		process.exit(1)
+		return { kind: "failed" }
 	}
 
 	// Anything shadcn rewrote beyond the items we meant to update goes back
-	const keep = allowedPaths(root, updating)
-	const restored = restoreUnlessAllowed(snapshot, keep)
+	const restored = restoreUnlessAllowed(snapshot, allowedPaths(root, updating))
 
 	for (const item of updating) recordInstalled(root, lock, item, itemHash(item))
 	writeLock(root, lock)
+	if (backups > 0) ignoreBackups(root)
 
-	log.success(`Updated ${updating.length} component${updating.length === 1 ? "" : "s"}.`)
-	if (restored.length > 0) {
-		log.info(`Kept your version of ${restored.length} other file${restored.length === 1 ? "" : "s"} that shadcn would have overwritten.`)
+	return {
+		kind: "updated",
+		updated: toUpdate,
+		keeping,
+		restored: restored.length,
+		backups,
+		backupDir: backups > 0 ? join(".substrate", "backup", stamp) : null,
 	}
-	if (backups.length > 0) {
-		ignoreBackups(root)
-		log.info(`Backed up ${backups.length} edited file${backups.length === 1 ? "" : "s"} to ${join(".substrate", "backup", stamp)}`)
+}
+
+export async function update(names: string[], options: UpdateOptions = {}): Promise<void> {
+	const root = findProjectRoot(process.cwd())
+	if (!root) {
+		log.error("No components.json found. Run this from inside your project.")
+		process.exit(1)
+	}
+
+	const result = await runUpdate(root, names, {
+		...options,
+		onRetry: (attempt) => log.warn(`Update failed (attempt ${attempt}), retrying...`),
+	})
+
+	switch (result.kind) {
+		case "no-lock":
+			log.error(`No ${LOCK_FILE} yet. Run \`substrate-kit doctor --adopt\` first so there is something to compare with.`)
+			process.exit(1)
+		case "untracked":
+			log.error(`Not tracked in ${LOCK_FILE}: ${result.names.join(", ")}`)
+			process.exit(1)
+		case "blocked":
+			log.error("These have local edits or an unknown version, so they were not touched:")
+			for (const item of result.items) console.log(`  ${item.name} (${item.status})`)
+			log.info("Update them anyway with `substrate-kit update --force <name>`. Your files are backed up first.")
+			process.exit(1)
+		case "up-to-date":
+			log.success("Everything is up to date.")
+			return
+		case "dry-run":
+			console.log()
+			console.log(`  Updating: ${result.toUpdate.join(", ")}`)
+			if (result.keeping.length > 0) console.log(`  Keeping your versions of: ${result.keeping.join(", ")}`)
+			log.info("Dry run: nothing was changed.")
+			return
+		case "failed":
+			log.error("Update failed. Your files were put back as they were.")
+			process.exit(1)
+		case "updated":
+			console.log()
+			console.log(`  Updated: ${result.updated.join(", ")}`)
+			if (result.keeping.length > 0) console.log(`  Kept your versions of: ${result.keeping.join(", ")}`)
+			log.success(`Updated ${result.updated.length} component${result.updated.length === 1 ? "" : "s"}.`)
+			if (result.restored > 0) {
+				log.info(`Kept your version of ${result.restored} other file${result.restored === 1 ? "" : "s"} that shadcn would have overwritten.`)
+			}
+			if (result.backupDir) {
+				log.info(`Backed up ${result.backups} edited file${result.backups === 1 ? "" : "s"} to ${result.backupDir}`)
+			}
 	}
 }

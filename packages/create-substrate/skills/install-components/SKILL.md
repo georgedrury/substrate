@@ -46,7 +46,7 @@ npx substrate-kit add --list-categories
 - Run from a project created with `npx create-substrate` or initialised with `npx @substrate-kit/cli init`. Both add `@substrate-kit/cli` as a dev dependency, which is what makes `npx substrate-kit` resolve. The CLI looks for `components.json` — it will error if it's missing.
 - Components land in `registry/substrate/...` and related aliases defined in `components.json`.
 - Under the hood the CLI delegates to `npx shadcn@latest add` against `https://substrate.georgedrury.co.uk/r/<name>`, in one call for all the names you give it, retrying if the network drops. Do **not** use the shadcn CLI directly — always go through `substrate-kit add` so the CLI can print theme-override hints and keep the workflow uniform.
-- If the Substrate MCP server is connected, `search_components`, `get_component`, `get_docs` and `install_components` do the same jobs without a shell.
+- If the Substrate MCP server is connected, `search_components`, `get_component`, `get_docs` and `install_components` do the same jobs without a shell, and `check_components` and `update_components` do what `doctor` and `update` do (never replacing a component you have edited).
 
 ### Related CLI commands
 
