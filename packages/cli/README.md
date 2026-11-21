@@ -31,7 +31,23 @@ npx substrate-kit add slider number-input colour-picker
 | `init` | Set up Substrate in the current project. `--force` refreshes existing skills |
 | `add [components...]` | Install components in one call; opens a picker with no arguments |
 | `docs [component]` | Read component documentation in the terminal. `--open` opens its docs page in the browser |
+| `doctor` | Show which installed components are behind the registry or edited locally. `--json`, `--check` for CI |
+| `update [components...]` | Update components that are behind. `--force` also replaces edited ones, after backing them up; `--dry-run` previews |
 | `mcp` | Start the Substrate MCP server over stdio |
+
+## Keeping components up to date
+
+Components are copied into your project, so a fix in the registry doesn't reach you automatically. `substrate-kit add` records what it installs in `substrate.lock.json` (commit it). Then:
+
+```bash
+npx substrate-kit doctor     # which components are behind, which you have edited
+npx substrate-kit update     # update the ones that are behind and unedited
+npx substrate-kit update --force panel   # replace an edited one; your file is backed up to .substrate/backup first
+```
+
+Projects made before the lockfile existed can start tracking with `npx substrate-kit doctor --adopt`. Their versions are then unknown, so `update --force` is needed to refresh them once.
+
+`update` only changes the components it names. shadcn would also overwrite a component's dependencies, including base components you have customised, so the files that change beyond the update are put back as they were.
 
 ## MCP server
 

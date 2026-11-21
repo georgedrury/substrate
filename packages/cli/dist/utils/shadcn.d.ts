@@ -4,6 +4,8 @@ export interface ShadcnAddOptions {
     silent?: boolean;
     /** Pass --yes so shadcn skips its confirmation prompts */
     yes?: boolean;
+    /** Overwrite files that already exist (used by update) */
+    overwrite?: boolean;
     /** How many times to try before giving up (default 3) */
     attempts?: number;
 }

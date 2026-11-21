@@ -56,6 +56,8 @@ npx substrate-kit add --list-categories
 | `substrate-kit docs <name>` | Read component docs in the terminal: props, theme variables, usage |
 | `substrate-kit docs <name> --open` | Open the component's docs page in the browser |
 | `substrate-kit docs --list` | List every component |
+| `substrate-kit doctor` | Show which installed components are behind the registry or edited locally |
+| `substrate-kit update` | Update components that are behind and unedited (`--force` backs up and replaces edited ones) |
 
 ---
 

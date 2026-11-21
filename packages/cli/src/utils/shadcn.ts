@@ -6,6 +6,8 @@ export interface ShadcnAddOptions {
 	silent?: boolean
 	/** Pass --yes so shadcn skips its confirmation prompts */
 	yes?: boolean
+	/** Overwrite files that already exist (used by update) */
+	overwrite?: boolean
 	/** How many times to try before giving up (default 3) */
 	attempts?: number
 }
@@ -19,14 +21,14 @@ export type RetryHandler = (attempt: number, error: unknown) => void
 // so answer "no" for it: existing files are kept and the rest are installed.
 // A dropped request fails the whole call, so it is retried.
 export function shadcnAdd(urls: string[], options: ShadcnAddOptions = {}, onRetry?: RetryHandler): void {
-	const { cwd, silent = false, yes = false, attempts = 3 } = options
+	const { cwd, silent = false, yes = false, overwrite = false, attempts = 3 } = options
 	const interactive = !silent && process.stdin.isTTY === true
 	const output = silent ? "pipe" : "inherit"
 	const npx = process.platform === "win32" ? "npx.cmd" : "npx"
 
 	for (let attempt = 1; ; attempt++) {
 		try {
-			execFileSync(npx, ["shadcn@latest", "add", ...(yes ? ["--yes"] : []), ...urls], {
+			execFileSync(npx, ["shadcn@latest", "add", ...(yes ? ["--yes"] : []), ...(overwrite ? ["--overwrite"] : []), ...urls], {
 				cwd,
 				encoding: "utf-8",
 				stdio: interactive ? "inherit" : ["pipe", output, output],

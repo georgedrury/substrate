@@ -5,12 +5,15 @@
 //      checking it merges into existing files and is safe to repeat
 //   3. installs every registry item into one project and typechecks it
 //   4. runs `substrate-kit add` with no terminal over an existing component
+//   5. walks the lockfile lifecycle: a new project is tracked, `add` records,
+//      `doctor` sees local edits and a moved registry, `update` is safe
+//      and `update --force` backs up what it replaces
 // Usage: node scripts/test-scaffold.mjs [--live] [case...]   (default: all)
 // --live tests against the deployed registry instead of the local build.
 // --keep leaves the scaffolded projects on disk after a passing run.
 // SUBSTRATE_TEST_SHOTS=<dir> saves a screenshot of each starter per theme.
 import { spawn } from "node:child_process"
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { appendFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { createServer } from "node:http"
 import { createServer as createTcpServer } from "node:net"
 import { tmpdir } from "node:os"
@@ -21,7 +24,7 @@ import { chromium } from "playwright"
 const root = join(dirname(fileURLToPath(import.meta.url)), "..")
 const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf-8"))
 const SURFACES = ["canvas-2d", "3d-scene", "animation", "node-editor", "data-vis", "image-gen", "blank"]
-const CASES = [...SURFACES, "cli-init", "cli-add", "all-items"]
+const CASES = [...SURFACES, "cli-init", "cli-add", "cli-lock", "all-items"]
 const CONCURRENCY = 3
 const COMMAND_TIMEOUT_MS = 10 * 60 * 1000
 
@@ -241,9 +244,78 @@ async function cliInit() {
 	return problems.length > 0 ? { ok: false, stage: "init", output: problems.join("\n") } : { ok: true }
 }
 
+// The lockfile tells "the registry moved on" apart from "you edited this", and
+// update must replace only what is safe to replace.
+async function cliLock() {
+	const scaffolder = join(root, "packages/create-substrate/dist/index.js")
+	const cli = join(root, "packages/cli/dist/index.js")
+	const cwd = join(workspace, "cli-lock")
+	const scaffold = await run("node", [scaffolder, "cli-lock", "--surface", "blank", "--pm", "npm", "--skip-git"], { cwd: workspace, env })
+	if (scaffold.code !== 0) return { ok: false, stage: "scaffold", output: scaffold.output }
+
+	const problems = []
+	const lockPath = join(cwd, "substrate.lock.json")
+	const readLock = () => JSON.parse(readFileSync(lockPath, "utf-8"))
+	const report = async () => {
+		const result = await run("node", [cli, "doctor", "--json"], { cwd, env })
+		if (result.code !== 0) throw new Error(`doctor failed\n${result.output}`)
+		return Object.fromEntries(JSON.parse(result.output.slice(result.output.indexOf("{"))).items.map((item) => [item.name, item.status]))
+	}
+
+	try {
+		if (!existsSync(lockPath)) return { ok: false, stage: "lockfile", output: "a new project has no substrate.lock.json" }
+		let status = await report()
+		const names = Object.keys(status)
+		if (names.length === 0) problems.push("the lockfile tracks nothing")
+		if (names.some((name) => status[name] !== "ok")) problems.push(`a fresh project should be up to date: ${JSON.stringify(status)}`)
+
+		// add records what it installs
+		const added = await run("node", [cli, "add", "swatch-palette"], { cwd, env })
+		if (added.code !== 0) return { ok: false, stage: "add", output: added.output }
+		const afterAdd = readLock().items["swatch-palette"]
+		if (!afterAdd || afterAdd.registryHash === null) problems.push("add did not record swatch-palette")
+
+		// a local edit shows up
+		const edited = "panel"
+		const editedFile = Object.keys(readLock().items[edited].files)[0]
+		const editedPath = [join(cwd, "src", editedFile), join(cwd, editedFile)].find(existsSync)
+		appendFileSync(editedPath, "\n// my edit\n")
+		status = await report()
+		if (status[edited] !== "modified") problems.push(`expected ${edited} to be modified, got ${status[edited]}`)
+
+		// the registry moving on shows up as behind, and update fixes it without touching the edit
+		const stale = names.find((name) => name !== edited && name !== "swatch-palette")
+		const lock = readLock()
+		lock.items[stale].registryHash = "deadbeefdeadbeef"
+		writeFileSync(lockPath, JSON.stringify(lock, null, 2))
+		status = await report()
+		if (status[stale] !== "behind") problems.push(`expected ${stale} to be behind, got ${status[stale]}`)
+		const updated = await run("node", [cli, "update"], { cwd, env })
+		if (updated.code !== 0) problems.push(`update failed\n${updated.output}`)
+		status = await report()
+		if (status[stale] !== "ok") problems.push(`${stale} should be up to date after update, got ${status[stale]}`)
+		if (!readFileSync(editedPath, "utf-8").includes("my edit")) problems.push("update replaced a locally edited file")
+
+		// an edited component is protected, unless forced, and then it is backed up
+		const refused = await run("node", [cli, "update", edited], { cwd, env })
+		if (refused.code === 0) problems.push("update replaced an edited component without --force")
+		if (!readFileSync(editedPath, "utf-8").includes("my edit")) problems.push("a refused update still changed the file")
+		const forced = await run("node", [cli, "update", "--force", edited], { cwd, env })
+		if (forced.code !== 0) problems.push(`update --force failed\n${forced.output}`)
+		if (readFileSync(editedPath, "utf-8").includes("my edit")) problems.push("update --force did not replace the edited file")
+		if (!existsSync(join(cwd, ".substrate/backup"))) problems.push("update --force made no backup")
+		status = await report()
+		if (status[edited] !== "ok") problems.push(`${edited} should be up to date after a forced update, got ${status[edited]}`)
+	} catch (error) {
+		return { ok: false, stage: "lifecycle", output: String(error) }
+	}
+	return problems.length > 0 ? { ok: false, stage: "lockfile", output: problems.join("\n") } : { ok: true }
+}
+
 function runCase(name) {
 	if (name === "all-items") return allItems()
 	if (name === "cli-add") return cliAdd()
+	if (name === "cli-lock") return cliLock()
 	if (name === "cli-init") return cliInit()
 	return scaffoldAndBuild(name, [join(root, "packages/create-substrate/dist/index.js"), name, "--surface", name, "--pm", "npm", "--skip-git"])
 }

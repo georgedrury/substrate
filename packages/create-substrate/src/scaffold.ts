@@ -112,6 +112,9 @@ export async function scaffold(
     }
     if (installed) {
       log.success("Substrate components installed")
+      // Record what was installed, so `substrate-kit doctor` can later say which
+      // components have fallen behind. Not worth failing the scaffold over.
+      execSilent("npx substrate-kit doctor --adopt --current", projectDir)
     } else {
       failedComponents.push(...config.components)
     }
@@ -526,6 +529,7 @@ dist/
 .env
 .env*.local
 *.tsbuildinfo
+.substrate/
 `
 }
 

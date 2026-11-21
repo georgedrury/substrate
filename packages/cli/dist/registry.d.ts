@@ -33,4 +33,19 @@ export interface Registry {
 export declare function loadRegistry(): Promise<Registry>;
 export declare function overrideKeys(item: RegistryItem): string[];
 export declare function matchesQuery(item: RegistryItem, query: string): boolean;
+export interface RegistryItemFile {
+    path: string;
+    type: string;
+    target?: string;
+    content?: string;
+}
+export interface ItemDetail {
+    name: string;
+    files: RegistryItemFile[];
+    registryDependencies?: string[];
+}
+export declare function fetchItem(name: string): Promise<ItemDetail>;
+export declare function substrateDependencyName(dependency: string): string | null;
+/** The named items and every Substrate item they depend on, fetched in parallel waves */
+export declare function collectItems(names: string[]): Promise<Map<string, ItemDetail>>;
 //# sourceMappingURL=registry.d.ts.map

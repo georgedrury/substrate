@@ -2,6 +2,8 @@ import { Command } from "commander"
 import { init } from "./commands/init.js"
 import { add } from "./commands/add.js"
 import { docs } from "./commands/docs.js"
+import { doctor } from "./commands/doctor.js"
+import { update } from "./commands/update.js"
 import { startServer } from "./mcp/server.js"
 import { VERSION } from "./utils/version.js"
 
@@ -44,6 +46,27 @@ export function createCli(): Command {
 		.option("--open", "Open the docs page in your browser", false)
 		.action(async (component: string | undefined, options) => {
 			await docs(component, { list: options.list, open: options.open })
+		})
+
+	program
+		.command("doctor")
+		.description("Check which installed Substrate components are behind the registry or edited locally")
+		.option("--json", "Print the report as JSON", false)
+		.option("--check", "Exit with an error if anything needs attention (for CI)", false)
+		.option("--adopt", "Start tracking the Substrate files already in this project", false)
+		.option("--current", "With --adopt: treat them as matching the registry now (true straight after an install)", false)
+		.action(async (options) => {
+			await doctor({ json: options.json, check: options.check, adopt: options.adopt, current: options.current })
+		})
+
+	program
+		.command("update")
+		.description("Update installed components that are behind the registry")
+		.argument("[components...]", "Components to update (all that are behind if omitted)")
+		.option("--force", "Also replace components you edited or whose version is unknown, after backing them up", false)
+		.option("--dry-run", "Show what would change without changing it", false)
+		.action(async (components: string[], options) => {
+			await update(components, { force: options.force, dryRun: options.dryRun })
 		})
 
 	program
