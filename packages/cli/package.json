@@ -1,6 +1,6 @@
 {
 	"name": "@substrate-kit/cli",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "Add Substrate components, skills and docs to a project, with an MCP server for agents",
 	"type": "module",
 	"bin": {

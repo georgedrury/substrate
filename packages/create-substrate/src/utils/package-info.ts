@@ -12,7 +12,7 @@ export const VERSION: string = (
 // The CLI version the generated project depends on. Keep in step with
 // packages/cli/package.json when it gains a new minor version.
 // SUBSTRATE_CLI_SPEC points it at a local tarball for testing before publish.
-export const CLI_RANGE = process.env.SUBSTRATE_CLI_SPEC ?? "^0.2.0"
+export const CLI_RANGE = process.env.SUBSTRATE_CLI_SPEC ?? "^0.2.1"
 
 // Agent guidance shared with `substrate-kit init`; copied here by
 // scripts/sync-skills.mjs, with markers so `init` can refresh it later.
